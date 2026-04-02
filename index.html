@@ -102,6 +102,7 @@
             <!-- DETAIL VIEW -->
             <div id="detailView" style="display:none;">
                 <div class="add-form" id="addForm"></div>
+                <div id="dashStatus"></div>
                 <div class="detail-table-wrap">
                     <table class="detail-table" id="detailTable">
                         <thead id="detailThead"></thead>
@@ -291,22 +292,30 @@
         ]
     };
 
-    // Main Load Function
-    async function loadData() {
-        const sections = ['daily', 'expenses', 'production', 'salaries', 'gallery'];
+    function renderHomeGallery() {
+        const grid = document.getElementById('home-gallery-grid');
+        if (!grid) return;
+        
+        grid.innerHTML = data.gallery.map((img, i) => `
+            <div class="fade-in-up" style="transition-delay: ${i * 0.1}s; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+                <img src="${img.src}" alt="${img.alt}" style="width: 100%; height: 300px; object-fit: cover; display: block; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+            </div>
+        `).join('');
+    }
+
+    // Main Load Function (Resilient and Fast)
+    async function loadData(targetSection = null) {
+        const sections = targetSection ? [targetSection] : ['daily', 'expenses', 'production', 'salaries', 'gallery'];
         
         for (const section of sections) {
             try {
                 const snapshot = await db.collection(section).orderBy('createdAt', 'desc').get();
                 data[section] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
-                // If it's the gallery, re-render it immediately to show any changes
                 if (section === 'gallery') renderGallery();
                 
             } catch (error) {
                 console.warn(`Section Load Error [${section}]:`, error);
-                
-                // Fallback to default data if cloud loading fails (e.g., permissions)
                 if (!data[section] || data[section].length === 0) {
                     data[section] = DEFAULT_DATA[section] || [];
                     if (section === 'gallery') renderGallery();
@@ -483,6 +492,13 @@
         reader.readAsDataURL(file);
     }
 
+    function showStatus(msg) {
+        const st = document.getElementById('dashStatus');
+        st.textContent = "✓ " + msg;
+        st.style.color = "var(--primary-color)";
+        setTimeout(() => { st.textContent = ""; }, 3000);
+    }
+
     async function addRecord(section) {
         const s = schema[section];
         const row = { createdAt: new Date() };
@@ -499,18 +515,27 @@
             }
         });
 
-        if (!valid) { alert('Please select a file or fill in a field.'); return; }
+        if (!valid) { showStatus('Please select a file or fill in a field.'); return; }
         
-        // Final Size Check for Firestore (1MB limit)
         if (section === 'gallery' && selectedImageData && selectedImageData.length > 1000000) {
-            alert("Image is still too large even after compression. Please try a smaller photo.");
+            alert("Image is still too large even after compression.");
             return;
         }
 
         try {
+            // Optimistic UI Update: Show it immediately!
+            const tempId = 'temp_' + Date.now();
+            data[section].unshift({ id: tempId, ...row });
+            renderTable(section);
+            if (section === 'gallery') renderGallery();
+            showStatus("Adding records...");
+
             await db.collection(section).add(row);
-            await loadData();
             
+            // Final Background Sync
+            await loadData(section);
+            
+            // Reset Form
             selectedImageData = null;
             if (section === 'gallery') {
                 document.getElementById('file-name').textContent = 'No file chosen';
@@ -521,10 +546,10 @@
             });
 
             renderTable(section);
-            alert("Entry added successfully!");
+            showStatus("Entry added successfully!");
         } catch (error) {
             console.error("Cloud Save Error:", error);
-            alert("Database Error: " + error.message + "\n\nTip: Ensure you have published the rules in the Firebase Console and the file is not too large.");
+            showStatus("Database Error: " + error.message);
         }
     }
 
@@ -532,11 +557,9 @@
         const s = schema[section];
         const rows = data[section];
 
-        // Header
         document.getElementById('detailThead').innerHTML =
             '<tr>' + s.labels.map(l => `<th>${l}</th>`).join('') + '<th>Action</th></tr>';
 
-        // Body
         document.getElementById('detailTbody').innerHTML = rows.length === 0
             ? `<tr><td colspan="${s.fields.length + 1}" style="text-align:center;color:#aaa;padding:1.5rem;">No records yet. Add one above.</td></tr>`
             : rows.map((row) =>
@@ -555,24 +578,23 @@
     async function deleteRecord(section, docId) {
         if (!confirm('Are you sure you want to delete this record?')) return;
 
-        // Local-only deletion for default example data (ID is missing or 'undefined')
-        if (!docId || docId === 'undefined' || docId === 'null') {
-            // Remove by matching src or item name if possible, or just filter out locals
-            data[section] = data[section].filter(row => row.id && row.id !== 'undefined');
-            renderTable(section);
-            renderGallery();
-            alert("Local example data removed from view.");
-            return;
-        }
-
         try {
-            await db.collection(section).doc(docId).delete();
-            await loadData();
+            // Optimistic UI Update: Hide it immediately!
+            data[section] = data[section].filter(row => row.id !== docId);
             renderTable(section);
-            alert("Record deleted from cloud successfully!");
+            if (section === 'gallery') renderGallery();
+            showStatus("Deleting record...");
+
+            if (docId && !docId.startsWith('temp_')) {
+                await db.collection(section).doc(docId).delete();
+            }
+            
+            await loadData(section); // Background Sync
+            renderTable(section);
+            showStatus("Record deleted!");
         } catch (error) {
             console.error("Cloud Delete Error:", error);
-            alert("Database Error: " + error.message + "\n\nTip: Check if your Firestore Rules allow deletion.");
+            showStatus("Error: " + error.message);
         }
     }
 
