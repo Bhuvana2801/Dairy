@@ -92,6 +92,10 @@
                     &#128176; Salaries
                     <small>View &amp; manage salaries</small>
                 </div>
+                <div class="dash-card" onclick="openSection('buffalo')">
+                    &#128003; Buffalo Selling
+                    <small>Manage buffalo sales</small>
+                </div>
             </div>
 
             <!-- DETAIL VIEW -->
@@ -163,7 +167,13 @@
                     <div class="cta-box" style="background: transparent; border: 2px solid rgba(177,216,183,0.5);">
                         <h2>Premium Buffalo Selling</h2>
                         <p>Looking to expand your dairy farm? We offer top-quality, healthy buffaloes from our very own herd. Raised on lush pastures and nurtured with the best natural feed, our cattle guarantee an excellent milk yield.</p>
-                        <a href="#" onclick="showPage('contact')" class="btn btn-primary" style="margin-top: 1rem;">Inquire About Buffaloes</a>
+                        
+                        <!-- Dynamic Buffalo Grid -->
+                        <div id="buffalo-selling-grid" class="product-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; text-align: left;">
+                            <!-- Buffaloes will be rendered here dynamically -->
+                        </div>
+
+                        <a href="#" onclick="showPage('contact')" class="btn btn-primary" style="margin-top: 2.5rem;">Inquire About Buffaloes</a>
                     </div>
                 </div>
             </section>
@@ -215,8 +225,8 @@
         const navEl = document.getElementById('nav-' + pageId);
         if (navEl) navEl.classList.add('nav-active');
 
-        // Extra check for Gallery
-        if (pageId === 'photos') renderGallery();
+        // Dynamic rendering
+        if (pageId === 'buffalo') renderBuffaloes();
 
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -238,7 +248,7 @@
     const db = firebase.firestore();
 
     // ── Cloud data storage ───────────────────────────────
-    let data = { daily: [], expenses: [], production: [], salaries: [], gallery: [] };
+    let data = { daily: [], expenses: [], production: [], salaries: [], buffalo: [] };
 
     // Placeholder data
     const DEFAULT_DATA = {
@@ -257,13 +267,18 @@
         salaries: [
             { name: 'Ravi Kumar',  role: 'Farm Manager',  amount: '₹18,000', month: 'April 2026' },
             { name: 'Suresh Babu', role: 'Milk Handler',  amount: '₹12,000', month: 'April 2026' }
+        ],
+        buffalo: [
+            { tagId: 'B-101', breed: 'Murrah',  age: '3 Years', price: '₹85,000', status: 'Available' },
+            { tagId: 'B-102', breed: 'Surti',   age: '4 Years', price: '₹75,000', status: 'Available' },
+            { tagId: 'B-103', breed: 'Murrah',  age: '2.5 Years', price: '₹95,000', status: 'Sold' }
         ]
     };
 
 
     // Main Load Function (Resilient and Fast)
     async function loadData(targetSection = null) {
-        const sections = targetSection ? [targetSection] : ['daily', 'expenses', 'production', 'salaries'];
+        const sections = targetSection ? [targetSection] : ['daily', 'expenses', 'production', 'salaries', 'buffalo'];
         
         for (const section of sections) {
             try {
@@ -282,6 +297,7 @@
     // Call load on start
     window.addEventListener('DOMContentLoaded', () => {
         data = { ...DEFAULT_DATA }; // Show defaults immediately
+        renderBuffaloes();
         loadData(); // Then try to fetch cloud data
     });
 
@@ -290,7 +306,8 @@
         daily:      { title: 'Daily Report',      fields: ['date','item','qty','note'],           labels: ['Date','Item','Quantity','Note'] },
         expenses:   { title: 'Monthly Expenses',  fields: ['month','category','amount','note'],   labels: ['Month','Category','Amount','Note'] },
         production: { title: 'Production',        fields: ['date','product','quantity','status'], labels: ['Date','Product','Quantity','Status'] },
-        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],       labels: ['Name','Role','Amount','Month'] }
+        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],       labels: ['Name','Role','Amount','Month'] },
+        buffalo:    { title: 'Buffalo Selling',   fields: ['tagId','breed','age','price','status'], labels: ['Tag ID','Breed','Age','Price','Status'] }
     };
 
     let currentSection = null;
@@ -407,27 +424,32 @@
 
     async function addRecord(section) {
         const s = schema[section];
-        const row = { createdAt: new Date() };
+        const row = { id: 'temp_' + Date.now(), createdAt: new Date() };
         let valid = false;
 
         s.fields.forEach(f => {
-            const v = document.getElementById('inp_' + f).value.trim();
-            row[f] = v;
-            if (v) valid = true;
+            const el = document.getElementById('inp_' + f);
+            if (el) {
+                const v = el.value.trim();
+                row[f] = v;
+                if (v) valid = true;
+            }
         });
 
         if (!valid) { showStatus('Please fill in at least one field.'); return; }
 
         try {
             // Optimistic UI Update: Show it immediately!
-            const tempId = 'temp_' + Date.now();
-            data[section].unshift({ id: tempId, ...row });
+            data[section].unshift(row);
             renderTable(section);
+            if (section === 'buffalo') renderBuffaloes();
             showStatus("Adding records...");
 
-            await db.collection(section).add(row);
+            const { id, ...saveRow } = row;
+            const docRef = await db.collection(section).add(saveRow);
             
-            // Final Background Sync
+            // Final Background Sync (replace temp ID with real ID)
+            row.id = docRef.id;
             await loadData(section);
             
             // Reset Form
@@ -437,6 +459,7 @@
             });
 
             renderTable(section);
+            if (section === 'buffalo') renderBuffaloes();
             showStatus("Entry added successfully!");
         } catch (error) {
             console.error("Cloud Save Error:", error);
@@ -470,6 +493,7 @@
             // Optimistic UI Update: Hide it immediately!
             data[section] = data[section].filter(row => row.id !== docId);
             renderTable(section);
+            if (section === 'buffalo') renderBuffaloes();
             showStatus("Deleting record...");
 
             if (docId && !docId.startsWith('temp_')) {
@@ -478,11 +502,31 @@
             
             await loadData(section); // Background Sync
             renderTable(section);
+            if (section === 'buffalo') renderBuffaloes();
             showStatus("Record deleted!");
         } catch (error) {
             console.error("Cloud Delete Error:", error);
             showStatus("Error: " + error.message);
         }
+    }
+
+    function renderBuffaloes() {
+        const grid = document.getElementById('buffalo-selling-grid');
+        if (!grid) return;
+        
+        grid.innerHTML = data.buffalo.length === 0
+            ? '<p style="color:#666;text-align:center;grid-column:1/-1;">No buffaloes currently available for sale.</p>'
+            : data.buffalo.map(b => `
+                <div class="fade-in-up" style="background:#fff; padding:1.5rem; border-radius:15px; box-shadow:0 8px 24px rgba(0,0,0,0.06); border:1px solid rgba(177,216,183,0.3);">
+                    <h3 style="color:var(--primary-color); margin-bottom:0.5rem;">${b.breed} Buffalo</h3>
+                    <p><strong>Tag ID:</strong> ${b.tagId}</p>
+                    <p><strong>Age:</strong> ${b.age}</p>
+                    <p style="font-size:1.2rem; color:var(--accent-color); font-weight:800; margin:0.5rem 0;">${b.price}</p>
+                    <span style="display:inline-block; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.8rem; font-weight:bold; background:${b.status === 'Available' ? '#e6f4ea' : '#fce8e6'}; color:${b.status === 'Available' ? '#1e8e3e' : '#d93025'};">
+                        ${b.status}
+                    </span>
+                </div>
+            `).join('');
     }
 
     </script>

@@ -523,7 +523,7 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 
 /* Detail View — Table */
 .detail-table-wrap {
-    max-height: 400px;
+    max-height: 350px;
     overflow-y: auto;
     overflow-x: auto;
     border-radius: 12px;

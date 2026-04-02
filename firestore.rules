@@ -3,10 +3,9 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Rules for Gallery (Publicly viewable)
-    match /gallery/{document} {
-      allow read: if true;
-      allow write: if true;
+    // Rules for Buffalo Selling (Publicly viewable)
+    match /buffalo/{document} {
+      allow read, write: if true;
     }
     
     // Rules for Admin Sections (Reports, Expenses, etc.)
