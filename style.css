@@ -541,6 +541,9 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     text-align: left;
     font-family: var(--font-main);
     font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 .detail-table td {
     padding: 0.75rem 1rem;

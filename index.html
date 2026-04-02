@@ -253,25 +253,25 @@
     // Placeholder data
     const DEFAULT_DATA = {
         daily: [
-            { date: '2026-04-01', item: 'Milk Collection', qty: '120 L', note: 'Morning shift' },
-            { date: '2026-04-01', item: 'Feed Used',       qty: '50 kg', note: 'Hay + grain' }
+            { id: 'def_d1', date: '2026-04-01', item: 'Milk Collection', qty: '120 L', note: 'Morning shift' },
+            { id: 'def_d2', date: '2026-04-01', item: 'Feed Used',       qty: '50 kg', note: 'Hay + grain' }
         ],
         expenses: [
-            { month: 'April 2026', category: 'Feed',        amount: '₹8,500', note: 'Monthly feed stock' },
-            { month: 'April 2026', category: 'Electricity', amount: '₹2,200', note: 'Pump + lights' }
+            { id: 'def_e1', month: 'April 2026', category: 'Feed',        amount: '₹8,500', note: 'Monthly feed stock' },
+            { id: 'def_e2', month: 'April 2026', category: 'Electricity', amount: '₹2,200', note: 'Pump + lights' }
         ],
         production: [
-            { date: '2026-04-01', product: 'Milk',   quantity: '150 L', status: 'Processed' },
-            { date: '2026-04-01', product: 'Cheese', quantity: '12 kg', status: 'Stored' }
+            { id: 'def_p1', date: '2026-04-01', product: 'Milk',   quantity: '150 L', status: 'Processed' },
+            { id: 'def_p2', date: '2026-04-01', product: 'Cheese', quantity: '12 kg', status: 'Stored' }
         ],
         salaries: [
-            { name: 'Ravi Kumar',  role: 'Farm Manager',  amount: '₹18,000', month: 'April 2026' },
-            { name: 'Suresh Babu', role: 'Milk Handler',  amount: '₹12,000', month: 'April 2026' }
+            { id: 'def_s1', name: 'Ravi Kumar',  role: 'Farm Manager',  amount: '₹18,000', month: 'April 2026' },
+            { id: 'def_s2', name: 'Suresh Babu', role: 'Milk Handler',  amount: '₹12,000', month: 'April 2026' }
         ],
         buffalo: [
-            { tagId: 'B-101', breed: 'Murrah',  age: '3 Years', price: '₹85,000', status: 'Available' },
-            { tagId: 'B-102', breed: 'Surti',   age: '4 Years', price: '₹75,000', status: 'Available' },
-            { tagId: 'B-103', breed: 'Murrah',  age: '2.5 Years', price: '₹95,000', status: 'Sold' }
+            { id: 'def_b1', tagId: 'B-101', breed: 'Murrah',  age: '3 Years', price: '₹85,000', status: 'Available' },
+            { id: 'def_b2', tagId: 'B-102', breed: 'Surti',   age: '4 Years', price: '₹75,000', status: 'Available' },
+            { id: 'def_b3', tagId: 'B-103', breed: 'Murrah',  age: '2.5 Years', price: '₹95,000', status: 'Sold' }
         ]
     };
 
@@ -438,6 +438,12 @@
 
         if (!valid) { showStatus('Please fill in at least one field.'); return; }
 
+        // Reset Form immediately
+        s.fields.forEach(f => { 
+            const el = document.getElementById('inp_' + f);
+            if (el) el.value = ''; 
+        });
+
         try {
             // Optimistic UI Update: Show it immediately!
             data[section].unshift(row);
@@ -451,12 +457,6 @@
             // Final Background Sync (replace temp ID with real ID)
             row.id = docRef.id;
             await loadData(section);
-            
-            // Reset Form
-            s.fields.forEach(f => { 
-                const el = document.getElementById('inp_' + f);
-                if (el) el.value = ''; 
-            });
 
             renderTable(section);
             if (section === 'buffalo') renderBuffaloes();
@@ -491,12 +491,12 @@
 
         try {
             // Optimistic UI Update: Hide it immediately!
-            data[section] = data[section].filter(row => row.id !== docId);
+            data[section] = data[section].filter(row => row.id !== docId && row.id !== undefined);
             renderTable(section);
             if (section === 'buffalo') renderBuffaloes();
             showStatus("Deleting record...");
 
-            if (docId && !docId.startsWith('temp_')) {
+            if (docId && docId !== 'undefined' && !docId.startsWith('temp_') && !docId.startsWith('def_')) {
                 await db.collection(section).doc(docId).delete();
             }
             
