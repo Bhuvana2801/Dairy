@@ -276,32 +276,30 @@
     };
 
 
-    // Main Load Function (Resilient and Fast)
-    async function loadData(targetSection = null) {
-        const sections = targetSection ? [targetSection] : ['daily', 'expenses', 'production', 'salaries', 'buffalo'];
-        
-        for (const section of sections) {
-            try {
-                const snapshot = await db.collection(section).orderBy('createdAt', 'desc').get();
+    // Replace robust loadData with Instant Realtime Listener
+    function setupRealtimeListeners() {
+        const sections = ['daily', 'expenses', 'production', 'salaries', 'buffalo'];
+        sections.forEach(section => {
+            db.collection(section).orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 data[section] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                
-            } catch (error) {
-                console.warn(`Section Load Error [${section}]:`, error);
+                if (currentSection === section) renderTable(section);
+                if (section === 'buffalo') renderBuffaloes();
+            }, error => {
+                console.warn(`Sync Error [${section}]:`, error);
                 if (!data[section] || data[section].length === 0) {
                     data[section] = DEFAULT_DATA[section] || [];
+                    if (currentSection === section) renderTable(section);
+                    if (section === 'buffalo') renderBuffaloes();
                 }
-            }
-            if (section === 'buffalo') {
-                renderBuffaloes();
-            }
-        }
+            });
+        });
     }
 
     // Call load on start
     window.addEventListener('DOMContentLoaded', () => {
         data = { ...DEFAULT_DATA }; // Show defaults immediately
         renderBuffaloes();
-        loadData(); // Then try to fetch cloud data
+        setupRealtimeListeners(); // Start listening to cloud updates instantly
     });
 
     // Schema for each section
@@ -412,7 +410,7 @@
         s.fields.forEach((f, i) => {
             html += `<input type="text" id="inp_${f}" placeholder="${s.labels[i]}" class="add-input">`;
         });
-        html += `<button class="btn btn-add" onclick="addRecord('${section}')">+ Add</button>`;
+        html += `<button class="btn btn-add" id="actionBtn" onclick="addRecord('${section}')">+ Add</button>`;
         html += '</div>';
         document.getElementById('addForm').innerHTML = html;
     }
@@ -448,25 +446,75 @@
         });
 
         try {
-            // Optimistic UI Update: Show it immediately!
-            data[section].unshift(row);
-            renderTable(section);
-            if (section === 'buffalo') renderBuffaloes();
             showStatus("Adding records...");
-
             const { id, ...saveRow } = row;
-            const docRef = await db.collection(section).add(saveRow);
-            
-            // Final Background Sync (replace temp ID with real ID)
-            row.id = docRef.id;
-            await loadData(section);
-
-            renderTable(section);
-            if (section === 'buffalo') renderBuffaloes();
+            await db.collection(section).add(saveRow);
             showStatus("Entry added successfully!");
         } catch (error) {
             console.error("Cloud Save Error:", error);
             showStatus("Database Error: " + error.message);
+        }
+    }
+    
+    let editModeId = null;
+
+    function editRecord(section, docId) {
+        if (docId.startsWith('def_')) {
+            alert("Cannot edit placeholder data. Add a real record first.");
+            return;
+        }
+        const row = data[section].find(r => r.id === docId);
+        if (!row) return;
+        editModeId = docId;
+        const s = schema[section];
+        s.fields.forEach(f => {
+            const el = document.getElementById('inp_' + f);
+            if (el) el.value = row[f] || '';
+        });
+        const btn = document.getElementById('actionBtn');
+        if (btn) {
+            btn.textContent = 'Update';
+            btn.classList.add('btn-export'); // Gives it a blue color logically
+            btn.onclick = () => saveUpdate(section);
+            showStatus("Editing record. Modify fields and click Update.");
+        }
+    }
+
+    async function saveUpdate(section) {
+        const s = schema[section];
+        let valid = false;
+        const updateData = {};
+
+        s.fields.forEach(f => {
+            const el = document.getElementById('inp_' + f);
+            if (el) {
+                const v = el.value.trim();
+                updateData[f] = v;
+                if (v) valid = true;
+            }
+        });
+
+        if (!valid) { showStatus('Please fill in at least one field.'); return; }
+
+        try {
+            showStatus("Updating record...");
+            await db.collection(section).doc(editModeId).update(updateData);
+            showStatus("Record updated successfully!");
+
+            // Reset Form and Button
+            s.fields.forEach(f => { 
+                const el = document.getElementById('inp_' + f);
+                if (el) el.value = ''; 
+            });
+            editModeId = null;
+            const btn = document.getElementById('actionBtn');
+            if (btn) {
+                btn.textContent = '+ Add';
+                btn.classList.remove('btn-export');
+                btn.onclick = () => addRecord(section);
+            }
+        } catch (err) {
+            showStatus("Error: " + err.message);
         }
     }
 
@@ -484,7 +532,10 @@
                 s.fields.map(f => {
                     return `<td>${row[f] || '-'}</td>`;
                 }).join('') +
-                `<td><button class="btn-delete" onclick="deleteRecord('${section}','${row.id}')">&#128465; Delete</button></td>` +
+                `<td>
+                    <button class="btn-edit" onclick="editRecord('${section}','${row.id}')">&#9998; Edit</button>
+                    <button class="btn-delete" onclick="deleteRecord('${section}','${row.id}')">&#128465; Delete</button>
+                </td>` +
                 '</tr>'
               ).join('');
     }
@@ -493,20 +544,14 @@
         if (!confirm('Are you sure you want to delete this record?')) return;
 
         try {
-            // Optimistic UI Update: Hide it immediately!
-            data[section] = data[section].filter(row => row.id !== docId && row.id !== undefined);
-            renderTable(section);
-            if (section === 'buffalo') renderBuffaloes();
             showStatus("Deleting record...");
 
             if (docId && docId !== 'undefined' && !docId.startsWith('temp_') && !docId.startsWith('def_')) {
                 await db.collection(section).doc(docId).delete();
+                showStatus("Record deleted!");
+            } else {
+                showStatus("Cannot delete mock placeholder data.");
             }
-            
-            await loadData(section); // Background Sync
-            renderTable(section);
-            if (section === 'buffalo') renderBuffaloes();
-            showStatus("Record deleted!");
         } catch (error) {
             console.error("Cloud Delete Error:", error);
             showStatus("Error: " + error.message);
