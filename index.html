@@ -165,8 +165,8 @@
             <section class="about section-padding" style="background: var(--bg-light);">
                 <div class="container fade-in-up">
                     <div class="cta-box" style="background: transparent; border: 2px solid rgba(177,216,183,0.5);">
-                        <h2>Premium Buffalo Selling</h2>
-                        <p>Looking to expand your dairy farm? We offer top-quality, healthy buffaloes from our very own herd. Raised on lush pastures and nurtured with the best natural feed, our cattle guarantee an excellent milk yield.</p>
+                        <h2 style="color: var(--primary-color);">Premium Buffalo Selling</h2>
+                        <p style="color: var(--text-dark);">Looking to expand your dairy farm? We offer top-quality, healthy buffaloes from our very own herd. Raised on lush pastures and nurtured with the best natural feed, our cattle guarantee an excellent milk yield.</p>
                         
                         <!-- Dynamic Buffalo Grid -->
                         <div id="buffalo-selling-grid" class="product-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; text-align: left;">
@@ -290,6 +290,9 @@
                 if (!data[section] || data[section].length === 0) {
                     data[section] = DEFAULT_DATA[section] || [];
                 }
+            }
+            if (section === 'buffalo') {
+                renderBuffaloes();
             }
         }
     }
