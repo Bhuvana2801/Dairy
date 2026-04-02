@@ -123,6 +123,16 @@
                     <p class="hero-desc">Pure, fresh dairy products crafted with love and tradition.<br>Serving families with quality milk since 2026 — straight from our pastures to your home.</p>
                 </div>
             </section>
+            
+            <!-- NEW HOME PAGE GALLERY SECTION -->
+            <section class="products section-padding bg-light" style="padding-top: 1rem;">
+                <div class="container">
+                    <h2 class="text-center section-title fade-in-up" style="margin-bottom: 2rem;">Our Farm Gallery</h2>
+                    <div id="home-gallery-grid" class="product-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                        <!-- Photos will be rendered here dynamically -->
+                    </div>
+                </div>
+            </section>
         </div>
 
         <!-- OUR STORY PAGE -->
@@ -283,25 +293,25 @@
 
     // Main Load Function
     async function loadData() {
-        try {
-            const sections = ['daily', 'expenses', 'production', 'salaries', 'gallery'];
-            for (const section of sections) {
+        const sections = ['daily', 'expenses', 'production', 'salaries', 'gallery'];
+        
+        for (const section of sections) {
+            try {
                 const snapshot = await db.collection(section).orderBy('createdAt', 'desc').get();
                 data[section] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                // If it's the gallery, re-render it immediately to show any changes
+                if (section === 'gallery') renderGallery();
+                
+            } catch (error) {
+                console.warn(`Section Load Error [${section}]:`, error);
+                
+                // Fallback to default data if cloud loading fails (e.g., permissions)
+                if (!data[section] || data[section].length === 0) {
+                    data[section] = DEFAULT_DATA[section] || [];
+                    if (section === 'gallery') renderGallery();
+                }
             }
-            
-            // Ensure we have data even if cloud is empty or rules block access
-            if (data.gallery.length === 0) data.gallery = DEFAULT_DATA.gallery;
-            if (data.daily.length === 0)   data.daily   = DEFAULT_DATA.daily;
-            if (data.expenses.length === 0) data.expenses = DEFAULT_DATA.expenses;
-            if (data.production.length === 0) data.production = DEFAULT_DATA.production;
-            if (data.salaries.length === 0) data.salaries = DEFAULT_DATA.salaries;
-            
-            renderGallery();
-        } catch (error) {
-            console.error("Cloud Access Error:", error);
-            data = DEFAULT_DATA;
-            renderGallery();
         }
     }
 
@@ -326,8 +336,8 @@
     // ── Admin Login / Logout ─────────────────────────────────
     function openAdminModal() {
         document.getElementById('adminModal').classList.add('active');
-        document.getElementById('modalAdminId').value = '20005';
-        document.getElementById('modalAdminPw').value = '9392';
+        document.getElementById('modalAdminId').value = '';
+        document.getElementById('modalAdminPw').value = '';
     }
     function closeAdminModal(event, force) {
         if (force || (event && event.target.id === 'adminModal')) {
@@ -349,8 +359,7 @@
         }
     }
     function handleAdminLogout() {
-        document.getElementById('dashboardModal').classList.remove('active');
-        showDashGrid();
+        window.location.reload();
     }
 
     // ── Navigation ───────────────────────────────────────────
@@ -437,14 +446,41 @@
     let selectedImageData = null;
     function handleFileSelect(input) {
         const file = input.files[0];
-        if (file) {
-            document.getElementById('file-name').textContent = file.name;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                selectedImageData = e.target.result;
+        if (!file) return;
+
+        document.getElementById('file-name').textContent = file.name;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                // Compression Logic: Max width 800px or height 800px
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+                const MAX_SIZE = 800;
+
+                if (width > height) {
+                    if (width > MAX_SIZE) {
+                        height *= MAX_SIZE / width;
+                        width = MAX_SIZE;
+                    }
+                } else {
+                    if (height > MAX_SIZE) {
+                        width *= MAX_SIZE / height;
+                        height = MAX_SIZE;
+                    }
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+                // Even more aggressive compression (Max 600px, quality 0.5)
+                selectedImageData = canvas.toDataURL('image/jpeg', 0.5);
             };
-            reader.readAsDataURL(file);
-        }
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
     }
 
     async function addRecord(section) {
@@ -465,11 +501,16 @@
 
         if (!valid) { alert('Please select a file or fill in a field.'); return; }
         
+        // Final Size Check for Firestore (1MB limit)
+        if (section === 'gallery' && selectedImageData && selectedImageData.length > 1000000) {
+            alert("Image is still too large even after compression. Please try a smaller photo.");
+            return;
+        }
+
         try {
             await db.collection(section).add(row);
-            await loadData(); // Reload all to stay in sync
+            await loadData();
             
-            // Reset
             selectedImageData = null;
             if (section === 'gallery') {
                 document.getElementById('file-name').textContent = 'No file chosen';
@@ -480,9 +521,10 @@
             });
 
             renderTable(section);
+            alert("Entry added successfully!");
         } catch (error) {
             console.error("Cloud Save Error:", error);
-            alert("Database Error: Check your Firestore Security Rules.");
+            alert("Database Error: " + error.message + "\n\nTip: Ensure you have published the rules in the Firebase Console and the file is not too large.");
         }
     }
 
@@ -511,31 +553,41 @@
     }
 
     async function deleteRecord(section, docId) {
-        if (!docId || docId === 'undefined') {
-            alert("Local example data cannot be deleted from the cloud. Clear cloud first.");
+        if (!confirm('Are you sure you want to delete this record?')) return;
+
+        // Local-only deletion for default example data (ID is missing or 'undefined')
+        if (!docId || docId === 'undefined' || docId === 'null') {
+            // Remove by matching src or item name if possible, or just filter out locals
+            data[section] = data[section].filter(row => row.id && row.id !== 'undefined');
+            renderTable(section);
+            renderGallery();
+            alert("Local example data removed from view.");
             return;
         }
-        if (confirm('Delete this record from the cloud permanently?')) {
-            try {
-                await db.collection(section).doc(docId).delete();
-                await loadData();
-                renderTable(section);
-            } catch (error) {
-                console.error("Cloud Delete Error:", error);
-                alert("Database Error: Check your Firestore Security Rules.");
-            }
+
+        try {
+            await db.collection(section).doc(docId).delete();
+            await loadData();
+            renderTable(section);
+            alert("Record deleted from cloud successfully!");
+        } catch (error) {
+            console.error("Cloud Delete Error:", error);
+            alert("Database Error: " + error.message + "\n\nTip: Check if your Firestore Rules allow deletion.");
         }
     }
 
     function renderGallery() {
-        const grid = document.getElementById('gallery-grid');
-        if (!grid) return;
-        
-        grid.innerHTML = data.gallery.map((img, i) => `
-            <div class="fade-in-up" style="transition-delay: ${i * 0.1}s; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
-                <img src="${img.src}" alt="${img.alt}" style="width: 100%; height: 300px; object-fit: cover; display: block; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-        `).join('');
+        const grids = ['gallery-grid', 'home-gallery-grid'];
+        grids.forEach(gridId => {
+            const grid = document.getElementById(gridId);
+            if (!grid) return;
+            
+            grid.innerHTML = data.gallery.map((img, i) => `
+                <div class="fade-in-up" style="transition-delay: ${i * 0.1}s; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
+                    <img src="${img.src}" alt="${img.alt}" style="width: 100%; height: 300px; object-fit: cover; display: block; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                </div>
+            `).join('');
+        });
     }
     </script>
 </body>
