@@ -25,7 +25,6 @@
             <ul class="nav-links">
                 <li><a href="#" onclick="showPage('home')" id="nav-home" class="nav-active">Home</a></li>
                 <li><a href="#" onclick="showPage('about')" id="nav-about">Our Story</a></li>
-                <li><a href="#" onclick="showPage('photos')" id="nav-photos">Photos</a></li>
                 <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
                 <li><a href="#" onclick="showPage('buffalo')" id="nav-buffalo">Buffalo Selling</a></li>
             </ul>
@@ -93,10 +92,6 @@
                     &#128176; Salaries
                     <small>View &amp; manage salaries</small>
                 </div>
-                <div class="dash-card" onclick="openSection('gallery')">
-                    &#128444; Manage Gallery
-                    <small>Upload farm photos</small>
-                </div>
             </div>
 
             <!-- DETAIL VIEW -->
@@ -124,16 +119,6 @@
                     <p class="hero-desc">Pure, fresh dairy products crafted with love and tradition.<br>Serving families with quality milk since 2026 — straight from our pastures to your home.</p>
                 </div>
             </section>
-            
-            <!-- NEW HOME PAGE GALLERY SECTION -->
-            <section class="products section-padding bg-light" style="padding-top: 1rem;">
-                <div class="container">
-                    <h2 class="text-center section-title fade-in-up" style="margin-bottom: 2rem;">Our Farm Gallery</h2>
-                    <div id="home-gallery-grid" class="product-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                        <!-- Photos will be rendered here dynamically -->
-                    </div>
-                </div>
-            </section>
         </div>
 
         <!-- OUR STORY PAGE -->
@@ -150,18 +135,6 @@
                         <div class="about-image">
                             <img src="images/about.png" alt="Our beautiful dairy farm">
                         </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
-        <!-- PHOTOS PAGE -->
-        <div id="page-photos" class="page-view">
-            <section class="products section-padding bg-light">
-                <div class="container">
-                    <h2 class="text-center section-title fade-in-up">Farm Gallery</h2>
-                    <div id="gallery-grid" class="product-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-                        <!-- Photos will be rendered here dynamically -->
                     </div>
                 </div>
             </section>
@@ -284,41 +257,23 @@
         salaries: [
             { name: 'Ravi Kumar',  role: 'Farm Manager',  amount: '₹18,000', month: 'April 2026' },
             { name: 'Suresh Babu', role: 'Milk Handler',  amount: '₹12,000', month: 'April 2026' }
-        ],
-        gallery: [
-            { src: 'https://images.unsplash.com/photo-1590402127261-26ce1ea77d20?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', alt: 'Lush Pastures' },
-            { src: 'https://images.unsplash.com/photo-1570042225831-d98fa7577f1e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', alt: 'Dairy Cows' },
-            { src: 'https://images.unsplash.com/photo-1598177439369-0e70494cf81a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', alt: 'Buffaloes grazing' }
         ]
     };
 
-    function renderHomeGallery() {
-        const grid = document.getElementById('home-gallery-grid');
-        if (!grid) return;
-        
-        grid.innerHTML = data.gallery.map((img, i) => `
-            <div class="fade-in-up" style="transition-delay: ${i * 0.1}s; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
-                <img src="${img.src}" alt="${img.alt}" style="width: 100%; height: 300px; object-fit: cover; display: block; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-            </div>
-        `).join('');
-    }
 
     // Main Load Function (Resilient and Fast)
     async function loadData(targetSection = null) {
-        const sections = targetSection ? [targetSection] : ['daily', 'expenses', 'production', 'salaries', 'gallery'];
+        const sections = targetSection ? [targetSection] : ['daily', 'expenses', 'production', 'salaries'];
         
         for (const section of sections) {
             try {
                 const snapshot = await db.collection(section).orderBy('createdAt', 'desc').get();
                 data[section] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 
-                if (section === 'gallery') renderGallery();
-                
             } catch (error) {
                 console.warn(`Section Load Error [${section}]:`, error);
                 if (!data[section] || data[section].length === 0) {
                     data[section] = DEFAULT_DATA[section] || [];
-                    if (section === 'gallery') renderGallery();
                 }
             }
         }
@@ -327,7 +282,6 @@
     // Call load on start
     window.addEventListener('DOMContentLoaded', () => {
         data = { ...DEFAULT_DATA }; // Show defaults immediately
-        renderGallery();
         loadData(); // Then try to fetch cloud data
     });
 
@@ -336,8 +290,7 @@
         daily:      { title: 'Daily Report',      fields: ['date','item','qty','note'],           labels: ['Date','Item','Quantity','Note'] },
         expenses:   { title: 'Monthly Expenses',  fields: ['month','category','amount','note'],   labels: ['Month','Category','Amount','Note'] },
         production: { title: 'Production',        fields: ['date','product','quantity','status'], labels: ['Date','Product','Quantity','Status'] },
-        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],       labels: ['Name','Role','Amount','Month'] },
-        gallery:    { title: 'Manage Gallery',    fields: ['src','alt'],                         labels: ['Image','Caption'] }
+        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],       labels: ['Name','Role','Amount','Month'] }
     };
 
     let currentSection = null;
@@ -401,7 +354,7 @@
     }
 
     function downloadCSV() {
-        if (!currentSection || currentSection === 'gallery') return;
+        if (!currentSection) return;
         
         const s = schema[currentSection];
         const rows = data[currentSection];
@@ -437,60 +390,13 @@
         const s = schema[section];
         let html = '<div class="add-form-inner">';
         s.fields.forEach((f, i) => {
-            if (f === 'src') {
-                html += `<div class="file-upload-wrapper">
-                            <label for="inp_${f}" class="file-label">Choose from Gallery</label>
-                            <input type="file" id="inp_${f}" accept="image/*" class="add-input" style="display:none;" onchange="handleFileSelect(this)">
-                            <span id="file-name" class="file-name-hint">No file chosen</span>
-                         </div>`;
-            } else {
-                html += `<input type="text" id="inp_${f}" placeholder="${s.labels[i]}" class="add-input">`;
-            }
+            html += `<input type="text" id="inp_${f}" placeholder="${s.labels[i]}" class="add-input">`;
         });
         html += `<button class="btn btn-add" onclick="addRecord('${section}')">+ Add</button>`;
         html += '</div>';
         document.getElementById('addForm').innerHTML = html;
     }
 
-    let selectedImageData = null;
-    function handleFileSelect(input) {
-        const file = input.files[0];
-        if (!file) return;
-
-        document.getElementById('file-name').textContent = file.name;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() {
-                // Compression Logic: Max width 800px or height 800px
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
-                const MAX_SIZE = 800;
-
-                if (width > height) {
-                    if (width > MAX_SIZE) {
-                        height *= MAX_SIZE / width;
-                        width = MAX_SIZE;
-                    }
-                } else {
-                    if (height > MAX_SIZE) {
-                        width *= MAX_SIZE / height;
-                        height = MAX_SIZE;
-                    }
-                }
-
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(img, 0, 0, width, height);
-                // Even more aggressive compression (Max 600px, quality 0.5)
-                selectedImageData = canvas.toDataURL('image/jpeg', 0.5);
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
 
     function showStatus(msg) {
         const st = document.getElementById('dashStatus');
@@ -505,29 +411,18 @@
         let valid = false;
 
         s.fields.forEach(f => {
-            if (f === 'src' && section === 'gallery') {
-                row[f] = selectedImageData;
-                if (selectedImageData) valid = true;
-            } else {
-                const v = document.getElementById('inp_' + f).value.trim();
-                row[f] = v;
-                if (v) valid = true;
-            }
+            const v = document.getElementById('inp_' + f).value.trim();
+            row[f] = v;
+            if (v) valid = true;
         });
 
-        if (!valid) { showStatus('Please select a file or fill in a field.'); return; }
-        
-        if (section === 'gallery' && selectedImageData && selectedImageData.length > 1000000) {
-            alert("Image is still too large even after compression.");
-            return;
-        }
+        if (!valid) { showStatus('Please fill in at least one field.'); return; }
 
         try {
             // Optimistic UI Update: Show it immediately!
             const tempId = 'temp_' + Date.now();
             data[section].unshift({ id: tempId, ...row });
             renderTable(section);
-            if (section === 'gallery') renderGallery();
             showStatus("Adding records...");
 
             await db.collection(section).add(row);
@@ -536,10 +431,6 @@
             await loadData(section);
             
             // Reset Form
-            selectedImageData = null;
-            if (section === 'gallery') {
-                document.getElementById('file-name').textContent = 'No file chosen';
-            }
             s.fields.forEach(f => { 
                 const el = document.getElementById('inp_' + f);
                 if (el) el.value = ''; 
@@ -565,9 +456,6 @@
             : rows.map((row) =>
                 '<tr>' +
                 s.fields.map(f => {
-                    if (f === 'src' && section === 'gallery') {
-                        return `<td><img src="${row[f]}" style="width:50px;height:50px;object-fit:cover;border-radius:4px;"></td>`;
-                    }
                     return `<td>${row[f] || '-'}</td>`;
                 }).join('') +
                 `<td><button class="btn-delete" onclick="deleteRecord('${section}','${row.id}')">&#128465; Delete</button></td>` +
@@ -582,7 +470,6 @@
             // Optimistic UI Update: Hide it immediately!
             data[section] = data[section].filter(row => row.id !== docId);
             renderTable(section);
-            if (section === 'gallery') renderGallery();
             showStatus("Deleting record...");
 
             if (docId && !docId.startsWith('temp_')) {
@@ -598,19 +485,6 @@
         }
     }
 
-    function renderGallery() {
-        const grids = ['gallery-grid', 'home-gallery-grid'];
-        grids.forEach(gridId => {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            
-            grid.innerHTML = data.gallery.map((img, i) => `
-                <div class="fade-in-up" style="transition-delay: ${i * 0.1}s; border-radius: 15px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.12);">
-                    <img src="${img.src}" alt="${img.alt}" style="width: 100%; height: 300px; object-fit: cover; display: block; transition: transform 0.4s ease;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-                </div>
-            `).join('');
-        });
-    }
     </script>
 </body>
 </html>
