@@ -742,7 +742,11 @@
         const address = document.getElementById('bookAddress').value;
         const note = document.getElementById('bookNote').value || 'None';
 
-        // Generate Order ID and IST Timestamp
+        // Generate Order ID (Sequential based on local device)
+        let orderCount = parseInt(localStorage.getItem('adfOrderCount') || '0') + 1;
+        localStorage.setItem('adfOrderCount', orderCount);
+        const orderID = 'ADF' + orderCount.toString().padStart(4, '0');
+
         const now = new Date();
         const istOptions = { 
             timeZone: 'Asia/Kolkata', 
@@ -754,10 +758,9 @@
             minute: '2-digit' 
         };
         const istTime = now.toLocaleString('en-IN', istOptions);
-        const orderID = 'ADF' + now.getTime().toString().slice(-6);
 
         const message = `*New Dairy Order* 🥛\n\n` +
-                        `*Order ID:* #${orderID}\n` +
+                        `*Order ID:* ${orderID}\n` +
                         `*Order Time:* ${istTime} IST\n\n` +
                         `*Customer Name:* ${name}\n` +
                         `*Phone:* ${phone}\n` +
