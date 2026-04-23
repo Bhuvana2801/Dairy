@@ -9,7 +9,6 @@ service cloud.firestore {
     match /expenses/{document}   { allow read, write: if true; }
     match /production/{document} { allow read, write: if true; }
     match /salaries/{document}   { allow read, write: if true; }
-    match /orders/{document}     { allow read, write: if true; }
     
     // Default: deny everything else
     match /{document=**} {
