@@ -228,43 +228,74 @@
                     <div class="booking-layout">
                         <!-- Booking Form -->
                         <div class="booking-form-card">
-                            <h3 style="color:var(--primary-color); margin-bottom:1.5rem; font-size:1.4rem;">🛒 Order Details</h3>
+                            <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:2rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 1rem;">
+                                <span style="font-size: 1.8rem;">🛒</span>
+                                <h3 style="color:var(--primary-color); margin:0; font-size:1.6rem; font-family:var(--font-heading);">Order Details</h3>
+                            </div>
+                            
                             <form id="bookingForm" onsubmit="sendBookingWhatsApp(event)">
-                                <div class="booking-field">
-                                    <label for="bookName">Full Name *</label>
-                                    <input type="text" id="bookName" placeholder="Enter your full name" required>
+                                <div class="booking-row">
+                                    <div class="booking-field">
+                                        <label for="bookName">Full Name *</label>
+                                        <div class="input-container">
+                                            <span class="field-icon">👤</span>
+                                            <input type="text" id="bookName" placeholder="Enter your full name" required>
+                                        </div>
+                                    </div>
+                                    <div class="booking-field">
+                                        <label for="bookPhone">Phone Number *</label>
+                                        <div class="input-container">
+                                            <span class="field-icon">📞</span>
+                                            <input type="tel" id="bookPhone" placeholder="Enter your phone number" required>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="booking-field">
-                                    <label for="bookPhone">Phone Number *</label>
-                                    <input type="tel" id="bookPhone" placeholder="Enter your phone number" required>
-                                </div>
+
                                 <div class="booking-field">
                                     <label for="bookProduct">Select Product *</label>
-                                    <select id="bookProduct" required>
-                                        <option value="">-- Choose a product --</option>
-                                        <option value="Buffalo Milk">🐃 Buffalo Milk</option>
-                                        <option value="Fresh Curd">🫙 Fresh Curd</option>
-                                        <option value="Pure Desi Ghee">🧈 Pure Desi Ghee</option>
-                                        <option value="Spiced Buttermilk">🥤 Spiced Buttermilk</option>
-                                    </select>
+                                    <div class="input-container">
+                                        <span class="field-icon">🥛</span>
+                                        <select id="bookProduct" required>
+                                            <option value="">-- Choose a product --</option>
+                                            <option value="Buffalo Milk">🐃 Buffalo Milk</option>
+                                            <option value="Fresh Curd">🫙 Fresh Curd</option>
+                                            <option value="Pure Desi Ghee">🧈 Pure Desi Ghee</option>
+                                            <option value="Spiced Buttermilk">🥤 Spiced Buttermilk</option>
+                                        </select>
+                                    </div>
                                 </div>
+
                                 <div class="booking-row">
                                     <div class="booking-field">
                                         <label for="bookQty">Quantity *</label>
-                                        <input type="text" id="bookQty" placeholder="e.g. 2 Litres" required>
+                                        <div class="input-container">
+                                            <span class="field-icon">⚖️</span>
+                                            <input type="text" id="bookQty" placeholder="e.g. 2 Litres" required>
+                                        </div>
                                     </div>
                                     <div class="booking-field">
                                         <label for="bookDate">Delivery Date</label>
-                                        <input type="date" id="bookDate">
+                                        <div class="input-container">
+                                            <span class="field-icon">📅</span>
+                                            <input type="date" id="bookDate">
+                                        </div>
                                     </div>
                                 </div>
+
                                 <div class="booking-field">
                                     <label for="bookAddress">Delivery Address *</label>
-                                    <textarea id="bookAddress" rows="3" placeholder="Enter your full delivery address" required></textarea>
+                                    <div class="input-container textarea-container">
+                                        <span class="field-icon">📍</span>
+                                        <textarea id="bookAddress" rows="3" placeholder="Enter your full delivery address" required></textarea>
+                                    </div>
                                 </div>
+
                                 <div class="booking-field">
                                     <label for="bookNote">Special Instructions</label>
-                                    <textarea id="bookNote" rows="2" placeholder="Any special requests? (optional)"></textarea>
+                                    <div class="input-container textarea-container">
+                                        <span class="field-icon">✍️</span>
+                                        <textarea id="bookNote" rows="2" placeholder="Any special requests? (optional)"></textarea>
+                                    </div>
                                 </div>
                                 <button type="submit" class="booking-submit-btn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
@@ -275,36 +306,44 @@
 
                         <!-- Contact Info Card -->
                         <div class="booking-info-card">
-                            <h3 style="color:var(--primary-color); margin-bottom:1.5rem; font-size:1.4rem;">📞 Need Help?</h3>
+                            <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:2rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 1rem;">
+                                <span style="font-size: 1.8rem;">📞</span>
+                                <h3 style="color:var(--primary-color); margin:0; font-size:1.6rem; font-family:var(--font-heading);">Need Help?</h3>
+                            </div>
+
                             <div class="info-item">
-                                <div class="info-icon">📍</div>
+                                <div class="info-icon" style="background: var(--bg-light); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">📍</div>
                                 <div>
-                                    <strong>Farm Location</strong>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Farm Location</strong>
                                     <p style="margin:0; color:#556B55; font-size:0.95rem;">Ayyappa Dairy Farm, South India</p>
                                 </div>
                             </div>
+
                             <div class="info-item">
-                                <div class="info-icon">📧</div>
+                                <div class="info-icon" style="background: var(--bg-light); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">📧</div>
                                 <div>
-                                    <strong>Email Us</strong>
-                                    <a href="mailto:ayyappadairyfarm01@gmail.com" style="display:block; color:var(--primary-color); text-decoration:none; font-size:0.95rem;">ayyappadairyfarm01@gmail.com</a>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Email Us</strong>
+                                    <a href="mailto:ayyappadairyfarm01@gmail.com" style="display:block; color:#556B55; text-decoration:none; font-size:0.95rem; transition: 0.2s;">ayyappadairyfarm01@gmail.com</a>
                                 </div>
                             </div>
+
                             <div class="info-item">
-                                <div class="info-icon">📞</div>
+                                <div class="info-icon" style="background: var(--bg-light); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">📞</div>
                                 <div>
-                                    <strong>Call Us</strong>
-                                    <a href="tel:+919392603808" style="display:block; color:var(--primary-color); text-decoration:none; font-size:0.95rem;">+91 93926 03808</a>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Call Us</strong>
+                                    <a href="tel:+919392603808" style="display:block; color:#556B55; text-decoration:none; font-size:0.95rem; transition: 0.2s;">+91 93926 03808</a>
                                 </div>
                             </div>
-                            <div class="info-item">
-                                <div class="info-icon">🕐</div>
+
+                            <div class="info-item" style="margin-bottom: 2rem;">
+                                <div class="info-icon" style="background: var(--bg-light); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">🕐</div>
                                 <div>
-                                    <strong>Delivery Hours</strong>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Delivery Hours</strong>
                                     <p style="margin:0; color:#556B55; font-size:0.95rem;">Morning: 6:00 AM – 9:00 AM<br>Evening: 5:00 PM – 8:00 PM</p>
                                 </div>
                             </div>
-                            <a href="https://wa.me/919392603808" target="_blank" rel="noopener noreferrer" class="info-whatsapp-btn">
+
+                            <a href="https://wa.me/919392603808" target="_blank" rel="noopener noreferrer" class="info-whatsapp-btn" style="margin-top: 0;">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
                                 Chat on WhatsApp
                             </a>

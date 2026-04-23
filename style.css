@@ -752,22 +752,53 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     .booking-row { grid-template-columns: 1fr; gap: 0; }
 }
 
-.booking-field { margin-bottom: 1.2rem; }
-.booking-field label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); }
-.booking-field input, .booking-field select, .booking-field textarea {
+.booking-field { margin-bottom: 1.5rem; }
+.booking-field label { display: block; font-weight: 600; margin-bottom: 0.6rem; color: var(--text-dark); font-size: 0.95rem; }
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.field-icon {
+    position: absolute;
+    left: 1.1rem;
+    font-size: 1.1rem;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: 1;
+    transition: var(--transition);
+}
+
+.input-container input, .input-container select, .input-container textarea {
     width: 100%;
-    padding: 0.9rem 1.2rem;
-    border: 1.5px solid #ddd;
-    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    padding-left: 3.2rem !important;
+    border: 1.5px solid #e0e6e0;
+    border-radius: 14px;
     font-size: 1rem;
     font-family: var(--font-main);
     outline: none;
     transition: var(--transition);
+    background: #fdfdfd;
 }
-.booking-field input:focus, .booking-field select:focus, .booking-field textarea:focus {
+
+.input-container input:focus, .input-container select:focus, .input-container textarea:focus {
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(47,82,51,0.1);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(26, 92, 42, 0.08);
 }
+
+.input-container:focus-within .field-icon {
+    opacity: 1;
+    transform: scale(1.1);
+    color: var(--primary-color);
+}
+
+.textarea-container { align-items: flex-start; }
+.textarea-container .field-icon { top: 1.1rem; }
 
 .booking-submit-btn {
     width: 100%;
