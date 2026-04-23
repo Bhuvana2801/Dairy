@@ -219,22 +219,84 @@ p { font-size: 1.1rem; color: #556B55; margin-bottom: 1rem; }
 /* Products Section */
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
 }
 
 .product-card {
     background: var(--white);
     border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    padding: 2rem 1.8rem;
+    text-align: center;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.07);
     transition: var(--transition);
-    border: 1px solid rgba(177, 216, 183, 0.3);
+    border: 1.5px solid rgba(177, 216, 183, 0.35);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
 }
 
 .product-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 45px rgba(26,92,42,0.13);
+    border-color: var(--secondary-color);
+}
+
+.product-icon {
+    font-size: 3.5rem;
+    margin-bottom: 0.4rem;
+    line-height: 1;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.1));
+}
+
+.product-card h3 {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.product-card p {
+    font-size: 0.97rem;
+    color: #5a6b5b;
+    line-height: 1.6;
+    margin-bottom: 0.6rem;
+    flex: 1;
+}
+
+.product-badge {
+    display: inline-block;
+    background: #e8f5e9;
+    color: #1e8e3e;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 0.3rem 0.9rem;
+    border-radius: 50px;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+}
+
+.product-order-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #25D366;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.92rem;
+    padding: 0.7rem 1.6rem;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(37,211,102,0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    margin-top: auto;
+}
+
+.product-order-btn:hover {
+    background: #1ebe5d;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37,211,102,0.45);
 }
 
 .card-img-wrapper {
@@ -248,8 +310,6 @@ p { font-size: 1.1rem; color: #556B55; margin-bottom: 1rem; }
     object-fit: cover;
     transition: transform 0.5s ease;
 }
-
-.product-card:hover .card-img-wrapper img { transform: scale(1.1); }
 
 .card-content {
     padding: 2rem;
@@ -660,3 +720,97 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     color: #666;
     font-style: italic;
 }
+
+/* Booking Layout */
+.booking-layout {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 3rem;
+    align-items: start;
+    text-align: left;
+}
+
+@media (max-width: 900px) {
+    .booking-layout { grid-template-columns: 1fr; gap: 2rem; }
+}
+
+.booking-form-card, .booking-info-card {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    border: 1px solid rgba(177,216,183,0.4);
+}
+
+.booking-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+@media (max-width: 600px) {
+    .booking-row { grid-template-columns: 1fr; gap: 0; }
+}
+
+.booking-field { margin-bottom: 1.2rem; }
+.booking-field label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark); }
+.booking-field input, .booking-field select, .booking-field textarea {
+    width: 100%;
+    padding: 0.9rem 1.2rem;
+    border: 1.5px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: var(--font-main);
+    outline: none;
+    transition: var(--transition);
+}
+.booking-field input:focus, .booking-field select:focus, .booking-field textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(47,82,51,0.1);
+}
+
+.booking-submit-btn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    background: #25D366;
+    color: #fff;
+    padding: 1.2rem;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-top: 1rem;
+}
+.booking-submit-btn:hover { background: #1ebe5d; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37,211,102,0.3); }
+
+.info-item {
+    display: flex;
+    gap: 1.2rem;
+    margin-bottom: 1.8rem;
+}
+.info-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.info-whatsapp-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.8rem;
+    background: #25D366;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 2rem;
+    transition: var(--transition);
+}
+.info-whatsapp-btn:hover { background: #1ebe5d; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37,211,102,0.3); }

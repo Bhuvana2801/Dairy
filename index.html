@@ -25,8 +25,8 @@
             <ul class="nav-links">
                 <li><a href="#" onclick="showPage('home')" id="nav-home" class="nav-active">Home</a></li>
                 <li><a href="#" onclick="showPage('about')" id="nav-about">Our Story</a></li>
-                <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
-                <li><a href="#" onclick="showPage('buffalo')" id="nav-buffalo">Buffalo Selling</a></li>
+                <li><a href="#" onclick="showPage('products')" id="nav-products">Our Products</a></li>
+                <li><a href="#" onclick="showPage('contact')" id="nav-contact">Order Now</a></li>
             </ul>
         </nav>
         <div class="nav-actions">
@@ -92,10 +92,6 @@
                     &#128176; Salaries
                     <small>View &amp; manage salaries</small>
                 </div>
-                <div class="dash-card" onclick="openSection('buffalo')">
-                    &#128003; Buffalo Selling
-                    <small>Manage buffalo sales</small>
-                </div>
             </div>
 
             <!-- DETAIL VIEW -->
@@ -144,37 +140,168 @@
             </section>
         </div>
 
-        <!-- CONTACT PAGE -->
-        <div id="page-contact" class="page-view">
-            <section class="contact section-padding">
-                <div class="container fade-in-up">
-                    <div class="cta-box">
-                        <h2>Order Fresh Dairy Today</h2>
-                        <p>Subscribe for weekly home delivery or visit our farm for a free tasting.</p>
-                        <form class="contact-form" id="contactForm">
-                            <input type="email" placeholder="Enter your email address" required>
-                            <button type="submit" class="btn btn-primary">Subscribe</button>
-                        </form>
+        <!-- OUR PRODUCTS PAGE -->
+        <div id="page-products" class="page-view">
+            <section class="section-padding" style="background: var(--bg-light);">
+                <div class="container">
+                    <div class="fade-in-up" style="text-align:center; margin-bottom:3rem;">
+                        <h2 style="font-size:2.2rem; color:var(--primary-color); margin-bottom:0.8rem;">🥛 Our Fresh Products</h2>
+                        <p style="color:var(--text-muted); font-size:1.1rem; max-width:560px; margin:0 auto;">Straight from our farm to your table — pure, natural, and packed with goodness.</p>
+                    </div>
+                    <div class="product-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:2rem;">
+
+
+
+                        <!-- Buffalo Milk -->
+                        <div class="product-card fade-in-up">
+                            <div class="product-icon">🐃</div>
+                            <h3>Buffalo Milk</h3>
+                            <p>Thick, creamy buffalo milk — ideal for making ghee, curd, and sweets. Higher fat content for extra richness.</p>
+                            <div class="product-badge">Available Daily</div>
+                            <a href="https://wa.me/919392603808?text=Hi%2C%20I%20want%20to%20order%20Buffalo%20Milk" target="_blank" class="product-order-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
+                                Order on WhatsApp
+                            </a>
+                        </div>
+
+                        <!-- Curd -->
+                        <div class="product-card fade-in-up">
+                            <div class="product-icon">🫙</div>
+                            <h3>Fresh Curd</h3>
+                            <p>Thick, home-style curd made daily from our farm's fresh milk. Creamy, probiotic-rich, and delicious.</p>
+                            <div class="product-badge">Made Fresh Daily</div>
+                            <a href="https://wa.me/919392603808?text=Hi%2C%20I%20want%20to%20order%20Fresh%20Curd" target="_blank" class="product-order-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
+                                Order on WhatsApp
+                            </a>
+                        </div>
+
+                        <!-- Ghee -->
+                        <div class="product-card fade-in-up">
+                            <div class="product-icon">🧈</div>
+                            <h3>Pure Desi Ghee</h3>
+                            <p>Traditional bilona-method ghee made from curd. A golden, aromatic treasure for your kitchen.</p>
+                            <div class="product-badge">Premium Quality</div>
+                            <a href="https://wa.me/919392603808?text=Hi%2C%20I%20want%20to%20order%20Pure%20Desi%20Ghee" target="_blank" class="product-order-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
+                                Order on WhatsApp
+                            </a>
+                        </div>
+
+
+
+                        <!-- Buttermilk -->
+                        <div class="product-card fade-in-up">
+                            <div class="product-icon">🥤</div>
+                            <h3>Spiced Buttermilk</h3>
+                            <p>Refreshing, traditional chaas made from churned curd — spiced with ginger, cumin, and fresh herbs.</p>
+                            <div class="product-badge">Seasonal</div>
+                            <a href="https://wa.me/919392603808?text=Hi%2C%20I%20want%20to%20order%20Spiced%20Buttermilk" target="_blank" class="product-order-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
+                                Order on WhatsApp
+                            </a>
+                        </div>
+
                     </div>
                 </div>
             </section>
         </div>
 
-        <!-- BUFFALO SELLING PAGE -->
-        <div id="page-buffalo" class="page-view">
-            <section class="about section-padding" style="background: var(--bg-light);">
+        <!-- CONTACT PAGE -->
+        <div id="page-contact" class="page-view">
+            <section class="contact section-padding" style="background: var(--bg-light);">
                 <div class="container fade-in-up">
-                    <div class="cta-box" style="background: transparent; border: 2px solid rgba(177,216,183,0.5);">
-                        <h2 style="color: var(--primary-color);">Premium Buffalo Selling</h2>
-                        <p style="color: var(--text-dark);">Looking to expand your dairy farm? We offer top-quality, healthy buffaloes from our very own herd. Raised on lush pastures and nurtured with the best natural feed, our cattle guarantee an excellent milk yield.</p>
-                        
-                        <!-- Dynamic Buffalo Grid -->
-                        <div id="buffalo-selling-grid" class="product-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem; text-align: left;">
-                            <!-- Buffaloes will be rendered here dynamically -->
+                    <div style="text-align:center; margin-bottom:2.5rem;">
+                        <h2 style="font-size:2.2rem; color:var(--primary-color); margin-bottom:0.5rem;">📦 Book Your Order</h2>
+                        <p style="color:#556B55; font-size:1.1rem; max-width:560px; margin:0 auto;">Fill in your details below and we'll get your fresh dairy delivered right to your doorstep!</p>
+                    </div>
+
+                    <div class="booking-layout">
+                        <!-- Booking Form -->
+                        <div class="booking-form-card">
+                            <h3 style="color:var(--primary-color); margin-bottom:1.5rem; font-size:1.4rem;">🛒 Order Details</h3>
+                            <form id="bookingForm" onsubmit="sendBookingWhatsApp(event)">
+                                <div class="booking-field">
+                                    <label for="bookName">Full Name *</label>
+                                    <input type="text" id="bookName" placeholder="Enter your full name" required>
+                                </div>
+                                <div class="booking-field">
+                                    <label for="bookPhone">Phone Number *</label>
+                                    <input type="tel" id="bookPhone" placeholder="Enter your phone number" required>
+                                </div>
+                                <div class="booking-field">
+                                    <label for="bookProduct">Select Product *</label>
+                                    <select id="bookProduct" required>
+                                        <option value="">-- Choose a product --</option>
+                                        <option value="Buffalo Milk">🐃 Buffalo Milk</option>
+                                        <option value="Fresh Curd">🫙 Fresh Curd</option>
+                                        <option value="Pure Desi Ghee">🧈 Pure Desi Ghee</option>
+                                        <option value="Spiced Buttermilk">🥤 Spiced Buttermilk</option>
+                                    </select>
+                                </div>
+                                <div class="booking-row">
+                                    <div class="booking-field">
+                                        <label for="bookQty">Quantity *</label>
+                                        <input type="text" id="bookQty" placeholder="e.g. 2 Litres" required>
+                                    </div>
+                                    <div class="booking-field">
+                                        <label for="bookDate">Delivery Date</label>
+                                        <input type="date" id="bookDate">
+                                    </div>
+                                </div>
+                                <div class="booking-field">
+                                    <label for="bookAddress">Delivery Address *</label>
+                                    <textarea id="bookAddress" rows="3" placeholder="Enter your full delivery address" required></textarea>
+                                </div>
+                                <div class="booking-field">
+                                    <label for="bookNote">Special Instructions</label>
+                                    <textarea id="bookNote" rows="2" placeholder="Any special requests? (optional)"></textarea>
+                                </div>
+                                <button type="submit" class="booking-submit-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
+                                    Send Order via WhatsApp
+                                </button>
+                            </form>
                         </div>
 
-                        <a href="#" onclick="showPage('contact')" class="btn btn-primary" style="margin-top: 2.5rem;">Inquire About Buffaloes</a>
+                        <!-- Contact Info Card -->
+                        <div class="booking-info-card">
+                            <h3 style="color:var(--primary-color); margin-bottom:1.5rem; font-size:1.4rem;">📞 Need Help?</h3>
+                            <div class="info-item">
+                                <div class="info-icon">📍</div>
+                                <div>
+                                    <strong>Farm Location</strong>
+                                    <p style="margin:0; color:#556B55; font-size:0.95rem;">Ayyappa Dairy Farm, South India</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">📧</div>
+                                <div>
+                                    <strong>Email Us</strong>
+                                    <a href="mailto:ayyappadairyfarm01@gmail.com" style="display:block; color:var(--primary-color); text-decoration:none; font-size:0.95rem;">ayyappadairyfarm01@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">📞</div>
+                                <div>
+                                    <strong>Call Us</strong>
+                                    <a href="tel:+919392603808" style="display:block; color:var(--primary-color); text-decoration:none; font-size:0.95rem;">+91 93926 03808</a>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-icon">🕐</div>
+                                <div>
+                                    <strong>Delivery Hours</strong>
+                                    <p style="margin:0; color:#556B55; font-size:0.95rem;">Morning: 6:00 AM – 9:00 AM<br>Evening: 5:00 PM – 8:00 PM</p>
+                                </div>
+                            </div>
+                            <a href="https://wa.me/919392603808" target="_blank" rel="noopener noreferrer" class="info-whatsapp-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
+                                Chat on WhatsApp
+                            </a>
+                        </div>
                     </div>
+
                 </div>
             </section>
         </div>
@@ -194,15 +321,23 @@
                 <ul>
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">Our Story</a></li>
-                    <li><a href="#products">Products</a></li>
+                    <li><a href="#" onclick="showPage('products')">Products</a></li>
+                    <li><a href="#" onclick="showPage('contact')">Order Now</a></li>
                 </ul>
             </div>
             <div class="footer-col">
-                <h4>Contact Us</h4>
+                <h4>Support & Contact</h4>
                 <ul>
                     <li>📍 Ayyappa Dairy Farm, South India</li>
-                    <li>📧 ayyappadairy@gmail.com</li>
-                    <li>📞 +91 93920 00005</li>
+                    <li><a href="mailto:ayyappadairyfarm01@gmail.com" style="color:inherit;text-decoration:none;">📧 ayyappadairyfarm01@gmail.com</a></li>
+                    <li><a href="tel:+919392603808" style="color:inherit;text-decoration:none;">📞 +91 93926 03808</a></li>
+                    <li>
+                        <a href="https://wa.me/919392603808" target="_blank" rel="noopener noreferrer"
+                           style="display:inline-flex; align-items:center; gap:0.5rem; background:#25D366; color:#fff; font-size:0.85rem; font-weight:600; padding:0.4rem 1rem; border-radius:50px; text-decoration:none; margin-top:0.4rem;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
+                            WhatsApp Us
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -226,7 +361,6 @@
         if (navEl) navEl.classList.add('nav-active');
 
         // Dynamic rendering
-        if (pageId === 'buffalo') renderBuffaloes();
 
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -248,7 +382,7 @@
     const db = firebase.firestore();
 
     // ── Cloud data storage ───────────────────────────────
-    let data = { daily: [], expenses: [], production: [], salaries: [], buffalo: [] };
+    let data = { daily: [], expenses: [], production: [], salaries: [] };
 
     // Placeholder data
     const DEFAULT_DATA = {
@@ -267,29 +401,22 @@
         salaries: [
             { id: 'def_s1', name: 'Ravi Kumar',  role: 'Farm Manager',  amount: '₹18,000', month: 'April 2026' },
             { id: 'def_s2', name: 'Suresh Babu', role: 'Milk Handler',  amount: '₹12,000', month: 'April 2026' }
-        ],
-        buffalo: [
-            { id: 'def_b1', tagId: 'B-101', breed: 'Murrah',  age: '3 Years', price: '₹85,000', status: 'Available' },
-            { id: 'def_b2', tagId: 'B-102', breed: 'Surti',   age: '4 Years', price: '₹75,000', status: 'Available' },
-            { id: 'def_b3', tagId: 'B-103', breed: 'Murrah',  age: '2.5 Years', price: '₹95,000', status: 'Sold' }
         ]
     };
 
 
     // Replace robust loadData with Instant Realtime Listener
     function setupRealtimeListeners() {
-        const sections = ['daily', 'expenses', 'production', 'salaries', 'buffalo'];
+        const sections = ['daily', 'expenses', 'production', 'salaries'];
         sections.forEach(section => {
             db.collection(section).orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 data[section] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 if (currentSection === section) renderTable(section);
-                if (section === 'buffalo') renderBuffaloes();
             }, error => {
                 console.warn(`Sync Error [${section}]:`, error);
                 if (!data[section] || data[section].length === 0) {
                     data[section] = DEFAULT_DATA[section] || [];
                     if (currentSection === section) renderTable(section);
-                    if (section === 'buffalo') renderBuffaloes();
                 }
             });
         });
@@ -298,7 +425,6 @@
     // Call load on start
     window.addEventListener('DOMContentLoaded', () => {
         data = { ...DEFAULT_DATA }; // Show defaults immediately
-        renderBuffaloes();
         setupRealtimeListeners(); // Start listening to cloud updates instantly
     });
 
@@ -307,8 +433,7 @@
         daily:      { title: 'Daily Report',      fields: ['date','item','qty','note'],           labels: ['Date','Item','Quantity','Note'] },
         expenses:   { title: 'Monthly Expenses',  fields: ['month','category','amount','note'],   labels: ['Month','Category','Amount','Note'] },
         production: { title: 'Production',        fields: ['date','product','quantity','status'], labels: ['Date','Product','Quantity','Status'] },
-        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],       labels: ['Name','Role','Amount','Month'] },
-        buffalo:    { title: 'Buffalo Selling',   fields: ['tagId','breed','age','price','status'], labels: ['Tag ID','Breed','Age','Price','Status'] }
+        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],       labels: ['Name','Role','Amount','Month'] }
     };
 
     let currentSection = null;
@@ -558,23 +683,23 @@
         }
     }
 
-    function renderBuffaloes() {
-        const grid = document.getElementById('buffalo-selling-grid');
-        if (!grid) return;
+    // ── Booking Order WhatsApp Handler ───────────────────────
+    function sendBookingWhatsApp(e) {
+        e.preventDefault();
+        const name = document.getElementById('bookName').value;
+        const phone = document.getElementById('bookPhone').value;
+        const product = document.getElementById('bookProduct').value;
+        const qty = document.getElementById('bookQty').value;
+        const date = document.getElementById('bookDate').value || 'Not specified';
+        const address = document.getElementById('bookAddress').value;
+        const note = document.getElementById('bookNote').value || 'None';
+
+        const message = `*New Dairy Order* 📦\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Product:* ${product}\n*Quantity:* ${qty}\n*Delivery Date:* ${date}\n*Address:* ${address}\n*Special Note:* ${note}`;
+
+        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(message)}`;
+        window.open(whatsappUrl, '_blank');
         
-        grid.innerHTML = data.buffalo.length === 0
-            ? '<p style="color:#666;text-align:center;grid-column:1/-1;">No buffaloes currently available for sale.</p>'
-            : data.buffalo.map(b => `
-                <div class="fade-in-up" style="background:#fff; padding:1.5rem; border-radius:15px; box-shadow:0 8px 24px rgba(0,0,0,0.06); border:1px solid rgba(177,216,183,0.3);">
-                    <h3 style="color:var(--primary-color); margin-bottom:0.5rem;">${b.breed} Buffalo</h3>
-                    <p><strong>Tag ID:</strong> ${b.tagId}</p>
-                    <p><strong>Age:</strong> ${b.age}</p>
-                    <p style="font-size:1.2rem; color:var(--accent-color); font-weight:800; margin:0.5rem 0;">${b.price}</p>
-                    <span style="display:inline-block; padding:0.3rem 0.8rem; border-radius:20px; font-size:0.8rem; font-weight:bold; background:${b.status === 'Available' ? '#e6f4ea' : '#fce8e6'}; color:${b.status === 'Available' ? '#1e8e3e' : '#d93025'};">
-                        ${b.status}
-                    </span>
-                </div>
-            `).join('');
+        document.getElementById('bookingForm').reset();
     }
 
     </script>
