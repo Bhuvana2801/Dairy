@@ -742,7 +742,30 @@
         const address = document.getElementById('bookAddress').value;
         const note = document.getElementById('bookNote').value || 'None';
 
-        const message = `*New Dairy Order* 📦\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Product:* ${product}\n*Quantity:* ${qty}\n*Delivery Date:* ${date}\n*Address:* ${address}\n*Special Note:* ${note}`;
+        // Generate Order ID and IST Timestamp
+        const now = new Date();
+        const istOptions = { 
+            timeZone: 'Asia/Kolkata', 
+            hour12: false, 
+            year: 'numeric', 
+            month: '2-digit', 
+            day: '2-digit', 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        };
+        const istTime = now.toLocaleString('en-IN', istOptions);
+        const orderID = 'ADF' + now.getTime().toString().slice(-6);
+
+        const message = `*New Dairy Order* 🥛\n\n` +
+                        `*Order ID:* #${orderID}\n` +
+                        `*Order Time:* ${istTime} IST\n\n` +
+                        `*Customer Name:* ${name}\n` +
+                        `*Phone:* ${phone}\n` +
+                        `*Product:* ${product}\n` +
+                        `*Quantity:* ${qty}\n` +
+                        `*Delivery Date:* ${date}\n` +
+                        `*Address:* ${address}\n` +
+                        `*Instructions:* ${note}`;
 
         const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
