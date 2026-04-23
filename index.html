@@ -97,6 +97,10 @@
                     &#128176; Salaries
                     <small>View &amp; manage salaries</small>
                 </div>
+                <div class="dash-card" onclick="openSection('orders')">
+                    &#128230; Customer Orders
+                    <small>View &amp; manage incoming orders</small>
+                </div>
             </div>
 
             <!-- DETAIL VIEW -->
@@ -430,7 +434,7 @@
     const db = firebase.firestore();
 
     // ── Cloud data storage ───────────────────────────────
-    let data = { daily: [], expenses: [], production: [], salaries: [] };
+    let data = { daily: [], expenses: [], production: [], salaries: [], orders: [] };
 
     // Placeholder data
     const DEFAULT_DATA = {
@@ -449,13 +453,16 @@
         salaries: [
             { id: 'def_s1', name: 'Ravi Kumar',  role: 'Farm Manager',  amount: '₹18,000', month: 'April 2026' },
             { id: 'def_s2', name: 'Suresh Babu', role: 'Milk Handler',  amount: '₹12,000', month: 'April 2026' }
+        ],
+        orders: [
+            { id: 'def_o1', orderID: 'ADF0001', name: 'Sample Customer', phone: '9876543210', product: 'Buffalo Milk', qty: '2 Litres', date: '2026-04-24', address: '123 Farm Road' }
         ]
     };
 
 
     // Replace robust loadData with Instant Realtime Listener
     function setupRealtimeListeners() {
-        const sections = ['daily', 'expenses', 'production', 'salaries'];
+        const sections = ['daily', 'expenses', 'production', 'salaries', 'orders'];
         sections.forEach(section => {
             db.collection(section).orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 data[section] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -481,7 +488,8 @@
         daily:      { title: 'Daily Report',      fields: ['date','item','qty','note'],           labels: ['Date','Item','Quantity','Note'] },
         expenses:   { title: 'Monthly Expenses',  fields: ['month','category','amount','note'],   labels: ['Month','Category','Amount','Note'] },
         production: { title: 'Production',        fields: ['date','product','quantity','status'], labels: ['Date','Product','Quantity','Status'] },
-        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],       labels: ['Name','Role','Amount','Month'] }
+        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],       labels: ['Name','Role','Amount','Month'] },
+        orders:     { title: 'Customer Orders',   fields: ['orderID','name','phone','product','qty','date','address'], labels: ['Order ID','Customer','Phone','Product','Qty','Delivery','Address'] }
     };
 
     let currentSection = null;
@@ -621,6 +629,7 @@
         try {
             showStatus("Adding records...");
             const { id, ...saveRow } = row;
+            saveRow.createdAt = firebase.firestore.FieldValue.serverTimestamp();
             await db.collection(section).add(saveRow);
             showStatus("Entry added successfully!");
         } catch (error) {
@@ -758,6 +767,24 @@
             minute: '2-digit' 
         };
         const istTime = now.toLocaleString('en-IN', istOptions);
+
+        // Save to Firestore for Admin to see in dashboard
+        try {
+            db.collection('orders').add({
+                orderID,
+                name,
+                phone,
+                product,
+                qty,
+                date,
+                address,
+                note,
+                status: 'Pending',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch (err) {
+            console.warn("Could not save order to cloud:", err);
+        }
 
         const message = `*New Dairy Order* 🥛\n\n` +
                         `*Order ID:* ${orderID}\n` +
