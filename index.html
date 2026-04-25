@@ -37,7 +37,8 @@
                 <li><a href="#" onclick="showPage('contact')" id="nav-contact">Order Now</a></li>
             </ul>
         </nav>
-        <div class="nav-actions">
+        <div class="nav-actions" style="display: flex; gap: 0.8rem; align-items: center;">
+            <button class="btn btn-orders" onclick="showPage('orders')" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">📦 My Orders</button>
             <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
         </div>
         <button class="menu-btn" id="menuBtn">
