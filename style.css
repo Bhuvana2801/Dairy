@@ -832,6 +832,84 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 }
 .textarea-container .field-icon { top: 1.1rem; }
 
+/* Mobile Bottom Navigation Bar */
+.mobile-nav {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 0.6rem 0 calc(0.6rem + env(safe-area-inset-bottom));
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2000;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.mobile-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #888;
+    gap: 0.2rem;
+    flex: 1;
+    transition: var(--transition);
+}
+
+.mobile-nav-item .m-icon {
+    font-size: 1.4rem;
+    transition: var(--transition);
+}
+
+.mobile-nav-item .m-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.mobile-nav-item.active {
+    color: var(--primary-color);
+}
+
+.mobile-nav-item.active .m-icon {
+    transform: translateY(-2px) scale(1.1);
+}
+
+/* Add padding to body to prevent content being hidden behind bottom nav */
+@media (max-width: 768px) {
+    .mobile-nav { display: flex; }
+    body { padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+    
+    .navbar { padding: 0.8rem 5%; }
+    .navbar .nav-links, .navbar .nav-actions { display: none; }
+    .navbar .logo-img img { height: 50px; }
+}
+
+/* Premium App-like touches */
+.booking-form-card, .booking-info-card, .product-card {
+    border: none;
+    box-shadow: 0 12px 32px rgba(26, 92, 42, 0.06);
+}
+
+.booking-submit-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1.1rem;
+    font-size: 1.1rem;
+    box-shadow: 0 10px 20px rgba(37, 211, 102, 0.25);
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 { font-size: 2.2rem; }
+    .hero-desc { font-size: 1rem; }
+    .section-padding { padding: 3.5rem 0; }
+}
+
 .booking-submit-btn {
     width: 100%;
     display: flex;

@@ -15,6 +15,9 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1A5C2A">
     <link rel="apple-touch-icon" href="app_icon_1776943971406.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Ayyappa Dairy">
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -452,6 +455,26 @@
         </div>
     </footer>
 
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav">
+        <a href="#" onclick="showPage('home')" class="mobile-nav-item active" id="m-nav-home">
+            <span class="m-icon">🏠</span>
+            <span class="m-label">Home</span>
+        </a>
+        <a href="#" onclick="showPage('products')" class="mobile-nav-item" id="m-nav-products">
+            <span class="m-icon">🥛</span>
+            <span class="m-label">Products</span>
+        </a>
+        <a href="#" onclick="showPage('contact')" class="mobile-nav-item" id="m-nav-contact">
+            <span class="m-icon">🛒</span>
+            <span class="m-label">Order</span>
+        </a>
+        <a href="#" onclick="showPage('about')" class="mobile-nav-item" id="m-nav-about">
+            <span class="m-icon">📖</span>
+            <span class="m-label">Story</span>
+        </a>
+    </nav>
+
     <script src="main.js"></script>
     <script>
     // ── Page Switcher ────────────────────────────────────────
@@ -460,13 +483,18 @@
         document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
         // Remove active from all nav links
         document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('nav-active'));
+        document.querySelectorAll('.mobile-nav-item').forEach(m => m.classList.remove('active'));
+        
         // Show selected page
         document.getElementById('page-' + pageId).classList.add('active');
-        // Highlight selected nav link
+        
+        // Highlight selected nav link (Desktop)
         const navEl = document.getElementById('nav-' + pageId);
         if (navEl) navEl.classList.add('nav-active');
 
-        // Dynamic rendering
+        // Highlight selected nav link (Mobile)
+        const mNavEl = document.getElementById('m-nav-' + pageId);
+        if (mNavEl) mNavEl.classList.add('active');
 
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
