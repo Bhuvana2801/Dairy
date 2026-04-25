@@ -38,7 +38,7 @@
             </ul>
         </nav>
         <div class="nav-actions" style="display: flex; gap: 0.8rem; align-items: center;">
-            <button class="btn btn-orders" onclick="showPage('orders')" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">📦 My Orders</button>
+            <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">📦 My Orders</button>
             <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
         </div>
         <button class="menu-btn" id="menuBtn">
@@ -115,6 +115,25 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- Customer Dashboard Modal -->
+    <div id="customerOrdersModal" class="modal-overlay" onclick="closeCustomerOrdersModal(event)">
+        <div class="modal-box modal-wide">
+            <div class="dash-header">
+                <div style="display:flex;align-items:center;gap:0.8rem;">
+                    <h2 style="margin:0; font-family:var(--font-heading);">📦 My Order History</h2>
+                </div>
+                <button class="modal-close" onclick="closeCustomerOrdersModal(null, true)">&times;</button>
+            </div>
+            
+            <div style="padding: 1rem 0;">
+                <p style="color: #666; margin-bottom: 2rem;">Track your recent orders placed from this device.</p>
+                <div id="customerOrdersListModal" class="orders-grid" style="display: grid; gap: 1.5rem; max-height: 70vh; overflow-y: auto; padding-right: 5px;">
+                    <!-- Orders will be injected here -->
+                </div>
+            </div>
         </div>
     </div>
 
@@ -495,20 +514,6 @@
         </div>
     </main>
 
-        <!-- Customer Dashboard: My Orders -->
-        <div id="page-orders" class="page-view" style="display: none;">
-            <section class="section-padding">
-                <div class="container">
-                    <h2 class="text-center">My Order History</h2>
-                    <p class="text-center" style="margin-bottom: 3rem;">Track your recent orders placed from this device.</p>
-                    
-                    <div id="customerOrdersList" class="orders-grid" style="display: grid; gap: 1.5rem; max-width: 800px; margin: 0 auto;">
-                        <!-- Orders will be injected here -->
-                    </div>
-                </div>
-            </section>
-        </div>
-
     <footer>
         <div class="container footer-grid">
             <div class="footer-col">
@@ -585,7 +590,7 @@
             <span class="m-icon">🛒</span>
             <span class="m-label">Order</span>
         </a>
-        <a href="#" onclick="showPage('orders')" class="mobile-nav-item" id="m-nav-orders">
+        <a href="#" onclick="openCustomerOrdersModal()" class="mobile-nav-item" id="m-nav-orders">
             <span class="m-icon">📦</span>
             <span class="m-label">My Orders</span>
         </a>
@@ -631,7 +636,8 @@
 
         // Special handling for Customer Dashboard
         if (pageId === 'orders') {
-            renderCustomerOrders();
+            openCustomerOrdersModal();
+            return false;
         }
 
         // Scroll to top
@@ -640,7 +646,7 @@
     }
 
     function renderCustomerOrders() {
-        const ordersList = document.getElementById('customerOrdersList');
+        const ordersList = document.getElementById('customerOrdersListModal');
         if (!ordersList) return;
         const orders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
         
@@ -650,7 +656,7 @@
                     <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🛍️</span>
                     <h3>No orders yet!</h3>
                     <p>Once you place an order, it will appear here for your reference.</p>
-                    <button onclick="showPage('contact')" class="btn btn-secondary" style="margin-top: 1rem;">Order Now</button>
+                    <button onclick="closeCustomerOrdersModal(null, true); showPage('contact')" class="btn btn-secondary" style="margin-top: 1rem;">Order Now</button>
                 </div>
             `;
             return;
@@ -673,6 +679,17 @@
                 </div>
             </div>
         `).join('');
+    }
+
+    function openCustomerOrdersModal() {
+        document.getElementById('customerOrdersModal').classList.add('active');
+        renderCustomerOrders();
+    }
+
+    function closeCustomerOrdersModal(event, force) {
+        if (force || (event && event.target.id === 'customerOrdersModal')) {
+            document.getElementById('customerOrdersModal').classList.remove('active');
+        }
     }
     // ── Firebase Configuration ──────────────────────────────
     const firebaseConfig = {
