@@ -266,21 +266,20 @@
                                     </div>
                                 </div>
 
-                                <div class="booking-field">
-                                    <label for="bookProduct">Select Product *</label>
-                                    <div class="input-container">
-                                        <span class="field-icon">🥛</span>
-                                        <select id="bookProduct" required>
-                                            <option value="">-- Choose a product --</option>
-                                            <option value="Buffalo Milk">🐃 Buffalo Milk</option>
-                                            <option value="Fresh Curd">🫙 Fresh Curd</option>
-                                            <option value="Pure Desi Ghee">🧈 Pure Desi Ghee</option>
-                                            <option value="Spiced Buttermilk">🥤 Spiced Buttermilk</option>
-                                        </select>
-                                    </div>
-                                </div>
-
                                 <div class="booking-row">
+                                    <div class="booking-field">
+                                        <label for="bookProduct">Select Product *</label>
+                                        <div class="input-container">
+                                            <span class="field-icon">🥛</span>
+                                            <select id="bookProduct" required>
+                                                <option value="">-- Choose a product --</option>
+                                                <option value="Buffalo Milk">Buffalo Milk</option>
+                                                <option value="Fresh Curd">Fresh Curd</option>
+                                                <option value="Pure Desi Ghee">Pure Desi Ghee</option>
+                                                <option value="Spiced Buttermilk">Spiced Buttermilk</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="booking-field">
                                         <label for="bookQty">Quantity *</label>
                                         <div class="input-container">
@@ -288,12 +287,25 @@
                                             <input type="text" id="bookQty" placeholder="e.g. 2 Litres" required>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="booking-row">
                                     <div class="booking-field">
                                         <label for="bookDate">Delivery Date *</label>
                                         <div class="input-container">
                                             <span class="field-icon">📅</span>
-                                            <select id="bookDate" required>
+                                            <select id="bookDate" required disabled>
                                                 <!-- Populated via JS -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="booking-field">
+                                        <label for="bookTime">Delivery Time *</label>
+                                        <div class="input-container">
+                                            <span class="field-icon">⏰</span>
+                                            <select id="bookTime" required>
+                                                <option value="Morning (6 AM - 9 AM)">Morning (6 AM - 9 AM)</option>
+                                                <option value="Evening (5 PM - 8 PM)">Evening (5 PM - 8 PM)</option>
                                             </select>
                                         </div>
                                     </div>
@@ -810,6 +822,7 @@
         const product = document.getElementById('bookProduct').value;
         const qty = document.getElementById('bookQty').value;
         const date = document.getElementById('bookDate').value;
+        const time = document.getElementById('bookTime').value;
         const state = document.getElementById('bookState').value;
         const city = document.getElementById('bookCity').value;
         const address = document.getElementById('bookAddress').value;
@@ -838,6 +851,7 @@
             <div class="summary-item"><strong>Product:</strong> ${product}</div>
             <div class="summary-item"><strong>Quantity:</strong> ${qty}</div>
             <div class="summary-item"><strong>Delivery Date:</strong> ${date}</div>
+            <div class="summary-item"><strong>Delivery Time:</strong> ${time}</div>
             <div class="summary-item"><strong>Location:</strong> ${city}, ${state}</div>
             <div class="summary-item"><strong>Address:</strong> ${address}</div>
         `;
@@ -852,6 +866,7 @@
                         `*Product:* ${product}\n` +
                         `*Quantity:* ${qty}\n` +
                         `*Delivery Date:* ${date}\n` +
+                        `*Delivery Time:* ${time}\n` +
                         `*Location:* ${city}, ${state}\n` +
                         `*Address:* ${address}`;
 
