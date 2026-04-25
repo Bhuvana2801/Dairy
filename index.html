@@ -114,6 +114,21 @@
         </div>
     </div>
 
+    <!-- Order Confirmation Modal -->
+    <div id="confirmOrderModal" class="modal-overlay">
+        <div class="modal-box">
+            <h2>Confirm Your Order</h2>
+            <p>Please review your order details before placing it.</p>
+            <div id="orderSummary" class="order-summary-content">
+                <!-- Summary will be injected here -->
+            </div>
+            <div style="display:flex; gap:1rem; margin-top:1.5rem;">
+                <button class="btn btn-secondary" style="flex:1;" onclick="closeConfirmModal()">Edit Details</button>
+                <button class="btn btn-primary" style="flex:1;" onclick="placeOrderFinal()">Confirm & Order</button>
+            </div>
+        </div>
+    </div>
+
     <main id="main-content">
 
         <!-- HOME PAGE -->
@@ -274,10 +289,35 @@
                                         </div>
                                     </div>
                                     <div class="booking-field">
-                                        <label for="bookDate">Delivery Date</label>
+                                        <label for="bookDate">Delivery Date *</label>
                                         <div class="input-container">
                                             <span class="field-icon">📅</span>
-                                            <input type="date" id="bookDate">
+                                            <select id="bookDate" required>
+                                                <!-- Populated via JS -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="booking-row">
+                                    <div class="booking-field">
+                                        <label for="bookState">State *</label>
+                                        <div class="input-container">
+                                            <span class="field-icon">🗺️</span>
+                                            <select id="bookState" required onchange="updateCities()">
+                                                <option value="">-- Select State --</option>
+                                                <option value="Telangana">Telangana</option>
+                                                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="booking-field">
+                                        <label for="bookCity">City / Town *</label>
+                                        <div class="input-container">
+                                            <span class="field-icon">🏙️</span>
+                                            <select id="bookCity" required disabled>
+                                                <option value="">-- Select City --</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -287,14 +327,6 @@
                                     <div class="input-container textarea-container">
                                         <span class="field-icon">📍</span>
                                         <textarea id="bookAddress" rows="3" placeholder="Enter your full delivery address" required></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="booking-field">
-                                    <label for="bookNote">Special Instructions</label>
-                                    <div class="input-container textarea-container">
-                                        <span class="field-icon">✍️</span>
-                                        <textarea id="bookNote" rows="2" placeholder="Any special requests? (optional)"></textarea>
                                     </div>
                                 </div>
                                 <button type="submit" class="booking-submit-btn">
@@ -474,6 +506,21 @@
     window.addEventListener('DOMContentLoaded', () => {
         data = { ...DEFAULT_DATA }; // Show defaults immediately
         setupRealtimeListeners(); // Start listening to cloud updates instantly
+
+        // Populate Delivery Dates (Today & Tomorrow)
+        const dateSelect = document.getElementById('bookDate');
+        if (dateSelect) {
+            const today = new Date();
+            const tomorrow = new Date();
+            tomorrow.setDate(today.getDate() + 1);
+            
+            const formatDate = (d) => d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+            
+            dateSelect.innerHTML = `
+                <option value="Today (${formatDate(today)})">Today (${formatDate(today)})</option>
+                <option value="Tomorrow (${formatDate(tomorrow)})">Tomorrow (${formatDate(tomorrow)})</option>
+            `;
+        }
     });
 
     // Schema for each section
@@ -733,25 +780,50 @@
     }
 
     // ── Booking Order WhatsApp Handler ───────────────────────
+    const citiesByState = {
+        "Telangana": ["Hyderabad", "Warangal", "Nizamabad", "Khammam", "Karimnagar", "Ramagundam", "Mahbubnagar", "Nalgonda", "Adilabad", "Suryapet", "Miryalaguda", "Siddipet", "Vikarabad", "Wanaparthy", "Nirmal", "Kamareddy", "Kothagudem", "Bodhan", "Palwancha", "Jagtial"],
+        "Andhra Pradesh": ["Visakhapatnam", "Vijayawada", "Guntur", "Nellore", "Kurnool", "Rajamahendravaram", "Tirupati", "Kakinada", "Anantapur", "Vizianagaram", "Eluru", "Ongole", "Nandyal", "Machilipatnam", "Adoni", "Tenali", "Proddatur", "Chittoor", "Hindupur", "Bhimavaram"]
+    };
+
+    function updateCities() {
+        const state = document.getElementById('bookState').value;
+        const citySelect = document.getElementById('bookCity');
+        citySelect.innerHTML = '<option value="">-- Select City --</option>';
+        
+        if (state && citiesByState[state]) {
+            citySelect.disabled = false;
+            citiesByState[state].forEach(city => {
+                const opt = document.createElement('option');
+                opt.value = city;
+                opt.textContent = city;
+                citySelect.appendChild(opt);
+            });
+        } else {
+            citySelect.disabled = true;
+        }
+    }
+
+    let pendingOrderMessage = "";
+
     function sendBookingWhatsApp(e) {
         e.preventDefault();
         const name = document.getElementById('bookName').value;
         const phone = document.getElementById('bookPhone').value;
         const product = document.getElementById('bookProduct').value;
         const qty = document.getElementById('bookQty').value;
-        const date = document.getElementById('bookDate').value || 'Not specified';
+        const date = document.getElementById('bookDate').value;
+        const state = document.getElementById('bookState').value;
+        const city = document.getElementById('bookCity').value;
         const address = document.getElementById('bookAddress').value;
-        const note = document.getElementById('bookNote').value || 'None';
 
-        // Generate Order ID (Sequential based on local device)
+        // Generate Order ID
         let orderCount = parseInt(localStorage.getItem('adfOrderCount') || '0') + 1;
-        localStorage.setItem('adfOrderCount', orderCount);
         const orderID = 'ADF' + orderCount.toString().padStart(4, '0');
 
         const now = new Date();
         const istOptions = { 
             timeZone: 'Asia/Kolkata', 
-            hour12: false, 
+            hour12: true, 
             year: 'numeric', 
             month: '2-digit', 
             day: '2-digit', 
@@ -760,7 +832,21 @@
         };
         const istTime = now.toLocaleString('en-IN', istOptions);
 
-        const message = `*New Dairy Order* 🥛\n\n` +
+        // Prepare Summary for Modal
+        const summaryHtml = `
+            <div class="summary-item"><strong>Order ID:</strong> ${orderID}</div>
+            <div class="summary-item"><strong>Customer:</strong> ${name}</div>
+            <div class="summary-item"><strong>Phone:</strong> ${phone}</div>
+            <div class="summary-item"><strong>Product:</strong> ${product}</div>
+            <div class="summary-item"><strong>Quantity:</strong> ${qty}</div>
+            <div class="summary-item"><strong>Delivery Date:</strong> ${date}</div>
+            <div class="summary-item"><strong>Location:</strong> ${city}, ${state}</div>
+            <div class="summary-item"><strong>Address:</strong> ${address}</div>
+        `;
+        document.getElementById('orderSummary').innerHTML = summaryHtml;
+
+        // Prepare WhatsApp Message
+        pendingOrderMessage = `*New Dairy Order* 🥛\n\n` +
                         `*Order ID:* ${orderID}\n` +
                         `*Order Time:* ${istTime} IST\n\n` +
                         `*Customer Name:* ${name}\n` +
@@ -768,13 +854,28 @@
                         `*Product:* ${product}\n` +
                         `*Quantity:* ${qty}\n` +
                         `*Delivery Date:* ${date}\n` +
-                        `*Address:* ${address}\n` +
-                        `*Instructions:* ${note}`;
+                        `*Location:* ${city}, ${state}\n` +
+                        `*Address:* ${address}`;
 
-        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(message)}`;
+        // Show Confirmation Modal
+        document.getElementById('confirmOrderModal').classList.add('active');
+    }
+
+    function closeConfirmModal() {
+        document.getElementById('confirmOrderModal').classList.remove('active');
+    }
+
+    function placeOrderFinal() {
+        // Increment order count only on final confirmation
+        let orderCount = parseInt(localStorage.getItem('adfOrderCount') || '0') + 1;
+        localStorage.setItem('adfOrderCount', orderCount);
+
+        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(pendingOrderMessage)}`;
         window.open(whatsappUrl, '_blank');
         
+        closeConfirmModal();
         document.getElementById('bookingForm').reset();
+        document.getElementById('bookCity').disabled = true;
     }
 
     </script>
