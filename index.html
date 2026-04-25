@@ -417,39 +417,44 @@
         <div id="page-install" class="page-view">
             <section class="section-padding" style="background: white; text-align: center; min-height: 80vh; display: flex; align-items: center;">
                 <div class="container fade-in-up" style="max-width: 600px; margin: 0 auto;">
-                    <div class="install-logo-container" style="margin-bottom: 1.5rem;">
-                        <img src="logo_1776943971406.png" alt="App Logo" style="width: 100px; height: 100px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: contain; background: white; padding: 5px;">
-                    </div>
-                    <h2 style="margin: 0 0 0.5rem; color: var(--primary-color); font-size: 2.2rem; font-family: var(--font-heading);">Install Ayyappa Dairy App</h2>
-                    <p style="font-size: 1.1rem; color: #666; margin-bottom: 2.5rem;">Get the freshest dairy delivered to your home with just one tap. Choose your device below to install.</p>
+                    <h2 style="margin: 0 0 1rem; color: var(--primary-color); font-size: 2.2rem; font-family: var(--font-heading);">How to Install the App</h2>
+                    <p style="font-size: 1.1rem; color: #666; margin-bottom: 2rem;">Follow these simple steps to add Ayyappa Dairy Farm to your home screen for quick access.</p>
                     
-                    <div class="install-choices" style="display: flex; flex-direction: column; gap: 1.2rem; margin-bottom: 2rem;">
-                        <button onclick="triggerAndroidPrompt()" style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1.2rem; background: #3DDC84; color: #fff; border: none; border-radius: 16px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.2s; width: 100%;">
-                            <span style="font-size: 1.8rem;">🤖</span> Android Install
-                        </button>
-                        <button onclick="showInstallSteps('ios')" style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1.2rem; background: #000; color: #fff; border: none; border-radius: 16px; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.2s; width: 100%;">
-                            <span style="font-size: 1.8rem;">🍎</span> iPhone (iOS) Install
-                        </button>
-                    </div>
-
-                    <div id="installStepsView" style="display:none; text-align: left; background: #f9f9f9; padding: 1.5rem; border-radius: 16px; margin-top: 2rem; border: 1px solid #eee;">
-                        <div id="androidSteps" style="display:none;">
-                            <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--primary-color);">How to Install on Android:</h3>
-                            <ol style="font-size: 1rem; padding-left: 1.5rem; line-height: 1.8; color: #444;">
-                                <li>Open <strong>Chrome</strong> browser.</li>
-                                <li>Tap the <strong>Menu (⋮)</strong> at the top right.</li>
-                                <li>Tap <strong>'Install App'</strong> or 'Add to Home Screen'.</li>
+                    <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; text-align: left; margin-bottom: 2.5rem;">
+                        <!-- Android Box -->
+                        <div style="background: #f0fff4; padding: 1.5rem; border-radius: 16px; border: 1px solid #c6f6d5;">
+                            <h3 style="color: #2f855a; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🤖</span> For Android Users
+                            </h3>
+                            <ol style="padding-left: 1.2rem; line-height: 1.6; color: #2d3748; font-size: 0.95rem;">
+                                <li>Open this site in <strong>Chrome</strong>.</li>
+                                <li>Tap the <strong>three dots (⋮)</strong> at the top right.</li>
+                                <li>Select <strong>'Install App'</strong> or 'Add to Home Screen'.</li>
                             </ol>
+                            <button onclick="triggerAndroidPrompt()" style="margin-top: 1rem; width: 100%; padding: 0.8rem; background: #3DDC84; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer;">Try One-Tap Install</button>
                         </div>
-                        <div id="iosSteps" style="display:none;">
-                            <h3 style="font-size: 1.2rem; margin-bottom: 1rem; color: var(--primary-color);">How to Install on iPhone:</h3>
-                            <ol style="font-size: 1rem; padding-left: 1.5rem; line-height: 1.8; color: #444;">
-                                <li>Open <strong>Safari</strong> browser.</li>
+
+                        <!-- iOS Box -->
+                        <div style="background: #f7fafc; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0;">
+                            <h3 style="color: #2d3748; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <span>🍎</span> For iPhone (iOS) Users
+                            </h3>
+                            <ol style="padding-left: 1.2rem; line-height: 1.6; color: #4a5568; font-size: 0.95rem;">
+                                <li>Open this site in <strong>Safari</strong>.</li>
                                 <li>Tap the <strong>Share</strong> button (box with arrow) at the bottom.</li>
                                 <li>Scroll down and tap <strong>'Add to Home Screen'</strong>.</li>
-                                <li>Tap <strong>'Add'</strong> in the top right corner.</li>
+                                <li>Tap <strong>'Add'</strong> in the top right.</li>
                             </ol>
                         </div>
+                    </div>
+
+                    <!-- Share Section -->
+                    <div style="border-top: 1px solid #eee; padding-top: 2rem;">
+                        <h3 style="margin-bottom: 1rem; color: var(--primary-color);">Share App with Others</h3>
+                        <button onclick="shareApp()" style="display: flex; align-items: center; justify-content: center; gap: 0.8rem; padding: 1rem 2rem; background: var(--secondary-color); color: var(--primary-color); border: none; border-radius: 50px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.2s; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                            <span>📤</span> Share App Link
+                        </button>
+                        <p style="font-size: 0.85rem; color: #888; margin-top: 1rem;">Help your friends and family get pure dairy products!</p>
                     </div>
                 </div>
             </section>
@@ -990,7 +995,7 @@
         document.getElementById('bookCity').disabled = true;
     }
 
-    // ── PWA Installation Logic ───────────────────────────────
+    // ── Install Page Logic ──────────────────────────────────
     let deferredPrompt;
     
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -1003,9 +1008,31 @@
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             deferredPrompt = null;
-            closeInstallChoiceModal(null, true);
         } else {
-            alert("Please follow the manual steps above if the automatic prompt doesn't appear.");
+            alert("To install: Tap the 3 dots (⋮) in Chrome and select 'Install App' or 'Add to Home Screen'.");
+        }
+    }
+
+    async function shareApp() {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Ayyappa Dairy Farm',
+                    text: 'Order fresh, pure dairy products from Ayyappa Dairy Farm! 🥛',
+                    url: 'https://dairy-peach.vercel.app/'
+                });
+            } catch (err) {
+                console.log('Error sharing:', err);
+            }
+        } else {
+            // Fallback: Copy to clipboard
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = 'https://dairy-peach.vercel.app/';
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            alert('App link copied to clipboard! Share it with your friends. 🥛');
         }
     }
 
