@@ -846,8 +846,8 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     padding: 0.6rem 0 calc(0.6rem + env(safe-area-inset-bottom));
     justify-content: space-around;
     align-items: center;
-    z-index: 2000;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+    z-index: 9999;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .mobile-nav-item {
@@ -881,9 +881,9 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 }
 
 /* Add padding to body to prevent content being hidden behind bottom nav */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .mobile-nav { display: flex; }
-    body { padding-bottom: calc(70px + env(safe-area-inset-bottom)); }
+    body { padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
     
     .navbar { padding: 0.8rem 5%; }
     .navbar .nav-links, .navbar .nav-actions { display: none; }
