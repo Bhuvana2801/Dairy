@@ -469,14 +469,15 @@
             <span class="m-icon">🛒</span>
             <span class="m-label">Order</span>
         </a>
-                                            <span class="m-icon">📖</span>
-                                            <span class="m-label">Story</span>
-                                        </a>
-                                        <a href="#" onclick="openInstallChoiceModal(event)" class="mobile-nav-item" id="m-nav-install">
-                                            <span class="m-icon">📲</span>
-                                            <span class="m-label">Install</span>
-                                        </a>
-                                    </nav>
+        <a href="#" onclick="showPage('about')" class="mobile-nav-item" id="m-nav-about">
+            <span class="m-icon">📖</span>
+            <span class="m-label">Story</span>
+        </a>
+        <a href="#" onclick="openInstallChoiceModal(event)" class="mobile-nav-item" id="m-nav-install">
+            <span class="m-icon">📲</span>
+            <span class="m-label">Install</span>
+        </a>
+    </nav>
 
                                     <!-- Install Choice Modal -->
                                     <div id="installChoiceModal" class="modal" onclick="closeInstallChoiceModal(event)">
@@ -998,26 +999,13 @@
         document.getElementById('bookCity').disabled = true;
     }
 
-    // ── PWA Installation Logic (Improved) ───────────────────
+    // ── PWA Installation Logic ───────────────────────────────
     let deferredPrompt;
     
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
     });
-
-
-    function closeInstallChoiceModal(event, force) {
-        if (force || (event && event.target.id === 'installChoiceModal')) {
-            document.getElementById('installChoiceModal').classList.remove('active');
-        }
-    }
-
-    function showInstallSteps(os) {
-        document.getElementById('installStepsView').style.display = 'block';
-        document.getElementById('androidSteps').style.display = os === 'android' ? 'block' : 'none';
-        document.getElementById('iosSteps').style.display = os === 'ios' ? 'block' : 'none';
-    }
 
     async function triggerAndroidPrompt() {
         if (deferredPrompt) {
