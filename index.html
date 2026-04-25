@@ -494,6 +494,20 @@
         </div>
     </main>
 
+        <!-- Customer Dashboard: My Orders -->
+        <div id="page-orders" class="page-view" style="display: none;">
+            <section class="section-padding">
+                <div class="container">
+                    <h2 class="text-center">My Order History</h2>
+                    <p class="text-center" style="margin-bottom: 3rem;">Track your recent orders placed from this device.</p>
+                    
+                    <div id="customerOrdersList" class="orders-grid" style="display: grid; gap: 1.5rem; max-width: 800px; margin: 0 auto;">
+                        <!-- Orders will be injected here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
     <footer>
         <div class="container footer-grid">
             <div class="footer-col">
@@ -570,9 +584,9 @@
             <span class="m-icon">🛒</span>
             <span class="m-label">Order</span>
         </a>
-        <a href="#" onclick="showPage('about')" class="mobile-nav-item" id="m-nav-about">
-            <span class="m-icon">📖</span>
-            <span class="m-label">Story</span>
+        <a href="#" onclick="showPage('orders')" class="mobile-nav-item" id="m-nav-orders">
+            <span class="m-icon">📦</span>
+            <span class="m-label">My Orders</span>
         </a>
         <a href="#" onclick="showPage('install')" class="mobile-nav-item" id="m-nav-install">
             <span class="m-icon">📲</span>
@@ -600,22 +614,64 @@
         document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
         // Remove active from all nav links
         document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('nav-active'));
-        document.querySelectorAll('.mobile-nav-item').forEach(m => m.classList.remove('active'));
         
+        // Sync Mobile Nav
+        document.querySelectorAll('.mobile-nav-item').forEach(item => item.classList.remove('active'));
+        const activeMNav = document.getElementById('m-nav-' + pageId);
+        if (activeMNav) activeMNav.classList.add('active');
+
         // Show selected page
-        document.getElementById('page-' + pageId).classList.add('active');
+        const targetPage = document.getElementById('page-' + pageId);
+        if (targetPage) targetPage.classList.add('active');
         
         // Highlight selected nav link (Desktop)
         const navEl = document.getElementById('nav-' + pageId);
         if (navEl) navEl.classList.add('nav-active');
 
-        // Highlight selected nav link (Mobile)
-        const mNavEl = document.getElementById('m-nav-' + pageId);
-        if (mNavEl) mNavEl.classList.add('active');
+        // Special handling for Customer Dashboard
+        if (pageId === 'orders') {
+            renderCustomerOrders();
+        }
 
         // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return false;
+    }
+
+    function renderCustomerOrders() {
+        const ordersList = document.getElementById('customerOrdersList');
+        if (!ordersList) return;
+        const orders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
+        
+        if (orders.length === 0) {
+            ordersList.innerHTML = `
+                <div class="empty-orders text-center" style="padding: 3rem; background: #f9f9f9; border-radius: 20px; border: 2px dashed #ddd;">
+                    <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🛍️</span>
+                    <h3>No orders yet!</h3>
+                    <p>Once you place an order, it will appear here for your reference.</p>
+                    <button onclick="showPage('contact')" class="btn btn-secondary" style="margin-top: 1rem;">Order Now</button>
+                </div>
+            `;
+            return;
+        }
+
+        ordersList.innerHTML = orders.reverse().map(order => `
+            <div style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #eee; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: 0; right: 0; background: var(--primary-color); color: white; padding: 4px 12px; font-size: 0.75rem; font-weight: 700; border-bottom-left-radius: 12px;">
+                    ${order.orderID}
+                </div>
+                <h3 style="margin-bottom: 0.8rem; color: var(--primary-color); font-size: 1.2rem;">${order.product}</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; font-size: 0.9rem;">
+                    <div><strong>Qty:</strong> ${order.qty}</div>
+                    <div><strong>Date:</strong> ${order.date}</div>
+                    <div><strong>Time:</strong> ${order.time}</div>
+                    <div><strong>Status:</strong> <span style="color: #25D366; font-weight: 700;">Sent to WhatsApp</span></div>
+                </div>
+                <div style="margin-top: 1rem; padding-top: 0.8rem; border-top: 1px solid #f0f0f0; font-size: 0.85rem; color: #666;">
+                    <strong>Placed on:</strong> ${order.placedAt}
+                </div>
+            </div>
+        `).join('');
     }
     // ── Firebase Configuration ──────────────────────────────
     const firebaseConfig = {
@@ -973,6 +1029,7 @@
     }
 
     let pendingOrderMessage = "";
+    let currentOrderData = null;
 
     function sendBookingWhatsApp(e) {
         e.preventDefault();
@@ -1016,13 +1073,20 @@
         `;
         document.getElementById('orderSummary').innerHTML = summaryHtml;
 
-        // Prepare WhatsApp Message
-        pendingOrderMessage = `*New Dairy Order* 🥛\n\n` +
-                        `*Order ID:* ${orderID}\n` +
-                        `*Order Time:* ${istTime} IST\n\n` +
-                        `*Customer Name:* ${name}\n` +
-                        `*Phone:* ${phone}\n` +
-                        `*Product:* ${product}\n` +
+        // Store current order for dashboard
+        currentOrderData = {
+            orderID,
+            name,
+            phone,
+            product,
+            qty,
+            date,
+            time,
+            city,
+            state,
+            address,
+            placedAt: istTime
+        };
                         `*Quantity:* ${qty}\n` +
                         `*Delivery Date:* ${date}\n` +
                         `*Delivery Time:* ${time}\n` +
@@ -1043,6 +1107,12 @@
         localStorage.setItem('adfOrderCount', orderCount);
 
         const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(pendingOrderMessage)}`;
+        
+        // Save to Customer Dashboard
+        const myOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
+        myOrders.push(currentOrderData);
+        localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
+
         window.open(whatsappUrl, '_blank');
         
         closeConfirmModal();
