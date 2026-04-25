@@ -521,18 +521,6 @@
                                         </div>
                                     </div>
 
-    <!-- Install App Prompt Banner -->
-    <div id="installBanner" class="install-banner">
-        <div class="install-content">
-            <span class="install-icon">📱</span>
-            <div class="install-text">
-                <strong>Install Ayyappa Dairy App</strong>
-                <p>Fast access & offline ordering</p>
-            </div>
-        </div>
-        <button id="installBtn" class="btn-install-now">Install Now</button>
-        <button class="install-close" onclick="closeInstallBanner()">&times;</button>
-    </div>
 
     <script src="main.js"></script>
     <script>
@@ -1018,12 +1006,6 @@
         deferredPrompt = e;
     });
 
-    function handleInstallClick(e) {
-        if (e) e.preventDefault();
-        document.getElementById('installChoiceModal').classList.add('active');
-        // Reset steps view
-        document.getElementById('installStepsView').style.display = 'none';
-    }
 
     function closeInstallChoiceModal(event, force) {
         if (force || (event && event.target.id === 'installChoiceModal')) {
