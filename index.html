@@ -507,17 +507,15 @@
         data = { ...DEFAULT_DATA }; // Show defaults immediately
         setupRealtimeListeners(); // Start listening to cloud updates instantly
 
-        // Populate Delivery Dates (Today & Tomorrow)
+        // Populate Delivery Dates (Tomorrow Only)
         const dateSelect = document.getElementById('bookDate');
         if (dateSelect) {
-            const today = new Date();
             const tomorrow = new Date();
-            tomorrow.setDate(today.getDate() + 1);
+            tomorrow.setDate(tomorrow.getDate() + 1);
             
             const formatDate = (d) => d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
             
             dateSelect.innerHTML = `
-                <option value="Today (${formatDate(today)})">Today (${formatDate(today)})</option>
                 <option value="Tomorrow (${formatDate(tomorrow)})">Tomorrow (${formatDate(tomorrow)})</option>
             `;
         }
