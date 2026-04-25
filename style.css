@@ -734,7 +734,15 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     .booking-layout { grid-template-columns: 1fr; gap: 2rem; }
 }
 
-.booking-form-card, .booking-info-card {
+.booking-form-card {
+    background: skyblue;
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 12px 32px rgba(135, 206, 235, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.booking-info-card {
     background: var(--white);
     padding: 2.5rem;
     border-radius: 20px;
