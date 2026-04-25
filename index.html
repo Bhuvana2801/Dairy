@@ -673,7 +673,7 @@
         const order = orders.find(o => o.orderID === orderID);
         if (!order) return;
 
-        const msg = `*Resending Dairy Order* 🥛\n\n` +
+        const msg = `*Order has been Placed* 🥛\n\n` +
                     `*Order ID:* ${order.orderID}\n` +
                     `*Original Time:* ${order.placedAt} IST\n\n` +
                     `*Customer Name:* ${order.name}\n` +
@@ -683,7 +683,8 @@
                     `*Delivery Date:* ${order.date}\n` +
                     `*Delivery Time:* ${order.time}\n` +
                     `*Location:* ${order.city}, ${order.state}\n` +
-                    `*Address:* ${order.address}`;
+                    `*Address:* ${order.address}\n\n` +
+                    `*Customer care number:* 9392603808`;
 
         const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
         window.open(whatsappUrl, '_blank');
@@ -1092,7 +1093,7 @@
         localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
 
         // Prepare WhatsApp Message
-        const msg = `*New Dairy Order* 🥛\n\n` +
+        const msg = `*Order has been Placed* 🥛\n\n` +
                     `*Order ID:* ${orderID}\n` +
                     `*Order Time:* ${istTime} IST\n\n` +
                     `*Customer Name:* ${name}\n` +
@@ -1102,7 +1103,8 @@
                     `*Delivery Date:* ${date}\n` +
                     `*Delivery Time:* ${time}\n` +
                     `*Location:* ${city}, ${state}\n` +
-                    `*Address:* ${address}`;
+                    `*Address:* ${address}\n\n` +
+                    `*Customer care number:* 9392603808`;
 
         // Redirect Directly
         const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
