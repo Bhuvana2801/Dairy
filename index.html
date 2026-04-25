@@ -1140,6 +1140,13 @@
             address,
             placedAt: istTime
         };
+        // Prepare WhatsApp Message
+        pendingOrderMessage = `*New Dairy Order* 🥛\n\n` +
+                        `*Order ID:* ${orderID}\n` +
+                        `*Order Time:* ${istTime} IST\n\n` +
+                        `*Customer Name:* ${name}\n` +
+                        `*Phone:* ${phone}\n` +
+                        `*Product:* ${product}\n` +
                         `*Quantity:* ${qty}\n` +
                         `*Delivery Date:* ${date}\n` +
                         `*Delivery Time:* ${time}\n` +
