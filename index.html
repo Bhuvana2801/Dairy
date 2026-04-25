@@ -475,6 +475,19 @@
         </a>
     </nav>
 
+    <!-- Install App Prompt Banner -->
+    <div id="installBanner" class="install-banner">
+        <div class="install-content">
+            <span class="install-icon">📱</span>
+            <div class="install-text">
+                <strong>Install Ayyappa Dairy App</strong>
+                <p>Fast access & offline ordering</p>
+            </div>
+        </div>
+        <button id="installBtn" class="btn-install-now">Install Now</button>
+        <button class="install-close" onclick="closeInstallBanner()">&times;</button>
+    </div>
+
     <script src="main.js"></script>
     <script>
     // ── Page Switcher ────────────────────────────────────────
@@ -931,6 +944,45 @@
         closeConfirmModal();
         document.getElementById('bookingForm').reset();
         document.getElementById('bookCity').disabled = true;
+    }
+
+    // ── PWA Installation Logic ───────────────────────────────
+    let deferredPrompt;
+    const installBanner = document.getElementById('installBanner');
+    const installBtn = document.getElementById('installBtn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        if (installBanner) installBanner.classList.add('active');
+    });
+
+    if (installBtn) {
+        installBtn.addEventListener('click', async () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                deferredPrompt = null;
+                closeInstallBanner();
+            } else {
+                alert("To install on iOS: Tap the 'Share' icon in Safari and select 'Add to Home Screen' 📲");
+            }
+        });
+    }
+
+    function closeInstallBanner() {
+        if (installBanner) installBanner.classList.remove('active');
+    }
+
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+        if (installBanner) installBanner.style.display = 'none';
+    } else {
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        if (isIOS && !window.navigator.standalone) {
+            setTimeout(() => {
+                if (installBanner) installBanner.classList.add('active');
+            }, 3000);
+        }
     }
 
     </script>
