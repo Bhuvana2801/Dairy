@@ -469,15 +469,57 @@
             <span class="m-icon">🛒</span>
             <span class="m-label">Order</span>
         </a>
-        <a href="#" onclick="showPage('about')" class="mobile-nav-item" id="m-nav-about">
-            <span class="m-icon">📖</span>
-            <span class="m-label">Story</span>
-        </a>
-        <a href="#" onclick="handleInstallClick(event)" class="mobile-nav-item" id="m-nav-install">
-            <span class="m-icon">📲</span>
-            <span class="m-label">Install</span>
-        </a>
-    </nav>
+                                            <span class="m-icon">📖</span>
+                                            <span class="m-label">Story</span>
+                                        </a>
+                                        <a href="#" onclick="openInstallChoiceModal(event)" class="mobile-nav-item" id="m-nav-install">
+                                            <span class="m-icon">📲</span>
+                                            <span class="m-label">Install</span>
+                                        </a>
+                                    </nav>
+
+                                    <!-- Install Choice Modal -->
+                                    <div id="installChoiceModal" class="modal" onclick="closeInstallChoiceModal(event)">
+                                        <div class="modal-content install-modal-content" style="max-width: 400px; text-align: center;">
+                                            <button class="close-modal" onclick="closeInstallChoiceModal(null, true)">&times;</button>
+                                            <div class="install-logo-container" style="margin-top: 1rem;">
+                                                <img src="app_icon_1776943971406.png" alt="App Logo" style="width: 80px; height: 80px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                            </div>
+                                            <h2 style="margin: 1rem 0 0.5rem; color: var(--primary-color);">Install Our App</h2>
+                                            <p style="font-size: 0.9rem; color: #666; margin-bottom: 1.5rem;">Get pure dairy delivered faster by adding our app to your home screen.</p>
+                                            
+                                            <div class="install-choices" style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1rem;">
+                                                <button onclick="showInstallSteps('android')" style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem; background: #3DDC84; color: #fff; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s;">
+                                                    <span style="font-size: 1.5rem;">🤖</span> Android Install
+                                                </button>
+                                                <button onclick="showInstallSteps('ios')" style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 1rem; background: #000; color: #fff; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s;">
+                                                    <span style="font-size: 1.5rem;">🍎</span> iOS (iPhone) Install
+                                                </button>
+                                            </div>
+
+                                            <!-- Steps View (Hidden initially) -->
+                                            <div id="installStepsView" style="display:none; text-align: left; background: #f9f9f9; padding: 1rem; border-radius: 12px; margin-top: 1rem;">
+                                                <div id="androidSteps" style="display:none;">
+                                                    <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #333;">Steps for Android:</h3>
+                                                    <ol style="font-size: 0.85rem; padding-left: 1.2rem; line-height: 1.6;">
+                                                        <li>Open this site in <strong>Chrome</strong> browser.</li>
+                                                        <li>Tap the <strong>three dots (⋮)</strong> in the top right.</li>
+                                                        <li>Select <strong>'Install App'</strong> or 'Add to Home Screen'.</li>
+                                                    </ol>
+                                                    <button class="btn-install-now" style="margin-top:1rem; width:100%; padding: 0.8rem;" onclick="triggerAndroidPrompt()">Try One-Tap Install</button>
+                                                </div>
+                                                <div id="iosSteps" style="display:none;">
+                                                    <h3 style="font-size: 1rem; margin-bottom: 0.5rem; color: #333;">Steps for iPhone:</h3>
+                                                    <ol style="font-size: 0.85rem; padding-left: 1.2rem; line-height: 1.6;">
+                                                        <li>Open this site in <strong>Safari</strong> browser.</li>
+                                                        <li>Tap the <strong>Share</strong> button (box with arrow) at the bottom.</li>
+                                                        <li>Scroll down and tap <strong>'Add to Home Screen'</strong>.</li>
+                                                        <li>Tap <strong>'Add'</strong> in the top right corner.</li>
+                                                    </ol>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
     <!-- Install App Prompt Banner -->
     <div id="installBanner" class="install-banner">
@@ -494,6 +536,24 @@
 
     <script src="main.js"></script>
     <script>
+    // ── Install Modal Logic ──────────────────────────────────
+    function openInstallChoiceModal(e) {
+        if(e) e.preventDefault();
+        document.getElementById('installChoiceModal').classList.add('active');
+    }
+    function closeInstallChoiceModal(e, force) {
+        if (force || e.target.classList.contains('modal')) {
+            document.getElementById('installChoiceModal').classList.remove('active');
+            document.getElementById('installStepsView').style.display = 'none';
+        }
+    }
+    function showInstallSteps(platform) {
+        const stepsView = document.getElementById('installStepsView');
+        stepsView.style.display = 'block';
+        document.getElementById('androidSteps').style.display = (platform === 'android') ? 'block' : 'none';
+        document.getElementById('iosSteps').style.display = (platform === 'ios') ? 'block' : 'none';
+    }
+
     // ── Page Switcher ────────────────────────────────────────
     function showPage(pageId) {
         // Hide all pages
@@ -950,53 +1010,42 @@
         document.getElementById('bookCity').disabled = true;
     }
 
-    // ── PWA Installation Logic ───────────────────────────────
+    // ── PWA Installation Logic (Improved) ───────────────────
     let deferredPrompt;
-    const installBanner = document.getElementById('installBanner');
-    const installBtn = document.getElementById('installBtn');
-
+    
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
-        // Also show the banner for Android if the event fires
-        if (installBanner) installBanner.classList.add('active');
     });
 
-    // Central function for installation
-    async function handleInstallClick(e) {
+    function handleInstallClick(e) {
         if (e) e.preventDefault();
-        
+        document.getElementById('installChoiceModal').classList.add('active');
+        // Reset steps view
+        document.getElementById('installStepsView').style.display = 'none';
+    }
+
+    function closeInstallChoiceModal(event, force) {
+        if (force || (event && event.target.id === 'installChoiceModal')) {
+            document.getElementById('installChoiceModal').classList.remove('active');
+        }
+    }
+
+    function showInstallSteps(os) {
+        document.getElementById('installStepsView').style.display = 'block';
+        document.getElementById('androidSteps').style.display = os === 'android' ? 'block' : 'none';
+        document.getElementById('iosSteps').style.display = os === 'ios' ? 'block' : 'none';
+    }
+
+    async function triggerAndroidPrompt() {
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             deferredPrompt = null;
-            closeInstallBanner();
+            closeInstallChoiceModal(null, true);
         } else {
-            // Check if already installed
-            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-                alert("Ayyappa Dairy App is already installed on your home screen! 🚀");
-            } else {
-                // Show manual instructions
-                alert("To Install Ayyappa Dairy App:\n\n" + 
-                      "📱 iPhone: Tap the 'Share' icon (bottom of Safari) and select 'Add to Home Screen'.\n\n" + 
-                      "🤖 Android: Tap the 3 dots (top right of Chrome) and select 'Install App' or 'Add to Home Screen'.");
-            }
+            alert("Please follow the manual steps above if the automatic prompt doesn't appear.");
         }
-    }
-
-    if (installBtn) {
-        installBtn.addEventListener('click', handleInstallClick);
-    }
-
-    function closeInstallBanner() {
-        if (installBanner) installBanner.classList.remove('active');
-    }
-
-    // Hide install options if already standalone
-    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-        const mInstall = document.getElementById('m-nav-install');
-        if (mInstall) mInstall.style.display = 'none';
-        if (installBanner) installBanner.style.display = 'none';
     }
 
     </script>
