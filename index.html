@@ -473,6 +473,10 @@
             <span class="m-icon">📖</span>
             <span class="m-label">Story</span>
         </a>
+        <a href="#" onclick="handleInstallClick(event)" class="mobile-nav-item" id="m-nav-install">
+            <span class="m-icon">📲</span>
+            <span class="m-label">Install</span>
+        </a>
     </nav>
 
     <!-- Install App Prompt Banner -->
@@ -954,35 +958,45 @@
     window.addEventListener('beforeinstallprompt', (e) => {
         e.preventDefault();
         deferredPrompt = e;
+        // Also show the banner for Android if the event fires
         if (installBanner) installBanner.classList.add('active');
     });
 
-    if (installBtn) {
-        installBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                deferredPrompt = null;
-                closeInstallBanner();
+    // Central function for installation
+    async function handleInstallClick(e) {
+        if (e) e.preventDefault();
+        
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            closeInstallBanner();
+        } else {
+            // Check if already installed
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+                alert("Ayyappa Dairy App is already installed on your home screen! 🚀");
             } else {
-                alert("To install on iOS: Tap the 'Share' icon in Safari and select 'Add to Home Screen' 📲");
+                // Show manual instructions
+                alert("To Install Ayyappa Dairy App:\n\n" + 
+                      "📱 iPhone: Tap the 'Share' icon (bottom of Safari) and select 'Add to Home Screen'.\n\n" + 
+                      "🤖 Android: Tap the 3 dots (top right of Chrome) and select 'Install App' or 'Add to Home Screen'.");
             }
-        });
+        }
+    }
+
+    if (installBtn) {
+        installBtn.addEventListener('click', handleInstallClick);
     }
 
     function closeInstallBanner() {
         if (installBanner) installBanner.classList.remove('active');
     }
 
+    // Hide install options if already standalone
     if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+        const mInstall = document.getElementById('m-nav-install');
+        if (mInstall) mInstall.style.display = 'none';
         if (installBanner) installBanner.style.display = 'none';
-    } else {
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        if (isIOS && !window.navigator.standalone) {
-            setTimeout(() => {
-                if (installBanner) installBanner.classList.add('active');
-            }, 3000);
-        }
     }
 
     </script>
