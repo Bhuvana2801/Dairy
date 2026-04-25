@@ -137,34 +137,7 @@
         </div>
     </div>
 
-    <!-- Order Confirmation Modal -->
-    <div id="confirmOrderModal" class="modal-overlay">
-        <div class="modal-box">
-            <h2>Confirm Your Order</h2>
-            <p>Please review your order details before placing it.</p>
-            <div id="orderSummary" class="order-summary-content">
-                <!-- Summary will be injected here -->
-            </div>
-            <div style="display:flex; gap:1rem; margin-top:1.5rem;">
-                <button class="btn btn-secondary" style="flex:1;" onclick="closeConfirmModal()">Edit Details</button>
-                <button class="btn btn-primary" style="flex:1;" onclick="placeOrderFinal()">Confirm & Order</button>
-            </div>
-        </div>
-    </div>
 
-    <!-- Success Order Modal -->
-    <div id="successModal" class="modal-overlay">
-        <div class="modal-box" style="text-align: center; max-width: 450px;">
-            <div style="margin-bottom: 1.5rem;">
-                <img src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJ6eXN6eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1n/l2JhIer8zZ02P3f0I/giphy.gif" alt="Success" style="width: 200px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-            </div>
-            <h2 style="color: var(--primary-color); margin-bottom: 1rem; font-family: var(--font-heading);">Order Received!</h2>
-            <p style="font-size: 1.1rem; line-height: 1.6; color: #444; font-weight: 400;">
-                Thank you for your order; it has been successfully received and is being processed to ensure fresh and timely delivery.
-            </p>
-            <button class="btn btn-primary" style="margin-top: 1.5rem; width: 100%;" onclick="closeSuccessModal()">Great, Thank You!</button>
-        </div>
-    </div>
 
     <main id="main-content">
 
@@ -1096,99 +1069,48 @@
         const city = document.getElementById('bookCity').value;
         const address = document.getElementById('bookAddress').value;
 
-        // Generate Order ID
+        // Generate Order ID & Time
         let orderCount = parseInt(localStorage.getItem('adfOrderCount') || '0') + 1;
+        localStorage.setItem('adfOrderCount', orderCount);
         const orderID = 'ADF' + orderCount.toString().padStart(4, '0');
 
         const now = new Date();
         const istOptions = { 
             timeZone: 'Asia/Kolkata', 
             hour12: true, 
-            year: 'numeric', 
-            month: '2-digit', 
-            day: '2-digit', 
-            hour: '2-digit', 
-            minute: '2-digit' 
+            year: 'numeric', month: '2-digit', day: '2-digit', 
+            hour: '2-digit', minute: '2-digit' 
         };
         const istTime = now.toLocaleString('en-IN', istOptions);
 
-        // Prepare Summary for Modal
-        const summaryHtml = `
-            <div class="summary-item"><strong>Order ID:</strong> ${orderID}</div>
-            <div class="summary-item"><strong>Customer:</strong> ${name}</div>
-            <div class="summary-item"><strong>Phone:</strong> ${phone}</div>
-            <div class="summary-item"><strong>Product:</strong> ${product}</div>
-            <div class="summary-item"><strong>Quantity:</strong> ${qty}</div>
-            <div class="summary-item"><strong>Delivery Date:</strong> ${date}</div>
-            <div class="summary-item"><strong>Delivery Time:</strong> ${time}</div>
-            <div class="summary-item"><strong>Location:</strong> ${city}, ${state}</div>
-            <div class="summary-item"><strong>Address:</strong> ${address}</div>
-        `;
-        document.getElementById('orderSummary').innerHTML = summaryHtml;
-
-        // Store current order for dashboard
-        currentOrderData = {
-            orderID,
-            name,
-            phone,
-            product,
-            qty,
-            date,
-            time,
-            city,
-            state,
-            address,
-            placedAt: istTime
-        };
-        // Prepare WhatsApp Message
-        pendingOrderMessage = `*New Dairy Order* 🥛\n\n` +
-                        `*Order ID:* ${orderID}\n` +
-                        `*Order Time:* ${istTime} IST\n\n` +
-                        `*Customer Name:* ${name}\n` +
-                        `*Phone:* ${phone}\n` +
-                        `*Product:* ${product}\n` +
-                        `*Quantity:* ${qty}\n` +
-                        `*Delivery Date:* ${date}\n` +
-                        `*Delivery Time:* ${time}\n` +
-                        `*Location:* ${city}, ${state}\n` +
-                        `*Address:* ${address}`;
-
-        // Show Confirmation Modal
-        document.getElementById('confirmOrderModal').classList.add('active');
-    }
-
-    function closeConfirmModal() {
-        document.getElementById('confirmOrderModal').classList.remove('active');
-    }
-
-    function placeOrderFinal() {
-        // Increment order count only on final confirmation
-        let orderCount = parseInt(localStorage.getItem('adfOrderCount') || '0') + 1;
-        localStorage.setItem('adfOrderCount', orderCount);
-
-        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(pendingOrderMessage)}`;
-        
         // Save to Customer Dashboard
+        const orderData = {
+            orderID, name, phone, product, qty, date, time, city, state, address, placedAt: istTime
+        };
         const myOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
-        myOrders.push(currentOrderData);
+        myOrders.push(orderData);
         localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
 
-        window.open(whatsappUrl, '_blank');
-        
-        closeConfirmModal();
-        
-        // Show Success Modal
-        setTimeout(() => {
-            document.getElementById('successModal').classList.add('active');
-        }, 500);
+        // Prepare WhatsApp Message
+        const msg = `*New Dairy Order* 🥛\n\n` +
+                    `*Order ID:* ${orderID}\n` +
+                    `*Order Time:* ${istTime} IST\n\n` +
+                    `*Customer Name:* ${name}\n` +
+                    `*Phone:* ${phone}\n` +
+                    `*Product:* ${product}\n` +
+                    `*Quantity:* ${qty}\n` +
+                    `*Delivery Date:* ${date}\n` +
+                    `*Delivery Time:* ${time}\n` +
+                    `*Location:* ${city}, ${state}\n` +
+                    `*Address:* ${address}`;
 
+        // Redirect Directly
+        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
+        window.open(whatsappUrl, '_blank');
+
+        // Reset Form
         document.getElementById('bookingForm').reset();
         document.getElementById('bookCity').disabled = true;
-    }
-
-    function closeSuccessModal() {
-        document.getElementById('successModal').classList.remove('active');
-        showPage('home'); // Redirect to home after closing
     }
 
     // ── Install Page Logic ──────────────────────────────────
