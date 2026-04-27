@@ -314,7 +314,9 @@
                                         <label for="bookDate">Delivery Date *</label>
                                         <div class="input-container">
                                             <span class="field-icon">📅</span>
-                                            <input type="text" id="bookDate" placeholder="Enter delivery date" required>
+                                            <select id="bookDate" required disabled>
+                                                <!-- Populated via JS -->
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="booking-field">
@@ -760,13 +762,17 @@
         data = { ...DEFAULT_DATA }; // Show defaults immediately
         setupRealtimeListeners(); // Start listening to cloud updates instantly
 
-        // Set Default Delivery Date (Tomorrow)
-        const dateInput = document.getElementById('bookDate');
-        if (dateInput) {
+        // Populate Delivery Dates (Tomorrow Only)
+        const dateSelect = document.getElementById('bookDate');
+        if (dateSelect) {
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
+            
             const formatDate = (d) => d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-            dateInput.value = formatDate(tomorrow);
+            
+            dateSelect.innerHTML = `
+                <option value="Tomorrow (${formatDate(tomorrow)})">Tomorrow (${formatDate(tomorrow)})</option>
+            `;
         }
     });
 
