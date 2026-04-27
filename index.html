@@ -314,9 +314,7 @@
                                         <label for="bookDate">Delivery Date *</label>
                                         <div class="input-container">
                                             <span class="field-icon">📅</span>
-                                            <select id="bookDate" required disabled>
-                                                <!-- Populated via JS -->
-                                            </select>
+                                            <input type="text" id="bookDate" placeholder="Enter delivery date" required>
                                         </div>
                                     </div>
                                     <div class="booking-field">
@@ -326,6 +324,7 @@
                                             <select id="bookTime" required>
                                                 <option value="Morning (6 AM - 9 AM)">Morning (6 AM - 9 AM)</option>
                                                 <option value="Evening (5 PM - 8 PM)">Evening (5 PM - 8 PM)</option>
+                                                <option value="Both (Morning & Evening)">Both (Morning & Evening)</option>
                                             </select>
                                         </div>
                                     </div>
@@ -761,17 +760,13 @@
         data = { ...DEFAULT_DATA }; // Show defaults immediately
         setupRealtimeListeners(); // Start listening to cloud updates instantly
 
-        // Populate Delivery Dates (Tomorrow Only)
-        const dateSelect = document.getElementById('bookDate');
-        if (dateSelect) {
+        // Set Default Delivery Date (Tomorrow)
+        const dateInput = document.getElementById('bookDate');
+        if (dateInput) {
             const tomorrow = new Date();
             tomorrow.setDate(tomorrow.getDate() + 1);
-            
             const formatDate = (d) => d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-            
-            dateSelect.innerHTML = `
-                <option value="Tomorrow (${formatDate(tomorrow)})">Tomorrow (${formatDate(tomorrow)})</option>
-            `;
+            dateInput.value = formatDate(tomorrow);
         }
     });
 
