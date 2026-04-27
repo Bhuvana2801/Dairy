@@ -690,7 +690,7 @@
         const order = orders.find(o => o.orderID === orderID);
         if (!order) return;
 
-        const msg = `*Order has been Placed* 🥛\n\n` +
+        const msg = `✅ *Order has been Placed* 🥛\n\n` +
                     `*Order ID:* ${order.orderID}\n` +
                     `*Original Time:* ${order.placedAt} IST\n\n` +
                     `*Customer Name:* ${order.name}\n` +
@@ -1112,7 +1112,7 @@
         localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
 
         // Prepare WhatsApp Message
-        const msg = `*Order has been Placed* 🥛\n\n` +
+        const msg = `✅ *Order has been Placed* 🥛\n\n` +
                     `*Order ID:* ${orderID}\n` +
                     `*Order Time:* ${istTime} IST\n\n` +
                     `*Customer Name:* ${name}\n` +
