@@ -384,6 +384,17 @@
                                     <div class="input-container textarea-container">
                                         <span class="field-icon">≡ƒôì</span>
                                         <textarea id="bookAddress" rows="3" placeholder="Enter your full delivery address" required></textarea>
+                                </div>
+                                <div class="booking-field">
+                                    <label for="bookTxnId" style="color: #5f259f; font-weight: bold;">Transaction ID (After Payment) *</label>
+                                    <div class="input-container">
+                                        <span class="field-icon">🧾</span>
+                                        <input type="text" id="bookTxnId" placeholder="Enter 12-digit UTR after paying" required style="border-color: #5f259f;">
+                                    </div>
+                                    <div style="margin-top: 15px;">
+                                        <button type="button" class="btn btn-primary" onclick="openPremiumModal()" style="width: 100%; padding: 0.9rem; font-size: 1.05rem; border-radius: 12px; background: #5f259f; border: none; color: white; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(95, 37, 159, 0.3); transition: 0.2s;">
+                                            💳 Open Payment Gateway
+                                        </button>
                                     </div>
                                 </div>
                                 <button type="submit" class="booking-submit-btn">
@@ -1099,8 +1110,42 @@
     document.getElementById('bookQty').addEventListener('change', calculateAmount);
     document.getElementById('bookProduct').addEventListener('change', calculateAmount);
 
-    let pendingOrderMessage = "";
-    let currentOrderData = null;
+    function openPremiumModal() {
+        const amount = document.getElementById('bookAmount').value;
+        if (!amount || amount === '0') {
+            alert("Please select a product and quantity first.");
+            return;
+        }
+        document.getElementById('premiumAmountText').innerText = `Amount: ₹${amount}`;
+        document.getElementById('premiumPaymentModal').classList.add('active');
+    }
+
+    function closePremiumModal(e, force = false) {
+        if (force || e.target.id === 'premiumPaymentModal') {
+            document.getElementById('premiumPaymentModal').classList.remove('active');
+        }
+    }
+
+    function triggerUPI(app) {
+        const amount = document.getElementById('bookAmount').value || '0';
+        const upiId = '9392603808@axl';
+        const name = encodeURIComponent('Ayyappa Dairy');
+        
+        let url = `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR`;
+        
+        if (app === 'phonepe') {
+            url = `phonepe://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR`;
+        } else if (app === 'gpay') {
+            url = `tez://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR`;
+        }
+        
+        window.location.href = url;
+        
+        // Auto-close modal after a short delay so they see the transaction ID instruction when they return
+        setTimeout(() => {
+            closePremiumModal(null, true);
+        }, 3000);
+    }
 
     function sendBookingWhatsApp(e) {
         e.preventDefault();
@@ -1114,6 +1159,7 @@
         const state = document.getElementById('bookState').value;
         const city = document.getElementById('bookCity').value;
         const address = document.getElementById('bookAddress').value;
+        const txnId = document.getElementById('bookTxnId').value;
 
         // Generate Order ID & Time
         let orderCount = parseInt(localStorage.getItem('adfOrderCount') || '0') + 1;
@@ -1129,13 +1175,20 @@
         };
         const istTime = now.toLocaleString('en-IN', istOptions);
 
-        // Prepare temporary order data (will be finalized and saved after payment selection)
-        currentOrderData = {
-            orderID, name, phone, product, qty, amount, date, time, city, state, address, placedAt: istTime
+        // Save to Customer Dashboard
+        const orderData = {
+            orderID, name, phone, product, qty, amount, date, time, city, state, address, placedAt: istTime,
+            paymentMethod: 'UPI',
+            paymentStatus: 'Completed',
+            transactionId: txnId
         };
+        
+        const myOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
+        myOrders.push(orderData);
+        localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
 
-        // Prepare Base WhatsApp Message
-        pendingOrderMessage = `*Order has been Placed* 🥛\n\n` +
+        // Prepare Final WhatsApp Message
+        const msg = `*Order has been Placed* 🥛\n\n` +
                     `*Order ID:* ${orderID}\n` +
                     `*Order Time:* ${istTime} IST\n\n` +
                     `*Customer Name:* ${name}\n` +
@@ -1143,66 +1196,20 @@
                     `*Product:* ${product}\n` +
                     `*Quantity:* ${qty}\n` +
                     `*Total Amount:* ₹${amount}\n` +
+                    `*Transaction ID:* ${txnId}\n` +
                     `*Delivery Date:* ${date}\n` +
                     `*Delivery Time:* ${time}\n` +
                     `*Location:* ${city}, ${state}\n` +
-                    `*Address:* ${address}\n\n`;
+                    `*Address:* ${address}\n\n` +
+                    `*Customer care number:* 9392603808`;
 
-        // Show PhonePe Modal directly instead of selection
-        document.getElementById('phonePeAmountText').innerText = `Please pay ₹${amount} to proceed.`;
-        document.getElementById('payNowBtn').style.display = 'block';
-        document.getElementById('confirmPaymentBtn').style.display = 'none';
-        document.getElementById('phonePeModal').classList.add('active');
-    }
-
-    function triggerPayment() {
-        if (!currentOrderData) return;
-        const upiLink = `upi://pay?pa=9392603808@axl&pn=Ayyappa%20Dairy&am=${currentOrderData.amount}&cu=INR`;
-        window.location.href = upiLink;
-        
-        // Reveal confirm button
-        document.getElementById('confirmPaymentBtn').style.display = 'block';
-    }
-
-    function closePhonePeModal(e, force = false) {
-        if (force || e.target.id === 'phonePeModal') {
-            document.getElementById('phonePeModal').classList.remove('active');
-        }
-    }
-
-    function confirmPhonePePayment() {
-        closePhonePeModal(null, true);
-        finalizeOrder('PhonePe', 'Completed');
-    }
-
-    function finalizeOrder(paymentMethod, paymentStatus) {
-        if (!currentOrderData) return;
-
-        // Save to Customer Dashboard
-        currentOrderData.paymentMethod = paymentMethod;
-        currentOrderData.paymentStatus = paymentStatus;
-        
-        const myOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
-        myOrders.push(currentOrderData);
-        localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
-
-        // Prepare Final WhatsApp Message
-        const finalMsg = pendingOrderMessage + 
-                        `*Payment Method:* ${paymentMethod}\n` +
-                        `*Payment Status:* ${paymentStatus}\n\n` +
-                        `*Customer care number:* 9392603808`;
-
-        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(finalMsg)}`;
+        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
         window.open(whatsappUrl, '_blank');
 
         // Reset Form
         document.getElementById('bookingForm').reset();
         document.getElementById('bookAmount').value = '';
         document.getElementById('bookCity').disabled = true;
-        
-        // Clear temp data
-        pendingOrderMessage = "";
-        currentOrderData = null;
     }
 
     // ΓöÇΓöÇ Install Page Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
