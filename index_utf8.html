@@ -137,7 +137,37 @@
         </div>
     </div>
 
+    <!-- Payment Selection Modal -->
+    <div id="paymentSelectionModal" class="modal-overlay" onclick="closePaymentModal(event)">
+        <div class="modal-box" style="text-align: center; max-width: 400px;">
+            <button class="modal-close" onclick="closePaymentModal(null, true)">&times;</button>
+            <h2 style="color: var(--primary-color); margin-bottom: 0.5rem; font-family: var(--font-heading);">Select Payment Method</h2>
+            <p style="color: #666; margin-bottom: 1.5rem;">How would you like to pay for your order?</p>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <button type="button" class="btn btn-primary" onclick="selectPhonePe()" style="background: #5f259f; padding: 1rem; font-size: 1.1rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; border: none; cursor: pointer; color: white;">
+                    ≡ƒô▒ Pay with PhonePe
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="selectCOD()" style="padding: 1rem; font-size: 1.1rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; border: 2px solid var(--primary-color); background: white; color: var(--primary-color); cursor: pointer;">
+                    ≡ƒÆ╡ Cash on Delivery
+                </button>
+            </div>
+        </div>
+    </div>
 
+    <!-- PhonePe QR Modal -->
+    <div id="phonePeModal" class="modal-overlay" onclick="closePhonePeModal(event)">
+        <div class="modal-box" style="text-align: center; max-width: 400px;">
+            <button class="modal-close" onclick="closePhonePeModal(null, true)">&times;</button>
+            <h2 style="color: #5f259f; margin-bottom: 0.5rem; font-family: var(--font-heading);">Scan to Pay</h2>
+            <p style="color: #666; margin-bottom: 1rem;">Please scan the QR code using your PhonePe app.</p>
+            <div style="background: #f8f8f8; padding: 1rem; border-radius: 16px; display: inline-block; margin-bottom: 1.5rem; border: 1px solid #eee;">
+                <img src="images/PP.jpeg" alt="PhonePe QR Code" style="max-width: 100%; height: auto; border-radius: 8px;">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="confirmPhonePePayment()" style="width: 100%; padding: 1rem; font-size: 1.1rem; background: #25D366; border: none; cursor: pointer; color: white; border-radius: 12px; font-weight: bold;">
+                Γ£à Payment Completed
+            </button>
+        </div>
+    </div>
 
     <main id="main-content">
 
@@ -305,6 +335,16 @@
                                                 <option value="19 Litres">19 Litres</option>
                                                 <option value="20 Litres">20 Litres</option>
                                             </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="booking-row">
+                                    <div class="booking-field">
+                                        <label for="bookAmount">Total Amount (Γé╣) *</label>
+                                        <div class="input-container">
+                                            <span class="field-icon">Γé╣</span>
+                                            <input type="text" id="bookAmount" placeholder="Automatically calculated" readonly style="background: #f8f8f8; font-weight: bold; color: var(--primary-color);">
                                         </div>
                                     </div>
                                 </div>
@@ -1054,6 +1094,25 @@
         }
     }
 
+    function calculateAmount() {
+        const qtyStr = document.getElementById('bookQty').value;
+        const amountField = document.getElementById('bookAmount');
+        if (!qtyStr) {
+            amountField.value = '';
+            return;
+        }
+        const qty = parseInt(qtyStr.split(' ')[0]) || 0;
+        
+        // 1 Litre milk is 80 rupees. Defaulting others to 80 as well for now.
+        const pricePerUnit = 80; 
+        
+        const totalAmount = qty * pricePerUnit;
+        amountField.value = totalAmount;
+    }
+
+    document.getElementById('bookQty').addEventListener('change', calculateAmount);
+    document.getElementById('bookProduct').addEventListener('change', calculateAmount);
+
     let pendingOrderMessage = "";
     let currentOrderData = null;
 
@@ -1063,6 +1122,7 @@
         const phone = document.getElementById('bookPhone').value;
         const product = document.getElementById('bookProduct').value;
         const qty = document.getElementById('bookQty').value;
+        const amount = document.getElementById('bookAmount').value || '0';
         const date = document.getElementById('bookDate').value;
         const time = document.getElementById('bookTime').value;
         const state = document.getElementById('bookState').value;
@@ -1083,35 +1143,84 @@
         };
         const istTime = now.toLocaleString('en-IN', istOptions);
 
-        // Save to Customer Dashboard
-        const orderData = {
-            orderID, name, phone, product, qty, date, time, city, state, address, placedAt: istTime
+        // Prepare temporary order data (will be finalized and saved after payment selection)
+        currentOrderData = {
+            orderID, name, phone, product, qty, amount, date, time, city, state, address, placedAt: istTime
         };
-        const myOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
-        myOrders.push(orderData);
-        localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
 
-        // Prepare WhatsApp Message
-        const msg = `*Order has been Placed* ≡ƒÑ¢\n\n` +
+        // Prepare Base WhatsApp Message
+        pendingOrderMessage = `*Order has been Placed* 🥛\n\n` +
                     `*Order ID:* ${orderID}\n` +
                     `*Order Time:* ${istTime} IST\n\n` +
                     `*Customer Name:* ${name}\n` +
                     `*Phone:* ${phone}\n` +
                     `*Product:* ${product}\n` +
                     `*Quantity:* ${qty}\n` +
+                    `*Total Amount:* ₹${amount}\n` +
                     `*Delivery Date:* ${date}\n` +
                     `*Delivery Time:* ${time}\n` +
                     `*Location:* ${city}, ${state}\n` +
-                    `*Address:* ${address}\n\n` +
-                    `*Customer care number:* 9392603808`;
+                    `*Address:* ${address}\n\n`;
 
-        // Redirect Directly
-        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
+        // Show Payment Modal instead of sending directly
+        document.getElementById('paymentSelectionModal').classList.add('active');
+    }
+
+    function closePaymentModal(e, force = false) {
+        if (force || e.target.id === 'paymentSelectionModal') {
+            document.getElementById('paymentSelectionModal').classList.remove('active');
+        }
+    }
+
+    function closePhonePeModal(e, force = false) {
+        if (force || e.target.id === 'phonePeModal') {
+            document.getElementById('phonePeModal').classList.remove('active');
+        }
+    }
+
+    function selectPhonePe() {
+        closePaymentModal(null, true);
+        document.getElementById('phonePeModal').classList.add('active');
+    }
+
+    function selectCOD() {
+        closePaymentModal(null, true);
+        finalizeOrder('Cash on Delivery', 'Pending');
+    }
+
+    function confirmPhonePePayment() {
+        closePhonePeModal(null, true);
+        finalizeOrder('PhonePe', 'Completed');
+    }
+
+    function finalizeOrder(paymentMethod, paymentStatus) {
+        if (!currentOrderData) return;
+
+        // Save to Customer Dashboard
+        currentOrderData.paymentMethod = paymentMethod;
+        currentOrderData.paymentStatus = paymentStatus;
+        
+        const myOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
+        myOrders.push(currentOrderData);
+        localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
+
+        // Prepare Final WhatsApp Message
+        const finalMsg = pendingOrderMessage + 
+                        `*Payment Method:* ${paymentMethod}\n` +
+                        `*Payment Status:* ${paymentStatus}\n\n` +
+                        `*Customer care number:* 9392603808`;
+
+        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(finalMsg)}`;
         window.open(whatsappUrl, '_blank');
 
         // Reset Form
         document.getElementById('bookingForm').reset();
+        document.getElementById('bookAmount').value = '';
         document.getElementById('bookCity').disabled = true;
+        
+        // Clear temp data
+        pendingOrderMessage = "";
+        currentOrderData = null;
     }
 
     // ΓöÇΓöÇ Install Page Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
