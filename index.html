@@ -142,11 +142,14 @@
         <div class="modal-box" style="text-align: center; max-width: 400px;">
             <button class="modal-close" onclick="closePhonePeModal(null, true)">&times;</button>
             <h2 style="color: #5f259f; margin-bottom: 0.5rem; font-family: var(--font-heading);">Scan to Pay</h2>
-            <p style="color: #666; margin-bottom: 1rem;">Please scan the QR code using your PhonePe app.</p>
+            <p id="phonePeAmountText" style="color: #666; margin-bottom: 1rem; font-weight: bold;">Please scan the QR code using your PhonePe app.</p>
             <div style="background: #f8f8f8; padding: 1rem; border-radius: 16px; display: inline-block; margin-bottom: 1.5rem; border: 1px solid #eee;">
                 <img src="images/PP.jpeg" alt="PhonePe QR Code" style="max-width: 100%; height: auto; border-radius: 8px;">
             </div>
-            <button type="button" class="btn btn-primary" onclick="confirmPhonePePayment()" style="width: 100%; padding: 1rem; font-size: 1.1rem; background: #25D366; border: none; cursor: pointer; color: white; border-radius: 12px; font-weight: bold;">
+            <button type="button" id="payNowBtn" class="btn btn-primary" onclick="triggerPayment()" style="width: 100%; padding: 1rem; font-size: 1.1rem; background: #5f259f; border: none; cursor: pointer; color: white; border-radius: 12px; font-weight: bold; margin-bottom: 10px;">
+                📱 Pay Now
+            </button>
+            <button type="button" id="confirmPaymentBtn" class="btn btn-primary" onclick="confirmPhonePePayment()" style="width: 100%; padding: 1rem; font-size: 1.1rem; background: #25D366; border: none; cursor: pointer; color: white; border-radius: 12px; font-weight: bold; display: none;">
                 ✅ Payment Completed
             </button>
         </div>
@@ -1146,7 +1149,19 @@
                     `*Address:* ${address}\n\n`;
 
         // Show PhonePe Modal directly instead of selection
+        document.getElementById('phonePeAmountText').innerText = `Please pay ₹${amount} to proceed.`;
+        document.getElementById('payNowBtn').style.display = 'block';
+        document.getElementById('confirmPaymentBtn').style.display = 'none';
         document.getElementById('phonePeModal').classList.add('active');
+    }
+
+    function triggerPayment() {
+        if (!currentOrderData) return;
+        const upiLink = `upi://pay?pa=9392603808@axl&pn=Ayyappa%20Dairy&am=${currentOrderData.amount}&cu=INR`;
+        window.location.href = upiLink;
+        
+        // Reveal confirm button
+        document.getElementById('confirmPaymentBtn').style.display = 'block';
     }
 
     function closePhonePeModal(e, force = false) {
