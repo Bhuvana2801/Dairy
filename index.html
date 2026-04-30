@@ -137,23 +137,6 @@
         </div>
     </div>
 
-    <!-- Payment Selection Modal -->
-    <div id="paymentSelectionModal" class="modal-overlay" onclick="closePaymentModal(event)">
-        <div class="modal-box" style="text-align: center; max-width: 400px;">
-            <button class="modal-close" onclick="closePaymentModal(null, true)">&times;</button>
-            <h2 style="color: var(--primary-color); margin-bottom: 0.5rem; font-family: var(--font-heading);">Select Payment Method</h2>
-            <p style="color: #666; margin-bottom: 1.5rem;">How would you like to pay for your order?</p>
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <button type="button" class="btn btn-primary" onclick="selectPhonePe()" style="background: #5f259f; padding: 1rem; font-size: 1.1rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; border: none; cursor: pointer; color: white;">
-                    📱 Pay with PhonePe
-                </button>
-                <button type="button" class="btn btn-secondary" onclick="selectCOD()" style="padding: 1rem; font-size: 1.1rem; border-radius: 12px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; border: 2px solid var(--primary-color); background: white; color: var(--primary-color); cursor: pointer;">
-                    💵 Cash on Delivery
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- PhonePe QR Modal -->
     <div id="phonePeModal" class="modal-overlay" onclick="closePhonePeModal(event)">
         <div class="modal-box" style="text-align: center; max-width: 400px;">
@@ -1162,30 +1145,14 @@
                     `*Location:* ${city}, ${state}\n` +
                     `*Address:* ${address}\n\n`;
 
-        // Show Payment Modal instead of sending directly
-        document.getElementById('paymentSelectionModal').classList.add('active');
-    }
-
-    function closePaymentModal(e, force = false) {
-        if (force || e.target.id === 'paymentSelectionModal') {
-            document.getElementById('paymentSelectionModal').classList.remove('active');
-        }
+        // Show PhonePe Modal directly instead of selection
+        document.getElementById('phonePeModal').classList.add('active');
     }
 
     function closePhonePeModal(e, force = false) {
         if (force || e.target.id === 'phonePeModal') {
             document.getElementById('phonePeModal').classList.remove('active');
         }
-    }
-
-    function selectPhonePe() {
-        closePaymentModal(null, true);
-        document.getElementById('phonePeModal').classList.add('active');
-    }
-
-    function selectCOD() {
-        closePaymentModal(null, true);
-        finalizeOrder('Cash on Delivery', 'Pending');
     }
 
     function confirmPhonePePayment() {
