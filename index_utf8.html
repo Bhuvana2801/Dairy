@@ -101,6 +101,10 @@
                     &#128176; Salaries
                     <small>View &amp; manage salaries</small>
                 </div>
+                <div class="dash-card" onclick="openSection('orders')" style="border-left: 4px solid #25D366;">
+                    &#128722; Orders List
+                    <small>View all customer orders</small>
+                </div>
             </div>
 
             <!-- DETAIL VIEW -->
@@ -137,23 +141,7 @@
         </div>
     </div>
 
-    <!-- PhonePe QR Modal -->
-    <div id="phonePeModal" class="modal-overlay" onclick="closePhonePeModal(event)">
-        <div class="modal-box" style="text-align: center; max-width: 400px;">
-            <button class="modal-close" onclick="closePhonePeModal(null, true)">&times;</button>
-            <h2 style="color: #5f259f; margin-bottom: 0.5rem; font-family: var(--font-heading);">Scan to Pay</h2>
-            <p id="phonePeAmountText" style="color: #666; margin-bottom: 1rem; font-weight: bold;">Please scan the QR code using your PhonePe app.</p>
-            <div style="background: #f8f8f8; padding: 1rem; border-radius: 16px; display: inline-block; margin-bottom: 1.5rem; border: 1px solid #eee;">
-                <img src="images/PP.jpeg" alt="PhonePe QR Code" style="max-width: 100%; height: auto; border-radius: 8px;">
-            </div>
-            <button type="button" id="payNowBtn" class="btn btn-primary" onclick="triggerPayment()" style="width: 100%; padding: 1rem; font-size: 1.1rem; background: #5f259f; border: none; cursor: pointer; color: white; border-radius: 12px; font-weight: bold; margin-bottom: 10px;">
-                📱 Pay Now
-            </button>
-            <button type="button" id="confirmPaymentBtn" class="btn btn-primary" onclick="confirmPhonePePayment()" style="width: 100%; padding: 1rem; font-size: 1.1rem; background: #25D366; border: none; cursor: pointer; color: white; border-radius: 12px; font-weight: bold; display: none;">
-                ✅ Payment Completed
-            </button>
-        </div>
-    </div>
+
 
     <main id="main-content">
 
@@ -264,6 +252,11 @@
                             </div>
                             
                             <form id="bookingForm" onsubmit="sendBookingWhatsApp(event)">
+                                <!-- Membership ID Banner -->
+                                <div id="membershipDisplay" style="display:none; background: linear-gradient(135deg, #e8f5e9, #c8e6c9); padding: 12px 16px; border-radius: 12px; margin-bottom: 1.2rem; color: var(--primary-color); font-weight: 700; border: 2px solid #4caf50; display:none; align-items:center; gap:0.6rem; font-size:1rem;">
+                                    <span style="font-size:1.4rem;">🎫</span>
+                                    <span>Membership ID: <span id="displayMemId" style="font-size:1.1rem; letter-spacing:1px;"></span></span>
+                                </div>
                                 <div class="booking-row">
                                     <div class="booking-field">
                                         <label for="bookName">Full Name *</label>
@@ -385,22 +378,14 @@
                                         <span class="field-icon">≡ƒôì</span>
                                         <textarea id="bookAddress" rows="3" placeholder="Enter your full delivery address" required></textarea>
                                 </div>
-                                <div class="booking-field">
-                                    <label for="bookTxnId" style="color: #5f259f; font-weight: bold;">Transaction ID (After Payment) *</label>
-                                    <div class="input-container">
-                                        <span class="field-icon">🧾</span>
-                                        <input type="text" id="bookTxnId" placeholder="Enter 12-digit UTR after paying" required style="border-color: #5f259f;">
-                                    </div>
-                                    <div style="margin-top: 15px;">
-                                        <button type="button" class="btn btn-primary" onclick="openPremiumModal()" style="width: 100%; padding: 0.9rem; font-size: 1.05rem; border-radius: 12px; background: #5f259f; border: none; color: white; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 15px rgba(95, 37, 159, 0.3); transition: 0.2s;">
-                                            💳 Open Payment Gateway
-                                        </button>
-                                    </div>
-                                </div>
                                 <button type="submit" class="booking-submit-btn">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
                                     Send Order via WhatsApp
                                 </button>
+                                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                                    <button type="button" onclick="subscribe('Daily')" class="btn btn-secondary" style="flex: 1; padding: 0.8rem; border-radius: 12px; font-weight: bold; border: 2px solid var(--primary-color); background: transparent; color: var(--primary-color); transition: 0.2s;">Daily Pay</button>
+                                    <button type="button" onclick="subscribe('Monthly')" class="btn btn-secondary" style="flex: 1; padding: 0.8rem; border-radius: 12px; font-weight: bold; border: 2px solid var(--primary-color); background: transparent; color: var(--primary-color); transition: 0.2s;">Monthly Pay</button>
+                                </div>
                             </form>
                         </div>
 
@@ -752,7 +737,7 @@
     const db = firebase.firestore();
 
     // ΓöÇΓöÇ Cloud data storage ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
-    let data = { daily: [], expenses: [], production: [], salaries: [] };
+    let data = { daily: [], expenses: [], production: [], salaries: [], orders: [] };
 
     // Placeholder data
     const DEFAULT_DATA = {
@@ -777,7 +762,7 @@
 
     // Replace robust loadData with Instant Realtime Listener
     function setupRealtimeListeners() {
-        const sections = ['daily', 'expenses', 'production', 'salaries'];
+        const sections = ['daily', 'expenses', 'production', 'salaries', 'orders'];
         sections.forEach(section => {
             db.collection(section).orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 data[section] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -809,14 +794,26 @@
                 <option value="Tomorrow (${formatDate(tomorrow)})">Tomorrow (${formatDate(tomorrow)})</option>
             `;
         }
+
+        // Show Membership ID if already subscribed
+        const memId = localStorage.getItem('adfMembershipId');
+        if (memId) {
+            const banner = document.getElementById('membershipDisplay');
+            const memIdSpan = document.getElementById('displayMemId');
+            if (banner && memIdSpan) {
+                memIdSpan.textContent = memId;
+                banner.style.display = 'flex';
+            }
+        }
     });
 
     // Schema for each section
     const schema = {
-        daily:      { title: 'Daily Report',      fields: ['date','item','qty','note'],           labels: ['Date','Item','Quantity','Note'] },
-        expenses:   { title: 'Monthly Expenses',  fields: ['month','category','amount','note'],   labels: ['Month','Category','Amount','Note'] },
-        production: { title: 'Production',        fields: ['date','product','quantity','status'], labels: ['Date','Product','Quantity','Status'] },
-        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],       labels: ['Name','Role','Amount','Month'] }
+        daily:      { title: 'Daily Report',      fields: ['date','item','qty','note'],                                    labels: ['Date','Item','Quantity','Note'],                                  readOnly: false },
+        expenses:   { title: 'Monthly Expenses',  fields: ['month','category','amount','note'],                            labels: ['Month','Category','Amount','Note'],                               readOnly: false },
+        production: { title: 'Production',        fields: ['date','product','quantity','status'],                          labels: ['Date','Product','Quantity','Status'],                             readOnly: false },
+        salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],                                labels: ['Name','Role','Amount','Month'],                                   readOnly: false },
+        orders:     { title: '📋 Orders List',    fields: ['orderID','name','phone','product','qty','date','membershipId'], labels: ['Order ID','Customer','Phone','Product','Qty','Delivery Date','Membership ID'], readOnly: true }
     };
 
     let currentSection = null;
@@ -868,14 +865,20 @@
         document.getElementById('dashHeading').textContent = s.title;
         document.getElementById('backBtn').style.display = 'inline-block';
         
-        // Only show export button for table-based reports (not gallery)
+        // Show export for non-gallery, non-readonly
         if (section !== 'gallery') {
             document.getElementById('exportBtn').style.display = 'inline-block';
         } else {
             document.getElementById('exportBtn').style.display = 'none';
         }
 
-        renderAddForm(section);
+        // For read-only sections (like orders), hide the add form
+        if (s.readOnly) {
+            document.getElementById('addForm').style.display = 'none';
+        } else {
+            document.getElementById('addForm').style.display = '';
+            renderAddForm(section);
+        }
         renderTable(section);
     }
 
@@ -1110,56 +1113,19 @@
     document.getElementById('bookQty').addEventListener('change', calculateAmount);
     document.getElementById('bookProduct').addEventListener('change', calculateAmount);
 
-    function openPremiumModal() {
-        const amount = document.getElementById('bookAmount').value;
-        if (!amount || amount === '0') {
-            alert("Please select a product and quantity first.");
-            return;
-        }
-        document.getElementById('premiumAmountText').innerText = `Amount: ₹${amount}`;
-        document.getElementById('premiumPaymentModal').classList.add('active');
-    }
-
-    function closePremiumModal(e, force = false) {
-        if (force || e.target.id === 'premiumPaymentModal') {
-            document.getElementById('premiumPaymentModal').classList.remove('active');
-        }
-    }
-
-    function triggerUPI(app) {
-        const amount = document.getElementById('bookAmount').value || '0';
-        const upiId = '9392603808@axl';
-        const name = encodeURIComponent('Ayyappa Dairy');
-        
-        let url = `upi://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR`;
-        
-        if (app === 'phonepe') {
-            url = `phonepe://pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR`;
-        } else if (app === 'gpay') {
-            url = `tez://upi/pay?pa=${upiId}&pn=${name}&am=${amount}&cu=INR`;
-        }
-        
-        window.location.href = url;
-        
-        // Auto-close modal after a short delay so they see the transaction ID instruction when they return
-        setTimeout(() => {
-            closePremiumModal(null, true);
-        }, 3000);
-    }
-
     function sendBookingWhatsApp(e) {
         e.preventDefault();
-        const name = document.getElementById('bookName').value;
-        const phone = document.getElementById('bookPhone').value;
-        const product = document.getElementById('bookProduct').value;
-        const qty = document.getElementById('bookQty').value;
-        const amount = document.getElementById('bookAmount').value || '0';
-        const date = document.getElementById('bookDate').value;
-        const time = document.getElementById('bookTime').value;
-        const state = document.getElementById('bookState').value;
-        const city = document.getElementById('bookCity').value;
-        const address = document.getElementById('bookAddress').value;
-        const txnId = document.getElementById('bookTxnId').value;
+        const name     = document.getElementById('bookName').value;
+        const phone    = document.getElementById('bookPhone').value;
+        const product  = document.getElementById('bookProduct').value;
+        const qty      = document.getElementById('bookQty').value;
+        const amount   = document.getElementById('bookAmount').value || '0';
+        const date     = document.getElementById('bookDate').value;
+        const time     = document.getElementById('bookTime').value;
+        const state    = document.getElementById('bookState').value;
+        const city     = document.getElementById('bookCity').value;
+        const address  = document.getElementById('bookAddress').value;
+        const membershipId = localStorage.getItem('adfMembershipId') || '';
 
         // Generate Order ID & Time
         let orderCount = parseInt(localStorage.getItem('adfOrderCount') || '0') + 1;
@@ -1175,28 +1141,33 @@
         };
         const istTime = now.toLocaleString('en-IN', istOptions);
 
-        // Save to Customer Dashboard
-        const orderData = {
-            orderID, name, phone, product, qty, amount, date, time, city, state, address, placedAt: istTime,
-            paymentMethod: 'UPI',
-            paymentStatus: 'Completed',
-            transactionId: txnId
-        };
-        
+        // Save to Customer Local History
+        const orderData = { orderID, name, phone, product, qty, amount, date, time, city, state, address, placedAt: istTime, membershipId };
         const myOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
         myOrders.push(orderData);
         localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
 
-        // Prepare Final WhatsApp Message
+        // Save to Firebase orders collection
+        try {
+            db.collection('orders').add({
+                orderID, name, phone, product, qty, amount, date, time, city, state, address,
+                membershipId: membershipId || 'N/A',
+                placedAt: istTime,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch(err) { console.warn('Order save error:', err); }
+
+        // Prepare WhatsApp Message (no payment details)
+        const memLine = membershipId ? `*Membership ID:* ${membershipId}\n` : '';
         const msg = `*Order has been Placed* 🥛\n\n` +
                     `*Order ID:* ${orderID}\n` +
-                    `*Order Time:* ${istTime} IST\n\n` +
+                    `*Order Time:* ${istTime} IST\n` +
+                    memLine + `\n` +
                     `*Customer Name:* ${name}\n` +
                     `*Phone:* ${phone}\n` +
                     `*Product:* ${product}\n` +
                     `*Quantity:* ${qty}\n` +
                     `*Total Amount:* ₹${amount}\n` +
-                    `*Transaction ID:* ${txnId}\n` +
                     `*Delivery Date:* ${date}\n` +
                     `*Delivery Time:* ${time}\n` +
                     `*Location:* ${city}, ${state}\n` +
@@ -1210,6 +1181,74 @@
         document.getElementById('bookingForm').reset();
         document.getElementById('bookAmount').value = '';
         document.getElementById('bookCity').disabled = true;
+
+        // Restore membership banner after reset
+        const memId = localStorage.getItem('adfMembershipId');
+        if (memId) {
+            const banner = document.getElementById('membershipDisplay');
+            const memIdSpan = document.getElementById('displayMemId');
+            if (banner && memIdSpan) { memIdSpan.textContent = memId; banner.style.display = 'flex'; }
+        }
+    }
+
+    // ── Subscription Handler ─────────────────────────────────────────────────
+    function subscribe(type) {
+        const name  = document.getElementById('bookName').value.trim();
+        const phone = document.getElementById('bookPhone').value.trim();
+
+        if (!name || !phone) {
+            alert('Please enter your Full Name and Phone Number before subscribing.');
+            return;
+        }
+
+        // Check if already subscribed
+        const existing = localStorage.getItem('adfMembershipId');
+        if (existing) {
+            alert(`You are already subscribed!\nYour Membership ID: ${existing}`);
+            return;
+        }
+
+        // Generate Membership ID
+        const prefix = (type === 'Daily') ? 'ADFD' : 'ADFM';
+        const countKey = (type === 'Daily') ? 'adfDailyCount' : 'adfMonthlyCount';
+        let count = parseInt(localStorage.getItem(countKey) || '0') + 1;
+        localStorage.setItem(countKey, count);
+        const membershipId = prefix + count.toString().padStart(4, '0');
+        localStorage.setItem('adfMembershipId', membershipId);
+
+        // Show banner
+        const banner = document.getElementById('membershipDisplay');
+        const memIdSpan = document.getElementById('displayMemId');
+        if (banner && memIdSpan) {
+            memIdSpan.textContent = membershipId;
+            banner.style.display = 'flex';
+        }
+
+        // Save subscription to Firebase
+        try {
+            db.collection('subscriptions').add({
+                membershipId, name, phone, type,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        } catch(err) { console.warn('Subscription save error:', err); }
+
+        // WhatsApp notification to farm
+        const now = new Date();
+        const istTime = now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+        const subMsg = `🎉 *New ${type} Subscription* 🎉\n\n` +
+                       `*Membership ID:* ${membershipId}\n` +
+                       `*Customer Name:* ${name}\n` +
+                       `*Phone:* ${phone}\n` +
+                       `*Plan:* ${type} Pay\n` +
+                       `*Subscribed On:* ${istTime} IST\n\n` +
+                       `*Customer care number:* 9392603808`;
+        const subUrl = `https://wa.me/919392603808?text=${encodeURIComponent(subMsg)}`;
+        window.open(subUrl, '_blank');
+
+        // Thank You message
+        setTimeout(() => {
+            alert(`✅ Thank You for subscribing!\n\nYour ${type} Membership ID is:\n\n${membershipId}\n\nPlease note this ID — it will appear on all your future orders.`);
+        }, 500);
     }
 
     // ΓöÇΓöÇ Install Page Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
