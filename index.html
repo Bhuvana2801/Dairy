@@ -130,6 +130,7 @@
                                 <th style="padding: 12px; text-align: left;">Customer</th>
                                 <th style="padding: 12px; text-align: left;">Amount</th>
                                 <th style="padding: 12px; text-align: left;">Plan</th>
+                                <th style="padding: 12px; text-align: left;">Payment</th>
                                 <th style="padding: 12px; text-align: left;">Status</th>
                                 <th style="padding: 12px; text-align: left;">Action</th>
                             </tr>
@@ -1558,7 +1559,7 @@
         receiptsListener = db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
             tbody.innerHTML = '';
             if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
                 return;
             }
             snapshot.forEach(doc => {
@@ -1566,17 +1567,25 @@
                 const tr = document.createElement('tr');
                 const status = order.status || 'Pending';
                 const statusColor = status === 'Confirmed' ? '#2e7d32' : (status === 'Reverify' ? '#d32f2f' : '#fbc02d');
+                const payStatus = order.paymentStatus || 'Unpaid';
+                const payColor = payStatus === 'Paid' ? '#2e7d32' : '#d32f2f';
                 const plan = order.paymentType || 'Daily';
                 
                 tr.innerHTML = `
                     <td style="padding: 12px;"><strong>${order.orderID}</strong></td>
-                    <td style="padding: 12px;">${order.date}</td>
+                    <td style="padding: 12px; font-size: 0.85rem;">${order.date}</td>
                     <td style="padding: 12px;">${order.name}</td>
                     <td style="padding: 12px;">₹${order.amount}</td>
-                    <td style="padding: 12px; font-weight: 600; color: #666;">${plan}</td>
-                    <td style="padding: 12px;"><span style="background:${statusColor}; color:white; padding:4px 10px; border-radius:50px; font-size:0.75rem; font-weight:700;">${status}</span></td>
+                    <td style="padding: 12px; color: #666;">${plan}</td>
                     <td style="padding: 12px;">
-                        <button class="btn" style="padding:6px 15px; font-size:0.8rem; background:var(--primary-color); color:white; border-radius:50px; font-weight: 700;" onclick="adminVerifyOrder('${doc.id}')">Verify Bill</button>
+                        <button onclick="togglePaymentStatus('${doc.id}', '${payStatus}')" style="background:none; border:none; color:${payColor}; cursor:pointer; font-weight:700; text-decoration:underline;">${payStatus}</button>
+                    </td>
+                    <td style="padding: 12px;"><span style="background:${statusColor}; color:white; padding:4px 10px; border-radius:50px; font-size:0.7rem; font-weight:700;">${status}</span></td>
+                    <td style="padding: 12px;">
+                        <div style="display:flex; gap:0.5rem;">
+                            <button class="btn" style="padding:5px 10px; font-size:0.75rem; background:var(--primary-color); color:white; border-radius:4px; font-weight:700;" onclick="adminVerifyOrder('${doc.id}')">Bill</button>
+                            <button class="btn" style="padding:5px 10px; font-size:0.75rem; background:#333; color:white; border-radius:4px; font-weight:700;" onclick="quickVerify('${doc.id}')">Verify</button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1587,10 +1596,24 @@
             if (err.code === 'permission-denied') errMsg = "Permission Denied: Update Firestore rules.";
             if (err.message.includes("index")) errMsg = "Missing Index: Check browser console for link.";
             
-            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #d32f2f;">
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 2rem; color: #d32f2f;">
                 ${errMsg}<br><small style="color:#888; font-weight:400;">(${err.code || 'unknown'})</small>
             </td></tr>`;
         });
+    }
+
+    async function togglePaymentStatus(docId, current) {
+        const next = current === 'Paid' ? 'Unpaid' : 'Paid';
+        if (confirm(`Change payment status to ${next}?`)) {
+            await db.collection('orders').doc(docId).update({ paymentStatus: next });
+        }
+    }
+
+    function quickVerify(docId) {
+        const status = prompt("Enter new status (Confirmed/Reverify/Pending):", "Confirmed");
+        if (status) {
+            updateOrderStatus(docId, status);
+        }
     }
 
     async function adminVerifyOrder(docId) {
