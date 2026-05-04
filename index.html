@@ -101,6 +101,10 @@
                     &#128004; Production
                     <small>View &amp; manage production</small>
                 </div>
+                <div class="dash-card" onclick="openSection('order-receipts')" style="border: 2px solid var(--accent-color); background: #fffdf8;">
+                    &#128147; Order Receipts
+                    <small>Verify bills & confirm orders</small>
+                </div>
                 <div class="dash-card" onclick="openSection('salaries')">
                     &#128176; Salaries
                     <small>View &amp; manage salaries</small>
@@ -398,11 +402,34 @@
                                     <p style="color: #ffcc00; font-weight: 700; font-size: 0.9rem; text-align: center; margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Give the rating to place the order</p>
                                     <button type="submit" class="booking-submit-btn">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                        Place Order
+                        Place Order
                                     </button>
                                 </div>
                                 
                                 <!-- Payment Type Selection (Hidden initially, shown after click) -->
+                                <!-- Order Receipts Section -->
+            <div id="order-receipts-section" class="dash-section" style="display:none;">
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color:var(--primary-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem; display:inline-block;">Verify Order Receipts</h3>
+                    <p style="font-size:0.9rem; color:#666;">Confirm payments and verify customer bills.</p>
+                </div>
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="receiptsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+                                
                                 <div id="payTypeSelection" style="display: none; margin-top: 1rem; background: #fff; padding: 1.5rem; border-radius: 16px; border: 2px solid var(--primary-color); box-shadow: 0 10px 25px rgba(0,0,0,0.1); animation: slideIn 0.3s ease;">
                                     <p style="margin: 0 0 1rem; font-weight: 700; color: var(--primary-color); text-align: center;">Select Your Payment Plan:</p>
                                     <div style="display: flex; gap: 1rem;">
@@ -950,6 +977,8 @@
         currentSection = null;
         document.getElementById('dashGrid').style.display = 'grid';
         document.getElementById('detailView').style.display = 'none';
+        document.getElementById('order-receipts-section').style.display = 'none';
+        document.getElementById('salaries-section').style.display = 'none';
         document.getElementById('dashHeading').textContent = 'Admin Dashboard';
         document.getElementById('backBtn').style.display = 'none';
         document.getElementById('exportBtn').style.display = 'none';
@@ -957,7 +986,23 @@
 
     function openSection(section) {
         currentSection = section;
+        
+        // Hide all custom sections first
+        document.getElementById('order-receipts-section').style.display = 'none';
+        document.getElementById('salaries-section').style.display = 'none';
+
+        if (section === 'order-receipts') {
+            document.getElementById('dashGrid').style.display = 'none';
+            document.getElementById('order-receipts-section').style.display = 'block';
+            document.getElementById('dashHeading').textContent = 'Order Receipts Verification';
+            document.getElementById('backBtn').style.display = 'inline-block';
+            renderOrderReceipts();
+            return;
+        }
+
         const s = schema[section];
+        if (!s) return;
+
         document.getElementById('dashGrid').style.display = 'none';
         document.getElementById('detailView').style.display = 'block';
         document.getElementById('dashHeading').textContent = s.title;
@@ -1323,6 +1368,7 @@
                 membershipId: membershipId || 'N/A',
                 paymentType: type,
                 rating: rating,
+                status: 'Pending Verification',
                 placedAt: istTime,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -1513,12 +1559,86 @@
         }
     }
 
-    // Initialize display on load
-    window.addEventListener('DOMContentLoaded', () => {
-        updateIDBanner();
-    });
+    // ΓöÇΓöÇ Admin Order Receipts Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    async function renderOrderReceipts() {
+        const tbody = document.getElementById('receiptsTableBody');
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Loading orders...</td></tr>';
+        
+        try {
+            const snapshot = await db.collection('orders').orderBy('createdAt', 'desc').get();
+            tbody.innerHTML = '';
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
+                return;
+            }
+            snapshot.forEach(doc => {
+                const order = doc.data();
+                const tr = document.createElement('tr');
+                const status = order.status || 'Pending';
+                const statusColor = status === 'Confirmed' ? '#2e7d32' : (status === 'Reverify' ? '#d32f2f' : '#fbc02d');
+                
+                tr.innerHTML = `
+                    <td style="padding: 12px;"><strong>${order.orderID}</strong></td>
+                    <td style="padding: 12px;">${order.date}</td>
+                    <td style="padding: 12px;">${order.name}</td>
+                    <td style="padding: 12px;">₹${order.amount}</td>
+                    <td style="padding: 12px;"><span style="background:${statusColor}; color:white; padding:4px 10px; border-radius:50px; font-size:0.75rem; font-weight:700;">${status}</span></td>
+                    <td style="padding: 12px;">
+                        <button class="btn" style="padding:6px 15px; font-size:0.8rem; background:var(--primary-color); color:white; border-radius:50px;" onclick="adminVerifyOrder('${doc.id}')">Verify Bill</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        } catch(err) { 
+            console.error(err);
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #d32f2f;">Error loading orders.</td></tr>'; 
+        }
+    }
 
+    async function adminVerifyOrder(docId) {
+        try {
+            const doc = await db.collection('orders').doc(docId).get();
+            const data = doc.data();
+            
+            const content = document.getElementById('receiptContent');
+            content.innerHTML = `
+                <div style="padding: 0.5rem 0;">
+                    <div class="receipt-item"><strong>ORDER NO:</strong><span>#${data.orderID}</span></div>
+                    <div class="receipt-item"><strong>DATE:</strong><span>${data.date}</span></div>
+                    <div class="receipt-line"></div>
+                    <div class="receipt-item"><strong>CUSTOMER:</strong> <span>${data.name}</span></div>
+                    <div class="receipt-item"><strong>PHONE:</strong> <span>${data.phone}</span></div>
+                    <div class="receipt-line"></div>
+                    <div class="receipt-item"><strong>PRODUCT:</strong> <span>${data.product}</span></div>
+                    <div class="receipt-item"><strong>QTY:</strong> <span>${data.qty}</span></div>
+                    <div class="receipt-line"></div>
+                    <div class="receipt-item" style="font-size: 1.2rem; margin-top: 0.5rem;"><strong>TOTAL PAY:</strong><span>₹${data.amount}</span></div>
+                    <div class="receipt-item"><strong>PLAN:</strong><span>${(data.paymentType || 'Daily').toUpperCase()} PAY</span></div>
+                    
+                    <div style="margin-top: 2rem; border-top: 2px solid #333; padding-top: 1.5rem;">
+                        <p style="text-align: center; font-weight: 800; color: #333; margin-bottom: 1.2rem;">ADMIN VERIFICATION</p>
+                        <div style="display: flex; flex-direction: column; gap: 0.8rem;">
+                            <button onclick="window.print()" class="btn" style="background:#333; color:white; padding:12px; border-radius:8px; font-weight:700;">🖨️ Print Receipt</button>
+                            <div style="display: flex; gap: 0.8rem;">
+                                <button onclick="updateOrderStatus('${docId}', 'Confirmed')" class="btn" style="flex:1; background:#2e7d32; color:white; padding:12px; border-radius:8px; font-weight:700;">✅ Confirm</button>
+                                <button onclick="updateOrderStatus('${docId}', 'Reverify')" class="btn" style="flex:1; background:#d32f2f; color:white; padding:12px; border-radius:8px; font-weight:700;">🔄 Reverify</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('receiptModal').classList.add('active');
+        } catch(err) { alert("Error loading bill details."); }
+    }
 
+    async function updateOrderStatus(docId, newStatus) {
+        try {
+            await db.collection('orders').doc(docId).update({ status: newStatus });
+            alert(`Order marked as: ${newStatus}`);
+            closeReceiptModal();
+            renderOrderReceipts();
+        } catch(err) { alert("Update failed: " + err.message); }
+    }
 
     // ΓöÇΓöÇ Install Page Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     let deferredPrompt;
