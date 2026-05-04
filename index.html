@@ -681,7 +681,7 @@
             <div style="margin-top: 1.8rem; text-align: center; font-family: 'Courier New', Courier, monospace;">
                 <p style="font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem;">THANK YOU FOR YOUR VISIT!</p>
                 <p style="font-size: 0.7rem; color: #666;">Please keep this for your records.</p>
-                <div id="receiptButtonContainer" style="display: flex; gap: 0.8rem; margin-top: 1.5rem;">
+                <div id="receiptButtonContainer" class="no-print" style="display: flex; gap: 0.8rem; margin-top: 1.5rem;">
                     <button onclick="window.print()" class="btn" style="flex: 1; padding: 0.8rem; background: #333; color: white; font-size: 0.85rem; border-radius: 4px; font-weight: 700; text-transform: uppercase;">Print Bill</button>
                     <button onclick="closeReceiptModal()" class="btn" style="flex: 1; padding: 0.8rem; background: #eee; color: #333; border-radius: 4px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Close</button>
                 </div>
@@ -1642,7 +1642,7 @@
                         PAY AMOUNT: ₹${data.amount}
                     </div>
 
-                    <div style="margin-top: 2rem; border-top: 2px dashed #333; padding-top: 1.5rem;">
+                    <div class="no-print" style="margin-top: 2rem; border-top: 2px dashed #333; padding-top: 1.5rem;">
                         <p style="text-align: center; font-weight: 800; color: #333; margin-bottom: 1.2rem; font-family: sans-serif; font-size: 0.9rem;">ADMIN ACTION</p>
                         <div style="display: flex; gap: 0.8rem;">
                             <button onclick="updateOrderStatus('${docId}', 'Confirmed')" class="btn" style="flex:1; background:#2e7d32; color:white; padding:10px; border-radius:6px; font-weight:700; font-size:0.8rem;">Confirm</button>
