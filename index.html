@@ -1194,7 +1194,7 @@
         const city     = document.getElementById('bookCity').value;
         const address  = document.getElementById('bookAddress').value;
         const rating = document.querySelector('input[name="rating"]:checked')?.value || 'N/A';
-        const ratingStars = rating !== 'N/A' ? '⭐'.repeat(parseInt(rating)) : 'N/A';
+        const ratingStars = rating !== 'N/A' ? '✅'.repeat(parseInt(rating)) : 'N/A';
 
         if (!product || !qty || !city || !address) {
             alert('Please complete all required fields.');
@@ -1257,7 +1257,7 @@
         } catch(err) { console.warn('Order save error:', err); }
 
         // Prepare WhatsApp Message
-        const msg = `*Order has been Placed* 🥛\n\n` +
+        const msg = `*Order has been Placed* ✅\n\n` +
                     `*Order ID:* ${orderID}\n` +
                     `*Plan Type:* ${type} Pay\n` +
                     `*Order Time:* ${istTime} IST\n\n` +
