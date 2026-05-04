@@ -1232,6 +1232,7 @@
             let dailyCount = parseInt(localStorage.getItem('adfDailyOrderCount') || '0') + 1;
             localStorage.setItem('adfDailyOrderCount', dailyCount);
             orderID = 'ADFD' + dailyCount.toString().padStart(4, '0');
+            localStorage.setItem('adfLastDailyID', orderID);
         } else {
             // Monthly Pay: Reuse existing ADFM ID or generate new one
             let existingADFM = localStorage.getItem('adfMonthlyMembershipId');
@@ -1250,8 +1251,7 @@
             membershipId = existingADFM;
             
             // Update display
-            const display = document.getElementById('currentIDDisplay');
-            if (display) display.textContent = membershipId;
+            updateIDBanner();
         }
 
         const now = new Date();
@@ -1305,19 +1305,47 @@
         document.getElementById('bookCity').disabled = true;
         
         // Refresh display
-        const mId = localStorage.getItem('adfMonthlyMembershipId');
-        if (mId) document.getElementById('currentIDDisplay').textContent = mId;
+        updateIDBanner();
         
         alert(`Order Placed Successfully!\nYour Order ID: ${orderID}`);
     }
 
+    function updateIDBanner() {
+        const display = document.getElementById('currentIDDisplay');
+        const label = document.querySelector('.id-label');
+        if (!display || !label) return;
+
+        const mId = localStorage.getItem('adfMonthlyMembershipId');
+        const lastDaily = localStorage.getItem('adfLastDailyID');
+        const expiryStr = localStorage.getItem('adfMonthlyExpiry');
+
+        if (mId && expiryStr) {
+            const expiry = new Date(expiryStr);
+            if (expiry > new Date()) {
+                label.textContent = 'CURRENT MEMBERSHIP ID';
+                display.textContent = mId;
+                display.style.color = 'var(--primary-color)';
+                return;
+            } else {
+                localStorage.removeItem('adfMonthlyMembershipId');
+                localStorage.removeItem('adfMonthlyExpiry');
+            }
+        }
+
+        if (lastDaily) {
+            label.textContent = 'LAST ORDER ID (DAILY)';
+            display.textContent = lastDaily;
+            display.style.color = '#666';
+        } else {
+            label.textContent = 'MEMBERSHIP / ORDER ID';
+            display.textContent = 'Not Generated Yet';
+            display.style.color = '#999';
+        }
+    }
+
     // Initialize display on load
     window.addEventListener('DOMContentLoaded', () => {
-        const mId = localStorage.getItem('adfMonthlyMembershipId');
-        if (mId) {
-            const display = document.getElementById('currentIDDisplay');
-            if (display) display.textContent = mId;
-        }
+        updateIDBanner();
     });
 
 
