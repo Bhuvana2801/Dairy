@@ -1354,12 +1354,11 @@
             billLink = "Unavailable (Please take screenshot)";
         }
 
-        // Prepare WhatsApp Message
+        // Prepare WhatsApp Message (Formatted exactly like the reference bill)
         const msg = `*Order has been Placed*\n\n` +
                     `*Order ID:* ${orderID}\n` +
                     `*Plan Type:* ${type} Pay\n` +
                     `*Order Time:* ${istTime} IST\n\n` +
-                    `*Digital Bill Link (PDF):* ${billLink}\n\n` +
                     `*Customer Name:* ${name}\n` +
                     `*Phone:* ${phone}\n` +
                     `*Product:* ${product}\n` +
@@ -1370,7 +1369,8 @@
                     `*Location:* ${city}, ${state}\n` +
                     `*Address:* ${address}\n` +
                     `*Service Rating:* ${ratingValue}\n\n` +
-                    `*Customer care number:* 9392603808`;
+                    `*Customer care number:* 9392603808\n\n` +
+                    `*Digital Bill (PDF):* ${billLink}`;
 
         const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
         window.open(whatsappUrl, '_blank');
