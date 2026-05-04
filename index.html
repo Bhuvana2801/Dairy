@@ -690,7 +690,17 @@
     function renderCustomerOrders() {
         const ordersList = document.getElementById('customerOrdersListModal');
         if (!ordersList) return;
-        const orders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
+        let orders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
+        
+        // Filter out orders older than 48 hours
+        const now = Date.now();
+        const fortyEightHours = 48 * 60 * 60 * 1000;
+        orders = orders.filter(o => {
+            if (o.timestamp) return (now - o.timestamp) < fortyEightHours;
+            // Fallback for older orders without timestamp (parse string if needed, or just keep for now)
+            return true; 
+        });
+        localStorage.setItem('adfMyOrders', JSON.stringify(orders));
         
         if (orders.length === 0) {
             ordersList.innerHTML = `
@@ -720,8 +730,8 @@
                     <div style="font-size: 0.85rem; color: #666;">
                         <strong>Placed on:</strong> ${order.placedAt}
                     </div>
-                    <button onclick="resendOrderToWhatsApp('${order.orderID}')" style="background: #25D366; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
-                        🔄 Resend
+                    <button onclick="orderAgain('${order.orderID}')" style="background: #25D366; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;">
+                        🛒 Order Again
                     </button>
                 </div>
             </div>
@@ -737,26 +747,29 @@
         }, 600);
     }
 
-    function resendOrderToWhatsApp(orderID) {
+    function orderAgain(orderID) {
         const orders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
         const order = orders.find(o => o.orderID === orderID);
         if (!order) return;
 
-        const msg = `*Order has been Placed* 🥛\n\n` +
-                    `*Order ID:* ${order.orderID}\n` +
-                    `*Original Time:* ${order.placedAt} IST\n\n` +
-                    `*Customer Name:* ${order.name}\n` +
-                    `*Phone:* ${order.phone}\n` +
-                    `*Product:* ${order.product}\n` +
-                    `*Quantity:* ${order.qty}\n` +
-                    `*Delivery Date:* ${order.date}\n` +
-                    `*Delivery Time:* ${order.time}\n` +
-                    `*Location:* ${order.city}, ${order.state}\n` +
-                    `*Address:* ${order.address}\n\n` +
-                    `*Customer care number:* 9392603808`;
+        // Fill Form
+        document.getElementById('bookName').value = order.name || '';
+        document.getElementById('bookPhone').value = order.phone || '';
+        document.getElementById('bookProduct').value = order.product || '';
+        document.getElementById('bookQty').value = order.qty || '';
+        document.getElementById('bookTime').value = order.time || '';
+        document.getElementById('bookState').value = order.state || '';
+        updateCities(); // Populates city dropdown based on state
+        document.getElementById('bookCity').value = order.city || '';
+        document.getElementById('bookAddress').value = order.address || '';
+        
+        // Recalculate amount
+        calculateAmount();
 
-        const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
-        window.open(whatsappUrl, '_blank');
+        // Date is handled by window load / default logic (Tomorrow)
+        // Show Order Page
+        closeCustomerOrdersModal(null, true);
+        showPage('order');
     }
 
     function openCustomerOrdersModal() {
@@ -1261,7 +1274,7 @@
         });
 
         // Save to Local History
-        const orderData = { orderID, name, phone, product, qty, amount, date, time, city, state, address, placedAt: istTime, membershipId, type };
+        const orderData = { orderID, name, phone, product, qty, amount, date, time, city, state, address, placedAt: istTime, timestamp: now.getTime(), membershipId, type };
         const myOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
         myOrders.push(orderData);
         localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
