@@ -976,16 +976,16 @@
     // ΓöÇΓöÇ Navigation ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     function showDashGrid() {
         currentSection = null;
-        document.getElementById('dashGrid').style.display = 'grid';
-        document.getElementById('detailView').style.display = 'none';
+        console.log("Showing Admin Grid");
         
-        // Safely hide custom sections
-        const receiptSec = document.getElementById('order-receipts-section');
-        if (receiptSec) receiptSec.style.display = 'none';
-        
-        const salarySec = document.getElementById('salaries-section');
-        if (salarySec) salarySec.style.display = 'none';
+        // Hide ALL detail/custom sections
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'salaries-section'];
+        sectionsToHide.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
 
+        document.getElementById('dashGrid').style.display = 'grid';
         document.getElementById('dashHeading').textContent = 'Admin Dashboard';
         document.getElementById('backBtn').style.display = 'none';
         document.getElementById('exportBtn').style.display = 'none';
@@ -993,16 +993,19 @@
 
     function openSection(section) {
         currentSection = section;
+        console.log("Opening Section:", section);
         
-        // Hide all custom/special sections safely first
-        const receiptSec = document.getElementById('order-receipts-section');
-        if (receiptSec) receiptSec.style.display = 'none';
-        
-        const salarySec = document.getElementById('salaries-section');
-        if (salarySec) salarySec.style.display = 'none';
+        // 1. Hide everything first for a clean slate
+        document.getElementById('dashGrid').style.display = 'none';
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'salaries-section'];
+        sectionsToHide.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
 
+        // 2. Handle Special Sections
         if (section === 'order-receipts') {
-            document.getElementById('dashGrid').style.display = 'none';
+            const receiptSec = document.getElementById('order-receipts-section');
             if (receiptSec) receiptSec.style.display = 'block';
             document.getElementById('dashHeading').textContent = 'Order Receipts Verification';
             document.getElementById('backBtn').style.display = 'inline-block';
@@ -1010,22 +1013,24 @@
             return;
         }
 
+        // 3. Handle Schema-based Sections (Daily, Expenses, etc.)
         const s = schema[section];
-        if (!s) return;
+        if (!s) {
+            console.warn("No schema found for section:", section);
+            showDashGrid(); // Fallback
+            return;
+        }
 
-        document.getElementById('dashGrid').style.display = 'none';
         document.getElementById('detailView').style.display = 'block';
         document.getElementById('dashHeading').textContent = s.title;
         document.getElementById('backBtn').style.display = 'inline-block';
         
-        // Show export for non-gallery, non-readonly
         if (section !== 'gallery') {
             document.getElementById('exportBtn').style.display = 'inline-block';
         } else {
             document.getElementById('exportBtn').style.display = 'none';
         }
 
-        // For read-only sections (like orders), hide the add form
         if (s.readOnly) {
             document.getElementById('addForm').style.display = 'none';
         } else {
