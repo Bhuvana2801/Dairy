@@ -1583,7 +1583,13 @@
             });
         }, err => {
             console.error("Receipts Listener Error:", err);
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #d32f2f;">Error syncing orders.</td></tr>';
+            let errMsg = "Error syncing orders.";
+            if (err.code === 'permission-denied') errMsg = "Permission Denied: Update Firestore rules.";
+            if (err.message.includes("index")) errMsg = "Missing Index: Check browser console for link.";
+            
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #d32f2f;">
+                ${errMsg}<br><small style="color:#888; font-weight:400;">(${err.code || 'unknown'})</small>
+            </td></tr>`;
         });
     }
 
