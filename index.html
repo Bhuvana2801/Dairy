@@ -978,8 +978,14 @@
         currentSection = null;
         document.getElementById('dashGrid').style.display = 'grid';
         document.getElementById('detailView').style.display = 'none';
-        document.getElementById('order-receipts-section').style.display = 'none';
-        document.getElementById('salaries-section').style.display = 'none';
+        
+        // Safely hide custom sections
+        const receiptSec = document.getElementById('order-receipts-section');
+        if (receiptSec) receiptSec.style.display = 'none';
+        
+        const salarySec = document.getElementById('salaries-section');
+        if (salarySec) salarySec.style.display = 'none';
+
         document.getElementById('dashHeading').textContent = 'Admin Dashboard';
         document.getElementById('backBtn').style.display = 'none';
         document.getElementById('exportBtn').style.display = 'none';
@@ -988,13 +994,16 @@
     function openSection(section) {
         currentSection = section;
         
-        // Hide all custom sections first
-        document.getElementById('order-receipts-section').style.display = 'none';
-        document.getElementById('salaries-section').style.display = 'none';
+        // Hide all custom/special sections safely first
+        const receiptSec = document.getElementById('order-receipts-section');
+        if (receiptSec) receiptSec.style.display = 'none';
+        
+        const salarySec = document.getElementById('salaries-section');
+        if (salarySec) salarySec.style.display = 'none';
 
         if (section === 'order-receipts') {
             document.getElementById('dashGrid').style.display = 'none';
-            document.getElementById('order-receipts-section').style.display = 'block';
+            if (receiptSec) receiptSec.style.display = 'block';
             document.getElementById('dashHeading').textContent = 'Order Receipts Verification';
             document.getElementById('backBtn').style.display = 'inline-block';
             renderOrderReceipts();
