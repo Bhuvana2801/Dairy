@@ -326,6 +326,16 @@
                                             <input type="text" id="bookAmount" placeholder="Automatically calculated" readonly style="background: #f8f8f8; font-weight: bold; color: var(--primary-color);">
                                         </div>
                                     </div>
+                                    <div class="booking-field">
+                                        <label>Rate Our Service *</label>
+                                        <div class="star-rating">
+                                            <input type="radio" name="rating" id="star5" value="5" required><label for="star5">★</label>
+                                            <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+                                            <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+                                            <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+                                            <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="booking-row">
@@ -1126,6 +1136,8 @@
         const city     = document.getElementById('bookCity').value;
         const address  = document.getElementById('bookAddress').value;
         const membershipId = localStorage.getItem('adfMembershipId') || '';
+        const rating = document.querySelector('input[name="rating"]:checked')?.value || 'N/A';
+        const ratingStars = rating !== 'N/A' ? '⭐'.repeat(parseInt(rating)) : 'N/A';
 
         // Generate Order ID & Time
         let orderCount = parseInt(localStorage.getItem('adfOrderCount') || '0') + 1;
@@ -1152,6 +1164,7 @@
             db.collection('orders').add({
                 orderID, name, phone, product, qty, amount, date, time, city, state, address,
                 membershipId: membershipId || 'N/A',
+                rating: rating,
                 placedAt: istTime,
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -1171,7 +1184,8 @@
                     `*Delivery Date:* ${date}\n` +
                     `*Delivery Time:* ${time}\n` +
                     `*Location:* ${city}, ${state}\n` +
-                    `*Address:* ${address}\n\n` +
+                    `*Address:* ${address}\n` +
+                    `*Service Rating:* ${ratingStars}\n\n` +
                     `*Customer care number:* 9392603808`;
 
         const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
