@@ -22,6 +22,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -662,8 +663,11 @@
             <div style="margin-top: 1.8rem; text-align: center; font-family: 'Courier New', Courier, monospace;">
                 <p style="font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem;">THANK YOU FOR YOUR VISIT!</p>
                 <p style="font-size: 0.7rem; color: #666;">Please keep this for your records.</p>
-                <div style="display: flex; gap: 0.8rem; margin-top: 1.5rem;">
-                    <button onclick="window.print()" class="btn" style="flex: 1; padding: 0.7rem; background: #333; color: white; font-size: 0.8rem; border-radius: 4px; font-family: sans-serif;">PRINT BILL</button>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.5rem;">
+                    <button onclick="shareReceiptAsImage()" class="btn" style="flex: 1 1 100%; padding: 0.8rem; background: #25D366; color: white; font-size: 0.9rem; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        📤 Share as Photo
+                    </button>
+                    <button onclick="window.print()" class="btn" style="flex: 1; padding: 0.7rem; background: #333; color: white; font-size: 0.8rem; border-radius: 4px; font-family: sans-serif;">PRINT</button>
                     <button onclick="closeReceiptModal()" class="btn" style="flex: 1; padding: 0.7rem; background: #eee; color: #333; border-radius: 4px; font-size: 0.8rem; font-family: sans-serif;">CLOSE</button>
                 </div>
             </div>
@@ -1398,6 +1402,49 @@
 
     function closeReceiptModal() {
         document.getElementById('receiptModal').classList.remove('active');
+    }
+
+    async function shareReceiptAsImage() {
+        const receiptCard = document.querySelector('.receipt-card');
+        const btnContainer = receiptCard.querySelector('div[style*="display: flex"]');
+        
+        // Temporarily hide buttons for the photo
+        const originalDisplay = btnContainer.style.display;
+        btnContainer.style.display = 'none';
+        
+        try {
+            const canvas = await html2canvas(receiptCard, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                logging: false,
+                useCORS: true
+            });
+            
+            // Restore buttons
+            btnContainer.style.display = originalDisplay;
+
+            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+            const file = new File([blob], `ADF_Receipt_${Date.now()}.png`, { type: 'image/png' });
+
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: 'Ayyappa Dairy Receipt',
+                    text: 'Here is your official digital receipt from Ayyappa Dairy Farm.'
+                });
+            } else {
+                // Fallback: Download the image
+                const link = document.createElement('a');
+                link.download = `Receipt_${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                alert("Sharing files is not supported on this browser. The receipt photo has been downloaded to your gallery instead!");
+            }
+        } catch (err) {
+            console.error('Photo Share Error:', err);
+            btnContainer.style.display = originalDisplay;
+            alert("Could not generate photo. Please take a screenshot instead.");
+        }
     }
 
     function updateIDBanner() {
