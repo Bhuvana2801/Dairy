@@ -129,6 +129,7 @@
                                 <th style="padding: 12px; text-align: left;">Date</th>
                                 <th style="padding: 12px; text-align: left;">Customer</th>
                                 <th style="padding: 12px; text-align: left;">Amount</th>
+                                <th style="padding: 12px; text-align: left;">Plan</th>
                                 <th style="padding: 12px; text-align: left;">Status</th>
                                 <th style="padding: 12px; text-align: left;">Action</th>
                             </tr>
@@ -1543,15 +1544,21 @@
     }
 
     // ΓöÇΓöÇ Admin Order Receipts Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
-    async function renderOrderReceipts() {
+    let receiptsListener = null;
+
+    function renderOrderReceipts() {
         const tbody = document.getElementById('receiptsTableBody');
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Loading orders...</td></tr>';
+        if (!tbody) return;
+
+        // Cleanup existing listener if any
+        if (receiptsListener) receiptsListener();
+
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem;">Listening for orders...</td></tr>';
         
-        try {
-            const snapshot = await db.collection('orders').orderBy('createdAt', 'desc').get();
+        receiptsListener = db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
             tbody.innerHTML = '';
             if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
                 return;
             }
             snapshot.forEach(doc => {
@@ -1559,23 +1566,25 @@
                 const tr = document.createElement('tr');
                 const status = order.status || 'Pending';
                 const statusColor = status === 'Confirmed' ? '#2e7d32' : (status === 'Reverify' ? '#d32f2f' : '#fbc02d');
+                const plan = order.paymentType || 'Daily';
                 
                 tr.innerHTML = `
                     <td style="padding: 12px;"><strong>${order.orderID}</strong></td>
                     <td style="padding: 12px;">${order.date}</td>
                     <td style="padding: 12px;">${order.name}</td>
                     <td style="padding: 12px;">₹${order.amount}</td>
+                    <td style="padding: 12px; font-weight: 600; color: #666;">${plan}</td>
                     <td style="padding: 12px;"><span style="background:${statusColor}; color:white; padding:4px 10px; border-radius:50px; font-size:0.75rem; font-weight:700;">${status}</span></td>
                     <td style="padding: 12px;">
-                        <button class="btn" style="padding:6px 15px; font-size:0.8rem; background:var(--primary-color); color:white; border-radius:50px;" onclick="adminVerifyOrder('${doc.id}')">Verify Bill</button>
+                        <button class="btn" style="padding:6px 15px; font-size:0.8rem; background:var(--primary-color); color:white; border-radius:50px; font-weight: 700;" onclick="adminVerifyOrder('${doc.id}')">Verify Bill</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-        } catch(err) { 
-            console.error(err);
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #d32f2f;">Error loading orders.</td></tr>'; 
-        }
+        }, err => {
+            console.error("Receipts Listener Error:", err);
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #d32f2f;">Error syncing orders.</td></tr>';
+        });
     }
 
     async function adminVerifyOrder(docId) {
