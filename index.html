@@ -23,6 +23,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -664,8 +665,8 @@
                 <p style="font-size: 0.8rem; font-weight: 700; margin-bottom: 0.5rem;">THANK YOU FOR YOUR VISIT!</p>
                 <p style="font-size: 0.7rem; color: #666;">Please keep this for your records.</p>
                 <div style="display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1.5rem;">
-                    <button onclick="shareReceiptAsImage()" class="btn" style="flex: 1 1 100%; padding: 0.8rem; background: #25D366; color: white; font-size: 0.9rem; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
-                        📤 Share as Photo
+                    <button onclick="shareReceiptAsPDF()" class="btn" style="flex: 1 1 100%; padding: 0.8rem; background: #25D366; color: white; font-size: 0.9rem; border-radius: 8px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        📄 Share as PDF (Bill)
                     </button>
                     <button onclick="window.print()" class="btn" style="flex: 1; padding: 0.7rem; background: #333; color: white; font-size: 0.8rem; border-radius: 4px; font-family: sans-serif;">PRINT</button>
                     <button onclick="closeReceiptModal()" class="btn" style="flex: 1; padding: 0.7rem; background: #eee; color: #333; border-radius: 4px; font-size: 0.8rem; font-family: sans-serif;">CLOSE</button>
@@ -1404,11 +1405,12 @@
         document.getElementById('receiptModal').classList.remove('active');
     }
 
-    async function shareReceiptAsImage() {
+    async function shareReceiptAsPDF() {
+        const { jsPDF } = window.jspdf;
         const receiptCard = document.querySelector('.receipt-card');
         const btnContainer = receiptCard.querySelector('div[style*="display: flex"]');
         
-        // Temporarily hide buttons for the photo
+        // Hide buttons for PDF
         const originalDisplay = btnContainer.style.display;
         btnContainer.style.display = 'none';
         
@@ -1420,30 +1422,33 @@
                 useCORS: true
             });
             
-            // Restore buttons
             btnContainer.style.display = originalDisplay;
 
-            const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-            const file = new File([blob], `ADF_Receipt_${Date.now()}.png`, { type: 'image/png' });
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: [canvas.width / 2, canvas.height / 2]
+            });
+
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+            const pdfBlob = pdf.output('blob');
+            const file = new File([pdfBlob], 'Bill.pdf', { type: 'application/pdf' });
 
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
                 await navigator.share({
                     files: [file],
-                    title: 'Ayyappa Dairy Receipt',
-                    text: 'Here is your official digital receipt from Ayyappa Dairy Farm.'
+                    title: 'Ayyappa Dairy Bill',
+                    text: 'Your official bill from Ayyappa Dairy Farm.'
                 });
             } else {
-                // Fallback: Download the image
-                const link = document.createElement('a');
-                link.download = `Receipt_${Date.now()}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
-                alert("Sharing files is not supported on this browser. The receipt photo has been downloaded to your gallery instead!");
+                pdf.save('Bill.pdf');
+                alert("Direct PDF sharing is not supported on this browser. Your 'Bill.pdf' has been downloaded instead!");
             }
         } catch (err) {
-            console.error('Photo Share Error:', err);
+            console.error('PDF Share Error:', err);
             btnContainer.style.display = originalDisplay;
-            alert("Could not generate photo. Please take a screenshot instead.");
+            alert("Could not generate PDF. Please try again or use the Print option.");
         }
     }
 
