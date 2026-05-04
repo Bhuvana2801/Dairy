@@ -118,7 +118,7 @@
             <!-- Order Receipts Section -->
             <div id="order-receipts-section" class="dash-section" style="display:none; padding: 1.5rem;">
                 <div style="margin-bottom: 2rem;">
-                    <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent-color); display: inline-block;">Verify Order Receipts (v2.3)</h3>
+                    <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent-color); display: inline-block;">Verify Order Receipts (v2.4)</h3>
                     <p style="font-size:0.9rem; color:#666;">Confirm payments and verify customer bills.</p>
                 </div>
                 <div class="table-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto;">
@@ -668,10 +668,11 @@
     <!-- Payment Receipt Modal -->
     <div id="receiptModal" class="modal">
         <div class="receipt-card fade-in-up">
-            <div style="text-align: center; margin-bottom: 1.5rem; border-bottom: 2px solid #000; padding: 1rem 0;">
-                <h2 style="color: #000; margin: 0; font-family: sans-serif; text-transform: uppercase; letter-spacing: 3px; font-weight: 900; font-size: 2rem;">AYYAPPA DAIRY</h2>
-                <p style="color: #333; font-size: 0.8rem; margin: 8px 0; font-weight: 600; letter-spacing: 1px;">*** OFFICIAL RECEIPT ***</p>
-                <p style="color: #666; font-size: 0.75rem; font-family: sans-serif;">Vinukonda, Andhra Pradesh</p>
+            <div style="text-align: center; margin-bottom: 1.2rem; padding: 1.5rem 0 1rem 0;">
+                <h2 style="color: #000; margin: 0; font-family: 'Lexend', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; font-size: 2.2rem;">AYYAPPA DAIRY</h2>
+                <p style="color: #333; font-size: 0.75rem; margin: 8px 0; font-weight: 600;">*** OFFICIAL RECEIPT ***</p>
+                <p style="color: #666; font-size: 0.7rem;">Vinukonda, Andhra Pradesh</p>
+                <div style="border-top: 2px solid #000; margin-top: 1.5rem; width: 100%;"></div>
             </div>
             
             <div id="receiptContent">
@@ -1624,30 +1625,33 @@
             const content = document.getElementById('receiptContent');
             const orderType = data.paymentType || 'Daily';
             content.innerHTML = `
-                <div style="padding: 0.5rem 0;">
+                <div style="padding: 0.2rem 0;">
                     <div class="receipt-item"><strong>ORDER NO:</strong><span>#${data.orderID}</span></div>
                     <div class="receipt-item"><strong>DATE:</strong><span>${data.date}</span></div>
-                    <div class="receipt-line"></div>
+                    <div class="receipt-line" style="border-top: 1px dashed #bbb; margin: 0.8rem 0;"></div>
+                    
                     <div class="receipt-item"><strong>CUSTOMER:</strong> <span>${data.name}</span></div>
                     <div class="receipt-item"><strong>PHONE:</strong> <span>${data.phone}</span></div>
-                    <div class="receipt-line"></div>
+                    <div class="receipt-line" style="border-top: 1px dashed #bbb; margin: 0.8rem 0;"></div>
+                    
                     <div class="receipt-item"><strong>PRODUCT:</strong> <span>${data.product}</span></div>
                     <div class="receipt-item"><strong>QTY:</strong> <span>${data.qty}</span></div>
                     <div class="receipt-item"><strong>DELIVERY:</strong> <span>Tomorrow (${data.date})</span></div>
-                    <div class="receipt-line"></div>
-                    <div class="receipt-item" style="font-size: 1.1rem; margin-top: 0.5rem;"><strong>TOTAL PAY:</strong><span>₹${data.amount}</span></div>
-                    <div class="receipt-item" style="margin-top: -0.4rem;"><strong>PLAN:</strong><span>${orderType.toUpperCase()} PAY</span></div>
+                    <div class="receipt-line" style="border-top: 1px dashed #bbb; margin: 0.8rem 0;"></div>
                     
-                    <div style="margin: 1.8rem 0; text-align: center; border: 2px solid #000; padding: 1.2rem; font-weight: 900; font-size: 1.3rem; letter-spacing: 1px; text-transform: uppercase; font-family: 'Courier New', Courier, monospace; background: #fff;">
+                    <div class="receipt-item" style="font-size: 1.1rem; margin-top: 0.5rem; font-weight: 900;"><strong>TOTAL PAY:</strong><span>₹${data.amount}</span></div>
+                    <div class="receipt-item" style="margin-top: -0.2rem;"><strong>PLAN:</strong><span>${orderType.toUpperCase()} PAY</span></div>
+                    
+                    <div style="margin: 1.8rem 0; text-align: center; border: 2px solid #000; padding: 1.1rem; font-weight: 900; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase; font-family: 'Courier New', Courier, monospace; background: #fff;">
                         PAY AMOUNT: ₹${data.amount}
                     </div>
 
                     <div style="margin: 1.5rem 0; text-align: center; font-family: 'Courier New', Courier, monospace;">
-                        <p style="font-size: 0.8rem; font-weight: 800; color: #333; margin-bottom: 0.3rem;">THANK YOU FOR YOUR VISIT!</p>
-                        <p style="font-size: 0.7rem; color: #777;">Please keep this for your records.</p>
+                        <p style="font-size: 0.8rem; font-weight: 800; color: #333; margin-bottom: 0.3rem; letter-spacing: 0.5px;">THANK YOU FOR YOUR VISIT!</p>
+                        <p style="font-size: 0.7rem; color: #999;">Please keep this for your records.</p>
                     </div>
 
-                    <div class="no-print" style="margin-top: 2rem; border-top: 1px dashed #333; padding-top: 1.5rem;">
+                    <div class="no-print" style="margin-top: 2rem; border-top: 1px dashed #bbb; padding-top: 1.5rem;">
                         <p style="text-align: center; font-weight: 800; color: #333; margin-bottom: 1.2rem; font-family: sans-serif; font-size: 0.9rem;">ADMIN ACTION</p>
                         <div style="display: flex; gap: 0.8rem;">
                             <button onclick="updateOrderStatus('${docId}', 'Confirmed')" class="btn" style="flex:1; background:#2e7d32; color:white; padding:10px; border-radius:6px; font-weight:700; font-size:0.8rem;">Confirm</button>
