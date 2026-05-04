@@ -646,6 +646,29 @@
     </nav>
 
 
+    <!-- Payment Receipt Modal -->
+    <div id="receiptModal" class="modal">
+        <div class="receipt-card fade-in-up">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="width: 60px; height: 60px; background: #E8F5E9; color: #2E7D32; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem;">✅</div>
+                <h2 style="color: var(--primary-color); margin: 0; font-family: var(--font-heading);">Order Confirmed</h2>
+                <p style="color: #666; font-size: 0.9rem;">Your receipt is ready</p>
+            </div>
+            
+            <div id="receiptContent">
+                <!-- Populated by JS -->
+            </div>
+            
+            <div style="margin-top: 1.8rem; border-top: 2px solid var(--bg-light); padding-top: 1.5rem; text-align: center;">
+                <p style="font-size: 0.8rem; color: #999; margin-bottom: 1rem;">Thank you for choosing Ayyappa Dairy Farm!</p>
+                <div style="display: flex; gap: 0.8rem;">
+                    <button onclick="window.print()" class="btn btn-secondary" style="flex: 1; padding: 0.8rem; font-size: 0.85rem; border-radius: 12px;">📥 Save Receipt</button>
+                    <button onclick="closeReceiptModal()" class="btn" style="flex: 1; padding: 0.8rem; background: #f0f0f0; border-radius: 12px; font-size: 0.85rem;">Dismiss</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="main.js"></script>
     <script>
     // ΓöÇΓöÇ Install Page Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
@@ -1326,7 +1349,38 @@
         // Refresh display
         updateIDBanner();
         
-        alert(`Order Placed Successfully!\nYour Order ID: ${orderID}`);
+        // Show Digital Receipt
+        showReceiptModal(orderData);
+    }
+
+    function showReceiptModal(data) {
+        const content = document.getElementById('receiptContent');
+        if (!content) return;
+
+        content.innerHTML = `
+            <div style="background: var(--bg-light); border-radius: 16px; padding: 1.5rem; border: 1px solid rgba(26, 92, 42, 0.1);">
+                <div class="receipt-item">
+                    <strong>Order ID</strong>
+                    <span style="background: var(--primary-color); color: white; padding: 2px 8px; border-radius: 6px; font-size: 0.8rem;">${data.orderID}</span>
+                </div>
+                <div class="receipt-line"></div>
+                <div class="receipt-item"><strong>Customer</strong> <span>${data.name}</span></div>
+                <div class="receipt-item"><strong>Product</strong> <span>${data.product}</span></div>
+                <div class="receipt-item"><strong>Quantity</strong> <span>${data.qty}</span></div>
+                <div class="receipt-item"><strong>Total Paid</strong> <span>₹${data.amount}</span></div>
+                <div class="receipt-line"></div>
+                <div class="receipt-item"><strong>Delivery Date</strong> <span>${data.date}</span></div>
+                <div class="receipt-item"><strong>Plan Type</strong> <span>${data.type} Pay</span></div>
+                <div style="margin-top: 1rem; text-align: center; color: #2E7D32; font-weight: 800; font-size: 0.9rem; letter-spacing: 1px;">
+                    ● PAYMENT SUCCESSFUL
+                </div>
+            </div>
+        `;
+        document.getElementById('receiptModal').classList.add('active');
+    }
+
+    function closeReceiptModal() {
+        document.getElementById('receiptModal').classList.remove('active');
     }
 
     function updateIDBanner() {
