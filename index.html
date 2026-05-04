@@ -1329,7 +1329,7 @@
                     `*Phone:* ${phone}\n` +
                     `*Product:* ${product}\n` +
                     `*Quantity:* ${qty}\n` +
-                    `*Total Amount:* ₹${amount}\n` +
+                    `*Total Pay:* ₹${amount}\n` +
                     `*Delivery Date:* ${date}\n` +
                     `*Delivery Time:* ${time}\n` +
                     `*Location:* ${city}, ${state}\n` +
@@ -1365,9 +1365,10 @@
                 </div>
                 <div class="receipt-line"></div>
                 <div class="receipt-item"><strong>Customer</strong> <span>${data.name}</span></div>
+                <div class="receipt-item"><strong>Phone</strong> <span>${data.phone}</span></div>
                 <div class="receipt-item"><strong>Product</strong> <span>${data.product}</span></div>
                 <div class="receipt-item"><strong>Quantity</strong> <span>${data.qty}</span></div>
-                <div class="receipt-item"><strong>Total Paid</strong> <span>₹${data.amount}</span></div>
+                <div class="receipt-item"><strong>Total Pay</strong> <span>₹${data.amount}</span></div>
                 <div class="receipt-line"></div>
                 <div class="receipt-item"><strong>Delivery Date</strong> <span>${data.date}</span></div>
                 <div class="receipt-item"><strong>Plan Type</strong> <span>${data.type} Pay</span></div>
