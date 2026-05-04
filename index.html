@@ -115,6 +115,29 @@
                 </div>
             </div>
 
+            <!-- Order Receipts Section -->
+            <div id="order-receipts-section" class="dash-section" style="display:none; padding: 1.5rem;">
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="color:var(--primary-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem; display:inline-block;">Verify Order Receipts</h3>
+                    <p style="font-size:0.9rem; color:#666;">Confirm payments and verify customer bills.</p>
+                </div>
+                <div class="table-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden;">
+                    <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: var(--primary-color); color: white;">
+                            <tr>
+                                <th style="padding: 12px; text-align: left;">Order ID</th>
+                                <th style="padding: 12px; text-align: left;">Date</th>
+                                <th style="padding: 12px; text-align: left;">Customer</th>
+                                <th style="padding: 12px; text-align: left;">Amount</th>
+                                <th style="padding: 12px; text-align: left;">Status</th>
+                                <th style="padding: 12px; text-align: left;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="receiptsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <!-- DETAIL VIEW -->
             <div id="detailView" style="display:none;">
                 <div class="add-form" id="addForm"></div>
@@ -407,28 +430,6 @@
                                 </div>
                                 
                                 <!-- Payment Type Selection (Hidden initially, shown after click) -->
-                                <!-- Order Receipts Section -->
-            <div id="order-receipts-section" class="dash-section" style="display:none;">
-                <div style="margin-bottom: 2rem;">
-                    <h3 style="color:var(--primary-color); border-bottom: 2px solid var(--accent-color); padding-bottom: 0.5rem; display:inline-block;">Verify Order Receipts</h3>
-                    <p style="font-size:0.9rem; color:#666;">Confirm payments and verify customer bills.</p>
-                </div>
-                <div class="table-container">
-                    <table class="admin-table">
-                        <thead>
-                            <tr>
-                                <th>Order ID</th>
-                                <th>Date</th>
-                                <th>Customer</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="receiptsTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
                                 
                                 <div id="payTypeSelection" style="display: none; margin-top: 1rem; background: #fff; padding: 1.5rem; border-radius: 16px; border: 2px solid var(--primary-color); box-shadow: 0 10px 25px rgba(0,0,0,0.1); animation: slideIn 0.3s ease;">
                                     <p style="margin: 0 0 1rem; font-weight: 700; color: var(--primary-color); text-align: center;">Select Your Payment Plan:</p>
