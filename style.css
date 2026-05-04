@@ -724,9 +724,9 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 /* Booking Layout */
 .booking-layout {
     display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 3rem;
-    align-items: start;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 2.5rem;
+    align-items: stretch;
     text-align: left;
 }
 
