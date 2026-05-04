@@ -749,10 +749,7 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     padding: 0 2%;
 }
 
-.contact .container {
-    max-width: 1450px;
-    width: 95%;
-}
+
 
 @media (max-width: 992px) {
     .booking-layout { 
