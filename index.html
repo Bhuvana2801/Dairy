@@ -1172,10 +1172,32 @@
             return;
         }
 
-        // Show payment type selection
-        document.getElementById('payTypeSelection').style.display = 'block';
-        // Scroll to selection
-        document.getElementById('payTypeSelection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Check for existing active monthly membership
+        const existingADFM = localStorage.getItem('adfMonthlyMembershipId');
+        const expiryStr = localStorage.getItem('adfMonthlyExpiry');
+        let isMember = false;
+
+        if (existingADFM && expiryStr) {
+            const expiry = new Date(expiryStr);
+            if (expiry > new Date()) {
+                isMember = true;
+            } else {
+                // Cleanup expired membership
+                localStorage.removeItem('adfMonthlyMembershipId');
+                localStorage.removeItem('adfMonthlyExpiry');
+                const display = document.getElementById('currentIDDisplay');
+                if (display) display.textContent = 'Not Generated Yet';
+            }
+        }
+
+        if (isMember) {
+            // If already a monthly member, bypass selection and finalize as Monthly
+            finalizeOrder('Monthly');
+        } else {
+            // Show payment type selection for new or daily customers
+            document.getElementById('payTypeSelection').style.display = 'block';
+            document.getElementById('payTypeSelection').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
     }
 
     function cancelPaySelection() {
