@@ -22,6 +22,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
@@ -831,6 +832,7 @@
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
+    const storage = firebase.storage();
 
     // ΓöÇΓöÇ Cloud data storage ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     let data = { daily: [], expenses: [], production: [], salaries: [], orders: [] };
@@ -1326,11 +1328,38 @@
             });
         } catch(err) { console.warn('Order save error:', err); }
 
+        // Generate and Upload PDF Bill in background
+        let billLink = "Generating...";
+        try {
+            // First show the modal so we can capture it
+            showReceiptModal(orderData);
+            const receiptCard = document.querySelector('.receipt-card');
+            const btnContainer = receiptCard.querySelector('div[style*="display: flex"]');
+            const originalDisplay = btnContainer.style.display;
+            btnContainer.style.display = 'none';
+
+            const canvas = await html2canvas(receiptCard, { backgroundColor: '#ffffff', scale: 2 });
+            btnContainer.style.display = originalDisplay;
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width/2, canvas.height/2] });
+            pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, canvas.width/2, canvas.height/2);
+            
+            const pdfBlob = pdf.output('blob');
+            const storageRef = storage.ref(`bills/${orderID}.pdf`);
+            await storageRef.put(pdfBlob);
+            billLink = await storageRef.getDownloadURL();
+        } catch (e) { 
+            console.warn("Bill generation failed:", e);
+            billLink = "Unavailable (Please take screenshot)";
+        }
+
         // Prepare WhatsApp Message
         const msg = `*Order has been Placed*\n\n` +
                     `*Order ID:* ${orderID}\n` +
                     `*Plan Type:* ${type} Pay\n` +
                     `*Order Time:* ${istTime} IST\n\n` +
+                    `*Digital Bill Link (PDF):* ${billLink}\n\n` +
                     `*Customer Name:* ${name}\n` +
                     `*Phone:* ${phone}\n` +
                     `*Product:* ${product}\n` +
