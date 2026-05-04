@@ -724,10 +724,17 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 /* Booking Layout */
 .booking-layout {
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: 2.5rem;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3rem;
     align-items: stretch;
     text-align: left;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.contact .container {
+    max-width: 1450px;
+    width: 95%;
 }
 
 @media (max-width: 900px) {
