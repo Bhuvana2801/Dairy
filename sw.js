@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ayyappa-dairy-v2'; // Updated version to force refresh
+const CACHE_NAME = 'ayyappa-dairy-v3'; // Updated version to force refresh
 const ASSETS = [
   './',
   './index.html',
