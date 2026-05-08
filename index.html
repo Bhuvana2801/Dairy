@@ -109,9 +109,9 @@
                     &#128176; Salaries
                     <small>View &amp; manage salaries</small>
                 </div>
-                <div class="dash-card" onclick="openSection('orders')" style="border-left: 4px solid #25D366;">
-                    &#128722; Orders List
-                    <small>View all customer orders</small>
+                <div class="dash-card" onclick="openSection('monthly-report')" style="border-left: 4px solid var(--accent-color);">
+                    &#128200; Monthly Report
+                    <small>View monthly summary &amp; analysis</small>
                 </div>
             </div>
 
@@ -151,6 +151,47 @@
                     <table class="detail-table" id="detailTable">
                         <thead id="detailThead"></thead>
                         <tbody id="detailTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- Monthly Report Section -->
+            <div id="monthly-report-section" class="dash-section" style="display:none; padding: 1.5rem;">
+                <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="color: var(--primary-color); margin-bottom: 0.4rem; border-bottom: 2px solid var(--accent-color); display: inline-block;">&#128200; Monthly Report</h3>
+                        <p style="font-size:0.9rem; color:#666; margin-bottom: 0;">View a summary of orders grouped by month.</p>
+                    </div>
+                    <button class="btn btn-export" onclick="downloadMonthlyReportCSV()" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">&#128229; Download CSV</button>
+                </div>
+
+                <!-- Filter -->
+                <div style="margin-bottom: 1.2rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                    <label style="font-weight: 600; color: var(--text-dark); font-size: 0.95rem;">Filter by Month:</label>
+                    <input type="month" id="monthlyReportFilter" onchange="renderMonthlyReport()" style="padding: 0.5rem 1rem; border: 1.5px solid #ddd; border-radius: 8px; font-size: 0.95rem; font-family: var(--font-main); outline: none;">
+                    <button onclick="document.getElementById('monthlyReportFilter').value=''; renderMonthlyReport()" style="padding: 0.5rem 1rem; border-radius: 8px; border: 1.5px solid #ddd; background: white; cursor: pointer; font-size: 0.9rem; font-weight: 600;">&#10006; Clear</button>
+                </div>
+
+                <!-- Summary Cards -->
+                <div id="monthlyReportSummary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 1rem; margin-bottom: 1.5rem;"></div>
+
+                <!-- Table -->
+                <div class="custom-scrollbar" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; max-height: 55vh; overflow-y: auto;">
+                    <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                        <thead style="background: var(--primary-color); color: white; position: sticky; top: 0; z-index: 10;">
+                            <tr>
+                                <th style="padding: 12px; text-align: left;">Order ID</th>
+                                <th style="padding: 12px; text-align: left;">Date</th>
+                                <th style="padding: 12px; text-align: left;">Customer</th>
+                                <th style="padding: 12px; text-align: left;">Product</th>
+                                <th style="padding: 12px; text-align: left;">Qty</th>
+                                <th style="padding: 12px; text-align: left;">Amount</th>
+                                <th style="padding: 12px; text-align: left;">Plan</th>
+                                <th style="padding: 12px; text-align: left;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="monthlyReportTableBody">
+                            <tr><td colspan="8" style="text-align:center; padding: 2rem; color: #999;">Loading...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -928,7 +969,8 @@
         expenses:   { title: 'Monthly Expenses',  fields: ['month','category','amount','note'],                            labels: ['Month','Category','Amount','Note'],                               readOnly: false },
         production: { title: 'Production',        fields: ['date','product','quantity','status'],                          labels: ['Date','Product','Quantity','Status'],                             readOnly: false },
         salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],                                labels: ['Name','Role','Amount','Month'],                                   readOnly: false },
-        orders:     { title: '📋 Orders List',    fields: ['orderID','name','phone','product','qty','date','membershipId'], labels: ['Order ID','Customer','Phone','Product','Qty','Delivery Date','Membership ID'], readOnly: true }
+        orders:     { title: '📋 Orders',        fields: ['orderID','name','phone','product','qty','date','membershipId'], labels: ['Order ID','Customer','Phone','Product','Qty','Delivery Date','Membership ID'], readOnly: true },
+        'monthly-report': { title: '📊 Monthly Report', fields: ['orderID','name','product','qty','amount','date','paymentType'], labels: ['Order ID','Customer','Product','Qty','Amount','Date','Plan'], readOnly: true }
     };
 
     let currentSection = null;
@@ -968,7 +1010,7 @@
         console.log("Showing Admin Grid");
         
         // Hide ALL detail/custom sections
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'salaries-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
@@ -986,7 +1028,7 @@
         
         // 1. Hide everything first for a clean slate
         document.getElementById('dashGrid').style.display = 'none';
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'salaries-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
@@ -999,6 +1041,22 @@
             document.getElementById('dashHeading').textContent = 'Order Receipts Verification';
             document.getElementById('backBtn').style.display = 'inline-block';
             renderOrderReceipts();
+            return;
+        }
+
+        if (section === 'monthly-report') {
+            const reportSec = document.getElementById('monthly-report-section');
+            if (reportSec) reportSec.style.display = 'block';
+            document.getElementById('dashHeading').textContent = '📊 Monthly Report';
+            document.getElementById('backBtn').style.display = 'inline-block';
+            document.getElementById('exportBtn').style.display = 'none';
+            // Set filter to current month by default
+            const filterEl = document.getElementById('monthlyReportFilter');
+            if (filterEl && !filterEl.value) {
+                const now = new Date();
+                filterEl.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+            }
+            renderMonthlyReport();
             return;
         }
 
@@ -1027,6 +1085,102 @@
             renderAddForm(section);
         }
         renderTable(section);
+    }
+
+    let monthlyReportOrders = [];
+
+    function renderMonthlyReport() {
+        const tbody = document.getElementById('monthlyReportTableBody');
+        const summaryDiv = document.getElementById('monthlyReportSummary');
+        const filterVal = document.getElementById('monthlyReportFilter').value; // e.g. '2026-05'
+
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#999;">Loading...</td></tr>';
+
+        db.collection('orders').orderBy('createdAt', 'desc').get().then(snapshot => {
+            let orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            // Filter by selected month
+            if (filterVal) {
+                const [yr, mo] = filterVal.split('-');
+                orders = orders.filter(o => {
+                    const d = o.placedAt || o.date || '';
+                    return d.includes(`${mo}/${yr}`) || d.includes(`${yr}-${mo}`) ||
+                           (o.createdAt && o.createdAt.toDate && (() => {
+                               const dt = o.createdAt.toDate();
+                               return dt.getFullYear() == yr && (dt.getMonth()+1) == parseInt(mo);
+                           })());
+                });
+            }
+
+            monthlyReportOrders = orders;
+
+            // Summary cards
+            const totalOrders = orders.length;
+            const totalRevenue = orders.reduce((sum, o) => sum + (parseFloat(o.amount) || 0), 0);
+            const paidCount = orders.filter(o => o.paymentStatus === 'Paid').length;
+            const pendingCount = totalOrders - paidCount;
+
+            summaryDiv.innerHTML = `
+                <div style="background:#e8f5e9;border-radius:12px;padding:1rem;text-align:center;border:1px solid #c8e6c9;">
+                    <div style="font-size:1.8rem;font-weight:800;color:var(--primary-color);">${totalOrders}</div>
+                    <div style="font-size:0.85rem;font-weight:600;color:#555;">Total Orders</div>
+                </div>
+                <div style="background:#fff8e1;border-radius:12px;padding:1rem;text-align:center;border:1px solid #ffe082;">
+                    <div style="font-size:1.8rem;font-weight:800;color:#e65100;">&#8377;${totalRevenue}</div>
+                    <div style="font-size:0.85rem;font-weight:600;color:#555;">Total Revenue</div>
+                </div>
+                <div style="background:#e8f5e9;border-radius:12px;padding:1rem;text-align:center;border:1px solid #c8e6c9;">
+                    <div style="font-size:1.8rem;font-weight:800;color:#2e7d32;">${paidCount}</div>
+                    <div style="font-size:0.85rem;font-weight:600;color:#555;">Paid Orders</div>
+                </div>
+                <div style="background:#ffebee;border-radius:12px;padding:1rem;text-align:center;border:1px solid #ffcdd2;">
+                    <div style="font-size:1.8rem;font-weight:800;color:#c62828;">${pendingCount}</div>
+                    <div style="font-size:0.85rem;font-weight:600;color:#555;">Unpaid Orders</div>
+                </div>
+            `;
+
+            // Table rows
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:#999;">No orders found for the selected period.</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = orders.map(o => {
+                const status = o.status || 'Pending';
+                const statusColor = status === 'Confirmed' ? '#2e7d32' : (status === 'Reverify' ? '#d32f2f' : '#fbc02d');
+                return `<tr>
+                    <td style="padding:12px;font-weight:700;">${o.orderID || '-'}</td>
+                    <td style="padding:12px;font-size:0.85rem;">${o.date || '-'}</td>
+                    <td style="padding:12px;">${o.name || '-'}</td>
+                    <td style="padding:12px;">${o.product || '-'}</td>
+                    <td style="padding:12px;">${o.qty || '-'}</td>
+                    <td style="padding:12px;font-weight:700;">&#8377;${o.amount || 0}</td>
+                    <td style="padding:12px;color:#666;">${o.paymentType || 'Daily'}</td>
+                    <td style="padding:12px;"><span style="background:${statusColor};color:white;padding:3px 10px;border-radius:50px;font-size:0.75rem;font-weight:700;">${status}</span></td>
+                </tr>`;
+            }).join('');
+
+        }).catch(err => {
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:2rem;color:#d32f2f;">Error loading orders: ${err.message}</td></tr>`;
+        });
+    }
+
+    function downloadMonthlyReportCSV() {
+        if (!monthlyReportOrders || monthlyReportOrders.length === 0) {
+            alert("No data to export. Please load the monthly report first.");
+            return;
+        }
+        let csv = "Order ID,Date,Customer,Product,Qty,Amount,Plan,Payment Status,Status\n";
+        monthlyReportOrders.forEach(o => {
+            csv += `"${o.orderID||''}","${o.date||''}","${o.name||''}","${o.product||''}","${o.qty||''}","${o.amount||''}","${o.paymentType||'Daily'}","${o.paymentStatus||'Unpaid'}","${o.status||'Pending'}"\n`;
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        const filterVal = document.getElementById('monthlyReportFilter').value || 'all';
+        link.download = `Monthly_Report_${filterVal}.csv`;
+        link.click();
     }
 
     function downloadCSV() {
