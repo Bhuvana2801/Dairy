@@ -468,7 +468,31 @@
                                     <div class="input-container textarea-container">
                                         <span class="field-icon">📍</span>
                                         <textarea id="bookAddress" rows="3" placeholder="Enter your full delivery address" required></textarea>
+                                    </div>
                                 </div>
+
+                                <div class="booking-field" style="margin-top: 1.5rem;">
+                                     <label>Plan Type *</label>
+                                     <div class="plan-type-grid">
+                                         <label class="plan-option-wrapper">
+                                             <input type="radio" name="planType" value="Daily" required>
+                                             <div class="plan-option">
+                                                 <div class="plan-icon">🥛</div>
+                                                 <div class="plan-label">Daily Pay</div>
+                                                 <div class="plan-desc">Fresh order daily</div>
+                                             </div>
+                                         </label>
+                                         <label class="plan-option-wrapper">
+                                             <input type="radio" name="planType" value="Monthly" required>
+                                             <div class="plan-option">
+                                                 <div class="plan-icon">📅</div>
+                                                 <div class="plan-label">Monthly Pay</div>
+                                                 <div class="plan-desc">1 Month Subscription</div>
+                                             </div>
+                                         </label>
+                                     </div>
+                                </div>
+
                                 <div style="margin-top: 1rem;">
                                     <p style="color: #ffcc00; font-weight: 700; font-size: 0.9rem; text-align: center; margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Give the rating to place the order</p>
                                     <button type="submit" class="booking-submit-btn">
@@ -1422,36 +1446,19 @@
         // Basic validation
         const name     = document.getElementById('bookName').value;
         const phone    = document.getElementById('bookPhone').value;
+        const planType = document.querySelector('input[name="planType"]:checked')?.value;
+
         if (!name || !phone) {
             alert('Please fill in your name and phone number.');
             return;
         }
 
-        // Check for existing active monthly membership
-        const existingADFM = localStorage.getItem('adfMonthlyMembershipId');
-        const expiryStr = localStorage.getItem('adfMonthlyExpiry');
-        let isMember = false;
-
-        if (existingADFM && expiryStr) {
-            const expiry = new Date(expiryStr);
-            if (expiry > new Date()) {
-                isMember = true;
-            } else {
-                // Cleanup expired membership
-                localStorage.removeItem('adfMonthlyMembershipId');
-                localStorage.removeItem('adfMonthlyExpiry');
-                const display = document.getElementById('currentIDDisplay');
-                if (display) display.textContent = 'Not Generated Yet';
-            }
+        if (!planType) {
+            alert('Please select a Plan Type (Daily or Monthly) before placing order.');
+            return;
         }
 
-        // Directly finalize as Daily if not a member, or Monthly if already a member
-        // This fulfills the "send directly" requirement.
-        if (isMember) {
-            finalizeOrder('Monthly');
-        } else {
-            finalizeOrder('Daily');
-        }
+        finalizeOrder(planType);
     }
 
     function cancelPaySelection() {
@@ -1481,27 +1488,27 @@
         let membershipId = '';
 
         if (type === 'Daily') {
-            // Generate ADFD ID for every order
-            let dailyCount = parseInt(localStorage.getItem('adfDailyOrderCount') || '0') + 1;
+            // Generate ADFD ID - Resets every 24 hours
+            const todayStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            const lastResetDate = localStorage.getItem('adfDailyLastReset');
+            
+            let dailyCount = 1;
+            if (lastResetDate === todayStr) {
+                dailyCount = parseInt(localStorage.getItem('adfDailyOrderCount') || '0') + 1;
+            } else {
+                // New day! Start from 0001
+                localStorage.setItem('adfDailyLastReset', todayStr);
+            }
+            
             localStorage.setItem('adfDailyOrderCount', dailyCount);
             orderID = 'ADFD' + dailyCount.toString().padStart(4, '0');
-            localStorage.setItem('adfLastDailyID', orderID);
         } else {
-            // Monthly Pay: Reuse existing ADFM ID or generate new one
-            let existingADFM = localStorage.getItem('adfMonthlyMembershipId');
-            if (!existingADFM) {
-                let monthlyCount = parseInt(localStorage.getItem('adfMonthlyCount') || '0') + 1;
-                localStorage.setItem('adfMonthlyCount', monthlyCount);
-                existingADFM = 'ADFM' + monthlyCount.toString().padStart(4, '0');
-                localStorage.setItem('adfMonthlyMembershipId', existingADFM);
-                
-                // Store expiry (1 month from now)
-                const expiry = new Date();
-                expiry.setMonth(expiry.getMonth() + 1);
-                localStorage.setItem('adfMonthlyExpiry', expiry.toISOString());
-            }
-            orderID = existingADFM;
-            membershipId = existingADFM;
+            // Monthly Pay: ID based on phone number for the month
+            // give ID as 1 month validate after clicking the Plan Type only send the order
+            const cleanPhone = phone.replace(/\D/g, '').slice(-10);
+            const currentMonthYear = new Date().toLocaleString('en-IN', { month: '2-digit', year: 'numeric' }).replace('/', '');
+            orderID = `ADFM${cleanPhone}`;
+            membershipId = `ADFM${cleanPhone}`; // Unique for user
         }
 
         const now = new Date();

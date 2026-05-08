@@ -1106,6 +1106,69 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 }
 .booking-submit-btn:hover { background: #1ebe5d; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37,211,102,0.3); }
 
+/* Plan Type Options */
+.plan-type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.plan-option-wrapper {
+    cursor: pointer;
+    display: block;
+}
+
+.plan-option-wrapper input[type="radio"] {
+    display: none;
+}
+
+.plan-option {
+    background: #fff;
+    border: 2px solid #eef2ee;
+    padding: 1.2rem 1rem;
+    border-radius: 16px;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.plan-option .plan-icon {
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+.plan-option .plan-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+.plan-option .plan-desc {
+    font-size: 0.75rem;
+    color: #888;
+    font-weight: 400;
+}
+
+.plan-option-wrapper input[type="radio"]:checked + .plan-option {
+    border-color: var(--primary-color);
+    background: #f0fff4;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(26, 92, 42, 0.08);
+}
+
+.plan-option-wrapper input[type="radio"]:checked + .plan-option .plan-label {
+    color: var(--primary-color);
+}
+
+.plan-option-wrapper input[type="radio"]:checked + .plan-option .plan-icon {
+    transform: scale(1.1);
+}
+
+
 .info-item {
     display: flex;
     gap: 1.2rem;
