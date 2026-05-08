@@ -426,7 +426,105 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     animation: slideUp 0.3s ease;
 }
 .modal-wide { max-width: 600px; }
-.modal-dashboard { max-width: 1100px; width: 95%; }
+.modal-dashboard {
+    max-width: 1100px;
+    width: 95%;
+    background: linear-gradient(135deg, #0d3320 0%, #1A5C2A 40%, #0f4d2a 70%, #0a2e18 100%);
+    border-radius: 24px;
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.08);
+    position: relative;
+}
+
+/* Decorative blobs inside dashboard */
+.modal-dashboard::before {
+    content: '';
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(212,160,23,0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+.modal-dashboard::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    left: -60px;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(168,213,162,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Dashboard inner content wrapper */
+.modal-dashboard > div {
+    position: relative;
+    z-index: 1;
+}
+
+/* Dashboard header bar */
+.modal-dashboard .dash-header {
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(10px);
+    padding: 1.4rem 2rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 0;
+}
+.modal-dashboard .dash-header h2 {
+    color: #fff;
+    font-size: 1.7rem;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+/* The scrollable body area of dashboard */
+.modal-dashboard .dash-body {
+    padding: 2rem;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Dashboard grid cards re-style for dark bg */
+.modal-dashboard .dash-grid {
+    gap: 1.4rem;
+}
+.modal-dashboard .dash-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 18px;
+    color: #fff;
+    font-size: 1.1rem;
+    padding: 2rem 1.5rem;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.modal-dashboard .dash-card small {
+    color: rgba(255,255,255,0.65);
+    font-size: 0.88rem;
+    margin-top: 0.5rem;
+}
+.modal-dashboard .dash-card:hover {
+    background: rgba(255,255,255,0.16);
+    border-color: var(--accent-color);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+    color: #fff;
+}
+
+/* Section areas inside dashboard */
+.modal-dashboard .dash-section {
+    background: rgba(255,255,255,0.97);
+    border-radius: 16px;
+    color: var(--text-dark);
+}
 
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(30px); }
