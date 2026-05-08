@@ -118,7 +118,7 @@
             <!-- Order Receipts Section -->
             <div id="order-receipts-section" class="dash-section" style="display:none; padding: 1.5rem;">
                 <div style="margin-bottom: 2rem;">
-                    <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent-color); display: inline-block;">Verify Order Receipts (v2.5)</h3>
+                    <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent-color); display: inline-block;">Verify Order Receipts (v2.4)</h3>
                     <p style="font-size:0.9rem; color:#666;">Confirm payments and verify customer bills.</p>
                 </div>
                 <div class="table-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto;">
@@ -668,7 +668,7 @@
     <!-- Payment Receipt Modal -->
     <div id="receiptModal" class="modal">
         <div class="receipt-card fade-in-up">
-            <div style="text-align: center; margin-bottom: 1.2rem; padding: 0.5rem 0 1rem 0;">
+            <div style="text-align: center; margin-bottom: 1.2rem; padding: 1.5rem 0 1rem 0;">
                 <h2 style="color: #000; margin: 0; font-family: 'Lexend', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; font-size: 2.2rem;">AYYAPPA DAIRY</h2>
                 <p style="color: #333; font-size: 0.75rem; margin: 8px 0; font-weight: 600;">*** OFFICIAL RECEIPT ***</p>
                 <p style="color: #666; font-size: 0.7rem;">Vinukonda, Andhra Pradesh</p>
@@ -683,7 +683,7 @@
                 <p style="font-size: 0.8rem; font-weight: 800; color: #333; margin-bottom: 0.3rem; letter-spacing: 0.5px;">THANK YOU FOR YOUR VISIT!</p>
                 <p style="font-size: 0.7rem; color: #999; margin-bottom: 1.5rem;">Please keep this for your records.</p>
                 <div id="receiptButtonContainer" class="no-print" style="display: flex; gap: 0.8rem;">
-                    <button onclick="window.print()" class="btn" style="flex: 1; padding: 0.8rem; background: #333; color: white; font-size: 0.85rem; border-radius: 4px; font-weight: 700; text-transform: uppercase;">Print Bill</button>
+                    <button onclick="downloadBill()" class="btn" style="flex: 1; padding: 0.8rem; background: #333; color: white; font-size: 0.85rem; border-radius: 4px; font-weight: 700; text-transform: uppercase;">Download</button>
                     <button onclick="closeReceiptModal()" class="btn" style="flex: 1; padding: 0.8rem; background: #eee; color: #333; border-radius: 4px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Close</button>
                 </div>
             </div>
@@ -1463,6 +1463,40 @@
 
     function closeReceiptModal() {
         document.getElementById('receiptModal').classList.remove('active');
+    }
+
+    async function downloadBill() {
+        const receiptCard = document.querySelector('.receipt-card');
+        const btnContainer = document.getElementById('receiptButtonContainer');
+        
+        // Hide buttons for the capture
+        if (btnContainer) btnContainer.style.display = 'none';
+        
+        try {
+            const canvas = await html2canvas(receiptCard, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                logging: false,
+                useCORS: true
+            });
+            
+            if (btnContainer) btnContainer.style.display = 'flex';
+
+            const imgData = canvas.toDataURL('image/png');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'portrait',
+                unit: 'px',
+                format: [canvas.width / 2, canvas.height / 2]
+            });
+
+            pdf.addImage(imgData, 'PNG', 0, 0, canvas.width / 2, canvas.height / 2);
+            pdf.save('Ayyappa_Dairy_Bill.pdf');
+        } catch (err) {
+            console.error('Download Error:', err);
+            if (btnContainer) btnContainer.style.display = 'flex';
+            alert("Could not generate PDF. Please try again.");
+        }
     }
 
     async function shareReceiptAsPDF() {
