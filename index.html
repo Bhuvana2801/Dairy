@@ -73,7 +73,7 @@
 
     <!-- Admin Dashboard Modal -->
     <div id="dashboardModal" class="modal-overlay">
-        <div class="modal-box modal-wide">
+        <div class="modal-box modal-dashboard">
 
             <!-- TOP BAR (always visible) -->
             <div class="dash-header">
@@ -121,8 +121,8 @@
                     <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent-color); display: inline-block;">Verify Order Receipts (v2.4)</h3>
                     <p style="font-size:0.9rem; color:#666;">Confirm payments and verify customer bills.</p>
                 </div>
-                <div class="table-container" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto;">
-                    <table class="admin-table" style="width: 100%; border-collapse: collapse;">
+                <div class="table-container custom-scrollbar" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; max-height: 60vh; overflow-y: auto;">
+                    <table class="admin-table" style="width: 100%; border-collapse: collapse; min-width: 800px;">
                         <thead style="background: var(--primary-color); color: white;">
                             <tr>
                                 <th style="padding: 12px; text-align: left;">Order ID</th>
