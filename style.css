@@ -179,8 +179,10 @@ p { font-size: 1.1rem; color: #556B55; margin-bottom: 1rem; }
     background: linear-gradient(135deg, rgba(26,92,42,0.55) 0%, rgba(26,40,26,0.72) 100%), url('images/hero.png') center/cover no-repeat;
     display: flex;
     align-items: center;
+    justify-content: center;
     position: relative;
     padding: 0 5%;
+    text-align: center;
 }
 
 .hero-tagline {
