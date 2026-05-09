@@ -863,6 +863,14 @@
 
     // ΓöÇΓöÇ Page Switcher ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     function showPage(pageId) {
+        // Handle Navbar background
+        const navbar = document.querySelector('.navbar');
+        if (pageId !== 'home') {
+            navbar.classList.add('navbar-solid');
+        } else {
+            navbar.classList.remove('navbar-solid');
+        }
+
         // Hide all pages
         document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
         // Remove active from all nav links

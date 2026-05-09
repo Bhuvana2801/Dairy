@@ -99,8 +99,9 @@ p { font-size: 1.1rem; color: #556B55; margin-bottom: 1rem; }
     transition: var(--transition);
 }
 
-.navbar.scrolled {
-    background-color: rgba(26, 92, 42, 0.97);
+.navbar.scrolled,
+.navbar.navbar-solid {
+    background-color: rgba(26, 92, 42, 0.98);
     backdrop-filter: blur(12px);
     padding: 0.6rem 5%;
     box-shadow: 0 2px 16px rgba(0,0,0,0.18);
