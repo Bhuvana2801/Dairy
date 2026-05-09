@@ -1398,11 +1398,25 @@
         const s = schema[section];
         let html = '<div class="add-form-inner">';
         s.fields.forEach((f, i) => {
-            html += `<input type="text" id="inp_${f}" placeholder="${s.labels[i]}" class="add-input">`;
+            let onInput = '';
+            if (section === 'coupons' && f === 'code') onInput = 'oninput="autoCalcCouponDiscount(this.value)"';
+            html += `<input type="text" id="inp_${f}" placeholder="${s.labels[i]}" class="add-input" ${onInput}>`;
         });
         html += `<button class="btn btn-add" id="actionBtn" onclick="addRecord('${section}')">+ Add</button>`;
         html += '</div>';
         document.getElementById('addForm').innerHTML = html;
+    }
+
+    function autoCalcCouponDiscount(code) {
+        const discInput = document.getElementById('inp_discount');
+        const statusInput = document.getElementById('inp_status');
+        if (!discInput) return;
+        
+        const cleanCode = code.trim().toUpperCase();
+        if (cleanCode === 'MONTHLY PLAN') {
+            discInput.value = '80';
+            if (statusInput) statusInput.value = 'Active';
+        }
     }
 
 
