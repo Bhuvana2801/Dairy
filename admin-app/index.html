@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>ADF Admin Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1A5C2A">
+    <link rel="apple-touch-icon" href="../images/logo.png">
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="login-card">
+            <img src="../images/logo.png" alt="Logo" style="height: 60px; margin-bottom: 1rem;">
+            <h2>Admin Login</h2>
+            <p>Enter your credentials to access the dashboard.</p>
+            
+            <div class="input-group">
+                <label>Admin ID</label>
+                <input type="text" id="adminId" placeholder="Enter ID">
+            </div>
+            
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="adminPw" placeholder="Enter Password">
+            </div>
+            
+            <p id="errorMsg" class="error-msg"></p>
+            
+            <button class="login-btn" onclick="login()">Login</button>
+        </div>
+    </div>
+
+    <!-- Main App Content -->
+    <div id="app">
+        <div class="dash-header">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Ayyappa Dairy Farm</p>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+
+        <div id="grid-view" class="grid-container">
+            <div class="dash-card" onclick="openSection('daily')">
+                <span>📋</span>
+                <h3>Daily Report</h3>
+                <p>Manage entries</p>
+            </div>
+            <div class="dash-card" onclick="openSection('expenses')">
+                <span>💵</span>
+                <h3>Expenses</h3>
+                <p>Monthly spends</p>
+            </div>
+            <div class="dash-card" onclick="openSection('production')">
+                <span>🐄</span>
+                <h3>Production</h3>
+                <p>Output tracking</p>
+            </div>
+            <div class="dash-card" onclick="openSection('orders')">
+                <span>📦</span>
+                <h3>Orders</h3>
+                <p>Verify & confirm</p>
+            </div>
+            <div class="dash-card" onclick="openSection('salaries')">
+                <span>💰</span>
+                <h3>Salaries</h3>
+                <p>Staff payments</p>
+            </div>
+            <div class="dash-card" onclick="openSection('monthly-report')">
+                <span>📊</span>
+                <h3>Report</h3>
+                <p>Monthly analysis</p>
+            </div>
+        </div>
+
+        <!-- Section Detail View -->
+        <div id="section-view">
+            <button class="back-btn" onclick="showGrid()">
+                ← Back to Dashboard
+            </button>
+            
+            <div class="section-header">
+                <h2 id="section-title">Section Name</h2>
+                <p id="section-desc" style="font-size: 0.85rem; color: var(--text-muted);"></p>
+            </div>
+
+            <button id="exportBtn" class="export-btn" style="display: none;" onclick="exportData()">
+                📥 Download CSV
+            </button>
+
+            <!-- Add Form (Only for editable sections) -->
+            <div id="add-form-container" class="add-form" style="display: none;">
+                <h4 style="margin-bottom: 1rem;">Add New Record</h4>
+                <div id="dynamic-inputs"></div>
+                <button id="submitBtn" class="btn-submit" onclick="saveRecord()">+ Add Entry</button>
+            </div>
+
+            <!-- Filter for Monthly Report -->
+            <div id="report-filter" style="display: none; margin-bottom: 1.5rem;">
+                <input type="month" id="monthFilter" style="padding: 10px; border-radius: 8px; border: none; width: 100%;" onchange="loadReportData()">
+            </div>
+
+            <div class="table-wrap">
+                <div style="overflow-x: auto;">
+                    <table class="mobile-table">
+                        <thead id="table-head"></thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
