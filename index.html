@@ -1553,20 +1553,32 @@
         let membershipId = '';
 
         if (type === 'Daily') {
-            // Generate ADFD ID - Resets every 24 hours
-            const todayStr = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-            const lastResetDate = localStorage.getItem('adfDailyLastReset');
+            // Centralized Daily ID generation using IST Date
+            const istDate = new Date().toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/').reverse().join('-');
             
-            let dailyCount = 1;
-            if (lastResetDate === todayStr) {
-                dailyCount = parseInt(localStorage.getItem('adfDailyOrderCount') || '0') + 1;
-            } else {
-                // New day! Start from 0001
-                localStorage.setItem('adfDailyLastReset', todayStr);
+            try {
+                // Use a dedicated counter document for each day
+                const counterRef = db.collection('order_counters').doc('daily_' + istDate);
+                const newCount = await db.runTransaction(async (transaction) => {
+                    const counterDoc = await transaction.get(counterRef);
+                    const count = (counterDoc.exists ? (counterDoc.data().count || 0) : 0) + 1;
+                    transaction.set(counterRef, { count, lastUpdated: firebase.firestore.FieldValue.serverTimestamp() });
+                    return count;
+                });
+                orderID = 'ADFD' + newCount.toString().padStart(4, '0');
+            } catch (err) {
+                console.error("ID Generation Error:", err);
+                // Fallback to local count if Firestore fails, though transaction is preferred
+                const lastResetDate = localStorage.getItem('adfDailyLastReset');
+                let dailyCount = 1;
+                if (lastResetDate === istDate) {
+                    dailyCount = parseInt(localStorage.getItem('adfDailyOrderCount') || '0') + 1;
+                } else {
+                    localStorage.setItem('adfDailyLastReset', istDate);
+                }
+                localStorage.setItem('adfDailyOrderCount', dailyCount);
+                orderID = 'ADFD' + dailyCount.toString().padStart(4, '0');
             }
-            
-            localStorage.setItem('adfDailyOrderCount', dailyCount);
-            orderID = 'ADFD' + dailyCount.toString().padStart(4, '0');
         } else {
             // Monthly Pay: ID based on phone number for the month
             // give ID as 1 month validate after clicking the Plan Type only send the order
@@ -1663,7 +1675,7 @@
                     <span>#${data.orderID}</span>
                 </div>
                 <div class="receipt-item">
-                    <strong>DATE:</strong>
+                    <strong>ORDERED DATE:</strong>
                     <span>${data.placedAt.split(',')[0]}</span>
                 </div>
                 <div class="receipt-line"></div>
@@ -1940,7 +1952,7 @@
             content.innerHTML = `
                 <div style="padding: 0.2rem 0;">
                     <div class="receipt-item"><strong>ORDER NO:</strong><span>#${data.orderID}</span></div>
-                    <div class="receipt-item"><strong>DATE:</strong><span>${data.date}</span></div>
+                    <div class="receipt-item"><strong>ORDERED DATE:</strong><span>${data.placedAt ? data.placedAt.split(',')[0] : data.date}</span></div>
                     <div class="receipt-line" style="border-top: 1px dashed #bbb; margin: 0.8rem 0;"></div>
                     
                     <div class="receipt-item"><strong>CUSTOMER:</strong> <span>${data.name}</span></div>
