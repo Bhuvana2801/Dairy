@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Admin Dashboard | Ayyappa Dairy</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    
+    <link rel="stylesheet" href="admin-app.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>Admin Dashboard</h1>
+            <button class="logout-btn" onclick="window.location.href='index.html'">Logout</button>
+        </header>
+
+        <!-- Stats Section (Mobile Bubbles) -->
+        <div class="stats-banner">
+            <div class="stat-bubble animate-in">
+                <span class="label">Revenue</span>
+                <span class="value" id="app-revenue">₹0</span>
+            </div>
+            <div class="stat-bubble animate-in" style="animation-delay: 0.1s;">
+                <span class="label">Orders</span>
+                <span class="value" id="app-orders">0</span>
+            </div>
+            <div class="stat-bubble animate-in" style="animation-delay: 0.2s;">
+                <span class="label">Yield</span>
+                <span class="value" id="app-yield">0L</span>
+            </div>
+        </div>
+
+        <!-- Main Grid Menu (Exactly as in Reference) -->
+        <div class="menu-grid animate-in" style="animation-delay: 0.3s;">
+            <div class="menu-card" onclick="openSection('production')">
+                <div class="card-bg"></div>
+                <div class="card-content">
+                    <span class="icon">📋</span>
+                    <h3>Daily Report</h3>
+                    <p>View & manage daily entries</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="openSection('expenses')">
+                <div class="card-bg"></div>
+                <div class="card-content">
+                    <span class="icon">💵</span>
+                    <h3>Monthly Expenses</h3>
+                    <p>View & manage expenses</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="openSection('production')">
+                <div class="card-bg"></div>
+                <div class="card-content">
+                    <span class="icon">🐄</span>
+                    <h3>Production</h3>
+                    <p>View & manage production</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="openSection('orders')">
+                <div class="card-bg"></div>
+                <div class="card-content">
+                    <span class="icon">💗</span>
+                    <h3>Order Receipts</h3>
+                    <p>Verify bills & confirm orders</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="openSection('salaries')">
+                <div class="card-bg"></div>
+                <div class="card-content">
+                    <span class="icon">💰</span>
+                    <h3>Salaries</h3>
+                    <p>View & manage salaries</p>
+                </div>
+            </div>
+            <div class="menu-card" onclick="openSection('reports')">
+                <div class="card-bg"></div>
+                <div class="card-content">
+                    <span class="icon">📊</span>
+                    <h3>Monthly Report</h3>
+                    <p>View monthly summary & analysis</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Overlay (The App "Pages") -->
+        <div class="section-overlay" id="sectionOverlay">
+            <header class="overlay-header">
+                <button class="back-btn" onclick="closeSection()"><i data-lucide="arrow-left"></i> Back</button>
+                <h2 id="overlayTitle">Details</h2>
+                <button class="add-btn" id="overlayAddBtn"><i data-lucide="plus"></i></button>
+            </header>
+            <div class="overlay-content">
+                <div id="tableContainer">
+                    <table class="app-table">
+                        <thead id="appTableHead"></thead>
+                        <tbody id="appTableBody"></tbody>
+                    </table>
+                    <div id="appEmptyState" class="empty-state">
+                        <i data-lucide="database-zap"></i>
+                        <p>No data found.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" onclick="closeSection()"><i data-lucide="home"></i><span>Home</span></a>
+            <a href="#" class="nav-item" onclick="openSection('orders')"><i data-lucide="shopping-cart"></i><span>Orders</span></a>
+            <a href="#" class="nav-item" onclick="openSection('production')"><i data-lucide="milk"></i><span>Farm</span></a>
+            <a href="#" class="nav-item" onclick="openSection('reports')"><i data-lucide="bar-chart-3"></i><span>Reports</span></a>
+        </nav>
+    </div>
+
+    <!-- Modals (Reused from logic) -->
+    <div class="modal-overlay" id="genericModal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h2 id="modalTitle">Entry Details</h2>
+                <button class="icon-btn" onclick="closeModal()"><i data-lucide="x"></i></button>
+            </div>
+            <form id="genericForm" class="modal-form">
+                <div id="formFields"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn-submit">Save Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        // Custom Mobile App Navigation
+        function openSection(id) {
+            document.getElementById('sectionOverlay').classList.add('active');
+            document.getElementById('overlayTitle').textContent = id.charAt(0).toUpperCase() + id.slice(1);
+            if (window.renderTable) window.renderTable(id);
+            
+            // Handle active nav state
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const nav = document.querySelector(`.nav-item[onclick*="${id}"]`);
+            if (nav) nav.classList.add('active');
+        }
+
+        function closeSection() {
+            document.getElementById('sectionOverlay').classList.remove('active');
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelector('.nav-item[onclick*="closeSection"]').classList.add('active');
+        }
+    </script>
+</body>
+</html>

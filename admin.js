@@ -116,9 +116,17 @@ document.addEventListener('DOMContentLoaded', () => {
             .reduce((sum, p) => sum + (parseFloat(p.quantity) || 0), 0);
         document.getElementById('stat-yield').textContent = totalYield;
 
-        // Active Subscriptions (Monthly plans)
         const activeSubs = data.orders.filter(o => o.paymentType === 'Monthly').length;
-        document.getElementById('stat-subs').textContent = activeSubs;
+        document.getElementById('stat-subs') && (document.getElementById('stat-subs').textContent = activeSubs);
+
+        // Update App Stats if present
+        const appRev = document.getElementById('app-revenue');
+        const appOrd = document.getElementById('app-orders');
+        const appYield = document.getElementById('app-yield');
+        
+        if (appRev) appRev.textContent = `₹${revenue.toLocaleString()}`;
+        if (appOrd) appOrd.textContent = data.orders.length;
+        if (appYield) appYield.textContent = `${totalYield}L`;
 
         updateCharts();
     };
@@ -187,10 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Table Rendering ---
     const renderTable = (sectionId) => {
-        const thead = document.getElementById('tableHead');
-        const tbody = document.getElementById('tableBody');
-        const emptyState = document.getElementById('tableEmptyState');
-        const addNewBtn = document.getElementById('addNewBtn');
+        const thead = document.getElementById('tableHead') || document.getElementById('appTableHead');
+        const tbody = document.getElementById('tableBody') || document.getElementById('appTableBody');
+        const emptyState = document.getElementById('tableEmptyState') || document.getElementById('appEmptyState');
+        const addNewBtn = document.getElementById('addNewBtn') || document.getElementById('overlayAddBtn');
 
         // Configs
         const configs = {
@@ -333,7 +341,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (addNewBtn) {
-        addNewBtn.addEventListener('click', () => openModal(currentSection));
+        addNewBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openModal(currentSection);
+        });
     }
 
     // Global Functions (attached to window for HTML access)
