@@ -405,14 +405,6 @@
 
                                 <div class="booking-row">
                                     <div class="booking-field">
-                                        <label for="bookCoupon">Coupon Code (Optional)</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">🎟️</span>
-                                            <input type="text" id="bookCoupon" placeholder="Enter coupon code" oninput="calculateAmount()">
-                                        </div>
-                                        <small id="couponStatus" style="display:block; margin-top:4px; font-size:0.75rem; font-weight:600;"></small>
-                                    </div>
-                                    <div class="booking-field">
                                         <label for="bookAmount">Total Amount (₹) *</label>
                                         <div class="input-container">
                                             <span class="field-icon">₹</span>
@@ -1601,12 +1593,9 @@
         const qtyStr = document.getElementById('bookQty').value;
         const product = document.getElementById('bookProduct').value;
         const amountField = document.getElementById('bookAmount');
-        const couponInput = document.getElementById('bookCoupon');
-        const couponStatus = document.getElementById('couponStatus');
         
         if (!qtyStr) {
             amountField.value = '';
-            if (couponStatus) couponStatus.textContent = '';
             return;
         }
         const qty = parseInt(qtyStr.split(' ')[0]) || 0;
@@ -1618,27 +1607,6 @@
         
         let totalAmount = qty * pricePerUnit;
         
-        // Coupon Logic
-        const couponCode = couponInput ? couponInput.value.trim().toUpperCase() : '';
-        if (couponCode && data.coupons) {
-            const coupon = data.coupons.find(c => c.code.toUpperCase() === couponCode && c.status.toLowerCase() === 'active');
-            if (coupon) {
-                const discount = parseFloat(coupon.discount) || 0;
-                totalAmount -= discount;
-                if (totalAmount < 0) totalAmount = 0;
-                if (couponStatus) {
-                    couponStatus.textContent = `✅ Applied: ₹${discount} off!`;
-                    couponStatus.style.color = "#2e7d32";
-                }
-            } else {
-                if (couponStatus) {
-                    couponStatus.textContent = "❌ Invalid or inactive coupon.";
-                    couponStatus.style.color = "#d32f2f";
-                }
-            }
-        } else {
-            if (couponStatus) couponStatus.textContent = "";
-        }
         
         amountField.value = totalAmount;
     }
