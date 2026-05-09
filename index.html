@@ -107,6 +107,10 @@
                     &#128176; Salaries
                     <small>View &amp; manage salaries</small>
                 </div>
+                <div class="dash-card" onclick="openSection('coupons')" style="border-top: 3px solid #ff4757;">
+                    &#127915; Coupons
+                    <small>Manage discount codes</small>
+                </div>
                 <div class="dash-card" onclick="openSection('monthly-report')" style="border-top: 3px solid var(--accent-color);">
                     &#128200; Monthly Report
                     <small>View monthly summary &amp; analysis</small>
@@ -401,12 +405,23 @@
 
                                 <div class="booking-row">
                                     <div class="booking-field">
+                                        <label for="bookCoupon">Coupon Code (Optional)</label>
+                                        <div class="input-container">
+                                            <span class="field-icon">🎟️</span>
+                                            <input type="text" id="bookCoupon" placeholder="Enter coupon code" oninput="calculateAmount()">
+                                        </div>
+                                        <small id="couponStatus" style="display:block; margin-top:4px; font-size:0.75rem; font-weight:600;"></small>
+                                    </div>
+                                    <div class="booking-field">
                                         <label for="bookAmount">Total Amount (₹) *</label>
                                         <div class="input-container">
                                             <span class="field-icon">₹</span>
                                             <input type="text" id="bookAmount" placeholder="Automatically calculated" readonly style="background: #f8f8f8; font-weight: bold; color: var(--primary-color);">
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="booking-row">
                                     <div class="booking-field">
                                         <label>Rate Our Service *</label>
                                         <div class="star-rating">
@@ -555,7 +570,7 @@
                             </div>
                             <div style="padding: 2rem; text-align: center;">
                                 <div style="font-size: 2.2rem; font-weight: 800; color: #333; margin-bottom: 0.5rem;">FREE 1 LITRE</div>
-                                <p style="color: #666; margin-bottom: 2rem;">Refer a friend for a monthly plan and get 1 Litre of pure Ghee/Milk for free!</p>
+                                <p style="color: #666; margin-bottom: 2rem;">Refer a friend for a monthly plan & get 1 litre of Ghee/Milk for free!</p>
                                 <button onclick="showPage('contact')" class="btn btn-primary" style="width: 100%; background: #333; border: none;">Contact Us</button>
                             </div>
                         </div>
@@ -1061,11 +1076,11 @@
         playNotificationSound();
     }
 
-    let isInitialLoad = { daily: true, expenses: true, production: true, salaries: true, orders: true };
+    let isInitialLoad = { daily: true, expenses: true, production: true, salaries: true, orders: true, coupons: true };
 
     // Replace robust loadData with Instant Realtime Listener
     function setupRealtimeListeners() {
-        const sections = ['daily', 'expenses', 'production', 'salaries', 'orders'];
+        const sections = ['daily', 'expenses', 'production', 'salaries', 'orders', 'coupons'];
         sections.forEach(section => {
             db.collection(section).orderBy('createdAt', 'desc').onSnapshot(snapshot => {
                 // Track changes for notifications
@@ -1132,7 +1147,8 @@
         salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],                                labels: ['Name','Role','Amount','Month'],                                   readOnly: false },
         orders:     { title: '📋 Orders',        fields: ['orderID','name','phone','product','qty','date','membershipId'], labels: ['Order ID','Customer','Phone','Product','Qty','Delivery Date','Membership ID'], readOnly: true },
         'monthly-report': { title: '📊 Monthly Report', fields: ['orderID','name','product','qty','amount','date','paymentType'], labels: ['Order ID','Customer','Product','Qty','Amount','Date','Plan'], readOnly: true },
-        'list-orders':    { title: '📦 List of Orders', fields: ['orderID','type','name','address'],                              labels: ['Order ID','Plan Type','Customer Name','Address'],         readOnly: true }
+        'list-orders':    { title: '📦 List of Orders', fields: ['orderID','type','name','address'],                              labels: ['Order ID','Plan Type','Customer Name','Address'],         readOnly: true },
+        coupons: { title: '🎟️ Coupons', fields: ['code', 'discount', 'status'], labels: ['Coupon Code', 'Discount (₹)', 'Status (Active/Inactive)'], readOnly: false }
     };
 
     let currentSection = null;
@@ -1559,17 +1575,47 @@
 
     function calculateAmount() {
         const qtyStr = document.getElementById('bookQty').value;
+        const product = document.getElementById('bookProduct').value;
         const amountField = document.getElementById('bookAmount');
+        const couponInput = document.getElementById('bookCoupon');
+        const couponStatus = document.getElementById('couponStatus');
+        
         if (!qtyStr) {
             amountField.value = '';
+            if (couponStatus) couponStatus.textContent = '';
             return;
         }
         const qty = parseInt(qtyStr.split(' ')[0]) || 0;
         
-        // 1 Litre milk is 80 rupees. Defaulting others to 80 as well for now.
-        const pricePerUnit = 80; 
+        // Base Price Logic
+        let pricePerUnit = 80; // Default (Milk)
+        if (product && product.toLowerCase().includes('ghee')) pricePerUnit = 600;
+        if (product && product.toLowerCase().includes('curd')) pricePerUnit = 40;
         
-        const totalAmount = qty * pricePerUnit;
+        let totalAmount = qty * pricePerUnit;
+        
+        // Coupon Logic
+        const couponCode = couponInput ? couponInput.value.trim().toUpperCase() : '';
+        if (couponCode && data.coupons) {
+            const coupon = data.coupons.find(c => c.code.toUpperCase() === couponCode && c.status.toLowerCase() === 'active');
+            if (coupon) {
+                const discount = parseFloat(coupon.discount) || 0;
+                totalAmount -= discount;
+                if (totalAmount < 0) totalAmount = 0;
+                if (couponStatus) {
+                    couponStatus.textContent = `✅ Applied: ₹${discount} off!`;
+                    couponStatus.style.color = "#2e7d32";
+                }
+            } else {
+                if (couponStatus) {
+                    couponStatus.textContent = "❌ Invalid or inactive coupon.";
+                    couponStatus.style.color = "#d32f2f";
+                }
+            }
+        } else {
+            if (couponStatus) couponStatus.textContent = "";
+        }
+        
         amountField.value = totalAmount;
     }
 
