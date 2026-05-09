@@ -1231,6 +1231,19 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     margin: 20px auto;
 }
 
+.receipt-watermark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: auto;
+    opacity: 0.5; /* 50% visible */
+    pointer-events: none;
+    z-index: 0;
+    filter: grayscale(100%);
+}
+
 /* Jagged edge effect for physical paper look */
 .receipt-card::after {
     content: "";

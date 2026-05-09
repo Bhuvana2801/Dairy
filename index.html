@@ -734,23 +734,28 @@
     <!-- Payment Receipt Modal -->
     <div id="receiptModal" class="modal">
         <div class="receipt-card fade-in-up">
-            <div style="text-align: center; margin-bottom: 1.2rem; padding: 1.5rem 0 1rem 0;">
-                <h2 style="color: #000; margin: 0; font-family: 'Lexend', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; font-size: 2.2rem;">AYYAPPA DAIRY</h2>
-                <p style="color: #333; font-size: 0.75rem; margin: 8px 0; font-weight: 600;">*** OFFICIAL RECEIPT ***</p>
-                <p style="color: #666; font-size: 0.7rem;">Vinukonda, Andhra Pradesh</p>
-                <div style="border-top: 2px solid #000; margin-top: 1.5rem; width: 100%;"></div>
-            </div>
+            <!-- Logo Watermark -->
+            <img src="images/logo.png" class="receipt-watermark" alt="Watermark">
             
-            <div id="receiptContent">
-                <!-- Populated by JS -->
-            </div>
-            
-            <div style="margin-top: 0.5rem; text-align: center; font-family: 'Courier New', Courier, monospace;">
-                <p style="font-size: 0.8rem; font-weight: 800; color: #333; margin-bottom: 0.3rem; letter-spacing: 0.5px;">THANK YOU FOR YOUR VISIT!</p>
-                <p style="font-size: 0.7rem; color: #999; margin-bottom: 1.5rem;">Please keep this for your records.</p>
-                <div id="receiptButtonContainer" class="no-print" style="display: flex; gap: 0.8rem;">
-                    <button onclick="downloadBill()" class="btn" style="flex: 1; padding: 0.8rem; background: #333; color: white; font-size: 0.85rem; border-radius: 4px; font-weight: 700; text-transform: uppercase;">Download</button>
-                    <button onclick="closeReceiptModal()" class="btn" style="flex: 1; padding: 0.8rem; background: #eee; color: #333; border-radius: 4px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Close</button>
+            <div class="receipt-content-wrapper" style="position: relative; z-index: 1;">
+                <div style="text-align: center; margin-bottom: 1.2rem; padding: 1.5rem 0 1rem 0;">
+                    <h2 style="color: #000; margin: 0; font-family: 'Lexend', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-weight: 800; font-size: 2.2rem;">AYYAPPA DAIRY</h2>
+                    <p style="color: #333; font-size: 0.75rem; margin: 8px 0; font-weight: 600;">*** OFFICIAL RECEIPT ***</p>
+                    <p style="color: #666; font-size: 0.7rem;">Vinukonda, Andhra Pradesh</p>
+                    <div style="border-top: 2px solid #000; margin-top: 1.5rem; width: 100%;"></div>
+                </div>
+                
+                <div id="receiptContent">
+                    <!-- Populated by JS -->
+                </div>
+                
+                <div style="margin-top: 0.5rem; text-align: center; font-family: 'Courier New', Courier, monospace;">
+                    <p style="font-size: 0.8rem; font-weight: 800; color: #333; margin-bottom: 0.3rem; letter-spacing: 0.5px;">THANK YOU FOR YOUR VISIT!</p>
+                    <p style="font-size: 0.7rem; color: #999; margin-bottom: 1.5rem;">Please keep this for your records.</p>
+                    <div id="receiptButtonContainer" class="no-print" style="display: flex; gap: 0.8rem;">
+                        <button onclick="downloadBill()" class="btn" style="flex: 1; padding: 0.8rem; background: #333; color: white; font-size: 0.85rem; border-radius: 4px; font-weight: 700; text-transform: uppercase;">Download</button>
+                        <button onclick="closeReceiptModal()" class="btn" style="flex: 1; padding: 0.8rem; background: #eee; color: #333; border-radius: 4px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
