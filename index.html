@@ -938,11 +938,74 @@
     };
 
 
+    // ΓöÇΓöÇ Notification Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    function requestNotificationPermission() {
+        if ("Notification" in window) {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    console.log("Notification permission granted.");
+                }
+            });
+        }
+    }
+
+    function playNotificationSound() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(880, audioCtx.currentTime); // High pitch
+            oscillator.frequency.exponentialRampToValueAtTime(440, audioCtx.currentTime + 0.5); // Slide down
+
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.5);
+        } catch (e) {
+            console.warn("Audio Context error:", e);
+        }
+    }
+
+    function sendNotification(title, body) {
+        if ("Notification" in window && Notification.permission === "granted") {
+            try {
+                new Notification(title, {
+                    body: body,
+                    icon: 'images/logo.png'
+                });
+            } catch (e) {
+                console.warn("Notification error:", e);
+            }
+        }
+        playNotificationSound();
+    }
+
+    let isInitialLoad = { daily: true, expenses: true, production: true, salaries: true, orders: true };
+
     // Replace robust loadData with Instant Realtime Listener
     function setupRealtimeListeners() {
         const sections = ['daily', 'expenses', 'production', 'salaries', 'orders'];
         sections.forEach(section => {
             db.collection(section).orderBy('createdAt', 'desc').onSnapshot(snapshot => {
+                // Track changes for notifications
+                if (!isInitialLoad[section]) {
+                    snapshot.docChanges().forEach(change => {
+                        if (change.type === "added") {
+                            const newData = change.doc.data();
+                            if (section === 'orders') {
+                                sendNotification("New Order Received! Γÿò", `Order ${newData.orderID} from ${newData.name}`);
+                            }
+                        }
+                    });
+                }
+                isInitialLoad[section] = false;
+
                 data[section] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                 if (currentSection === section) renderTable(section);
             }, error => {
@@ -956,9 +1019,10 @@
     }
 
     // Call load on start
-    window.addEventListener('DOMContentLoaded', () => {
+    window.addEventListener('load', () => {
         data = { ...DEFAULT_DATA }; // Show defaults immediately
         setupRealtimeListeners(); // Start listening to cloud updates instantly
+        requestNotificationPermission(); // Ask for notification permission
 
         // Populate Delivery Dates (Tomorrow Only)
         const dateSelect = document.getElementById('bookDate');
@@ -1550,6 +1614,8 @@
             status: 'Pending Verification',
             placedAt: istTime,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+            sendNotification("Order Placed Successfully Γ£ô", `Your order ${orderID} has been sent to WhatsApp.`);
         }).catch(err => console.warn('Order save error:', err));
 
         // Cleanup form and update banners
