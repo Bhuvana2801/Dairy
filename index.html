@@ -108,17 +108,14 @@
                     <small>View &amp; manage salaries</small>
                 </div>
                 <div class="dash-card" onclick="openSection('coupons')" style="border-top: 3px solid #ff4757;">
-                    &#127915; Coupons
+                    &#127915; No.of Coupons
                     <small>Manage discount codes</small>
                 </div>
                 <div class="dash-card" onclick="openSection('monthly-report')" style="border-top: 3px solid var(--accent-color);">
                     &#128200; Monthly Report
                     <small>View monthly summary &amp; analysis</small>
                 </div>
-                <div class="dash-card" onclick="openSection('list-orders')" style="border-top: 3px solid var(--accent-color);">
-                    &#128230; List of Orders
-                    <small>View Order ID, Plan, Name & Address</small>
-                </div>
+
             </div>
 
             <!-- Order Receipts Section -->
@@ -1149,7 +1146,7 @@
         salaries:   { title: 'Salaries',          fields: ['name','role','amount','month'],                                labels: ['Name','Role','Amount','Month'],                                   readOnly: false },
         orders:     { title: '📋 Orders',        fields: ['orderID','name','phone','product','qty','date','membershipId'], labels: ['Order ID','Customer','Phone','Product','Qty','Delivery Date','Membership ID'], readOnly: true },
         'monthly-report': { title: '📊 Monthly Report', fields: ['orderID','name','product','qty','amount','date','paymentType'], labels: ['Order ID','Customer','Product','Qty','Amount','Date','Plan'], readOnly: true },
-        'list-orders':    { title: '📦 List of Orders', fields: ['orderID','type','name','address'],                              labels: ['Order ID','Plan Type','Customer Name','Address'],         readOnly: true },
+
         coupons: { title: '🎟️ Coupons', fields: ['code', 'discount', 'status'], labels: ['Coupon Code', 'Discount (₹)', 'Status (Active/Inactive)'], readOnly: false }
     };
 
