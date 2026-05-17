@@ -108,7 +108,7 @@
                     <small>View &amp; manage salaries</small>
                 </div>
                 <div class="dash-card" onclick="openSection('coupons')" style="border-top: 3px solid #ff4757;">
-                    &#127915; No.of Coupons
+                    &#127915; Active Coupons Offers
                     <small>Manage discount codes</small>
                 </div>
                 <div class="dash-card" onclick="openSection('monthly-report')" style="border-top: 3px solid var(--accent-color);">
@@ -1155,7 +1155,7 @@
         orders:     { title: '📋 Orders',        fields: ['orderID','name','phone','product','qty','date','membershipId'], labels: ['Order ID','Customer','Phone','Product','Qty','Delivery Date','Membership ID'], readOnly: true },
         'monthly-report': { title: '📊 Monthly Report', fields: ['orderID','name','product','qty','amount','date','paymentType'], labels: ['Order ID','Customer','Product','Qty','Amount','Date','Plan'], readOnly: true },
         'coupons-applied': { title: '📝 Coupons Applied', fields: ['couponCode', 'name', 'phone'], labels: ['Coupon Code', 'Customer Name', 'Phone Number'], readOnly: false },
-        coupons: { title: '🎟️ Coupons', fields: ['code', 'discount', 'status'], labels: ['Coupon Code', 'Discount (₹)', 'Status (Active/Inactive)'], readOnly: false }
+        coupons: { title: '🎟️ Active Coupons Offers', fields: ['name', 'type', 'discount', 'amount'], labels: ['Name of the Coupon', 'Coupon Types', 'Discount', 'Amount'], readOnly: false }
     };
 
     let currentSection = null;
@@ -1404,25 +1404,62 @@
     function renderAddForm(section) {
         const s = schema[section];
         let html = '<div class="add-form-inner">';
-        s.fields.forEach((f, i) => {
-            let onInput = '';
-            if (section === 'coupons' && f === 'code') onInput = 'oninput="autoCalcCouponDiscount(this.value)"';
-            html += `<input type="text" id="inp_${f}" placeholder="${s.labels[i]}" class="add-input" ${onInput}>`;
-        });
+        if (section === 'coupons') {
+            html += `
+                <input type="text" id="inp_name" placeholder="Name of the Coupon" class="add-input">
+                <select id="inp_type" class="add-input" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; background: white;" onchange="autoCalcCouponAmount()">
+                    <option value="">-- Coupon Types --</option>
+                    <option value="Monthly Subscription">Monthly Subscription</option>
+                    <option value="New customer bonous">New customer bonous</option>
+                </select>
+                <input type="text" id="inp_discount" placeholder="Discount" class="add-input" oninput="autoCalcCouponAmount()">
+                <input type="text" id="inp_amount" placeholder="Amount" class="add-input" readonly style="background-color: #f1f3f5; cursor: not-allowed;">
+            `;
+        } else {
+            s.fields.forEach((f, i) => {
+                html += `<input type="text" id="inp_${f}" placeholder="${s.labels[i]}" class="add-input">`;
+            });
+        }
         html += `<button class="btn btn-add" id="actionBtn" onclick="addRecord('${section}')">+ Add</button>`;
         html += '</div>';
         document.getElementById('addForm').innerHTML = html;
     }
 
-    function autoCalcCouponDiscount(code) {
-        const discInput = document.getElementById('inp_discount');
-        const statusInput = document.getElementById('inp_status');
-        if (!discInput) return;
-        
-        const cleanCode = code.trim().toUpperCase();
-        if (cleanCode === 'MONTHLY PLAN') {
-            discInput.value = '80';
-            if (statusInput) statusInput.value = 'Active';
+    function autoCalcCouponAmount() {
+        const typeSelect = document.getElementById('inp_type');
+        const discountInput = document.getElementById('inp_discount');
+        const amountInput = document.getElementById('inp_amount');
+        if (!typeSelect || !discountInput || !amountInput) return;
+
+        const type = typeSelect.value;
+        const discountStr = discountInput.value.trim();
+        if (!discountStr) {
+            amountInput.value = '';
+            return;
+        }
+
+        let discountVal = parseFloat(discountStr);
+        if (isNaN(discountVal)) {
+            amountInput.value = '';
+            return;
+        }
+
+        if (discountStr.includes('%')) {
+            // Percentage discount
+            let base = 2400; // Base for Monthly Subscription
+            if (type === 'New customer bonous') {
+                base = 800; // Base for New customer bonus
+            }
+            const amt = (base * discountVal) / 100;
+            amountInput.value = amt.toFixed(2);
+        } else {
+            // Flat discount
+            // If they enter 1 under Monthly Subscription (as in "1 day free"), let's treat it as ₹80
+            if (type === 'Monthly Subscription' && discountVal === 1) {
+                amountInput.value = '80';
+            } else {
+                amountInput.value = discountVal;
+            }
         }
     }
 
