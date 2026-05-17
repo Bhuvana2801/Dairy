@@ -1158,7 +1158,7 @@
         orders:     { title: '📋 Orders',        fields: ['orderID','name','phone','product','qty','date','membershipId'], labels: ['Order ID','Customer','Phone','Product','Qty','Delivery Date','Membership ID'], readOnly: true },
         'monthly-report': { title: '📊 Monthly Report', fields: ['orderID','name','product','qty','amount','date','paymentType'], labels: ['Order ID','Customer','Product','Qty','Amount','Date','Plan'], readOnly: true },
         'coupons-applied': { title: '📝 Coupons Applied', fields: ['couponCode', 'name', 'phone'], labels: ['Coupon Code', 'Customer Name', 'Phone Number'], readOnly: false },
-        coupons: { title: '🎟️ Active Coupons Offers', fields: ['name', 'type', 'discount', 'amount'], labels: ['Name of the Coupon', 'Coupon Types', 'Discount', 'Amount'], readOnly: false }
+        coupons: { title: '🎟️ Active Coupons Offers', fields: ['name', 'type', 'issuedBy', 'status'], labels: ['Name of the Coupon', 'Coupon Types', 'Issued By : VANGA BHUVANA CHANDRA', 'Status'], readOnly: false }
     };
 
     let currentSection = null;
@@ -1410,13 +1410,17 @@
         if (section === 'coupons') {
             html += `
                 <input type="text" id="inp_name" placeholder="Name of the Coupon" class="add-input">
-                <select id="inp_type" class="add-input" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; background: white;" onchange="autoCalcCouponAmount()">
+                <select id="inp_type" class="add-input" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; background: white;">
                     <option value="">-- Coupon Types --</option>
                     <option value="Monthly Subscription">Monthly Subscription</option>
                     <option value="New customer bonous">New customer bonous</option>
                 </select>
-                <input type="text" id="inp_discount" placeholder="Discount" class="add-input" oninput="autoCalcCouponAmount()">
-                <input type="text" id="inp_amount" placeholder="Amount" class="add-input" readonly style="background-color: #f1f3f5; cursor: not-allowed;">
+                <input type="text" id="inp_issuedBy" placeholder="Issued By : VANGA BHUVANA CHANDRA" value="VANGA BHUVANA CHANDRA" class="add-input">
+                <select id="inp_status" class="add-input" style="padding: 10px; border-radius: 8px; border: 1px solid #ddd; background: white;">
+                    <option value="">-- Status --</option>
+                    <option value="Active">Active</option>
+                    <option value="Not active">Not active</option>
+                </select>
             `;
         } else {
             s.fields.forEach((f, i) => {
@@ -1426,44 +1430,6 @@
         html += `<button class="btn btn-add" id="actionBtn" onclick="addRecord('${section}')">+ Add</button>`;
         html += '</div>';
         document.getElementById('addForm').innerHTML = html;
-    }
-
-    function autoCalcCouponAmount() {
-        const typeSelect = document.getElementById('inp_type');
-        const discountInput = document.getElementById('inp_discount');
-        const amountInput = document.getElementById('inp_amount');
-        if (!typeSelect || !discountInput || !amountInput) return;
-
-        const type = typeSelect.value;
-        const discountStr = discountInput.value.trim();
-        if (!discountStr) {
-            amountInput.value = '';
-            return;
-        }
-
-        let discountVal = parseFloat(discountStr);
-        if (isNaN(discountVal)) {
-            amountInput.value = '';
-            return;
-        }
-
-        if (discountStr.includes('%')) {
-            // Percentage discount
-            let base = 2400; // Base for Monthly Subscription
-            if (type === 'New customer bonous') {
-                base = 800; // Base for New customer bonus
-            }
-            const amt = (base * discountVal) / 100;
-            amountInput.value = amt.toFixed(2);
-        } else {
-            // Flat discount
-            // If they enter 1 under Monthly Subscription (as in "1 day free"), let's treat it as ₹80
-            if (type === 'Monthly Subscription' && discountVal === 1) {
-                amountInput.value = '80';
-            } else {
-                amountInput.value = discountVal;
-            }
-        }
     }
 
 
@@ -1491,10 +1457,7 @@
         if (!valid) { showStatus('Please fill in at least one field.'); return; }
 
         // Reset Form immediately
-        s.fields.forEach(f => { 
-            const el = document.getElementById('inp_' + f);
-            if (el) el.value = ''; 
-        });
+        renderAddForm(section);
 
         try {
             showStatus("Adding records...");
@@ -1554,10 +1517,7 @@
             showStatus("Record updated successfully!");
 
             // Reset Form and Button
-            s.fields.forEach(f => { 
-                const el = document.getElementById('inp_' + f);
-                if (el) el.value = ''; 
-            });
+            renderAddForm(section);
             editModeId = null;
             const btn = document.getElementById('actionBtn');
             if (btn) {
