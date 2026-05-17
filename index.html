@@ -1694,12 +1694,43 @@
                 orderID = 'ADFD' + dailyCount.toString().padStart(4, '0');
             }
         } else {
-            // Monthly Pay: ID based on phone number for the month
-            // give ID as 1 month validate after clicking the Plan Type only send the order
+            // Monthly Pay: Fixed ID for the month based on phone number starting from ADFM0001
             const cleanPhone = phone.replace(/\D/g, '').slice(-10);
             const currentMonthYear = new Date().toLocaleString('en-IN', { month: '2-digit', year: 'numeric' }).replace('/', '');
-            orderID = `ADFM${cleanPhone}`;
-            membershipId = `ADFM${cleanPhone}`; // Unique for user
+            
+            try {
+                const userDocRef = db.collection('monthly_customers_' + currentMonthYear).doc(cleanPhone);
+                const counterRef = db.collection('order_counters').doc('monthly_' + currentMonthYear);
+
+                const assignedID = await db.runTransaction(async (transaction) => {
+                    const userDoc = await transaction.get(userDocRef);
+                    if (userDoc.exists) {
+                        return userDoc.data().orderID;
+                    }
+                    const counterDoc = await transaction.get(counterRef);
+                    const count = (counterDoc.exists ? (counterDoc.data().count || 0) : 0) + 1;
+                    
+                    const newID = 'ADFM' + count.toString().padStart(4, '0');
+                    transaction.set(counterRef, { count, lastUpdated: firebase.firestore.FieldValue.serverTimestamp() });
+                    transaction.set(userDocRef, { orderID: newID, phone: cleanPhone, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
+                    return newID;
+                });
+                orderID = assignedID;
+                membershipId = assignedID;
+            } catch (err) {
+                console.error("Monthly ID Generation Error:", err);
+                const localMonthlyKey = 'adfMonthlyID_' + currentMonthYear + '_' + cleanPhone;
+                let localID = localStorage.getItem(localMonthlyKey);
+                if (!localID) {
+                    const countKey = 'adfMonthlyCount_' + currentMonthYear;
+                    let count = parseInt(localStorage.getItem(countKey) || '0') + 1;
+                    localStorage.setItem(countKey, count);
+                    localID = 'ADFM' + count.toString().padStart(4, '0');
+                    localStorage.setItem(localMonthlyKey, localID);
+                }
+                orderID = localID;
+                membershipId = localID;
+            }
         }
 
         const now = new Date();
