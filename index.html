@@ -43,7 +43,7 @@
             </ul>
         </nav>
         <div class="nav-actions" style="display: flex; gap: 0.8rem; align-items: center;">
-            <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">📦 MY Dashboard</button>
+            <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">👤 My Profile</button>
             <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
         </div>
         <button class="admin-mobile-btn" onclick="openAdminModal()">ADMIN</button>
@@ -212,7 +212,7 @@
         <div class="modal-box modal-wide">
             <div class="dash-header">
                 <div style="display:flex;align-items:center;gap:0.8rem;">
-                    <h2 style="margin:0; font-family:var(--font-heading);">📦 MY Dashboard</h2>
+                    <h2 style="margin:0; font-family:var(--font-heading);">👤 My Profile</h2>
                 </div>
                 <button class="modal-close" onclick="closeCustomerOrdersModal(null, true)">&times;</button>
             </div>
@@ -812,8 +812,8 @@
             <span class="m-label">Contact</span>
         </a>
         <a href="#" onclick="openCustomerOrdersModal()" class="mobile-nav-item" id="m-nav-orders">
-            <span class="m-icon">📦</span>
-            <span class="m-label">MY Dashboard</span>
+            <span class="m-icon">👤</span>
+            <span class="m-label">My Profile</span>
         </a>
         <a href="#" onclick="showPage('install')" class="mobile-nav-item" id="m-nav-install">
             <span class="m-icon">📲</span>
