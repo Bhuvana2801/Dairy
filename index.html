@@ -209,56 +209,78 @@
 
     <!-- Customer Profile Modal -->
     <div id="customerOrdersModal" class="modal-overlay" onclick="closeCustomerOrdersModal(event)">
-        <div class="modal-box modal-wide" style="max-width:700px;">
-            <div class="dash-header">
-                <div style="display:flex;align-items:center;gap:0.8rem;">
-                    <h2 style="margin:0; font-family:var(--font-heading);">👤 My Profile</h2>
-                </div>
-                <button class="modal-close" onclick="closeCustomerOrdersModal(null, true)">&times;</button>
+        <div onclick="event.stopPropagation()" style="background:white; border-radius:20px; width:90%; max-width:600px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); position:relative;">
+
+            <!-- Sticky Header -->
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; border-bottom:2px solid #f0f0f0; background:white; flex-shrink:0;">
+                <h2 style="margin:0; font-family:var(--font-heading); color:var(--primary-color); font-size:1.4rem;">👤 My Profile</h2>
+                <button onclick="closeCustomerOrdersModal(null, true)" style="background:none; border:none; font-size:1.8rem; cursor:pointer; color:#999; line-height:1; padding:0;">&times;</button>
             </div>
 
-            <!-- Profile Tabs -->
-            <div style="display:flex; gap:0; border-bottom: 2px solid #eee; margin-bottom:1.5rem;">
-                <button id="tab-aboutme" onclick="switchProfileTab('aboutme')" style="flex:1; padding:0.8rem 1rem; border:none; background:none; font-weight:700; font-size:1rem; cursor:pointer; color:var(--primary-color); border-bottom:3px solid var(--primary-color); font-family:var(--font-main); transition:0.2s;">👤 About Me</button>
-                <button id="tab-myorders" onclick="switchProfileTab('myorders')" style="flex:1; padding:0.8rem 1rem; border:none; background:none; font-weight:700; font-size:1rem; cursor:pointer; color:#999; border-bottom:3px solid transparent; font-family:var(--font-main); transition:0.2s;">🛒 My Orders</button>
+            <!-- Sticky Tabs -->
+            <div style="display:flex; background:white; border-bottom:2px solid #eee; flex-shrink:0;">
+                <button id="tab-aboutme" onclick="switchProfileTab('aboutme')" style="flex:1; padding:1rem; border:none; border-bottom:3px solid var(--primary-color); background:none; font-weight:700; font-size:0.95rem; cursor:pointer; color:var(--primary-color); font-family:var(--font-main);">👤 About Me</button>
+                <button id="tab-myorders" onclick="switchProfileTab('myorders')" style="flex:1; padding:1rem; border:none; border-bottom:3px solid transparent; background:none; font-weight:700; font-size:0.95rem; cursor:pointer; color:#aaa; font-family:var(--font-main);">🛒 My Orders</button>
             </div>
 
-            <!-- About Me Tab -->
-            <div id="profile-tab-aboutme" style="padding:0 0.5rem 1rem;">
-                <div style="background:linear-gradient(135deg,var(--primary-color),#2d8f4e); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; text-align:center; color:white;">
-                    <div style="width:72px;height:72px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 0.8rem;">👤</div>
-                    <div id="profile-display-name" style="font-size:1.3rem;font-weight:800;font-family:var(--font-heading);">My Profile</div>
-                    <div id="profile-display-phone" style="font-size:0.9rem;opacity:0.85;margin-top:0.3rem;"></div>
-                </div>
-                <div style="display:grid; gap:1rem;">
-                    <div>
-                        <label style="font-weight:700;color:var(--text-dark);font-size:0.9rem;display:block;margin-bottom:0.4rem;">👤 Full Name</label>
-                        <input type="text" id="profile-name" placeholder="Enter your full name" style="width:100%;padding:0.7rem 1rem;border:1.5px solid #ddd;border-radius:10px;font-size:1rem;font-family:var(--font-main);outline:none;box-sizing:border-box;transition:border 0.2s;" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'">
-                    </div>
-                    <div>
-                        <label style="font-weight:700;color:var(--text-dark);font-size:0.9rem;display:block;margin-bottom:0.4rem;">📞 Phone Number</label>
-                        <input type="tel" id="profile-phone" placeholder="Enter your phone number" style="width:100%;padding:0.7rem 1rem;border:1.5px solid #ddd;border-radius:10px;font-size:1rem;font-family:var(--font-main);outline:none;box-sizing:border-box;transition:border 0.2s;" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'">
-                    </div>
-                    <div>
-                        <label style="font-weight:700;color:var(--text-dark);font-size:0.9rem;display:block;margin-bottom:0.4rem;">🏙️ City / Town</label>
-                        <input type="text" id="profile-city" placeholder="Enter your city or town" style="width:100%;padding:0.7rem 1rem;border:1.5px solid #ddd;border-radius:10px;font-size:1rem;font-family:var(--font-main);outline:none;box-sizing:border-box;transition:border 0.2s;" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'">
-                    </div>
-                    <div>
-                        <label style="font-weight:700;color:var(--text-dark);font-size:0.9rem;display:block;margin-bottom:0.4rem;">📍 Address</label>
-                        <textarea id="profile-address" rows="3" placeholder="Enter your delivery address" style="width:100%;padding:0.7rem 1rem;border:1.5px solid #ddd;border-radius:10px;font-size:1rem;font-family:var(--font-main);outline:none;box-sizing:border-box;resize:none;transition:border 0.2s;" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'"></textarea>
-                    </div>
-                    <button onclick="saveProfileInfo()" style="width:100%;padding:0.85rem;background:var(--primary-color);color:white;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:var(--font-main);transition:0.2s;" onmouseover="this.style.background='#1a5c2a'" onmouseout="this.style.background='var(--primary-color)'">💾 Save Profile</button>
-                    <div id="profile-save-msg" style="text-align:center;color:#2d8f4e;font-weight:600;display:none;font-size:0.95rem;">✅ Profile saved successfully!</div>
-                </div>
-            </div>
+            <!-- Scrollable Content -->
+            <div style="overflow-y:auto; flex:1; padding:1.5rem;">
 
-            <!-- My Orders Tab -->
-            <div id="profile-tab-myorders" style="display:none; padding:0 0.5rem 1rem;">
-                <p style="color:#666; margin-bottom:1.2rem; font-size:0.95rem;">Track your recent orders placed from this device.</p>
-                <div id="customerOrdersListModal" class="orders-grid" style="display:grid; gap:1.5rem; max-height:55vh; overflow-y:auto; padding-right:5px;">
-                    <!-- Orders will be injected here -->
+                <!-- About Me Tab -->
+                <div id="profile-tab-aboutme">
+                    <!-- Profile Card -->
+                    <div style="background:linear-gradient(135deg, var(--primary-color) 0%, #2d8f4e 100%); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; text-align:center; color:white;">
+                        <div style="width:70px; height:70px; background:rgba(255,255,255,0.25); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; margin:0 auto 0.8rem;">👤</div>
+                        <div id="profile-display-name" style="font-size:1.2rem; font-weight:800; font-family:var(--font-heading);">My Profile</div>
+                        <div id="profile-display-phone" style="font-size:0.88rem; opacity:0.85; margin-top:0.3rem;"></div>
+                    </div>
+
+                    <!-- Fields -->
+                    <div style="display:flex; flex-direction:column; gap:1rem;">
+                        <div>
+                            <label style="font-weight:700; color:#333; font-size:0.88rem; display:block; margin-bottom:0.4rem;">👤 Full Name</label>
+                            <input type="text" id="profile-name" placeholder="Enter your full name"
+                                style="width:100%; padding:0.75rem 1rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem; font-family:var(--font-main); outline:none; box-sizing:border-box;"
+                                onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'">
+                        </div>
+                        <div>
+                            <label style="font-weight:700; color:#333; font-size:0.88rem; display:block; margin-bottom:0.4rem;">📞 Phone Number</label>
+                            <input type="tel" id="profile-phone" placeholder="Enter your phone number"
+                                style="width:100%; padding:0.75rem 1rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem; font-family:var(--font-main); outline:none; box-sizing:border-box;"
+                                onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'">
+                        </div>
+                        <div>
+                            <label style="font-weight:700; color:#333; font-size:0.88rem; display:block; margin-bottom:0.4rem;">🏙️ City / Town</label>
+                            <input type="text" id="profile-city" placeholder="Enter your city or town"
+                                style="width:100%; padding:0.75rem 1rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem; font-family:var(--font-main); outline:none; box-sizing:border-box;"
+                                onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'">
+                        </div>
+                        <div>
+                            <label style="font-weight:700; color:#333; font-size:0.88rem; display:block; margin-bottom:0.4rem;">📍 Address</label>
+                            <textarea id="profile-address" rows="3" placeholder="Enter your delivery address"
+                                style="width:100%; padding:0.75rem 1rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem; font-family:var(--font-main); outline:none; box-sizing:border-box; resize:none;"
+                                onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'"></textarea>
+                        </div>
+                        <button onclick="saveProfileInfo()"
+                            style="width:100%; padding:0.9rem; background:var(--primary-color); color:white; border:none; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; font-family:var(--font-main);"
+                            onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                            💾 Save Profile
+                        </button>
+                        <div id="profile-save-msg" style="text-align:center; color:#2d8f4e; font-weight:600; display:none; font-size:0.95rem; padding:0.5rem; background:#e8f5e9; border-radius:8px;">
+                            ✅ Profile saved successfully!
+                        </div>
+                    </div>
                 </div>
-            </div>
+
+                <!-- My Orders Tab -->
+                <div id="profile-tab-myorders" style="display:none;">
+                    <p style="color:#666; margin-bottom:1.2rem; font-size:0.95rem;">Track your recent orders placed from this device.</p>
+                    <div id="customerOrdersListModal" class="orders-grid" style="display:grid; gap:1.2rem;">
+                        <!-- Orders will be injected here -->
+                    </div>
+                </div>
+
+            </div><!-- end scrollable -->
         </div>
     </div>
 
