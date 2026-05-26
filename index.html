@@ -207,19 +207,55 @@
         </div>
     </div>
 
-    <!-- Customer Dashboard Modal -->
+    <!-- Customer Profile Modal -->
     <div id="customerOrdersModal" class="modal-overlay" onclick="closeCustomerOrdersModal(event)">
-        <div class="modal-box modal-wide">
+        <div class="modal-box modal-wide" style="max-width:700px;">
             <div class="dash-header">
                 <div style="display:flex;align-items:center;gap:0.8rem;">
                     <h2 style="margin:0; font-family:var(--font-heading);">👤 My Profile</h2>
                 </div>
                 <button class="modal-close" onclick="closeCustomerOrdersModal(null, true)">&times;</button>
             </div>
-            
-            <div style="padding: 1rem 0;">
-                <p style="color: #666; margin-bottom: 2rem;">Track your recent orders placed from this device.</p>
-                <div id="customerOrdersListModal" class="orders-grid" style="display: grid; gap: 1.5rem; max-height: 70vh; overflow-y: auto; padding-right: 5px;">
+
+            <!-- Profile Tabs -->
+            <div style="display:flex; gap:0; border-bottom: 2px solid #eee; margin-bottom:1.5rem;">
+                <button id="tab-aboutme" onclick="switchProfileTab('aboutme')" style="flex:1; padding:0.8rem 1rem; border:none; background:none; font-weight:700; font-size:1rem; cursor:pointer; color:var(--primary-color); border-bottom:3px solid var(--primary-color); font-family:var(--font-main); transition:0.2s;">👤 About Me</button>
+                <button id="tab-myorders" onclick="switchProfileTab('myorders')" style="flex:1; padding:0.8rem 1rem; border:none; background:none; font-weight:700; font-size:1rem; cursor:pointer; color:#999; border-bottom:3px solid transparent; font-family:var(--font-main); transition:0.2s;">🛒 My Orders</button>
+            </div>
+
+            <!-- About Me Tab -->
+            <div id="profile-tab-aboutme" style="padding:0 0.5rem 1rem;">
+                <div style="background:linear-gradient(135deg,var(--primary-color),#2d8f4e); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; text-align:center; color:white;">
+                    <div style="width:72px;height:72px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto 0.8rem;">👤</div>
+                    <div id="profile-display-name" style="font-size:1.3rem;font-weight:800;font-family:var(--font-heading);">My Profile</div>
+                    <div id="profile-display-phone" style="font-size:0.9rem;opacity:0.85;margin-top:0.3rem;"></div>
+                </div>
+                <div style="display:grid; gap:1rem;">
+                    <div>
+                        <label style="font-weight:700;color:var(--text-dark);font-size:0.9rem;display:block;margin-bottom:0.4rem;">👤 Full Name</label>
+                        <input type="text" id="profile-name" placeholder="Enter your full name" style="width:100%;padding:0.7rem 1rem;border:1.5px solid #ddd;border-radius:10px;font-size:1rem;font-family:var(--font-main);outline:none;box-sizing:border-box;transition:border 0.2s;" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'">
+                    </div>
+                    <div>
+                        <label style="font-weight:700;color:var(--text-dark);font-size:0.9rem;display:block;margin-bottom:0.4rem;">📞 Phone Number</label>
+                        <input type="tel" id="profile-phone" placeholder="Enter your phone number" style="width:100%;padding:0.7rem 1rem;border:1.5px solid #ddd;border-radius:10px;font-size:1rem;font-family:var(--font-main);outline:none;box-sizing:border-box;transition:border 0.2s;" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'">
+                    </div>
+                    <div>
+                        <label style="font-weight:700;color:var(--text-dark);font-size:0.9rem;display:block;margin-bottom:0.4rem;">🏙️ City / Town</label>
+                        <input type="text" id="profile-city" placeholder="Enter your city or town" style="width:100%;padding:0.7rem 1rem;border:1.5px solid #ddd;border-radius:10px;font-size:1rem;font-family:var(--font-main);outline:none;box-sizing:border-box;transition:border 0.2s;" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'">
+                    </div>
+                    <div>
+                        <label style="font-weight:700;color:var(--text-dark);font-size:0.9rem;display:block;margin-bottom:0.4rem;">📍 Address</label>
+                        <textarea id="profile-address" rows="3" placeholder="Enter your delivery address" style="width:100%;padding:0.7rem 1rem;border:1.5px solid #ddd;border-radius:10px;font-size:1rem;font-family:var(--font-main);outline:none;box-sizing:border-box;resize:none;transition:border 0.2s;" onfocus="this.style.borderColor='var(--primary-color)'" onblur="this.style.borderColor='#ddd'"></textarea>
+                    </div>
+                    <button onclick="saveProfileInfo()" style="width:100%;padding:0.85rem;background:var(--primary-color);color:white;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;font-family:var(--font-main);transition:0.2s;" onmouseover="this.style.background='#1a5c2a'" onmouseout="this.style.background='var(--primary-color)'">💾 Save Profile</button>
+                    <div id="profile-save-msg" style="text-align:center;color:#2d8f4e;font-weight:600;display:none;font-size:0.95rem;">✅ Profile saved successfully!</div>
+                </div>
+            </div>
+
+            <!-- My Orders Tab -->
+            <div id="profile-tab-myorders" style="display:none; padding:0 0.5rem 1rem;">
+                <p style="color:#666; margin-bottom:1.2rem; font-size:0.95rem;">Track your recent orders placed from this device.</p>
+                <div id="customerOrdersListModal" class="orders-grid" style="display:grid; gap:1.5rem; max-height:55vh; overflow-y:auto; padding-right:5px;">
                     <!-- Orders will be injected here -->
                 </div>
             </div>
@@ -990,6 +1026,8 @@
 
     function openCustomerOrdersModal() {
         document.getElementById('customerOrdersModal').classList.add('active');
+        switchProfileTab('aboutme');
+        loadProfileInfo();
         renderCustomerOrders();
     }
 
@@ -998,6 +1036,56 @@
             document.getElementById('customerOrdersModal').classList.remove('active');
         }
     }
+
+    function switchProfileTab(tab) {
+        const aboutTab = document.getElementById('profile-tab-aboutme');
+        const ordersTab = document.getElementById('profile-tab-myorders');
+        const btnAbout = document.getElementById('tab-aboutme');
+        const btnOrders = document.getElementById('tab-myorders');
+
+        if (tab === 'aboutme') {
+            aboutTab.style.display = 'block';
+            ordersTab.style.display = 'none';
+            btnAbout.style.color = 'var(--primary-color)';
+            btnAbout.style.borderBottom = '3px solid var(--primary-color)';
+            btnOrders.style.color = '#999';
+            btnOrders.style.borderBottom = '3px solid transparent';
+        } else {
+            aboutTab.style.display = 'none';
+            ordersTab.style.display = 'block';
+            btnAbout.style.color = '#999';
+            btnAbout.style.borderBottom = '3px solid transparent';
+            btnOrders.style.color = 'var(--primary-color)';
+            btnOrders.style.borderBottom = '3px solid var(--primary-color)';
+        }
+    }
+
+    function loadProfileInfo() {
+        const profile = JSON.parse(localStorage.getItem('ayyappa_profile') || '{}');
+        document.getElementById('profile-name').value = profile.name || '';
+        document.getElementById('profile-phone').value = profile.phone || '';
+        document.getElementById('profile-city').value = profile.city || '';
+        document.getElementById('profile-address').value = profile.address || '';
+        document.getElementById('profile-display-name').textContent = profile.name || 'My Profile';
+        document.getElementById('profile-display-phone').textContent = profile.phone ? '📞 ' + profile.phone : '';
+        document.getElementById('profile-save-msg').style.display = 'none';
+    }
+
+    function saveProfileInfo() {
+        const profile = {
+            name: document.getElementById('profile-name').value.trim(),
+            phone: document.getElementById('profile-phone').value.trim(),
+            city: document.getElementById('profile-city').value.trim(),
+            address: document.getElementById('profile-address').value.trim()
+        };
+        localStorage.setItem('ayyappa_profile', JSON.stringify(profile));
+        document.getElementById('profile-display-name').textContent = profile.name || 'My Profile';
+        document.getElementById('profile-display-phone').textContent = profile.phone ? '📞 ' + profile.phone : '';
+        const msg = document.getElementById('profile-save-msg');
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+    }
+
     // ΓöÇΓöÇ Firebase Configuration ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     const firebaseConfig = {
         apiKey: "AIzaSyCJ4oNdqQGC0RDAJ5h80DCch9c8cqTkNpY",
