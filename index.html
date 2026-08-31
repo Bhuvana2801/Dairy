@@ -86,39 +86,35 @@
 
             <!-- DASHBOARD GRID -->
             <div class="dash-body">
-            <div id="dashGrid" class="dash-grid">
-                <div class="dash-card" onclick="openSection('daily')">
-                    &#128203; Daily Report
-                    <small>View &amp; manage daily entries</small>
-                </div>
-                <div class="dash-card" onclick="openSection('expenses')">
-                    &#128181; Monthly Expenses
-                    <small>View &amp; manage expenses</small>
-                </div>
-                <div class="dash-card" onclick="openSection('production')">
-                    &#128004; Production
-                    <small>View &amp; manage production</small>
-                </div>
-                <div class="dash-card" onclick="openSection('order-receipts')" style="border-top: 3px solid var(--accent-color);">
-                    &#128147; Order Receipts
-                    <small>Verify bills & confirm orders</small>
-                </div>
-                <div class="dash-card" onclick="openSection('salaries')">
-                    &#128176; Salaries
-                    <small>View &amp; manage salaries</small>
-                </div>
-                <div class="dash-card" onclick="openSection('coupons')" style="border-top: 3px solid #ff4757;">
-                    &#127915; Active Coupons Offers
-                    <small>Manage discount codes</small>
-                </div>
-                <div class="dash-card" onclick="openSection('monthly-report')" style="border-top: 3px solid var(--accent-color);">
-                    &#128200; Monthly Report
-                    <small>View monthly summary &amp; analysis</small>
+            <div id="dashGrid" class="dash-grid dash-grid-3">
+                <!-- Orders Card -->
+                <div class="dash-card dash-card-premium" onclick="openSection('order-receipts')" style="animation-delay: 0.05s;">
+                    <div class="dash-card-icon dash-card-icon--orders">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    </div>
+                    <div class="dash-card-title">Orders</div>
+                    <div class="dash-card-desc">View, verify & manage all customer orders</div>
+                    <div class="dash-card-arrow">→</div>
                 </div>
 
-                <div class="dash-card" onclick="openSection('coupons-applied')" style="border-top: 3px solid #ffba08;">
-                    &#128203; Coupons Applied
-                    <small>Track used coupon codes</small>
+                <!-- Coupons Card -->
+                <div class="dash-card dash-card-premium" onclick="openSection('coupons')" style="animation-delay: 0.15s;">
+                    <div class="dash-card-icon dash-card-icon--coupons">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                    </div>
+                    <div class="dash-card-title">Coupons</div>
+                    <div class="dash-card-desc">Create & manage discount codes & offers</div>
+                    <div class="dash-card-arrow">→</div>
+                </div>
+
+                <!-- Monthly Expenses Card -->
+                <div class="dash-card dash-card-premium" onclick="openSection('expenses')" style="animation-delay: 0.25s;">
+                    <div class="dash-card-icon dash-card-icon--expenses">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <div class="dash-card-title">Monthly Expenses</div>
+                    <div class="dash-card-desc">Track & manage all monthly expenses</div>
+                    <div class="dash-card-arrow">→</div>
                 </div>
             </div>
 
@@ -136,12 +132,12 @@
                         <thead style="background: var(--primary-color); color: white;">
                             <tr>
                                 <th style="padding: 12px; text-align: left;">Order ID</th>
-                                <th style="padding: 12px; text-align: left;">Date</th>
-                                <th style="padding: 12px; text-align: left;">Customer</th>
+                                <th style="padding: 12px; text-align: left;">Customer & Slot</th>
+                                <th style="padding: 12px; text-align: left;">Plan & Qty</th>
                                 <th style="padding: 12px; text-align: left;">Amount</th>
-                                <th style="padding: 12px; text-align: left;">Plan</th>
-                                <th style="padding: 12px; text-align: left;">Payment</th>
-                                <th style="padding: 12px; text-align: left;">Status</th>
+                                <th style="padding: 12px; text-align: left;">Order Status</th>
+                                <th style="padding: 12px; text-align: left;">Payment Status</th>
+                                <th style="padding: 12px; text-align: left;">Sub Status</th>
                                 <th style="padding: 12px; text-align: left;">Action</th>
                             </tr>
                         </thead>
@@ -223,11 +219,14 @@
 
             <!-- Sticky Tabs -->
             <div class="profile-tabs premium-tabs" style="display:flex; background:white; border-bottom:2px solid #eee; flex-shrink:0;">
-                <div class="profile-tab active premium-tab" id="tab-aboutme" onclick="switchProfileTab('aboutme')" style="flex:1; padding:1rem; cursor:pointer; font-weight:700;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-purple"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> About Me
+                <div class="profile-tab active premium-tab" id="tab-aboutme" onclick="switchProfileTab('aboutme')" style="flex:1; padding:0.8rem; cursor:pointer; font-weight:700; font-size:0.9rem; text-align:center;">
+                    👤 About Me
                 </div>
-                <div class="profile-tab premium-tab" id="tab-myorders" onclick="switchProfileTab('myorders')" style="flex:1; padding:1rem; cursor:pointer; font-weight:700;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-gray"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg> My Orders
+                <div class="profile-tab premium-tab" id="tab-mysubscription" onclick="switchProfileTab('mysubscription')" style="flex:1; padding:0.8rem; cursor:pointer; font-weight:700; font-size:0.9rem; text-align:center;">
+                    🥛 Subscription & Wallet
+                </div>
+                <div class="profile-tab premium-tab" id="tab-myorders" onclick="switchProfileTab('myorders')" style="flex:1; padding:0.8rem; cursor:pointer; font-weight:700; font-size:0.9rem; text-align:center;">
+                    📦 My Orders
                 </div>
             </div>
 
@@ -277,6 +276,55 @@
                         </button>
                         <div id="profile-save-msg" style="text-align:center; color:#2d8f4e; font-weight:600; display:none; font-size:0.95rem; padding:0.5rem; background:#e8f5e9; border-radius:8px;">
                             ✅ Profile saved successfully!
+                        </div>
+                    </div>
+                </div>
+
+                <!-- My Subscription & Wallet Tab -->
+                <div id="profile-tab-mysubscription" style="display:none;">
+                    <!-- Reward Wallet Widget -->
+                    <div class="wallet-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 0.85rem; opacity: 0.9; text-transform: uppercase;">Ayyappa Reward Wallet</div>
+                                <div id="userWalletBalanceDisplay" style="font-size: 1.8rem; font-weight: 800; color: #FFD700; margin-top: 0.2rem;">₹0 Credit</div>
+                            </div>
+                            <div style="font-size: 2rem;">💳</div>
+                        </div>
+                        <div class="referral-code-box">
+                            <div>
+                                <div style="font-size: 0.75rem; opacity: 0.8;">Your Shareable Referral Code</div>
+                                <div id="userReferralCodeDisplay" style="font-size: 1.1rem; font-weight: 800; color: #FFF; letter-spacing: 1px;">AYYAPPA-BHU123</div>
+                            </div>
+                            <button onclick="copyUserReferralCode()" style="background: var(--accent-color); color: #000; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; cursor: pointer;">Copy & Share</button>
+                        </div>
+                    </div>
+
+                    <!-- Active Subscription Card -->
+                    <div id="activeSubCardContainer">
+                        <!-- Dynamically populated via JS -->
+                    </div>
+
+                    <!-- Today's Order Card -->
+                    <div id="todayOrderCardContainer" style="margin-top: 1rem;">
+                        <!-- Dynamically populated via JS -->
+                    </div>
+
+                    <!-- Loyalty Perk Card -->
+                    <div style="margin-top: 1rem; background: #fdf8e6; border: 1px solid #ffe082; border-radius: 16px; padding: 1.2rem;">
+                        <h4 style="color: #b78103; margin: 0 0 0.5rem 0; font-size: 1rem; display: flex; align-items: center; gap: 0.4rem;">
+                            ⭐ Loyalty Rewards & VIP Status
+                        </h4>
+                        <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.6rem;" id="loyaltyStreakDesc">
+                            Subscribe for 3 consecutive months to get ₹150 OFF your renewal! Reach 6 months to unlock ⭐ AYYAPPA VIP status.
+                        </p>
+                        <div style="background: #fff; height: 10px; border-radius: 5px; overflow: hidden; border: 1px solid #ffe082;">
+                            <div id="loyaltyProgressBar" style="width: 33%; height: 100%; background: linear-gradient(90deg, #FFD700, #b78103);"></div>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #888; margin-top: 0.4rem;">
+                            <span>Month 1</span>
+                            <span>Month 3 (₹150 OFF)</span>
+                            <span>Month 6 (VIP ⭐)</span>
                         </div>
                     </div>
                 </div>
@@ -413,172 +461,324 @@
                                         <div id="currentIDDisplay" style="font-size: 1.2rem; font-weight: 800; color: var(--primary-color);">Not Generated Yet</div>
                                     </div>
                                 </div>
-                                <div class="booking-row">
-                                    <div class="booking-field">
-                                        <label for="bookName">Full Name *</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">👤</span>
-                                            <input type="text" id="bookName" placeholder="Enter your full name" required>
+
+                                <!-- Personal Details Section -->
+                                <div style="margin-bottom: 1.5rem;">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.1rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
+                                        👤 Personal Details
+                                    </h4>
+                                    <div class="booking-row">
+                                        <div class="booking-field">
+                                            <label for="bookName">Full Name *</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">👤</span>
+                                                <input type="text" id="bookName" placeholder="Enter your full name" required>
+                                            </div>
+                                        </div>
+                                        <div class="booking-field">
+                                            <label for="bookPhone">Mobile Number *</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">📞</span>
+                                                <input type="tel" id="bookPhone" placeholder="Enter 10-digit mobile number" required>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="booking-field">
-                                        <label for="bookPhone">Phone Number *</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">📞</span>
-                                            <input type="tel" id="bookPhone" placeholder="Enter your phone number" required>
+                                    <div class="booking-row">
+                                        <div class="booking-field" style="width: 100%;">
+                                            <label for="bookEmail">Email Address (Optional)</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">📧</span>
+                                                <input type="email" id="bookEmail" placeholder="Enter email for receipts (optional)">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="booking-row">
-                                    <div class="booking-field">
-                                        <label for="bookProduct">Select Product *</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">🥛</span>
-                                            <select id="bookProduct" required>
-                                                <option value="">-- Choose a product --</option>
-                                                <option value="Buffalo Milk">🐃 Buffalo Milk</option>
-                                                <option value="Fresh Curd">🍶 Fresh Curd</option>
-                                                <option value="Pure Desi Ghee">🧈 Pure Desi Ghee</option>
-                                            </select>
+                                <!-- Delivery Address Section -->
+                                <div style="margin-bottom: 1.5rem;">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.1rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
+                                        📍 Delivery Address (Home Delivery)
+                                    </h4>
+                                    <div class="booking-row">
+                                        <div class="booking-field">
+                                            <label for="bookHouse">House / Flat / Door No. *</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">🏠</span>
+                                                <input type="text" id="bookHouse" placeholder="e.g. Flat 302, Door No 4-12" required>
+                                            </div>
+                                        </div>
+                                        <div class="booking-field">
+                                            <label for="bookStreet">Street / Area *</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">🛣️</span>
+                                                <input type="text" id="bookStreet" placeholder="e.g. Main Street, SBI Colony" required>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="booking-field">
-                                        <label for="bookQty">Quantity *</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">⚖️</span>
-                                            <select id="bookQty" required>
-                                                <option value="">-- Select Quantity --</option>
-                                                <option value="1 Litre">1 Litre</option>
-                                                <option value="2 Litres">2 Litres</option>
-                                                <option value="3 Litres">3 Litres</option>
-                                                <option value="4 Litres">4 Litres</option>
-                                                <option value="5 Litres">5 Litres</option>
-                                                <option value="6 Litres">6 Litres</option>
-                                                <option value="7 Litres">7 Litres</option>
-                                                <option value="8 Litres">8 Litres</option>
-                                                <option value="9 Litres">9 Litres</option>
-                                                <option value="10 Litres">10 Litres</option>
-                                                <option value="11 Litres">11 Litres</option>
-                                                <option value="12 Litres">12 Litres</option>
-                                                <option value="13 Litres">13 Litres</option>
-                                                <option value="14 Litres">14 Litres</option>
-                                                <option value="15 Litres">15 Litres</option>
-                                                <option value="16 Litres">16 Litres</option>
-                                                <option value="17 Litres">17 Litres</option>
-                                                <option value="18 Litres">18 Litres</option>
-                                                <option value="19 Litres">19 Litres</option>
-                                                <option value="20 Litres">20 Litres</option>
-                                            </select>
+                                    <div class="booking-row">
+                                        <div class="booking-field">
+                                            <label for="bookState">State *</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">🗺️</span>
+                                                <select id="bookState" required onchange="updateCities()">
+                                                    <option value="">-- Select State --</option>
+                                                    <option value="Andhra Pradesh" selected>Andhra Pradesh</option>
+                                                    <option value="Telangana">Telangana</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="booking-field">
+                                            <label for="bookCity">City / District / Mandal *</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">🏙️</span>
+                                                <select id="bookCity" required>
+                                                    <option value="Vinukonda">Vinukonda (Palnadu Dist)</option>
+                                                    <option value="Velamavaripalem">Velamavaripalem</option>
+                                                    <option value="Guntur">Guntur</option>
+                                                    <option value="Vijayawada">Vijayawada</option>
+                                                    <option value="Narsaraopet">Narsaraopet</option>
+                                                    <option value="Chilakaluripet">Chilakaluripet</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="booking-row">
-                                    <div class="booking-field">
-                                        <label for="bookAmount">Total Amount (₹) *</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">₹</span>
-                                            <input type="text" id="bookAmount" placeholder="Automatically calculated" readonly style="background: #f8f8f8; font-weight: bold; color: var(--primary-color);">
+                                    <div class="booking-row">
+                                        <div class="booking-field">
+                                            <label for="bookPin">PIN Code *</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">📮</span>
+                                                <input type="text" id="bookPin" placeholder="e.g. 522647" required pattern="[0-9]{6}">
+                                            </div>
+                                        </div>
+                                        <div class="booking-field">
+                                            <label for="bookLandmark">Landmark (Optional)</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">🚩</span>
+                                                <input type="text" id="bookLandmark" placeholder="e.g. Near Water Tank">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="booking-row">
-                                    <div class="booking-field">
-                                        <label>Rate Our Service *</label>
-                                        <div class="star-rating">
-                                            <input type="radio" name="rating" id="star5" value="5" required><label for="star5">★</label>
-                                            <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
-                                            <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
-                                            <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
-                                            <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="booking-row">
-                                    <div class="booking-field">
-                                        <label for="bookDate">Delivery Date *</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">📅</span>
-                                            <select id="bookDate" required disabled>
-                                                <!-- Populated via JS -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="booking-field">
-                                        <label for="bookTime">Delivery Time *</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">⏰</span>
-                                            <select id="bookTime" required>
-                                                <option value="Morning (7 AM - 10 AM)">Morning (7 AM - 10 AM)</option>
-                                            </select>
+                                    <div class="booking-field" style="margin-top: 0.5rem;">
+                                        <label for="bookAddress">Full Address Summary *</label>
+                                        <div class="input-container textarea-container">
+                                            <span class="field-icon">📍</span>
+                                            <textarea id="bookAddress" rows="2" placeholder="Full address string" required></textarea>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="booking-row">
-                                    <div class="booking-field">
-                                        <label for="bookState">State *</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">🗺️</span>
-                                            <select id="bookState" required onchange="updateCities()">
-                                                <option value="">-- Select State --</option>
-                                                <option value="Telangana">Telangana</option>
-                                                <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                            </select>
+                                <!-- Milk & Order Details -->
+                                <div style="margin-bottom: 1.5rem;">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.1rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
+                                        🥛 Product & Quantity Details
+                                    </h4>
+                                    <div class="booking-row">
+                                        <div class="booking-field">
+                                            <label for="bookProduct">Product *</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">🥛</span>
+                                                <select id="bookProduct" required onchange="calculateAmount()">
+                                                    <option value="Buffalo Milk">🐃 Pure Buffalo Milk (₹100/L)</option>
+                                                    <option value="Fresh Curd">🍶 Fresh Curd (₹50/Kg)</option>
+                                                    <option value="Pure Desi Ghee">🧈 Pure Desi Ghee (₹600/Kg)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="booking-field">
+                                            <label for="bookQty">Quantity *</label>
+                                            <div class="input-container">
+                                                <span class="field-icon">⚖️</span>
+                                                <select id="bookQty" required onchange="calculateAmount()">
+                                                    <option value="500 ml">500 ml — ₹50</option>
+                                                    <option value="1 Litre" selected>1 Litre — ₹100</option>
+                                                    <option value="2 Litres">2 Litres — ₹200</option>
+                                                    <option value="3 Litres">3 Litres — ₹300</option>
+                                                    <option value="4 Litres">4 Litres — ₹400</option>
+                                                    <option value="5 Litres">5 Litres — ₹500</option>
+                                                    <option value="10 Litres">10 Litres — ₹1000</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="booking-field">
-                                        <label for="bookCity">City / Town *</label>
-                                        <div class="input-container">
-                                            <span class="field-icon">🏙️</span>
-                                            <select id="bookCity" required disabled>
-                                                <option value="">-- Select City --</option>
-                                            </select>
+                                </div>
+
+                                <!-- Subscription & Plan Structure -->
+                                <div style="margin-bottom: 1.5rem;">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.1rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
+                                        📋 Select Subscription Model *
+                                    </h4>
+                                    
+                                    <div class="plan-type-grid">
+                                        <label class="plan-option-wrapper">
+                                            <input type="radio" name="planType" value="Daily" checked onchange="togglePlanOptions()">
+                                            <div class="plan-option">
+                                                <div class="plan-icon">🟢</div>
+                                                <div class="plan-label">Daily Subscription</div>
+                                                <div class="plan-desc">Pay per order daily. Duration discounts up to ₹150 OFF!</div>
+                                            </div>
+                                        </label>
+                                        <label class="plan-option-wrapper">
+                                            <input type="radio" name="planType" value="Monthly" onchange="togglePlanOptions()">
+                                            <div class="plan-option">
+                                                <div class="plan-icon">🔵</div>
+                                                <div class="plan-label">Monthly Subscription</div>
+                                                <div class="plan-desc">Pay once in advance for 30 days. Auto daily deliveries!</div>
+                                            </div>
+                                        </label>
+                                    </div>
+
+                                    <!-- Daily Sub Duration Options -->
+                                    <div id="dailyPlanSection" style="margin-top: 1rem; background: #f8fdf8; padding: 1rem; border-radius: 12px; border: 1px solid #d2e8d4;">
+                                        <label style="font-weight: 700; color: var(--primary-color); font-size: 0.9rem;">Daily Subscription Duration & Discount:</label>
+                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.5rem;">
+                                            <label style="border: 1px solid #c2e2c4; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.82rem; cursor: pointer; text-align: center;">
+                                                <input type="radio" name="dailyDuration" value="7 Days" onchange="calculateAmount()">
+                                                <strong>7 Days</strong><br><span style="color:#2e7d32; font-weight:700;">₹50 OFF</span>
+                                            </label>
+                                            <label style="border: 1px solid #c2e2c4; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.82rem; cursor: pointer; text-align: center;">
+                                                <input type="radio" name="dailyDuration" value="15 Days" onchange="calculateAmount()">
+                                                <strong>15 Days</strong><br><span style="color:#2e7d32; font-weight:700;">₹100 OFF</span>
+                                            </label>
+                                            <label style="border: 1px solid #c2e2c4; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.82rem; cursor: pointer; text-align: center;">
+                                                <input type="radio" name="dailyDuration" value="30 Days" checked onchange="calculateAmount()">
+                                                <strong>30 Days</strong><br><span style="color:#2e7d32; font-weight:700;">₹150 OFF</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <!-- Monthly Sub Plans Info -->
+                                    <div id="monthlyPlanSection" style="display: none; margin-top: 1rem; background: #eef6fc; padding: 1rem; border-radius: 12px; border: 1px solid #b3d7f5;">
+                                        <label style="font-weight: 700; color: #1565c0; font-size: 0.9rem;">Select Monthly Prepaid Plan (30 Days):</label>
+                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.5rem;">
+                                            <label style="border: 1px solid #90caf9; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: center;">
+                                                <input type="radio" name="monthlyPlan" value="Basic" checked onchange="calculateAmount()">
+                                                <strong>Basic (1L/day)</strong><br><span style="color:#1565c0; font-weight:800;">₹2,850</span>
+                                                <div style="font-size:0.7rem; color:#888; text-decoration:line-through;">₹3,000</div>
+                                            </label>
+                                            <label style="border: 1px solid #90caf9; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: center;">
+                                                <input type="radio" name="monthlyPlan" value="Family" onchange="calculateAmount()">
+                                                <strong>Family (2L/day)</strong><br><span style="color:#1565c0; font-weight:800;">₹5,700</span>
+                                                <div style="font-size:0.7rem; color:#888; text-decoration:line-through;">₹6,000</div>
+                                            </label>
+                                            <label style="border: 1px solid #90caf9; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: center;">
+                                                <input type="radio" name="monthlyPlan" value="Premium" onchange="calculateAmount()">
+                                                <strong>Premium (3L/day)</strong><br><span style="color:#1565c0; font-weight:800;">₹8,550</span>
+                                                <div style="font-size:0.7rem; color:#888; text-decoration:line-through;">₹9,000</div>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="booking-field">
-                                    <label for="bookAddress">Delivery Address *</label>
-                                    <div class="input-container textarea-container">
-                                        <span class="field-icon">📍</span>
-                                        <textarea id="bookAddress" rows="3" placeholder="Enter your full delivery address" required></textarea>
+                                <!-- New Customer Welcome Offers -->
+                                <div class="welcome-offer-container">
+                                    <div class="welcome-offer-title">
+                                        🎁 New Customer Welcome Offer (Choose 1)
+                                    </div>
+                                    <div class="welcome-grid">
+                                        <label class="welcome-card">
+                                            <input type="radio" name="welcomeOffer" value="A" class="welcome-card-input" onchange="calculateAmount()">
+                                            <div class="welcome-card-body">
+                                                <span class="welcome-badge">OPTION A</span>
+                                                <div class="welcome-text">First Order — ₹20 OFF</div>
+                                                <div class="welcome-sub">Get Milk at ₹80/L for your first order!</div>
+                                            </div>
+                                        </label>
+                                        <label class="welcome-card">
+                                            <input type="radio" name="welcomeOffer" value="B" class="welcome-card-input" checked onchange="calculateAmount()">
+                                            <div class="welcome-card-body">
+                                                <span class="welcome-badge">OPTION B</span>
+                                                <div class="welcome-text">First Monthly Sub — ₹100 OFF</div>
+                                                <div class="welcome-sub">1L/day = ₹2,750 full month!</div>
+                                            </div>
+                                        </label>
                                     </div>
                                 </div>
 
-                                <div class="booking-field" style="margin-top: 1.5rem;">
-                                     <label>Plan Type *</label>
-                                     <div class="plan-type-grid">
-                                         <label class="plan-option-wrapper">
-                                             <input type="radio" name="planType" value="Daily" required>
-                                             <div class="plan-option">
-                                                 <div class="plan-icon">🥛</div>
-                                                 <div class="plan-label">Daily Pay</div>
-                                                 <div class="plan-desc">Fresh order daily</div>
-                                             </div>
-                                         </label>
-                                         <label class="plan-option-wrapper">
-                                             <input type="radio" name="planType" value="Monthly" required>
-                                             <div class="plan-option">
-                                                 <div class="plan-icon">📅</div>
-                                                 <div class="plan-label">Monthly Pay</div>
-                                                 <div class="plan-desc">1 Month Subscription</div>
-                                             </div>
-                                         </label>
-                                     </div>
+                                <!-- Referral Code & Reward Credit Section -->
+                                <div style="margin-top: 1.2rem; background: #fff8e1; border: 1px solid #ffe082; padding: 1rem; border-radius: 14px;">
+                                    <div style="font-weight: 700; color: #e65100; font-size: 0.95rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
+                                        🤝 Refer & Earn (Have a Code?)
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem;">
+                                        <input type="text" id="bookReferral" placeholder="e.g. AYYAPPA-BHU123" style="flex: 1; padding: 0.6rem 0.8rem; border: 1px solid #ffd54f; border-radius: 8px; font-weight: 700; text-transform: uppercase;" oninput="calculateAmount()">
+                                        <button type="button" onclick="verifyReferralCode()" style="background: #e65100; color: white; border: none; padding: 0 1rem; border-radius: 8px; font-weight: 700; cursor: pointer;">Apply</button>
+                                    </div>
+                                    <div id="referralStatusMsg" style="font-size: 0.8rem; margin-top: 0.4rem; font-weight: 600;"></div>
                                 </div>
 
-                                <div style="margin-top: 1rem;">
-                                    <p style="color: #ffcc00; font-weight: 700; font-size: 0.9rem; text-align: center; margin-bottom: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;">Give the rating to place the order</p>
-                                    <button type="submit" class="booking-submit-btn">
+                                <!-- Optional Delivery Slot Selection -->
+                                <div style="margin-top: 1.5rem;">
+                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                        🚚 Delivery Slot (Optional)
+                                    </h4>
+                                    <p style="font-size: 0.82rem; color: #666; margin-bottom: 0.6rem;">You can pick a slot or leave as 'No Preference' (To Be Assigned).</p>
+                                    <div class="slot-grid">
+                                        <label class="slot-pill">
+                                            <input type="radio" name="deliverySlot" value="Morning (7:00 AM – 9:00 AM)" class="slot-pill-input" onchange="calculateAmount()">
+                                            <div class="slot-title">🌅 Morning</div>
+                                            <div class="slot-time">7:00 – 9:00 AM</div>
+                                        </label>
+                                        <label class="slot-pill">
+                                            <input type="radio" name="deliverySlot" value="Evening (7:00 PM – 9:00 PM)" class="slot-pill-input" onchange="calculateAmount()">
+                                            <div class="slot-title">🌙 Evening</div>
+                                            <div class="slot-time">7:00 – 9:00 PM</div>
+                                        </label>
+                                        <label class="slot-pill">
+                                            <input type="radio" name="deliverySlot" value="No Preference" class="slot-pill-input" checked onchange="calculateAmount()">
+                                            <div class="slot-title">⚪ No Preference</div>
+                                            <div class="slot-time">To Be Assigned</div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <!-- Service Rating -->
+                                <div style="margin-top: 1.5rem;">
+                                    <label style="font-weight: 700; color: var(--primary-color); font-size: 0.95rem;">Rate Our Service *</label>
+                                    <div class="star-rating" style="margin-top: 0.3rem;">
+                                        <input type="radio" name="rating" id="star5" value="5" checked required><label for="star5">★</label>
+                                        <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+                                        <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+                                        <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+                                        <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+                                    </div>
+                                </div>
+
+                                <!-- Real-Time Itemized Checkout Breakdown Summary Card -->
+                                <div class="checkout-summary-box">
+                                    <div class="checkout-header">
+                                        <h4>🥛 AYYAPPA DAIRY FARM</h4>
+                                        <span id="summaryPlanBadge" style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800;">MONTHLY BASIC</span>
+                                    </div>
+                                    <div class="checkout-row">
+                                        <span>Milk / Product Base Value:</span>
+                                        <span id="sumMilkValue">₹3,000</span>
+                                    </div>
+                                    <div class="checkout-row discount" id="sumPlanDiscountRow">
+                                        <span>Monthly / Plan Discount:</span>
+                                        <span id="sumPlanDiscount">−₹150</span>
+                                    </div>
+                                    <div class="checkout-row discount" id="sumWelcomeDiscountRow">
+                                        <span>New Customer Discount:</span>
+                                        <span id="sumWelcomeDiscount">−₹100</span>
+                                    </div>
+                                    <div class="checkout-row">
+                                        <span>Home Delivery:</span>
+                                        <span style="color: #A8D5A2; font-weight: 800;">FREE</span>
+                                    </div>
+                                    <div class="checkout-row total">
+                                        <span>TOTAL FINAL AMOUNT:</span>
+                                        <span id="sumTotalAmount" style="color: #FFD700;">₹2,750</span>
+                                    </div>
+                                    <input type="hidden" id="bookAmount" value="2750">
+                                    <div class="advance-pay-badge" id="advanceBadgeText">💳 100% ADVANCE PAYMENT</div>
+                                </div>
+
+                                <div style="margin-top: 1.5rem;">
+                                    <button type="submit" class="booking-submit-btn" id="paySubmitBtn">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                        Place Order
+                                        PAY ₹2,750 & SUBSCRIBE
                                     </button>
                                 </div>
-                                
                             </form>
                         </div>
 
@@ -908,6 +1108,7 @@
                     <p style="font-size: 0.7rem; color: #999; margin-bottom: 1.5rem;">Please keep this for your records.</p>
                     <div id="receiptButtonContainer" class="no-print" style="display: flex; gap: 0.8rem;">
                         <button onclick="downloadBill()" class="btn" style="flex: 1; padding: 0.8rem; background: #333; color: white; font-size: 0.85rem; border-radius: 4px; font-weight: 700; text-transform: uppercase;">Download</button>
+                        <button onclick="printReceipt()" class="btn" style="flex: 1; padding: 0.8rem; background: var(--primary-color, #1A5C2A); color: white; font-size: 0.85rem; border-radius: 4px; font-weight: 700; text-transform: uppercase;">🖨️ Print</button>
                         <button onclick="closeReceiptModal()" class="btn" style="flex: 1; padding: 0.8rem; background: #eee; color: #333; border-radius: 4px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">Close</button>
                     </div>
                 </div>
@@ -1068,26 +1269,159 @@
         }
     }
 
+    function copyUserReferralCode() {
+        const codeElement = document.getElementById('userReferralCodeDisplay');
+        if (!codeElement) return;
+        const code = codeElement.innerText.trim();
+        navigator.clipboard.writeText(code).then(() => {
+            alert(`Referral code '${code}' copied! Share with friends to earn ₹100 reward credit when they subscribe!`);
+        }).catch(err => {
+            alert(`Referral Code: ${code}`);
+        });
+    }
+
+    function renewSubscription() {
+        closeCustomerOrdersModal(null, true);
+        const bookingSection = document.getElementById('booking');
+        if (bookingSection) {
+            bookingSection.scrollIntoView({ behavior: 'smooth' });
+        }
+        const monthlyRadio = document.querySelector('input[name="planType"][value="Monthly"]');
+        if (monthlyRadio) {
+            monthlyRadio.checked = true;
+            togglePlanOptions();
+        }
+    }
+
+    function renderSubscriptionDashboard() {
+        let profile = JSON.parse(localStorage.getItem('ayyappa_profile') || '{}');
+        const orders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
+
+        // Generate referral code if missing
+        if (!profile.referralCode) {
+            const phone = profile.phone || '9999';
+            profile.referralCode = 'AYYAPPA-' + phone.slice(-4) + Math.floor(100 + Math.random() * 900);
+            localStorage.setItem('ayyappa_profile', JSON.stringify(profile));
+        }
+
+        const walletDisplay = document.getElementById('userWalletBalanceDisplay');
+        const refDisplay = document.getElementById('userReferralCodeDisplay');
+        if (walletDisplay) walletDisplay.innerText = `₹${profile.walletBalance || 0} Credit`;
+        if (refDisplay) refDisplay.innerText = profile.referralCode;
+
+        // Render Active Subscription Card
+        const activeSubContainer = document.getElementById('activeSubCardContainer');
+        const latestSub = orders.slice().reverse().find(o => o.type === 'Monthly' || o.subscriptionStatus);
+        
+        if (activeSubContainer) {
+            if (latestSub) {
+                const subStatus = latestSub.subscriptionStatus || 'ACTIVE';
+                const isExpired = subStatus === 'EXPIRED';
+                const badgeColor = isExpired ? '#d32f2f' : '#2e7d32';
+                const statusIcon = isExpired ? '🟠' : '🟢';
+
+                activeSubContainer.innerHTML = `
+                    <div class="active-sub-card">
+                        <div class="active-sub-header">
+                            <div>
+                                <span style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: #888;">Active Plan</span>
+                                <h4 style="margin: 0.2rem 0; font-size: 1.1rem; color: var(--text-color);">${latestSub.type} Subscription (${latestSub.product})</h4>
+                            </div>
+                            <span class="status-badge" style="background: ${badgeColor}; color: white;">${statusIcon} ${subStatus}</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0; font-size: 0.85rem;">
+                            <div>
+                                <span style="color: #666;">Quantity:</span>
+                                <div><strong>${latestSub.qty} / day</strong></div>
+                            </div>
+                            <div>
+                                <span style="color: #666;">Delivery Slot:</span>
+                                <div><strong>${latestSub.deliverySlot || '⚪ Morning (7-9 AM)'}</strong></div>
+                            </div>
+                            <div>
+                                <span style="color: #666;">Payment Status:</span>
+                                <div style="color: #2e7d32; font-weight: 700;">💳 ${latestSub.paymentStatus || 'PAYMENT COMPLETED'}</div>
+                            </div>
+                            <div>
+                                <span style="color: #666;">Delivery Mode:</span>
+                                <div style="color: #1976d2; font-weight: 700;">🚚 FREE HOME DELIVERY</div>
+                            </div>
+                        </div>
+                        ${isExpired ? `
+                        <div class="renewal-banner">
+                            <div>
+                                <strong>⚠️ Plan Expired or Ending Soon!</strong>
+                                <div style="font-size: 0.8rem;">Renew now to get ₹150 duration discount + loyalty perks!</div>
+                            </div>
+                            <button class="renew-btn" onclick="renewSubscription()">RENEW SUBSCRIPTION</button>
+                        </div>
+                        ` : `
+                        <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                            <button onclick="renewSubscription()" class="renew-btn" style="background: var(--primary-color);">RENEW / UPGRADE PLAN</button>
+                        </div>
+                        `}
+                    </div>
+                `;
+            } else {
+                activeSubContainer.innerHTML = `
+                    <div class="active-sub-card" style="text-align: center; padding: 1.5rem;">
+                        <p style="color: #666; margin-bottom: 0.8rem;">No active subscription found on this device.</p>
+                        <button onclick="renewSubscription()" class="renew-btn" style="display: inline-block;">🥛 SUBSCRIBE NOW (SAVE UP TO ₹150)</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Render Today's Delivery Card
+        const todayContainer = document.getElementById('todayOrderCardContainer');
+        if (todayContainer) {
+            const todayStr = new Date().toLocaleDateString('en-IN');
+            todayContainer.innerHTML = `
+                <div style="background: #f0f7ff; border: 1px solid #bbdefb; border-radius: 14px; padding: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="font-size: 0.75rem; color: #1976d2; font-weight: 700; text-transform: uppercase;">TODAY'S DELIVERY STATUS</span>
+                            <div style="font-size: 1rem; font-weight: 800; color: #0d47a1; margin-top: 0.2rem;">🥛 ${latestSub ? latestSub.qty : '1 Litre Pure Fresh Milk'}</div>
+                        </div>
+                        <span class="status-badge status-scheduled">🚚 SCHEDULED</span>
+                    </div>
+                    <div style="font-size: 0.8rem; color: #555; margin-top: 0.6rem; display: flex; align-items: center; justify-content: space-between;">
+                        <span>📅 Delivery Date: <strong>${todayStr}</strong></span>
+                        <span>💳 Status: <strong style="color:#2e7d32;">COVERED BY SUB</strong></span>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
     function switchProfileTab(tab) {
         const aboutTab = document.getElementById('profile-tab-aboutme');
+        const subTab = document.getElementById('profile-tab-mysubscription');
         const ordersTab = document.getElementById('profile-tab-myorders');
+        
         const btnAbout = document.getElementById('tab-aboutme');
+        const btnSub = document.getElementById('tab-mysubscription');
         const btnOrders = document.getElementById('tab-myorders');
 
+        if (aboutTab) aboutTab.style.display = 'none';
+        if (subTab) subTab.style.display = 'none';
+        if (ordersTab) ordersTab.style.display = 'none';
+
+        if (btnAbout) { btnAbout.style.color = '#999'; btnAbout.style.borderBottom = '3px solid transparent'; }
+        if (btnSub) { btnSub.style.color = '#999'; btnSub.style.borderBottom = '3px solid transparent'; }
+        if (btnOrders) { btnOrders.style.color = '#999'; btnOrders.style.borderBottom = '3px solid transparent'; }
+
         if (tab === 'aboutme') {
-            aboutTab.style.display = 'block';
-            ordersTab.style.display = 'none';
-            btnAbout.style.color = 'var(--primary-color)';
-            btnAbout.style.borderBottom = '3px solid var(--primary-color)';
-            btnOrders.style.color = '#999';
-            btnOrders.style.borderBottom = '3px solid transparent';
+            if (aboutTab) aboutTab.style.display = 'block';
+            if (btnAbout) { btnAbout.style.color = 'var(--primary-color)'; btnAbout.style.borderBottom = '3px solid var(--primary-color)'; }
+        } else if (tab === 'mysubscription') {
+            if (subTab) subTab.style.display = 'block';
+            if (btnSub) { btnSub.style.color = 'var(--primary-color)'; btnSub.style.borderBottom = '3px solid var(--primary-color)'; }
+            renderSubscriptionDashboard();
         } else {
-            aboutTab.style.display = 'none';
-            ordersTab.style.display = 'block';
-            btnAbout.style.color = '#999';
-            btnAbout.style.borderBottom = '3px solid transparent';
-            btnOrders.style.color = 'var(--primary-color)';
-            btnOrders.style.borderBottom = '3px solid var(--primary-color)';
+            if (ordersTab) ordersTab.style.display = 'block';
+            if (btnOrders) { btnOrders.style.color = 'var(--primary-color)'; btnOrders.style.borderBottom = '3px solid var(--primary-color)'; }
+            renderCustomerOrders();
         }
     }
 
@@ -1713,35 +2047,156 @@
         }
     }
 
-    function calculateAmount() {
-        const qtyStr = document.getElementById('bookQty').value;
-        const product = document.getElementById('bookProduct').value;
-        const amountField = document.getElementById('bookAmount');
+    let referralApplied = false;
+    let appliedReferralCode = '';
+
+    function togglePlanOptions() {
+        const planType = document.querySelector('input[name="planType"]:checked')?.value;
+        const dailySec = document.getElementById('dailyPlanSection');
+        const monthlySec = document.getElementById('monthlyPlanSection');
         
-        if (!qtyStr) {
-            amountField.value = '';
-            return;
+        if (planType === 'Monthly') {
+            if (dailySec) dailySec.style.display = 'none';
+            if (monthlySec) monthlySec.style.display = 'block';
+        } else {
+            if (dailySec) dailySec.style.display = 'block';
+            if (monthlySec) monthlySec.style.display = 'none';
         }
-        const qty = parseInt(qtyStr.split(' ')[0]) || 0;
-        
-        // Base Price Logic
-        let pricePerUnit = 80; // Default (Milk)
-        if (product && product.toLowerCase().includes('ghee')) pricePerUnit = 600;
-        if (product && product.toLowerCase().includes('curd')) pricePerUnit = 40;
-        
-        let totalAmount = qty * pricePerUnit;
-        
-        
-        amountField.value = totalAmount;
+        calculateAmount();
     }
 
-    document.getElementById('bookQty').addEventListener('change', calculateAmount);
-    document.getElementById('bookProduct').addEventListener('change', calculateAmount);
+    function verifyReferralCode() {
+        const input = document.getElementById('bookReferral');
+        const msg = document.getElementById('referralStatusMsg');
+        if (!input || !msg) return;
+        const code = input.value.trim().toUpperCase();
+        
+        if (!code) {
+            msg.innerHTML = '<span style="color:#d32f2f;">Please enter a referral code.</span>';
+            referralApplied = false;
+            appliedReferralCode = '';
+            calculateAmount();
+            return;
+        }
+
+        // Self referral check
+        const userProfile = JSON.parse(localStorage.getItem('ayyappa_profile') || '{}');
+        if (userProfile.referralCode && userProfile.referralCode.toUpperCase() === code) {
+            msg.innerHTML = '<span style="color:#d32f2f;">❌ You cannot use your own referral code!</span>';
+            referralApplied = false;
+            appliedReferralCode = '';
+            calculateAmount();
+            return;
+        }
+
+        referralApplied = true;
+        appliedReferralCode = code;
+        msg.innerHTML = `<span style="color:#2e7d32;">✅ Referral Code '${code}' Applied! ₹100 OFF your 1st monthly subscription.</span>`;
+        calculateAmount();
+    }
+
+    function calculateAmount() {
+        const product = document.getElementById('bookProduct')?.value || 'Buffalo Milk';
+        const qtyStr = document.getElementById('bookQty')?.value || '1 Litre';
+        const planType = document.querySelector('input[name="planType"]:checked')?.value || 'Daily';
+        const welcomeOffer = document.querySelector('input[name="welcomeOffer"]:checked')?.value || 'B';
+        const dailyDuration = document.querySelector('input[name="dailyDuration"]:checked')?.value || '30 Days';
+        const monthlyPlan = document.querySelector('input[name="monthlyPlan"]:checked')?.value || 'Basic';
+
+        let basePricePerLitre = 100; // Fixed Milk price ₹100/L
+        if (product.includes('Curd')) basePricePerLitre = 50;
+        if (product.includes('Ghee')) basePricePerLitre = 600;
+
+        let litres = 1;
+        if (qtyStr.includes('500 ml')) litres = 0.5;
+        else {
+            const parsed = parseInt(qtyStr);
+            if (!isNaN(parsed)) litres = parsed;
+        }
+
+        let baseTotal = 0;
+        let planDiscount = 0;
+        let welcomeDiscount = 0;
+        let finalPayable = 0;
+        let summaryBadgeText = '';
+        let advanceBadgeText = '';
+        let submitBtnText = '';
+
+        if (planType === 'Daily') {
+            let days = 30;
+            let durationOff = 150;
+            if (dailyDuration === '7 Days') { days = 7; durationOff = 50; }
+            else if (dailyDuration === '15 Days') { days = 15; durationOff = 100; }
+            else { days = 30; durationOff = 150; }
+
+            baseTotal = litres * basePricePerLitre * days;
+            planDiscount = durationOff;
+
+            // Welcome Option A: ₹20 OFF per litre for single / daily order
+            if (welcomeOffer === 'A') {
+                welcomeDiscount = 20 * litres * days;
+            }
+
+            const totalPlanValue = Math.max(0, baseTotal - planDiscount - welcomeDiscount);
+            const dailyPayPerOrder = Math.round(totalPlanValue / days);
+
+            finalPayable = dailyPayPerOrder; // Pay per daily order!
+            summaryBadgeText = `DAILY SUB (${days} DAYS)`;
+            advanceBadgeText = `🔴 PAYMENT PENDING PER ORDER (₹${dailyPayPerOrder}/DAY)`;
+            submitBtnText = `PLACE ORDER & PAY ₹${dailyPayPerOrder}`;
+        } else {
+            // Monthly Subscription (30 Days Prepaid)
+            let dailyLitres = litres;
+            if (monthlyPlan === 'Family') dailyLitres = 2;
+            if (monthlyPlan === 'Premium') dailyLitres = 3;
+
+            baseTotal = dailyLitres * basePricePerLitre * 30; // e.g. 1L * 100 * 30 = 3000
+            
+            // Standard Monthly Discount: 1L = 150 OFF, 2L = 300 OFF, 3L = 450 OFF
+            planDiscount = dailyLitres * 150; 
+
+            // Welcome Option B OR Referral Code discount = ₹100 OFF 1st monthly sub
+            if (welcomeOffer === 'B' || referralApplied) {
+                welcomeDiscount = 100;
+            } else if (welcomeOffer === 'A') {
+                welcomeDiscount = 20 * dailyLitres * 30;
+            }
+
+            finalPayable = Math.max(0, baseTotal - planDiscount - welcomeDiscount);
+            summaryBadgeText = `MONTHLY PREPAID (${monthlyPlan.toUpperCase()})`;
+            advanceBadgeText = `💳 100% ADVANCE PAYMENT (COVERED FOR 30 DAYS)`;
+            submitBtnText = `PAY ₹${finalPayable.toLocaleString()} & SUBSCRIBE`;
+        }
+
+        // Update Summary DOM
+        const sumMilkValue = document.getElementById('sumMilkValue');
+        const sumPlanDiscount = document.getElementById('sumPlanDiscount');
+        const sumWelcomeDiscount = document.getElementById('sumWelcomeDiscount');
+        const sumTotalAmount = document.getElementById('sumTotalAmount');
+        const summaryPlanBadge = document.getElementById('summaryPlanBadge');
+        const advBadge = document.getElementById('advanceBadgeText');
+        const payBtn = document.getElementById('paySubmitBtn');
+        const bookAmountField = document.getElementById('bookAmount');
+
+        if (sumMilkValue) sumMilkValue.innerText = `₹${baseTotal.toLocaleString()}`;
+        if (sumPlanDiscount) sumPlanDiscount.innerText = `−₹${planDiscount.toLocaleString()}`;
+        if (sumWelcomeDiscount) sumWelcomeDiscount.innerText = `−₹${welcomeDiscount.toLocaleString()}`;
+        if (sumTotalAmount) sumTotalAmount.innerText = `₹${finalPayable.toLocaleString()}`;
+        if (summaryPlanBadge) summaryPlanBadge.innerText = summaryBadgeText;
+        if (advBadge) advBadge.innerText = advanceBadgeText;
+        if (bookAmountField) bookAmountField.value = finalPayable;
+
+        if (payBtn) {
+            payBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg> ${submitBtnText}`;
+        }
+    }
+
+    document.getElementById('bookQty')?.addEventListener('change', calculateAmount);
+    document.getElementById('bookProduct')?.addEventListener('change', calculateAmount);
 
     function sendBookingWhatsApp(e) {
         e.preventDefault();
         
-        // Basic validation
         const name     = document.getElementById('bookName').value;
         const phone    = document.getElementById('bookPhone').value;
         const planType = document.querySelector('input[name="planType"]:checked')?.value;
@@ -1759,23 +2214,23 @@
         finalizeOrder(planType);
     }
 
-    function cancelPaySelection() {
-        document.getElementById('payTypeSelection').style.display = 'none';
-    }
-
     async function finalizeOrder(type) {
         const name     = document.getElementById('bookName').value;
         const phone    = document.getElementById('bookPhone').value;
+        const email    = document.getElementById('bookEmail')?.value || 'N/A';
+        const house    = document.getElementById('bookHouse')?.value || '';
+        const street   = document.getElementById('bookStreet')?.value || '';
         const product  = document.getElementById('bookProduct').value;
         const qty      = document.getElementById('bookQty').value;
         const amount   = document.getElementById('bookAmount').value || '0';
-        const date     = document.getElementById('bookDate').value;
-        const time     = document.getElementById('bookTime').value;
         const state    = document.getElementById('bookState').value;
         const city     = document.getElementById('bookCity').value;
+        const pin      = document.getElementById('bookPin')?.value || '';
+        const landmark = document.getElementById('bookLandmark')?.value || '';
         const address  = document.getElementById('bookAddress').value;
-        const rating = document.querySelector('input[name="rating"]:checked')?.value || 'N/A';
-        const ratingValue = rating !== 'N/A' ? `${rating}/5` : 'N/A';
+        const deliverySlot = document.querySelector('input[name="deliverySlot"]:checked')?.value || 'No Preference';
+        const rating   = document.querySelector('input[name="rating"]:checked')?.value || '5';
+        const ratingValue = `${rating}/5`;
 
         if (!product || !qty || !city || !address) {
             alert('Please complete all required fields.');
@@ -1786,11 +2241,8 @@
         let membershipId = '';
 
         if (type === 'Daily') {
-            // Centralized Daily ID generation using IST Date
             const istDate = new Date().toLocaleDateString('en-GB', { timeZone: 'Asia/Kolkata' }).split('/').reverse().join('-');
-            
             try {
-                // Use a dedicated counter document for each day
                 const counterRef = db.collection('order_counters').doc('daily_' + istDate);
                 const newCount = await db.runTransaction(async (transaction) => {
                     const counterDoc = await transaction.get(counterRef);
@@ -1801,34 +2253,21 @@
                 orderID = 'ADFD' + newCount.toString().padStart(4, '0');
             } catch (err) {
                 console.error("ID Generation Error:", err);
-                // Fallback to local count if Firestore fails, though transaction is preferred
-                const lastResetDate = localStorage.getItem('adfDailyLastReset');
-                let dailyCount = 1;
-                if (lastResetDate === istDate) {
-                    dailyCount = parseInt(localStorage.getItem('adfDailyOrderCount') || '0') + 1;
-                } else {
-                    localStorage.setItem('adfDailyLastReset', istDate);
-                }
-                localStorage.setItem('adfDailyOrderCount', dailyCount);
-                orderID = 'ADFD' + dailyCount.toString().padStart(4, '0');
+                const dailyCount = Math.floor(1000 + Math.random() * 9000);
+                orderID = 'ADFD' + dailyCount;
             }
         } else {
-            // Monthly Pay: Fixed ID for the month based on phone number starting from ADFM0001
             const cleanPhone = phone.replace(/\D/g, '').slice(-10);
             const currentMonthYear = new Date().toLocaleString('en-IN', { month: '2-digit', year: 'numeric' }).replace('/', '');
-            
             try {
                 const userDocRef = db.collection('monthly_customers_' + currentMonthYear).doc(cleanPhone);
                 const counterRef = db.collection('order_counters').doc('monthly_' + currentMonthYear);
 
                 const assignedID = await db.runTransaction(async (transaction) => {
                     const userDoc = await transaction.get(userDocRef);
-                    if (userDoc.exists) {
-                        return userDoc.data().orderID;
-                    }
+                    if (userDoc.exists) return userDoc.data().orderID;
                     const counterDoc = await transaction.get(counterRef);
                     const count = (counterDoc.exists ? (counterDoc.data().count || 0) : 0) + 1;
-                    
                     const newID = 'ADFM' + count.toString().padStart(4, '0');
                     transaction.set(counterRef, { count, lastUpdated: firebase.firestore.FieldValue.serverTimestamp() });
                     transaction.set(userDocRef, { orderID: newID, phone: cleanPhone, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
@@ -1838,17 +2277,9 @@
                 membershipId = assignedID;
             } catch (err) {
                 console.error("Monthly ID Generation Error:", err);
-                const localMonthlyKey = 'adfMonthlyID_' + currentMonthYear + '_' + cleanPhone;
-                let localID = localStorage.getItem(localMonthlyKey);
-                if (!localID) {
-                    const countKey = 'adfMonthlyCount_' + currentMonthYear;
-                    let count = parseInt(localStorage.getItem(countKey) || '0') + 1;
-                    localStorage.setItem(countKey, count);
-                    localID = 'ADFM' + count.toString().padStart(4, '0');
-                    localStorage.setItem(localMonthlyKey, localID);
-                }
-                orderID = localID;
-                membershipId = localID;
+                const count = Math.floor(1000 + Math.random() * 9000);
+                orderID = 'ADFM' + count;
+                membershipId = orderID;
             }
         }
 
@@ -1858,74 +2289,86 @@
             year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' 
         });
 
-        // Prepare WhatsApp Message First (For direct sending)
-        const msg = `*Order has been Placed*\n\n` +
+        // Set status indicators
+        const orderStatus = 'SCHEDULED';
+        const paymentStatus = type === 'Monthly' ? 'PAYMENT COMPLETED' : 'PAYMENT PENDING';
+        const subscriptionStatus = type === 'Monthly' ? 'ACTIVE' : 'UPCOMING';
+
+        // Prepare WhatsApp Message First
+        const msg = `*ORDER & SUBSCRIPTION CONFIRMATION*\n` +
+                    `*Ayyappa Dairy Farm*\n\n` +
                     `*Order ID:* ${orderID}\n` +
-                    `*Plan Type:* ${type} Pay\n` +
-                    `*Order Time:* ${istTime} IST\n\n` +
+                    `*Plan Type:* ${type} Subscription\n` +
+                    `*Order Status:* 🟡 ${orderStatus}\n` +
+                    `*Payment Status:* ${type === 'Monthly' ? '🟢 PAYMENT COMPLETED' : '🟠 PAYMENT PENDING'}\n` +
+                    `*Subscription Status:* 🟢 ${subscriptionStatus}\n\n` +
                     `*Customer Name:* ${name}\n` +
                     `*Phone:* ${phone}\n` +
                     `*Product:* ${product}\n` +
                     `*Quantity:* ${qty}\n` +
-                    `*Total Pay:* ₹${amount}\n` +
-                    `*Delivery Date:* ${date}\n` +
-                    `*Delivery Time:* ${time}\n` +
-                    `*Location:* ${city}, ${state}\n` +
-                    `*Address:* ${address}\n` +
+                    `*Delivery Slot:* ${deliverySlot === 'No Preference' ? '⚪ To Be Assigned' : deliverySlot}\n` +
+                    `*Total Amount Paid/Payable:* ₹${amount}\n\n` +
+                    `*Home Delivery Address:*\n` +
+                    `${house}, ${street}, ${city}, ${state} - ${pin}\n` +
+                    `*Landmark:* ${landmark || 'None'}\n\n` +
                     `*Service Rating:* ${ratingValue}\n\n` +
-                    `*Customer care number:* 9392603808`;
+                    `*Customer Care:* 9392603808`;
 
         const whatsappUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
         
         // Open WhatsApp immediately
         window.open(whatsappUrl, '_blank');
 
-        // Save to Local History
-        const orderData = { orderID, name, phone, product, qty, amount, date, time, city, state, address, placedAt: istTime, timestamp: now.getTime(), membershipId, type };
+        // Save Order & Subscription Data Locally
+        const orderData = { 
+            orderID, name, phone, email, product, qty, amount, 
+            deliverySlot, city, state, pin, address, placedAt: istTime, 
+            timestamp: now.getTime(), membershipId, type,
+            orderStatus, paymentStatus, subscriptionStatus
+        };
         const myOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
         myOrders.push(orderData);
         localStorage.setItem('adfMyOrders', JSON.stringify(myOrders));
 
+        // Save active subscription to user profile local cache
+        let profile = JSON.parse(localStorage.getItem('ayyappa_profile') || '{}');
+        profile.name = name;
+        profile.phone = phone;
+        profile.city = city;
+        profile.address = address;
+        if (!profile.referralCode) {
+            profile.referralCode = 'AYYAPPA-' + phone.slice(-4) + Math.floor(100 + Math.random() * 900);
+        }
+        profile.activeSubscription = {
+            orderID, type, product, qty, amount,
+            startDate: new Date().toLocaleDateString('en-IN'),
+            endDate: new Date(Date.now() + 30*24*60*60*1000).toLocaleDateString('en-IN'),
+            status: subscriptionStatus,
+            paymentStatus: paymentStatus,
+            deliverySlot: deliverySlot === 'No Preference' ? 'To Be Assigned' : deliverySlot
+        };
+        localStorage.setItem('ayyappa_profile', JSON.stringify(profile));
+
         // Save to Firebase (Background)
         db.collection('orders').add({
-            orderID, name, phone, product, qty, amount, date, time, city, state, address,
+            orderID, name, phone, email, product, qty, amount, 
+            deliverySlot, city, state, pin, address,
             membershipId: membershipId || 'N/A',
             paymentType: type,
+            orderStatus: orderStatus,
+            paymentStatus: paymentStatus,
+            subscriptionStatus: subscriptionStatus,
             rating: rating,
-            status: 'Pending Verification',
             placedAt: istTime,
             createdAt: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
-            sendNotification("Order Placed Successfully Γ£ô", `Your order ${orderID} has been sent to WhatsApp.`);
+            sendNotification("Order Placed Successfully ✅", `Order ${orderID} sent to WhatsApp.`);
         }).catch(err => console.warn('Order save error:', err));
 
         // Cleanup form and update banners
         document.getElementById('bookingForm').reset();
-        document.getElementById('bookAmount').value = '';
-        document.getElementById('bookCity').disabled = true;
+        calculateAmount();
         updateIDBanner();
-        
-        // Background PDF Generation (Optional, non-blocking)
-        setTimeout(async () => {
-            try {
-                const receiptCard = document.querySelector('.receipt-card');
-                if (!receiptCard) return;
-                const btnContainer = receiptCard.querySelector('div[style*="display: flex"]');
-                const originalDisplay = btnContainer ? btnContainer.style.display : 'flex';
-                if (btnContainer) btnContainer.style.display = 'none';
-
-                const canvas = await html2canvas(receiptCard, { backgroundColor: '#ffffff', scale: 2 });
-                if (btnContainer) btnContainer.style.display = originalDisplay;
-
-                const { jsPDF } = window.jspdf;
-                const pdf = new jsPDF({ orientation: 'portrait', unit: 'px', format: [canvas.width/2, canvas.height/2] });
-                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, canvas.width/2, canvas.height/2);
-                
-                const pdfBlob = pdf.output('blob');
-                const storageRef = storage.ref(`bills/${orderID}.pdf`);
-                await storageRef.put(pdfBlob);
-            } catch (e) { console.warn("Background Bill generation failed:", e); }
-        }, 1000);
     }
 
     function showReceiptModal(data) {
@@ -2095,10 +2538,9 @@
         const tbody = document.getElementById('receiptsTableBody');
         if (!tbody) return;
 
-        // Cleanup existing listener if any
         if (receiptsListener) receiptsListener();
 
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem;">Listening for orders...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem;">Listening for orders...</td></tr>';
         
         receiptsListener = db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
             tbody.innerHTML = '';
@@ -2109,27 +2551,60 @@
             snapshot.forEach(doc => {
                 const order = doc.data();
                 const tr = document.createElement('tr');
-                const status = order.status || 'Pending';
-                const statusColor = status === 'Confirmed' ? '#2e7d32' : (status === 'Reverify' ? '#d32f2f' : '#fbc02d');
-                const payStatus = order.paymentStatus || 'Unpaid';
-                const payColor = payStatus === 'Paid' ? '#2e7d32' : '#d32f2f';
+                
+                const orderStatus = order.orderStatus || order.status || 'SCHEDULED';
+                const paymentStatus = order.paymentStatus || (order.paymentType === 'Monthly' ? 'PAYMENT COMPLETED' : 'PAYMENT PENDING');
+                const subStatus = order.subscriptionStatus || (order.paymentType === 'Monthly' ? 'ACTIVE' : 'UPCOMING');
+
+                const slot = order.deliverySlot || 'Morning (7-9 AM)';
                 const plan = order.paymentType || 'Daily';
                 
                 tr.innerHTML = `
-                    <td style="padding: 12px;"><strong>${order.orderID}</strong></td>
-                    <td style="padding: 12px; font-size: 0.85rem;">${order.date}</td>
-                    <td style="padding: 12px;">${order.name}</td>
-                    <td style="padding: 12px;">₹${order.amount}</td>
-                    <td style="padding: 12px; color: #666;">${plan}</td>
-                    <td style="padding: 12px;">
-                        <button onclick="togglePaymentStatus('${doc.id}', '${payStatus}')" style="background:none; border:none; color:${payColor}; cursor:pointer; font-weight:700; text-decoration:underline;">${payStatus}</button>
+                    <td style="padding: 10px 12px;">
+                        <strong>${order.orderID || 'ADF-ORD'}</strong>
+                        <div style="font-size:0.75rem; color:#888;">${order.placedAt ? order.placedAt.split(',')[0] : 'Today'}</div>
                     </td>
-                    <td style="padding: 12px;"><span style="background:${statusColor}; color:white; padding:4px 10px; border-radius:50px; font-size:0.7rem; font-weight:700;">${status}</span></td>
-                    <td style="padding: 12px;">
-                        <div style="display:flex; gap:0.5rem;">
-                            <button class="btn" style="padding:5px 10px; font-size:0.75rem; background:var(--primary-color); color:white; border-radius:4px; font-weight:700;" onclick="adminVerifyOrder('${doc.id}')">Bill</button>
-                            <button class="btn" style="padding:5px 10px; font-size:0.75rem; background:#333; color:white; border-radius:4px; font-weight:700;" onclick="quickVerify('${doc.id}')">Verify</button>
-                            <button class="btn" style="padding:5px 10px; font-size:0.75rem; background:#d32f2f; color:white; border-radius:4px; font-weight:700;" onclick="deleteOrder('${doc.id}')">Delete</button>
+                    <td style="padding: 10px 12px;">
+                        <strong>${order.name || 'Customer'}</strong>
+                        <div style="font-size:0.75rem; color:#555;">📞 ${order.phone || ''}</div>
+                        <div style="font-size:0.75rem; color:#1976d2;">🕒 ${slot}</div>
+                    </td>
+                    <td style="padding: 10px 12px;">
+                        <div><strong>${plan} Sub</strong></div>
+                        <div style="font-size:0.8rem; color:#666;">${order.product || 'Milk'} (${order.qty || '1L'})</div>
+                    </td>
+                    <td style="padding: 10px 12px; font-weight:800; color:#2e7d32;">₹${order.amount || 0}</td>
+                    <td style="padding: 10px 12px;">
+                        <select onchange="updateAdminOrderStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #fff8e1;">
+                            <option value="SCHEDULED" ${orderStatus === 'SCHEDULED' ? 'selected' : ''}>🟡 SCHEDULED</option>
+                            <option value="OUT FOR DELIVERY" ${orderStatus === 'OUT FOR DELIVERY' ? 'selected' : ''}>🚚 OUT FOR DELIVERY</option>
+                            <option value="DELIVERED" ${orderStatus === 'DELIVERED' ? 'selected' : ''}>🟢 DELIVERED</option>
+                            <option value="DELIVERY FAILED" ${orderStatus === 'DELIVERY FAILED' ? 'selected' : ''}>🔴 DELIVERY FAILED</option>
+                            <option value="CANCELLED" ${orderStatus === 'CANCELLED' ? 'selected' : ''}>⚪ CANCELLED</option>
+                        </select>
+                    </td>
+                    <td style="padding: 10px 12px;">
+                        <select onchange="updateAdminPaymentStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #e8f5e9;">
+                            <option value="PAYMENT PENDING" ${paymentStatus === 'PAYMENT PENDING' ? 'selected' : ''}>🟠 PENDING</option>
+                            <option value="PAYMENT COMPLETED" ${paymentStatus === 'PAYMENT COMPLETED' ? 'selected' : ''}>🟢 COMPLETED</option>
+                            <option value="COVERED BY SUBSCRIPTION" ${paymentStatus === 'COVERED BY SUBSCRIPTION' ? 'selected' : ''}>💳 COVERED BY SUB</option>
+                            <option value="PAYMENT FAILED" ${paymentStatus === 'PAYMENT FAILED' ? 'selected' : ''}>🔴 FAILED</option>
+                            <option value="REFUNDED" ${paymentStatus === 'REFUNDED' ? 'selected' : ''}>⚪ REFUNDED</option>
+                        </select>
+                    </td>
+                    <td style="padding: 10px 12px;">
+                        <select onchange="updateAdminSubStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #e3f2fd;">
+                            <option value="UPCOMING" ${subStatus === 'UPCOMING' ? 'selected' : ''}>🟡 UPCOMING</option>
+                            <option value="ACTIVE" ${subStatus === 'ACTIVE' ? 'selected' : ''}>🟢 ACTIVE</option>
+                            <option value="PAUSED" ${subStatus === 'PAUSED' ? 'selected' : ''}>🟠 PAUSED</option>
+                            <option value="EXPIRED" ${subStatus === 'EXPIRED' ? 'selected' : ''}>🔴 EXPIRED</option>
+                            <option value="CANCELLED" ${subStatus === 'CANCELLED' ? 'selected' : ''}>⚪ CANCELLED</option>
+                        </select>
+                    </td>
+                    <td style="padding: 10px 12px;">
+                        <div style="display:flex; gap:0.3rem;">
+                            <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:var(--primary-color); color:white; border-radius:4px; font-weight:700;" onclick="adminVerifyOrder('${doc.id}')">Bill</button>
+                            <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:#d32f2f; color:white; border-radius:4px; font-weight:700;" onclick="deleteOrder('${doc.id}')">Delete</button>
                         </div>
                     </td>
                 `;
@@ -2137,14 +2612,44 @@
             });
         }, err => {
             console.error("Receipts Listener Error:", err);
-            let errMsg = "Error syncing orders.";
-            if (err.code === 'permission-denied') errMsg = "Permission Denied: Update Firestore rules.";
-            if (err.message.includes("index")) errMsg = "Missing Index: Check browser console for link.";
-            
             tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 2rem; color: #d32f2f;">
-                ${errMsg}<br><small style="color:#888; font-weight:400;">(${err.code || 'unknown'})</small>
+                Error syncing orders.<br><small style="color:#888; font-weight:400;">(${err.code || 'unknown'})</small>
             </td></tr>`;
         });
+    }
+
+    async function updateAdminOrderStatus(docId, newStatus) {
+        try {
+            await db.collection('orders').doc(docId).update({
+                orderStatus: newStatus,
+                status: newStatus
+            });
+        } catch (err) {
+            console.error("Error updating order status:", err);
+            alert("Error updating order status: " + err.message);
+        }
+    }
+
+    async function updateAdminPaymentStatus(docId, newStatus) {
+        try {
+            await db.collection('orders').doc(docId).update({
+                paymentStatus: newStatus
+            });
+        } catch (err) {
+            console.error("Error updating payment status:", err);
+            alert("Error updating payment status: " + err.message);
+        }
+    }
+
+    async function updateAdminSubStatus(docId, newStatus) {
+        try {
+            await db.collection('orders').doc(docId).update({
+                subscriptionStatus: newStatus
+            });
+        } catch (err) {
+            console.error("Error updating subscription status:", err);
+            alert("Error updating subscription status: " + err.message);
+        }
     }
 
     async function deleteOrder(docId) {
@@ -2213,10 +2718,13 @@
             
             const content = document.getElementById('receiptContent');
             const orderType = data.paymentType || 'Daily';
+            const statusLabel = data.status || 'Pending';
+            const statusColor = statusLabel === 'Confirmed' ? '#2e7d32' : (statusLabel === 'Reverify' ? '#d32f2f' : '#fbc02d');
             content.innerHTML = `
                 <div style="padding: 0.2rem 0;">
                     <div class="receipt-item"><strong>ORDER NO:</strong><span>#${data.orderID}</span></div>
                     <div class="receipt-item"><strong>ORDERED DATE:</strong><span>${data.placedAt ? data.placedAt.split(',')[0] : data.date}</span></div>
+                    <div class="receipt-item"><strong>STATUS:</strong><span style="background:${statusColor};color:white;padding:2px 10px;border-radius:50px;font-size:0.75rem;font-weight:700;">${statusLabel.toUpperCase()}</span></div>
                     <div class="receipt-line" style="border-top: 1px dashed #bbb; margin: 0.8rem 0;"></div>
                     
                     <div class="receipt-item"><strong>CUSTOMER:</strong> <span>${data.name}</span></div>
@@ -2225,7 +2733,7 @@
                     
                     <div class="receipt-item"><strong>PRODUCT:</strong> <span>${data.product}</span></div>
                     <div class="receipt-item"><strong>QTY:</strong> <span>${data.qty}</span></div>
-                    <div class="receipt-item"><strong>DELIVERY:</strong> <span>Tomorrow (${data.date})</span></div>
+                    <div class="receipt-item"><strong>DELIVERY:</strong> <span>${data.date}</span></div>
                     <div class="receipt-line" style="border-top: 1px dashed #bbb; margin: 0.8rem 0;"></div>
                     
                     <div class="receipt-item" style="font-size: 1.1rem; margin-top: 0.5rem; font-weight: 900;"><strong>TOTAL PAY:</strong><span>₹${data.amount}</span></div>
@@ -2243,10 +2751,53 @@
     async function updateOrderStatus(docId, newStatus) {
         try {
             await db.collection('orders').doc(docId).update({ status: newStatus });
-            alert(`Order marked as: ${newStatus}`);
-            closeReceiptModal();
-            renderOrderReceipts();
+            // If confirmed, auto-show the receipt
+            if (newStatus === 'Confirmed') {
+                alert(`✅ Order Confirmed! Generating receipt...`);
+                await adminVerifyOrder(docId);
+            } else {
+                alert(`Order marked as: ${newStatus}`);
+            }
         } catch(err) { alert("Update failed: " + err.message); }
+    }
+
+    function printReceipt() {
+        const receiptCard = document.querySelector('.receipt-card');
+        if (!receiptCard) return;
+        
+        const printWindow = window.open('', '_blank', 'width=450,height=700');
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Ayyappa Dairy - Receipt</title>
+                <style>
+                    * { margin: 0; padding: 0; box-sizing: border-box; }
+                    body { font-family: 'Courier New', Courier, monospace; background: #fff; padding: 20px; }
+                    .receipt-item { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; color: #000; }
+                    .receipt-item strong { color: #222; text-transform: uppercase; font-weight: 800; }
+                    .receipt-item span { text-align: right; font-weight: 700; }
+                    .receipt-line { border-top: 1px dashed #000; margin: 0.8rem 0; }
+                    @media print {
+                        body { padding: 10px; }
+                    }
+                </style>
+            </head>
+            <body>
+                ${receiptCard.innerHTML}
+                <script>
+                    // Remove the button container before printing
+                    const btns = document.getElementById('receiptButtonContainer');
+                    if (btns) btns.remove();
+                    window.onload = function() {
+                        window.print();
+                        setTimeout(function() { window.close(); }, 500);
+                    };
+                <\/script>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
     }
 
     // ΓöÇΓöÇ Install Page Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ

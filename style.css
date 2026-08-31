@@ -604,6 +604,14 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     grid-template-columns: 1fr 1fr;
     gap: 1.2rem;
 }
+
+/* New 3-column premium layout */
+.dash-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.8rem;
+    padding: 1rem 0;
+}
+
 .dash-card {
     background: var(--bg-light);
     border: 1.5px solid rgba(177,216,183,0.5);
@@ -618,6 +626,170 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 }
 .dash-card small { display: block; font-weight: 400; color: #888; font-size: 0.85rem; margin-top: 0.4rem; }
 .dash-card:hover { background: var(--secondary-color); transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); }
+
+/* ── Premium Dashboard Cards ────────────────────────── */
+.dash-card-premium {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 22px;
+    padding: 2.5rem 2rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    animation: dashCardSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.dash-card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, rgba(212,160,23,0.6), transparent);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+.dash-card-premium:hover::before {
+    opacity: 1;
+}
+
+.dash-card-premium:hover {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(212,160,23,0.5);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 30px rgba(212,160,23,0.1);
+}
+
+/* Card icon circles */
+.dash-card-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.4rem;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.dash-card-icon::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 24px;
+    border: 2px solid transparent;
+    transition: border-color 0.4s ease;
+}
+
+.dash-card-premium:hover .dash-card-icon {
+    transform: scale(1.1) rotate(-3deg);
+}
+
+.dash-card-premium:hover .dash-card-icon::after {
+    border-color: rgba(255,255,255,0.2);
+}
+
+.dash-card-icon svg {
+    color: white;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.dash-card-icon--orders {
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    box-shadow: 0 8px 24px rgba(59,130,246,0.35);
+}
+
+.dash-card-icon--coupons {
+    background: linear-gradient(135deg, #f43f5e, #be123c);
+    box-shadow: 0 8px 24px rgba(244,63,94,0.35);
+}
+
+.dash-card-icon--expenses {
+    background: linear-gradient(135deg, #10b981, #047857);
+    box-shadow: 0 8px 24px rgba(16,185,129,0.35);
+}
+
+/* Card title */
+.dash-card-title {
+    color: #fff;
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-heading);
+}
+
+/* Card description */
+.dash-card-desc {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+}
+
+/* Card arrow indicator */
+.dash-card-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.5);
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    margin-top: 0.3rem;
+}
+
+.dash-card-premium:hover .dash-card-arrow {
+    background: rgba(212,160,23,0.25);
+    color: var(--accent-color);
+    transform: translateX(4px);
+}
+
+@keyframes dashCardSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Responsive: stack on mobile */
+@media (max-width: 768px) {
+    .dash-grid-3 {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+    }
+    .dash-card-premium {
+        padding: 2rem 1.5rem 1.5rem;
+    }
+    .dash-card-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 16px;
+        margin-bottom: 1rem;
+    }
+    .dash-card-icon svg {
+        width: 26px;
+        height: 26px;
+    }
+    .dash-card-title {
+        font-size: 1.15rem;
+    }
+}
 
 /* Animations */
 
@@ -1418,3 +1590,220 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 .icon-gray { color: #9ca3af !important; }
 .icon-pink { color: #ec4899 !important; }
 .icon-blue { color: #3b82f6 !important; }
+
+/* ── Final Customer Order & Subscription Structure Styles ── */
+.plan-type-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+.plan-option-wrapper {
+    cursor: pointer;
+    position: relative;
+}
+.plan-option-wrapper input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.plan-option {
+    border: 2px solid #e0eee0;
+    background: #fcfdfc;
+    border-radius: 14px;
+    padding: 1.2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+.plan-option-wrapper input[type="radio"]:checked + .plan-option {
+    border-color: var(--primary-color);
+    background: #eaf5eb;
+    box-shadow: 0 8px 20px rgba(26,92,42,0.15);
+    transform: translateY(-2px);
+}
+.plan-icon { font-size: 2rem; margin-bottom: 0.3rem; }
+.plan-label { font-weight: 800; font-size: 1.1rem; color: var(--primary-color); }
+.plan-desc { font-size: 0.85rem; color: #666; }
+
+/* Welcome offer selection pills */
+.welcome-offer-container {
+    background: #f8fdf8;
+    border: 1.5px dashed var(--secondary-color);
+    border-radius: 16px;
+    padding: 1.2rem;
+    margin-top: 1rem;
+}
+.welcome-offer-title {
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.welcome-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+}
+.welcome-card {
+    border: 1.5px solid #d2e8d4;
+    background: #fff;
+    border-radius: 12px;
+    padding: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: left;
+    position: relative;
+}
+.welcome-card-input { position: absolute; opacity: 0; }
+.welcome-card-input:checked + .welcome-card-body {
+    border-color: var(--primary-color);
+}
+.welcome-card:has(.welcome-card-input:checked) {
+    border-color: var(--primary-color);
+    background: #eef8ee;
+    box-shadow: 0 4px 14px rgba(26,92,42,0.12);
+}
+.welcome-badge {
+    display: inline-block;
+    background: #ffecb3;
+    color: #b78103;
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 0.3rem;
+}
+.welcome-text { font-weight: 700; font-size: 0.9rem; color: #222; }
+.welcome-sub { font-size: 0.78rem; color: #666; }
+
+/* Delivery Slot Pills */
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.6rem;
+    margin-top: 0.5rem;
+}
+.slot-pill {
+    border: 1px solid #d1e3d3;
+    background: #fff;
+    border-radius: 12px;
+    padding: 0.7rem 0.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+.slot-pill-input { position: absolute; opacity: 0; }
+.slot-pill:has(.slot-pill-input:checked) {
+    border-color: var(--primary-color);
+    background: #1A5C2A;
+    color: #fff;
+}
+.slot-pill:has(.slot-pill-input:checked) .slot-title,
+.slot-pill:has(.slot-pill-input:checked) .slot-time { color: #fff !important; }
+.slot-title { font-weight: 700; font-size: 0.85rem; color: #333; }
+.slot-time { font-size: 0.75rem; color: #777; }
+
+/* Checkout Summary Card */
+.checkout-summary-box {
+    background: #1A5C2A;
+    color: #fff;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    box-shadow: 0 12px 30px rgba(26,92,42,0.25);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+.checkout-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1rem;
+}
+.checkout-header h4 {
+    margin: 0;
+    font-size: 1.15rem;
+    color: #FFD700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.checkout-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.92rem;
+    margin-bottom: 0.6rem;
+    color: rgba(255,255,255,0.9);
+}
+.checkout-row.discount { color: #A8D5A2; font-weight: 700; }
+.checkout-row.total {
+    border-top: 1.5px dashed rgba(255,255,255,0.3);
+    padding-top: 0.8rem;
+    margin-top: 0.8rem;
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #FFF;
+}
+.advance-pay-badge {
+    background: rgba(255, 215, 0, 0.2);
+    border: 1px solid #FFD700;
+    color: #FFD700;
+    text-align: center;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    margin-top: 0.8rem;
+    text-transform: uppercase;
+}
+
+/* Status Badges */
+.status-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+.status-scheduled { background: #fff3cd; color: #856404; }
+.status-out { background: #cce5ff; color: #004085; }
+.status-delivered { background: #d4edda; color: #155724; }
+.status-failed { background: #f8d7da; color: #721c24; }
+.status-cancelled { background: #e2e3e5; color: #383d41; }
+
+.status-active { background: #2e7d32; color: #fff; }
+.status-upcoming { background: #fbc02d; color: #000; }
+.status-paused { background: #ff9800; color: #fff; }
+.status-expired { background: #d32f2f; color: #fff; }
+
+/* Dashboard Wallet & Reward Widgets */
+.wallet-card {
+    background: linear-gradient(135deg, #1A5C2A 0%, #0d3320 100%);
+    color: white;
+    border-radius: 18px;
+    padding: 1.5rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+.referral-code-box {
+    background: rgba(255,255,255,0.12);
+    border: 1px dashed rgba(255,255,255,0.4);
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.8rem;
+}
+
