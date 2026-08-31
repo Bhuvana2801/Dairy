@@ -138,6 +138,7 @@
                                 <th style="padding: 12px; text-align: left;">Order Status</th>
                                 <th style="padding: 12px; text-align: left;">Payment Status</th>
                                 <th style="padding: 12px; text-align: left;">Sub Status</th>
+                                <th style="padding: 12px; text-align: center;">Update</th>
                                 <th style="padding: 12px; text-align: left;">Action</th>
                             </tr>
                         </thead>
@@ -2540,12 +2541,12 @@
 
         if (receiptsListener) receiptsListener();
 
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem;">Listening for orders...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 2rem;">Listening for orders...</td></tr>';
         
         receiptsListener = db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
             tbody.innerHTML = '';
             if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
                 return;
             }
             snapshot.forEach(doc => {
@@ -2601,9 +2602,13 @@
                             <option value="CANCELLED" ${subStatus === 'CANCELLED' ? 'selected' : ''}>⚪ CANCELLED</option>
                         </select>
                     </td>
+                    <!-- DEDICATED UPDATE COLUMN -->
+                    <td style="padding: 10px 12px; text-align: center;">
+                        <button class="btn" style="padding:6px 14px; font-size:0.75rem; background:#00897b; color:white; border-radius:6px; font-weight:800; border:none; cursor:pointer; box-shadow:0 2px 6px rgba(0,137,123,0.3);" onclick="adminSaveStatusOnly('${doc.id}')" title="Save updated status to database">⚡ Update</button>
+                    </td>
                     <td style="padding: 10px 12px;">
                         <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
-                            <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:#00897b; color:white; border-radius:4px; font-weight:700;" onclick="adminUpdateAndNotifyCustomer('${doc.id}')" title="Update status & send WhatsApp to customer">Update</button>
+                            <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:#25D366; color:white; border-radius:4px; font-weight:700;" onclick="adminSendWhatsAppNotification('${doc.id}')" title="Send WhatsApp details to customer">💬 Notify</button>
                             <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:var(--primary-color); color:white; border-radius:4px; font-weight:700;" onclick="adminVerifyOrder('${doc.id}')">Bill</button>
                             <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:#d32f2f; color:white; border-radius:4px; font-weight:700;" onclick="deleteOrder('${doc.id}')">Delete</button>
                         </div>
@@ -2613,13 +2618,13 @@
             });
         }, err => {
             console.error("Receipts Listener Error:", err);
-            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 2rem; color: #d32f2f;">
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 2rem; color: #d32f2f;">
                 Error syncing orders.<br><small style="color:#888; font-weight:400;">(${err.code || 'unknown'})</small>
             </td></tr>`;
         });
     }
 
-    async function adminUpdateAndNotifyCustomer(docId) {
+    async function adminSaveStatusOnly(docId) {
         const orderSelect = document.getElementById(`orderStatus_${docId}`);
         const paySelect = document.getElementById(`paymentStatus_${docId}`);
         const subSelect = document.getElementById(`subscriptionStatus_${docId}`);
@@ -2629,7 +2634,6 @@
         const newSubscriptionStatus = subSelect ? subSelect.value : 'ACTIVE';
 
         try {
-            // Save to Firestore
             await db.collection('orders').doc(docId).update({
                 orderStatus: newOrderStatus,
                 status: newOrderStatus,
@@ -2638,24 +2642,39 @@
                 lastUpdatedByAdmin: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            // Fetch document data for customer phone & details
+            alert(`✅ Statuses updated successfully!\nOrder Status: ${newOrderStatus}\nPayment Status: ${newPaymentStatus}\nSubscription Status: ${newSubscriptionStatus}`);
+        } catch (err) {
+            console.error("Error updating order status:", err);
+            alert("Error updating status: " + err.message);
+        }
+    }
+
+    async function adminSendWhatsAppNotification(docId) {
+        const orderSelect = document.getElementById(`orderStatus_${docId}`);
+        const paySelect = document.getElementById(`paymentStatus_${docId}`);
+        const subSelect = document.getElementById(`subscriptionStatus_${docId}`);
+        
+        const newOrderStatus = orderSelect ? orderSelect.value : 'SCHEDULED';
+        const newPaymentStatus = paySelect ? paySelect.value : 'PAYMENT COMPLETED';
+        const newSubscriptionStatus = subSelect ? subSelect.value : 'ACTIVE';
+
+        try {
             const docSnap = await db.collection('orders').doc(docId).get();
             if (!docSnap.exists) {
-                alert("Order updated successfully!");
+                alert("Order not found!");
                 return;
             }
             const data = docSnap.data();
             const cleanPhone = (data.phone || '').replace(/\D/g, '').slice(-10);
 
-            // Format WhatsApp message to customer
-            const msg = `*AYYAPPA DAIRY FARM - ORDER STATUS UPDATE* 🥛\n\n` +
+            const msg = `*AYYAPPA DAIRY FARM - ORDER DETAILS & STATUS* 🥛\n\n` +
                         `Dear *${data.name || 'Customer'}*,\n` +
-                        `Here is the latest update for your order:\n\n` +
+                        `Here are the latest details and status for your order:\n\n` +
                         `*Order ID:* ${data.orderID || 'ADF-ORD'}\n` +
                         `*Plan:* ${data.paymentType || 'Daily'} Subscription (${data.product || 'Milk'} ${data.qty || ''})\n` +
                         `*Amount:* ₹${data.amount || 0}\n` +
                         `*Delivery Slot:* ${data.deliverySlot || 'Morning (7:00 AM – 9:00 AM)'}\n\n` +
-                        `*UPDATED STATUS DETAILS:*\n` +
+                        `*CURRENT STATUS:*\n` +
                         `🚚 *Order Status:* ${newOrderStatus}\n` +
                         `💳 *Payment Status:* ${newPaymentStatus}\n` +
                         `🥛 *Subscription Status:* ${newSubscriptionStatus}\n\n` +
@@ -2666,11 +2685,11 @@
                 const whatsappUrl = `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(msg)}`;
                 window.open(whatsappUrl, '_blank');
             } else {
-                alert(`Order status updated successfully in system! (Phone number: ${data.phone || 'N/A'})`);
+                alert(`Order phone number is missing or invalid (${data.phone || 'N/A'}).`);
             }
         } catch (err) {
-            console.error("Error updating order:", err);
-            alert("Error updating order: " + err.message);
+            console.error("Error generating WhatsApp notification:", err);
+            alert("Error sending notification: " + err.message);
         }
     }
 
