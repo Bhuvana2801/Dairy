@@ -2144,7 +2144,7 @@
             finalPayable = dailyPayPerOrder; // Pay per daily order!
             summaryBadgeText = `DAILY SUB (${days} DAYS)`;
             advanceBadgeText = `🔴 PAYMENT PENDING PER ORDER (₹${dailyPayPerOrder}/DAY)`;
-            submitBtnText = `PLACE ORDER & PAY ₹${dailyPayPerOrder}`;
+            submitBtnText = `PLACE ORDER`;
         } else {
             // Monthly Subscription (30 Days Prepaid)
             let dailyLitres = litres;
@@ -2166,7 +2166,7 @@
             finalPayable = Math.max(0, baseTotal - planDiscount - welcomeDiscount);
             summaryBadgeText = `MONTHLY PREPAID (${monthlyPlan.toUpperCase()})`;
             advanceBadgeText = `💳 100% ADVANCE PAYMENT (COVERED FOR 30 DAYS)`;
-            submitBtnText = `PAY ₹${finalPayable.toLocaleString()} & SUBSCRIBE`;
+            submitBtnText = `PLACE ORDER & SUBSCRIBE`;
         }
 
         // Update Summary DOM
