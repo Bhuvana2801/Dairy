@@ -2575,7 +2575,7 @@
                     </td>
                     <td style="padding: 10px 12px; font-weight:800; color:#2e7d32;">₹${order.amount || 0}</td>
                     <td style="padding: 10px 12px;">
-                        <select onchange="updateAdminOrderStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #fff8e1;">
+                        <select id="orderStatus_${doc.id}" onchange="updateAdminOrderStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #fff8e1;">
                             <option value="SCHEDULED" ${orderStatus === 'SCHEDULED' ? 'selected' : ''}>🟡 SCHEDULED</option>
                             <option value="OUT FOR DELIVERY" ${orderStatus === 'OUT FOR DELIVERY' ? 'selected' : ''}>🚚 OUT FOR DELIVERY</option>
                             <option value="DELIVERED" ${orderStatus === 'DELIVERED' ? 'selected' : ''}>🟢 DELIVERED</option>
@@ -2584,7 +2584,7 @@
                         </select>
                     </td>
                     <td style="padding: 10px 12px;">
-                        <select onchange="updateAdminPaymentStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #e8f5e9;">
+                        <select id="paymentStatus_${doc.id}" onchange="updateAdminPaymentStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #e8f5e9;">
                             <option value="PAYMENT PENDING" ${paymentStatus === 'PAYMENT PENDING' ? 'selected' : ''}>🟠 PENDING</option>
                             <option value="PAYMENT COMPLETED" ${paymentStatus === 'PAYMENT COMPLETED' ? 'selected' : ''}>🟢 COMPLETED</option>
                             <option value="COVERED BY SUBSCRIPTION" ${paymentStatus === 'COVERED BY SUBSCRIPTION' ? 'selected' : ''}>💳 COVERED BY SUB</option>
@@ -2593,7 +2593,7 @@
                         </select>
                     </td>
                     <td style="padding: 10px 12px;">
-                        <select onchange="updateAdminSubStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #e3f2fd;">
+                        <select id="subscriptionStatus_${doc.id}" onchange="updateAdminSubStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #e3f2fd;">
                             <option value="UPCOMING" ${subStatus === 'UPCOMING' ? 'selected' : ''}>🟡 UPCOMING</option>
                             <option value="ACTIVE" ${subStatus === 'ACTIVE' ? 'selected' : ''}>🟢 ACTIVE</option>
                             <option value="PAUSED" ${subStatus === 'PAUSED' ? 'selected' : ''}>🟠 PAUSED</option>
@@ -2602,7 +2602,8 @@
                         </select>
                     </td>
                     <td style="padding: 10px 12px;">
-                        <div style="display:flex; gap:0.3rem;">
+                        <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
+                            <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:#00897b; color:white; border-radius:4px; font-weight:700;" onclick="adminUpdateAndNotifyCustomer('${doc.id}')" title="Update status & send WhatsApp to customer">Update</button>
                             <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:var(--primary-color); color:white; border-radius:4px; font-weight:700;" onclick="adminVerifyOrder('${doc.id}')">Bill</button>
                             <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:#d32f2f; color:white; border-radius:4px; font-weight:700;" onclick="deleteOrder('${doc.id}')">Delete</button>
                         </div>
@@ -2616,6 +2617,61 @@
                 Error syncing orders.<br><small style="color:#888; font-weight:400;">(${err.code || 'unknown'})</small>
             </td></tr>`;
         });
+    }
+
+    async function adminUpdateAndNotifyCustomer(docId) {
+        const orderSelect = document.getElementById(`orderStatus_${docId}`);
+        const paySelect = document.getElementById(`paymentStatus_${docId}`);
+        const subSelect = document.getElementById(`subscriptionStatus_${docId}`);
+        
+        const newOrderStatus = orderSelect ? orderSelect.value : 'SCHEDULED';
+        const newPaymentStatus = paySelect ? paySelect.value : 'PAYMENT COMPLETED';
+        const newSubscriptionStatus = subSelect ? subSelect.value : 'ACTIVE';
+
+        try {
+            // Save to Firestore
+            await db.collection('orders').doc(docId).update({
+                orderStatus: newOrderStatus,
+                status: newOrderStatus,
+                paymentStatus: newPaymentStatus,
+                subscriptionStatus: newSubscriptionStatus,
+                lastUpdatedByAdmin: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Fetch document data for customer phone & details
+            const docSnap = await db.collection('orders').doc(docId).get();
+            if (!docSnap.exists) {
+                alert("Order updated successfully!");
+                return;
+            }
+            const data = docSnap.data();
+            const cleanPhone = (data.phone || '').replace(/\D/g, '').slice(-10);
+
+            // Format WhatsApp message to customer
+            const msg = `*AYYAPPA DAIRY FARM - ORDER STATUS UPDATE* 🥛\n\n` +
+                        `Dear *${data.name || 'Customer'}*,\n` +
+                        `Here is the latest update for your order:\n\n` +
+                        `*Order ID:* ${data.orderID || 'ADF-ORD'}\n` +
+                        `*Plan:* ${data.paymentType || 'Daily'} Subscription (${data.product || 'Milk'} ${data.qty || ''})\n` +
+                        `*Amount:* ₹${data.amount || 0}\n` +
+                        `*Delivery Slot:* ${data.deliverySlot || 'Morning (7:00 AM – 9:00 AM)'}\n\n` +
+                        `*UPDATED STATUS DETAILS:*\n` +
+                        `🚚 *Order Status:* ${newOrderStatus}\n` +
+                        `💳 *Payment Status:* ${newPaymentStatus}\n` +
+                        `🥛 *Subscription Status:* ${newSubscriptionStatus}\n\n` +
+                        `If you have any questions, feel free to contact us at *9392603808*.\n` +
+                        `Thank you for choosing Ayyappa Dairy Farm! 🌾`;
+
+            if (cleanPhone && cleanPhone.length === 10) {
+                const whatsappUrl = `https://wa.me/91${cleanPhone}?text=${encodeURIComponent(msg)}`;
+                window.open(whatsappUrl, '_blank');
+            } else {
+                alert(`Order status updated successfully in system! (Phone number: ${data.phone || 'N/A'})`);
+            }
+        } catch (err) {
+            console.error("Error updating order:", err);
+            alert("Error updating order: " + err.message);
+        }
     }
 
     async function updateAdminOrderStatus(docId, newStatus) {
