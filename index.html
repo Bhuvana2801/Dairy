@@ -28,22 +28,30 @@
 </head>
 <body>
     <header class="navbar">
-        <a href="#home" class="logo logo-img">
+        <a href="#home" onclick="showPage('home')" class="logo logo-img">
             <img src="images/logo.png" alt="Logo">
             <span>Ayyappa Dairy Farm</span>
         </a>
         <nav>
             <ul class="nav-links">
                 <li><a href="#" onclick="showPage('home')" id="nav-home" class="nav-active">Home</a></li>
-                <li><a href="#" onclick="showPage('about')" id="nav-about">Our Story</a></li>
-                <li><a href="#" onclick="showPage('products')" id="nav-products">Our Products</a></li>
-                <li><a href="#" onclick="showPage('offers')" id="nav-offers">Grab Offers</a></li>
-                <li><a href="#" onclick="showPage('order')" id="nav-order">Order Now</a></li>
-                <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact details</a></li>
+                <li><a href="#" onclick="showPage('products')" id="nav-products">Products</a></li>
+                <li id="nav-offers-li"><a href="#" onclick="showPage('offers')" id="nav-offers">Grab Offers</a></li>
+                <li id="nav-order-li" style="display: none;"><a href="#" onclick="showPage('order')" id="nav-order">Order</a></li>
+                <li id="nav-profile-li" style="display: none;"><a href="#" onclick="openCustomerOrdersModal()" id="nav-profile">My Profile</a></li>
+                <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+                <li><a href="#" onclick="showPage('install')" id="nav-install">Install</a></li>
             </ul>
         </nav>
         <div class="nav-actions" style="display: flex; gap: 0.8rem; align-items: center;">
-            <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">👤 My Profile</button>
+            <div id="publicNavBtns" style="display: flex; gap: 0.6rem;">
+                <button class="btn btn-signin" onclick="openCustomerSigninModal()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 0.5rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: 0.3s;">🔑 Sign In</button>
+                <button class="btn btn-register" onclick="openCustomerRegisterModal()" style="background: #25D366; color: white; border: none; padding: 0.5rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(37,211,102,0.3);">📋 Register</button>
+            </div>
+            <div id="loggedInNavBtns" style="display: none; gap: 0.6rem; align-items: center;">
+                <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">👤 My Profile</button>
+                <button class="btn btn-logout" onclick="handleCustomerLogout()" style="background: #e53e3e; color: white; border: none; padding: 0.5rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: 0.3s;">🚪 Logout</button>
+            </div>
             <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
         </div>
         <button class="admin-mobile-btn" onclick="openAdminModal()">ADMIN</button>
@@ -65,6 +73,188 @@
             </div>
             <p id="modalError" class="modal-error"></p>
             <button class="btn btn-primary" style="width:100%; margin-top:0.5rem;" onclick="handleAdminLogin()">Login</button>
+        </div>
+    </div>
+
+    <!-- Customer Registration Modal -->
+    <div id="customerRegisterModal" class="modal-overlay" onclick="closeCustomerRegisterModal(event)">
+        <div class="modal-box modal-wide fade-in-up" style="max-width: 580px; max-height: 90vh; overflow-y: auto;">
+            <button class="modal-close" onclick="closeCustomerRegisterModal(null, true)">&times;</button>
+            <h2 style="color: var(--primary-color); margin-bottom: 0.2rem; font-family: var(--font-heading); text-align: center;">Customer Registration</h2>
+            <p style="text-align: center; color: #666; font-size: 0.95rem; margin-bottom: 1.2rem;">Fill in your details below to request account registration & subscription access.</p>
+            
+            <form id="customerRegisterForm" onsubmit="handleCustomerRegistration(event)" novalidate>
+                <!-- Customer Details -->
+                <div style="background: #f8faf8; padding: 1rem; border-radius: 12px; border: 1px solid #e0eee0; margin-bottom: 1rem;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">👤 Customer Details</h4>
+                    <div class="modal-input-group">
+                        <label for="regName">Full Name <span style="color:red;">*</span></label>
+                        <input type="text" id="regName" placeholder="Enter your full name" required>
+                        <small class="field-error" id="err-regName" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                        <div class="modal-input-group">
+                            <label for="regPhone">Phone Number <span style="color:red;">*</span></label>
+                            <input type="tel" id="regPhone" placeholder="10-digit Mobile No" maxlength="10" required>
+                            <small class="field-error" id="err-regPhone" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                        </div>
+                        <div class="modal-input-group">
+                            <label for="regWhatsapp">WhatsApp Number <span style="color:red;">*</span></label>
+                            <input type="tel" id="regWhatsapp" placeholder="10-digit WhatsApp No" maxlength="10" required>
+                            <small class="field-error" id="err-regWhatsapp" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delivery Address -->
+                <div style="background: #f8faf8; padding: 1rem; border-radius: 12px; border: 1px solid #e0eee0; margin-bottom: 1rem;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">📍 Delivery Address</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 0.8rem;">
+                        <div class="modal-input-group" style="margin-bottom:0;">
+                            <label for="regLocation">Location / City / Town <span style="color:red;">*</span></label>
+                            <select id="regLocation" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                                <option value="Narasaraopet" selected>Narasaraopet</option>
+                            </select>
+                        </div>
+                        <div class="modal-input-group" style="margin-bottom:0;">
+                            <label for="regArea">Choose Area <span style="color:red;">*</span></label>
+                            <select id="regArea" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;" required>
+                                <option value="">-- Select Area --</option>
+                                <option value="Clock Tower Area">Clock Tower Area</option>
+                                <option value="Kota Centre">Kota Centre</option>
+                                <option value="Mallamma Centre">Mallamma Centre</option>
+                                <option value="Prakash Nagar">Prakash Nagar</option>
+                                <option value="Rikshaw Centre">Rikshaw Centre</option>
+                                <option value="Ramireddypeta">Ramireddypeta</option>
+                                <option value="Barampet">Barampet</option>
+                                <option value="Srirampuram">Srirampuram</option>
+                                <option value="Reddy Nagar">Reddy Nagar</option>
+                            </select>
+                            <small class="field-error" id="err-regArea" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                        </div>
+                    </div>
+                    <div class="modal-input-group">
+                        <label for="regAddress">House No / Street Address <span style="color:red;">*</span></label>
+                        <textarea id="regAddress" rows="2" placeholder="Door No, Street Name, Landmark" style="width:100%; padding:0.75rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem; font-family:inherit;" required></textarea>
+                        <small class="field-error" id="err-regAddress" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                    </div>
+                </div>
+
+                <!-- Delivery Slot & Subscription Preference -->
+                <div style="background: #f8faf8; padding: 1rem; border-radius: 12px; border: 1px solid #e0eee0; margin-bottom: 1.2rem;">
+                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">🚚 Subscription Preference</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                        <div class="modal-input-group" style="margin-bottom:0;">
+                            <label for="regSlot">Delivery Slot <span style="color:red;">*</span></label>
+                            <select id="regSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                                <option value="Morning">Morning</option>
+                                <option value="Evening">Evening</option>
+                                <option value="Morning & Evening">Morning & Evening</option>
+                            </select>
+                        </div>
+                        <div class="modal-input-group" style="margin-bottom:0;">
+                            <label for="regSubType">Subscription Type <span style="color:red;">*</span></label>
+                            <select id="regSubType" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                                <option value="Daily Subscription">Daily Subscription</option>
+                                <option value="Monthly Subscription">Monthly Subscription</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" id="regSubmitBtn" class="btn btn-secondary" style="width: 100%; padding: 0.9rem; font-size: 1.1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 15px rgba(26,92,42,0.3);">
+                    📋 REGISTER
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Registration Thank You Modal -->
+    <div id="registerThankYouModal" class="modal-overlay" onclick="closeRegisterThankYouModal(event)">
+        <div class="modal-box fade-in-up" style="max-width: 440px; text-align: center; padding: 2.2rem 1.8rem;">
+            <div style="font-size: 3.5rem; margin-bottom: 0.5rem; line-height: 1;">🥛</div>
+            <h2 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.8rem; font-weight: 800;">Thank You for Registering.</h2>
+            <p style="color: #444; font-size: 1.1rem; font-weight: 600; margin-bottom: 1.5rem; line-height: 1.5;">
+                Admin will send your ID & Password through WhatsApp.
+            </p>
+            <button class="btn btn-primary" onclick="closeRegisterThankYouModal(null, true)" style="width: 100%; padding: 0.8rem; font-size: 1.05rem; font-weight: 700; border-radius: 50px; cursor: pointer; background: #25D366; color: white; border: none; box-shadow: 0 4px 12px rgba(37,211,102,0.3);">
+                OK / Close
+            </button>
+        </div>
+    </div>
+
+    <!-- Customer Sign In Modal -->
+    <div id="customerSigninModal" class="modal-overlay" onclick="closeCustomerSigninModal(event)">
+        <div class="modal-box fade-in-up" style="max-width: 420px; padding: 2.2rem 1.8rem;">
+            <button class="modal-close" onclick="closeCustomerSigninModal(null, true)">&times;</button>
+            <h2 style="color: var(--primary-color); margin-bottom: 0.3rem; text-align: center; font-family: var(--font-heading);">Customer Sign In</h2>
+            <p style="text-align: center; color: #666; font-size: 0.95rem; margin-bottom: 1.5rem;">Enter your Customer ID or Phone Number and Password.</p>
+            
+            <form id="customerSigninForm" onsubmit="handleCustomerSignin(event)">
+                <div class="modal-input-group">
+                    <label for="signinLoginId">Customer ID / Phone Number</label>
+                    <input type="text" id="signinLoginId" placeholder="e.g. CUST-1001 or 9392603808" required>
+                </div>
+                <div class="modal-input-group">
+                    <label for="signinPassword">Password</label>
+                    <input type="password" id="signinPassword" placeholder="Enter your password" required>
+                </div>
+                <p id="signinErrorMsg" style="color: #c62828; font-weight: 700; font-size: 0.9rem; text-align: center; min-height: 1.2rem; margin-bottom: 1rem; display: none;"></p>
+                <button type="submit" id="signinSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1.05rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 12px rgba(26,92,42,0.3);">
+                    🔑 Sign In
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Customer Approval Modal -->
+    <div id="adminApproveCustomerModal" class="modal-overlay" onclick="closeAdminApproveCustomerModal(event)">
+        <div class="modal-box modal-wide fade-in-up" style="max-width: 540px; padding: 2rem;">
+            <button class="modal-close" onclick="closeAdminApproveCustomerModal(null, true)">&times;</button>
+            <h2 style="color: var(--primary-color); margin-bottom: 0.3rem; text-align: center;">Approve Customer Registration</h2>
+            <p style="text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 1.2rem;">Assign IDs, Password, and Subscription Type for <strong id="approveCustName">Customer</strong></p>
+
+            <form id="adminApproveForm" onsubmit="submitAdminApproval(event)">
+                <input type="hidden" id="approveDocId">
+                <input type="hidden" id="approveCustPhone">
+                <input type="hidden" id="approveCustWa">
+
+                <div style="background: #f0f7f0; padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.9rem;">
+                    <div><strong>Phone:</strong> <span id="approveDisplayPhone"></span> | <strong>WhatsApp:</strong> <span id="approveDisplayWa"></span></div>
+                    <div><strong>Location:</strong> <span id="approveDisplayLoc"></span>, <span id="approveDisplayArea"></span></div>
+                    <div><strong>Address:</strong> <span id="approveDisplayAddr"></span></div>
+                </div>
+
+                <div class="modal-input-group">
+                    <label for="approveMembershipId">Assigned Membership ID <span style="color:red;">*</span></label>
+                    <input type="text" id="approveMembershipId" placeholder="e.g. AYY-M-1001" required>
+                </div>
+                <div class="modal-input-group">
+                    <label for="approveCustomerId">Assigned Customer ID / Login ID <span style="color:red;">*</span></label>
+                    <input type="text" id="approveCustomerId" placeholder="e.g. CUST-1001" required>
+                </div>
+                <div class="modal-input-group">
+                    <label for="approvePassword">Assigned Password <span style="color:red;">*</span></label>
+                    <input type="text" id="approvePassword" placeholder="e.g. Ayyappa@123" required>
+                </div>
+                <div class="modal-input-group">
+                    <label for="approveSubscriptionType">Active Subscription Type <span style="color:red;">*</span></label>
+                    <select id="approveSubscriptionType" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                        <option value="Daily Subscription">Daily Subscription</option>
+                        <option value="Monthly Subscription">Monthly Subscription</option>
+                        <option value="Daily Subscription + Monthly Subscription">Daily Subscription + Monthly Subscription</option>
+                    </select>
+                </div>
+
+                <div style="display: flex; gap: 0.8rem; margin-top: 1.2rem;">
+                    <button type="submit" class="btn btn-secondary" style="flex: 1; background: #2e7d32; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                        ✅ Save & Approve
+                    </button>
+                    <button type="button" onclick="sendApprovalWhatsApp()" class="btn btn-primary" style="flex: 1; background: #25D366; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                        💬 Send WhatsApp
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -286,37 +476,66 @@
                        <p class="profile-subtitle" id="profile-display-phone" style="color: white; font-size: 0.9rem; opacity: 0.85;"></p>
                     </div>
 
-                    <!-- Fields -->
+                    <!-- Read-only Account Details & Editable Address -->
                     <div class="premium-form-section" style="display:flex; flex-direction:column; gap:1rem;">
-                        <div class="premium-field">
-                           <label>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-purple"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Full Name
-                           </label>
-                           <input type="text" id="profile-name" placeholder="Enter your full name" required>
+                        <div style="background: #f8faf8; padding: 1rem; border-radius: 14px; border: 1px solid #e0eee0;">
+                            <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">📋 Account Information (Read-Only)</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; font-size: 0.9rem;">
+                                <div><span style="color:#666; font-size:0.8rem;">Membership ID:</span><br><strong id="profile-membership-id" style="color:var(--primary-color); font-size:1.05rem;">AYY-M-1001</strong></div>
+                                <div><span style="color:#666; font-size:0.8rem;">Account Status:</span><br><span id="profile-account-status" style="background:#2e7d32; color:white; padding:2px 8px; border-radius:12px; font-size:0.75rem; font-weight:800;">ACTIVE</span></div>
+                                <div><span style="color:#666; font-size:0.8rem;">Customer Name:</span><br><strong id="profile-read-name">Customer</strong></div>
+                                <div><span style="color:#666; font-size:0.8rem;">Phone Number:</span><br><strong id="profile-read-phone">N/A</strong></div>
+                                <div><span style="color:#666; font-size:0.8rem;">WhatsApp Number:</span><br><strong id="profile-read-whatsapp">N/A</strong></div>
+                                <div><span style="color:#666; font-size:0.8rem;">Subscription Type:</span><br><strong id="profile-read-subtype" style="color:#1565c0;">Daily Subscription</strong></div>
+                            </div>
                         </div>
-                        <div class="premium-field">
-                           <label>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-pink"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg> Phone Number
-                           </label>
-                           <input type="tel" id="profile-phone" placeholder="Enter your phone number" required>
+
+                        <div style="background: #f8faf8; padding: 1rem; border-radius: 14px; border: 1px solid #e0eee0;">
+                            <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">📍 Delivery Address (Editable)</h4>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 0.8rem;">
+                                <div class="premium-field">
+                                    <label>Location / City / Town</label>
+                                    <select id="profile-city" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                                        <option value="Narasaraopet" selected>Narasaraopet</option>
+                                    </select>
+                                </div>
+                                <div class="premium-field">
+                                    <label>Choose Area</label>
+                                    <select id="profile-area" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                                        <option value="Clock Tower Area">Clock Tower Area</option>
+                                        <option value="Kota Centre">Kota Centre</option>
+                                        <option value="Mallamma Centre">Mallamma Centre</option>
+                                        <option value="Prakash Nagar">Prakash Nagar</option>
+                                        <option value="Rikshaw Centre">Rikshaw Centre</option>
+                                        <option value="Ramireddypeta">Ramireddypeta</option>
+                                        <option value="Barampet">Barampet</option>
+                                        <option value="Srirampuram">Srirampuram</option>
+                                        <option value="Reddy Nagar">Reddy Nagar</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="premium-field" style="margin-bottom:0.8rem;">
+                                <label>House No / Street Address</label>
+                                <textarea id="profile-address" rows="2" placeholder="Door No, Street Name, Landmark" style="width:100%; padding:0.75rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem; font-family:inherit;"></textarea>
+                            </div>
+
+                            <div class="premium-field">
+                                <label>Delivery Slot</label>
+                                <select id="profile-slot" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                                    <option value="Morning">Morning</option>
+                                    <option value="Evening">Evening</option>
+                                    <option value="Morning & Evening">Morning & Evening</option>
+                                </select>
+                            </div>
                         </div>
-                        <div class="premium-field">
-                           <label>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-blue"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg> City / Town
-                           </label>
-                           <input type="text" id="profile-city" placeholder="Enter your city or town" required>
-                        </div>
-                        <div class="premium-field">
-                           <label>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-pink"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> Address
-                           </label>
-                           <textarea id="profile-address" rows="3" placeholder="Enter your delivery address" required></textarea>
-                        </div>
-                        <button class="premium-btn" onclick="saveProfileInfo()">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save Profile
+
+                        <button class="premium-btn" onclick="saveProfileInfo()" style="background: var(--primary-color); color: white; border: none; padding: 0.9rem; border-radius: 50px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 4px 14px rgba(26,92,42,0.3);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> Save Address Changes
                         </button>
                         <div id="profile-save-msg" style="text-align:center; color:#2d8f4e; font-weight:600; display:none; font-size:0.95rem; padding:0.5rem; background:#e8f5e9; border-radius:8px;">
-                            ✅ Profile saved successfully!
+                            ✅ Address updated successfully!
                         </div>
                     </div>
                 </div>
@@ -389,8 +608,39 @@
         <!-- HOME PAGE -->
         <div id="page-home" class="page-view active">
             <section class="hero section-padding">
-                <div class="hero-content fade-in" style="text-align: center; width: 100%; max-width: none;">
-                    <h1 style="text-align: center; margin: 0 auto;">Welcome to Ayyappa Dairy Farm</h1>
+                <div class="hero-content fade-in" style="text-align: center; width: 100%; max-width: 800px; margin: 0 auto;">
+                    <h1 style="text-align: center; margin: 0 auto 0.8rem; font-size: 2.6rem; color: #ffffff; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">Welcome to Ayyappa Dairy Farm</h1>
+                    <h2 style="text-align: center; margin: 0 auto 2.2rem; font-size: 1.8rem; letter-spacing: 2.5px; color: var(--accent-color, #FFD700); font-weight: 800; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">FRESH MILK, PURE LIFE</h2>
+
+                    <!-- Customer Access Box -->
+                    <div id="homeAccessBox" class="home-access-box" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 2rem 1.8rem; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); max-width: 440px; margin: 0 auto; border: 1px solid rgba(255,255,255,0.4);">
+                        <div style="margin-bottom: 1.4rem; text-align: center;">
+                            <p style="font-size: 1.05rem; color: #2d3748; font-weight: 700; margin-bottom: 0.6rem;">Already Registered?</p>
+                            <button class="btn btn-primary" onclick="openCustomerSigninModal()" style="width: 100%; padding: 0.85rem 1.5rem; font-size: 1.05rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 14px rgba(26,92,42,0.35); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                                🔑 Sign In
+                            </button>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="font-size: 1.05rem; color: #2d3748; font-weight: 700; margin-bottom: 0.6rem;">New Customer?</p>
+                            <button class="btn btn-secondary" onclick="openCustomerRegisterModal()" style="width: 100%; padding: 0.85rem 1.5rem; font-size: 1.05rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: #25D366; color: white; border: none; box-shadow: 0 4px 14px rgba(37,211,102,0.35); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                                📋 Register
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Welcome Back Box for Logged In Customer -->
+                    <div id="homeLoggedInBox" class="home-access-box" style="display: none; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 1.8rem; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); max-width: 440px; margin: 0 auto; text-align: center; border: 1px solid rgba(255,255,255,0.4);">
+                        <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 0.4rem;">👋 Welcome Back, <span id="homeCustName">Customer</span>!</h3>
+                        <p style="color: #555; font-size: 0.95rem; margin-bottom: 1.2rem;">Membership ID: <strong id="homeCustMembershipId" style="color: var(--primary-color);">AYY-M-1001</strong></p>
+                        <div style="display: flex; gap: 0.8rem;">
+                            <button class="btn btn-primary" onclick="showPage('order')" style="flex: 1; padding: 0.8rem; font-size: 1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 12px rgba(26,92,42,0.3);">
+                                🛒 Place Order
+                            </button>
+                            <button class="btn btn-secondary" onclick="openCustomerOrdersModal()" style="flex: 1; padding: 0.8rem; font-size: 1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: #25D366; color: white; border: none; box-shadow: 0 4px 12px rgba(37,211,102,0.3);">
+                                👤 My Profile
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>
@@ -475,343 +725,142 @@
 
         <!-- ORDER PAGE -->
         <div id="page-order" class="page-view">
-            <section class="contact section-padding" style="background: var(--primary-color); position: relative; overflow: hidden; padding-top: 140px;">
-                <!-- Decorative elements for a premium look -->
+            <section class="contact section-padding" style="background: var(--primary-color); position: relative; overflow: hidden; padding-top: 140px; min-height: 85vh;">
+                <!-- Background ambient lights -->
                 <div style="position: absolute; top: -10%; right: -5%; width: 300px; height: 300px; background: rgba(255,255,255,0.03); border-radius: 50%;"></div>
                 <div style="position: absolute; bottom: -10%; left: -5%; width: 200px; height: 200px; background: rgba(255,255,255,0.03); border-radius: 50%;"></div>
                 
                 <div class="container fade-in-up">
-                    <div style="text-align:center; margin-bottom:2.5rem;">
-                        <h2 style="font-size:2.2rem; color: var(--white); margin-bottom:0.5rem;">🥛 Book Your Order</h2>
-                        <p style="color: var(--secondary-color); font-size:1.1rem; max-width:560px; margin:0 auto; opacity: 0.9;">Fill in your details below and we'll get your fresh dairy delivered right to your doorstep!</p>
+                    <div style="text-align:center; margin-bottom:2rem;">
+                        <h2 style="font-size:2.2rem; color: var(--white); margin-bottom:0.5rem;">🥛 Place Your Order</h2>
+                        <p style="color: var(--secondary-color); font-size:1.05rem; max-width:560px; margin:0 auto; opacity: 0.9;">Fresh dairy delivered straight from our farm to your home.</p>
                     </div>
 
-                    <div class="booking-layout">
-                        <!-- Booking Form -->
-                        <div class="booking-form-card">
-                            <div style="display:flex; align-items:center; justify-content:center; gap:0.8rem; margin-bottom:1.8rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 1rem; text-align: center;">
-                                <span style="font-size: 1.8rem;">🛒</span>
-                                <h3 style="color:var(--primary-color); margin:0; font-size:1.6rem; font-family:var(--font-heading); text-align: center;">Proceed to Order (Home Delivery)</h3>
-                            </div>
+                    <div class="booking-layout" style="max-width: 650px; margin: 0 auto;">
+                        <div class="booking-form-card" style="background: white; border-radius: 24px; padding: 2rem; box-shadow: 0 15px 35px rgba(0,0,0,0.25);">
                             
-                            <!-- 4-Section Menu Navigation Grid -->
-                            <div class="order-menu-grid">
-                                <div class="order-menu-card active" id="order-menu-new" onclick="switchOrderSection('new')">
-                                    <span class="menu-num">1</span>
-                                    <span class="menu-icon">👤</span>
-                                    <span class="menu-label">New Customer</span>
-                                </div>
-                                <div class="order-menu-card" id="order-menu-daily" onclick="switchOrderSection('daily')">
-                                    <span class="menu-num">2</span>
-                                    <span class="menu-icon">🟢</span>
-                                    <span class="menu-label">Daily Subscription</span>
-                                </div>
-                                <div class="order-menu-card" id="order-menu-monthly" onclick="switchOrderSection('monthly')">
-                                    <span class="menu-num">3</span>
-                                    <span class="menu-icon">🔵</span>
-                                    <span class="menu-label">Monthly Subscription</span>
-                                </div>
-                                <div class="order-menu-card" id="order-menu-refer" onclick="switchOrderSection('refer')">
-                                    <span class="menu-num">4</span>
-                                    <span class="menu-icon">🤝</span>
-                                    <span class="menu-label">Refer a Friend</span>
+                            <!-- Logged In Customer Summary Header -->
+                            <div style="background: #f0f7f0; padding: 1.2rem; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid #c8e6c9;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+                                    <div>
+                                        <div style="font-size: 0.78rem; color: #666; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Customer Name</div>
+                                        <div id="orderCustName" style="font-size: 1.25rem; font-weight: 800; color: var(--primary-color);">Customer</div>
+                                        <div style="font-size: 0.88rem; color: #444; margin-top: 2px;">Phone: <strong id="orderCustPhone">N/A</strong></div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 0.78rem; color: #666; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Membership ID</div>
+                                        <div id="orderCustMembershipId" style="font-size: 1.3rem; font-weight: 800; color: var(--primary-color);">AYY-M-1001</div>
+                                        <div style="font-size: 0.8rem; color: #1565c0; font-weight: 700; margin-top: 2px;" id="orderCustSubTypeDisplay">Daily Subscription</div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div id="idDisplayBanner" style="background: var(--bg-light); padding: 1rem 1.2rem; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; border: 1.5px dashed var(--primary-color);">
-                                <span style="font-size: 1.5rem;">🆔</span>
-                                <div>
-                                    <div class="id-label" style="font-size: 0.8rem; color: #555; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">NEW CUSTOMER MEMBERSHIP ID</div>
-                                    <div id="currentIDDisplay" style="font-size: 1.3rem; font-weight: 800; color: var(--primary-color);">ADFD2001</div>
-                                </div>
+                            <!-- Subscription Selector Tabs (Only shown if user has BOTH subscriptions) -->
+                            <div id="orderSubscriptionTabs" style="display: none; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.5rem;">
+                                <button type="button" id="tabDailyBtn" onclick="selectOrderSubTab('Daily')" style="padding: 0.85rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; border: 2px solid var(--primary-color); background: var(--primary-color); color: white;">
+                                    🟢 Daily Subscription
+                                </button>
+                                <button type="button" id="tabMonthlyBtn" onclick="selectOrderSubTab('Monthly')" style="padding: 0.85rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; border: 2px solid #1565c0; background: white; color: #1565c0;">
+                                    🔵 Monthly Subscription
+                                </button>
                             </div>
 
-                            <form id="bookingForm" onsubmit="sendBookingWhatsApp(event)">
-                                
-                                <!-- SECTION 1: NEW CUSTOMER -->
-                                <div id="order-sec-new" class="order-tab-content">
-                                    <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 1.2rem; border-radius: 16px; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(22,101,52,0.06);">
-                                        <h4 style="color: #166534; margin-bottom: 0.4rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 800;">
-                                            👤 1) New Customer Registration & Sign In
-                                        </h4>
-                                        <p style="font-size: 0.88rem; color: #374151; margin: 0;">Fill in your details below to sign in, allocate your Membership ID, and unlock Daily & Monthly subscriptions.</p>
+                            <!-- Daily Subscription Form Section -->
+                            <form id="dailyOrderForm" onsubmit="handleDailyOrderSubmit(event)" style="display: block;">
+                                <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
+                                    <h3 style="color: #166534; font-size: 1.2rem; margin-bottom: 0.3rem; font-weight: 800;">🟢 Daily Subscription Order</h3>
+                                    <p style="font-size: 0.88rem; color: #444; margin: 0;">Order fresh daily milk delivery to your doorstep.</p>
+                                </div>
+
+                                <div class="modal-input-group">
+                                    <label for="dailyOrderQty" style="font-weight: 700; color: #333;">Milk Quantity (Litres) <span style="color:red;">*</span></label>
+                                    <select id="dailyOrderQty" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:1rem; font-weight:700;" required>
+                                        <option value="1">1 Litre (₹80)</option>
+                                        <option value="2">2 Litres (₹160)</option>
+                                        <option value="3">3 Litres (₹240)</option>
+                                        <option value="4">4 Litres (₹320)</option>
+                                        <option value="5">5 Litres (₹400)</option>
+                                        <option value="6">6 Litres (₹480)</option>
+                                        <option value="7">7 Litres (₹560)</option>
+                                        <option value="8">8 Litres (₹640)</option>
+                                        <option value="9">9 Litres (₹720)</option>
+                                        <option value="10">10 Litres (₹800 - Max Limit)</option>
+                                    </select>
+                                </div>
+
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
+                                    <div class="modal-input-group" style="margin-bottom:0;">
+                                        <label for="dailyOrderSlot" style="font-weight: 700; color: #333;">Delivery Slot <span style="color:red;">*</span></label>
+                                        <select id="dailyOrderSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                            <option value="Morning">Morning</option>
+                                            <option value="Evening">Evening</option>
+                                        </select>
                                     </div>
-
-                                    <!-- Personal & Contact Fields -->
-                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-bottom: 1.2rem;">
-                                        <div>
-                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Full Name *</label>
-                                            <input type="text" id="newCustName" placeholder="Enter your full name" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem;" required>
-                                        </div>
-                                        <div>
-                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Phone Number *</label>
-                                            <input type="tel" id="newCustPhone" placeholder="Enter 10-digit mobile number" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem;" required>
-                                        </div>
-                                        <div>
-                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">WhatsApp Number *</label>
-                                            <input type="tel" id="newCustWhatsapp" placeholder="Enter WhatsApp number" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem;" required>
-                                        </div>
-                                    </div>
-
-                                    <!-- Address: Location & Area Selection -->
-                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-bottom: 1.2rem;">
-                                        <div>
-                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">📍 Location / City *</label>
-                                            <select id="newCustLocation" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem; font-weight: 700; background: white;" required>
-                                                <option value="Narasaraopet" selected>Narasaraopet</option>
-                                                <option value="Vinukonda">Vinukonda</option>
-                                                <option value="Chilakaluripet">Chilakaluripet</option>
-                                                <option value="Guntur">Guntur</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">🏘️ Select Area (Narasaraopet) *</label>
-                                            <select id="newCustArea" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem; font-weight: 700; background: white;" required>
-                                                <option value="" disabled selected>-- Choose Area --</option>
-                                                <option value="Arundelpet">Arundelpet</option>
-                                                <option value="Gandhi Chowk">Gandhi Chowk</option>
-                                                <option value="Clock Tower Area">Clock Tower Area</option>
-                                                <option value="Kota Centre">Kota Centre</option>
-                                                <option value="Mallamma Centre">Mallamma Centre</option>
-                                                <option value="Prakash Nagar">Prakash Nagar</option>
-                                                <option value="Rikshaw Centr">Rikshaw Centr</option>
-                                                <option value="Ramireddypeta">Ramireddypeta</option>
-                                                <option value="Barampet">Barampet</option>
-                                                <option value="Srirampuram">Srirampuram</option>
-                                                <option value="Reddy Nagar">Reddy Nagar</option>
-                                                <option value="Mahalakshmi Nagar">Mahalakshmi Nagar</option>
-                                                <option value="Kakatiya Nagar">Kakatiya Nagar</option>
-                                                <option value="Navodaya Nagar">Navodaya Nagar</option>
-                                                <option value="Guntur Road">Guntur Road</option>
-                                                <option value="Kotappakonda Road">Kotappakonda Road</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <!-- House/Door No & Street Address -->
-                                    <div style="margin-bottom: 1.2rem;">
-                                        <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">🏠 House No / Street Address *</label>
-                                        <input type="text" id="newCustAddress" placeholder="Door No, Street Name, House Name, Landmark" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem;" required>
-                                    </div>
-
-                                    <!-- Delivery Slot & Subscription Selection -->
-                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-bottom: 1.5rem;">
-                                        <div>
-                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">🚚 Delivery Slot *</label>
-                                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                                                <label style="flex:1; min-width: 90px; border: 1.5px solid #c2e2c4; background: white; padding: 0.6rem 0.4rem; border-radius: 10px; font-size: 0.82rem; cursor: pointer; text-align: center; font-weight: 700;">
-                                                    <input type="radio" name="newCustSlot" value="Morning" checked> Morning
-                                                </label>
-                                                <label style="flex:1; min-width: 90px; border: 1.5px solid #c2e2c4; background: white; padding: 0.6rem 0.4rem; border-radius: 10px; font-size: 0.82rem; cursor: pointer; text-align: center; font-weight: 700;">
-                                                    <input type="radio" name="newCustSlot" value="Evening"> Evening
-                                                </label>
-                                                <label style="flex:1.2; min-width: 130px; border: 1.5px solid #c2e2c4; background: white; padding: 0.6rem 0.4rem; border-radius: 10px; font-size: 0.82rem; cursor: pointer; text-align: center; font-weight: 700;">
-                                                    <input type="radio" name="newCustSlot" value="Morning & Evening"> Morning & Evening
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">📋 Subscription Type *</label>
-                                            <div style="display: flex; gap: 0.5rem;">
-                                                <label style="flex:1; border: 1.5px solid #166534; background: #f0fdf4; padding: 0.6rem; border-radius: 10px; font-size: 0.85rem; cursor: pointer; text-align: center; font-weight: 800; color: #166534;">
-                                                    <input type="radio" name="newCustSubType" value="Daily" checked> 🟢 Daily (ADFD2800)
-                                                </label>
-                                                <label style="flex:1; border: 1.5px solid #1565c0; background: #eef6fc; padding: 0.6rem; border-radius: 10px; font-size: 0.85rem; cursor: pointer; text-align: center; font-weight: 800; color: #1565c0;">
-                                                    <input type="radio" name="newCustSubType" value="Monthly"> 🔵 Monthly (ADFM20001)
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Welcome Offers Card Selection -->
-                                    <div class="welcome-offer-container" style="margin-bottom: 1.5rem;">
-                                        <div class="welcome-grid">
-                                            <label class="welcome-card">
-                                                <input type="radio" name="welcomeOffer" value="A" class="welcome-card-input" onchange="calculateAmount()">
-                                                <div class="welcome-card-body">
-                                                    <span class="welcome-badge">OPTION A</span>
-                                                    <div class="welcome-text">First Order — ₹20 OFF</div>
-                                                    <div class="welcome-sub">Get Milk at ₹80/L for your first order!</div>
-                                                </div>
-                                            </label>
-                                            <label class="welcome-card">
-                                                <input type="radio" name="welcomeOffer" value="B" class="welcome-card-input" checked onchange="calculateAmount()">
-                                                <div class="welcome-card-body">
-                                                    <span class="welcome-badge">OPTION B</span>
-                                                    <div class="welcome-text">First Monthly Sub — ₹100 OFF</div>
-                                                    <div class="welcome-sub">1L/day = ₹2,750 full month!</div>
-                                                </div>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Centered Sign In Button at Bottom -->
-                                    <div style="text-align: center; margin-top: 2rem; margin-bottom: 1.5rem;">
-                                        <button type="button" class="btn-signin-center" id="newCustSigninBtn" onclick="handleNewCustomerSignin()">
-                                            🔑 Sign In & Allocate Membership ID
-                                        </button>
+                                    <div class="modal-input-group" style="margin-bottom:0;">
+                                        <label for="dailyOrderPayment" style="font-weight: 700; color: #333;">Payment Option <span style="color:red;">*</span></label>
+                                        <select id="dailyOrderPayment" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                            <option value="Cash on Delivery">Cash on Delivery</option>
+                                            <option value="UPI">UPI</option>
+                                        </select>
                                     </div>
                                 </div>
 
-                                <!-- SECTION 2: DAILY SUBSCRIPTION -->
-                                <div id="order-sec-daily" class="order-tab-content" style="display: none;">
-                                    <div style="background: #f8fdf8; border: 1px solid #c2e2c4; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
-                                        <h4 style="color: #2e7d32; margin-bottom: 0.4rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
-                                            🟢 2) Daily Subscription (Pay Per Order Daily)
-                                        </h4>
-                                        <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;">Daily fresh delivery at your doorstep with duration discounts up to ₹150 OFF!</p>
-                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-                                            <label style="border: 1px solid #c2e2c4; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.82rem; cursor: pointer; text-align: center;">
-                                                <input type="radio" name="dailyDuration" value="7 Days" onchange="calculateAmount()">
-                                                <strong>7 Days</strong><br><span style="color:#2e7d32; font-weight:700;">₹50 OFF</span>
-                                            </label>
-                                            <label style="border: 1px solid #c2e2c4; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.82rem; cursor: pointer; text-align: center;">
-                                                <input type="radio" name="dailyDuration" value="15 Days" onchange="calculateAmount()">
-                                                <strong>15 Days</strong><br><span style="color:#2e7d32; font-weight:700;">₹100 OFF</span>
-                                            </label>
-                                            <label style="border: 1px solid #c2e2c4; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.82rem; cursor: pointer; text-align: center;">
-                                                <input type="radio" name="dailyDuration" value="30 Days" checked onchange="calculateAmount()">
-                                                <strong>30 Days</strong><br><span style="color:#2e7d32; font-weight:700;">₹150 OFF</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- SECTION 3: MONTHLY SUBSCRIPTION -->
-                                <div id="order-sec-monthly" class="order-tab-content" style="display: none;">
-                                    <div style="background: #eef6fc; border: 1px solid #b3d7f5; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
-                                        <h4 style="color: #1565c0; margin-bottom: 0.4rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
-                                            🔵 3) Monthly Subscription (30 Days Prepaid)
-                                        </h4>
-                                        <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;">Pay once for 30 days advance & enjoy hassle-free daily milk deliveries!</p>
-                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
-                                            <label style="border: 1px solid #90caf9; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: center;">
-                                                <input type="radio" name="monthlyPlan" value="Basic" checked onchange="calculateAmount()">
-                                                <strong>Basic (1L/day)</strong><br><span style="color:#1565c0; font-weight:800;">₹2,850</span>
-                                                <div style="font-size:0.7rem; color:#888; text-decoration:line-through;">₹3,000</div>
-                                            </label>
-                                            <label style="border: 1px solid #90caf9; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: center;">
-                                                <input type="radio" name="monthlyPlan" value="Family" onchange="calculateAmount()">
-                                                <strong>Family (2L/day)</strong><br><span style="color:#1565c0; font-weight:800;">₹5,700</span>
-                                                <div style="font-size:0.7rem; color:#888; text-decoration:line-through;">₹6,000</div>
-                                            </label>
-                                            <label style="border: 1px solid #90caf9; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: center;">
-                                                <input type="radio" name="monthlyPlan" value="Premium" onchange="calculateAmount()">
-                                                <strong>Premium (3L/day)</strong><br><span style="color:#1565c0; font-weight:800;">₹8,550</span>
-                                                <div style="font-size:0.7rem; color:#888; text-decoration:line-through;">₹9,000</div>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- SECTION 4: REFER A FRIEND -->
-                                <div id="order-sec-refer" class="order-tab-content" style="display: none;">
-                                    <div style="background: #fff8e1; border: 1px solid #ffe082; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
-                                        <h4 style="color: #e65100; margin-bottom: 0.4rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
-                                            🤝 4) Refer a Friend & Get 1 KG Pure Desi Ghee!
-                                        </h4>
-                                        <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;">Refer a friend for a monthly subscription and get 1 KG Pure Desi Ghee or ₹100 credit on your reward wallet!</p>
-                                        <div style="display: flex; gap: 0.5rem;">
-                                            <input type="text" id="bookReferral" placeholder="e.g. AYYAPPA-BHU123" style="flex: 1; padding: 0.6rem 0.8rem; border: 1px solid #ffd54f; border-radius: 8px; font-weight: 700; text-transform: uppercase;" oninput="calculateAmount()">
-                                            <button type="button" onclick="verifyReferralCode()" style="background: #e65100; color: white; border: none; padding: 0 1rem; border-radius: 8px; font-weight: 700; cursor: pointer;">Apply Code</button>
-                                        </div>
-                                        <div id="referralStatusMsg" style="font-size: 0.8rem; margin-top: 0.4rem; font-weight: 600;"></div>
-                                    </div>
-                                </div>
-
-                                <!-- Hidden radio group for planType so JS calculation logic remains backward compatible -->
-                                <div style="display: none;">
-                                    <input type="radio" name="planType" value="Daily" checked onchange="calculateAmount()">
-                                    <input type="radio" name="planType" value="Monthly" onchange="calculateAmount()">
-                                </div>
-
-                                <!-- Order Checkout Section (Only visible on Daily / Monthly / Refer tabs after sign-in & approval) -->
-                                <div id="orderCheckoutSection" style="display: none;">
-                                    <!-- Optional Delivery Slot Selection -->
-                                    <div style="margin-top: 1.5rem;">
-                                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                            🚚 Delivery Slot (Optional)
-                                        </h4>
-                                        <p style="font-size: 0.82rem; color: #666; margin-bottom: 0.6rem;">You can pick a slot or leave as 'No Preference' (To Be Assigned).</p>
-                                        <div class="slot-grid">
-                                            <label class="slot-pill">
-                                                <input type="radio" name="deliverySlot" value="Morning (7:00 AM – 9:00 AM)" class="slot-pill-input" onchange="calculateAmount()">
-                                                <div class="slot-title">🌅 Morning</div>
-                                                <div class="slot-time">7:00 – 9:00 AM</div>
-                                            </label>
-                                            <label class="slot-pill">
-                                                <input type="radio" name="deliverySlot" value="Evening (7:00 PM – 9:00 PM)" class="slot-pill-input" onchange="calculateAmount()">
-                                                <div class="slot-title">🌙 Evening</div>
-                                                <div class="slot-time">7:00 – 9:00 PM</div>
-                                            </label>
-                                            <label class="slot-pill">
-                                                <input type="radio" name="deliverySlot" value="No Preference" class="slot-pill-input" checked onchange="calculateAmount()">
-                                                <div class="slot-title">⚪ No Preference</div>
-                                                <div class="slot-time">To Be Assigned</div>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Service Rating -->
-                                    <div style="margin-top: 1.5rem;">
-                                        <label style="font-weight: 700; color: var(--primary-color); font-size: 0.95rem;">Rate Our Service *</label>
-                                        <div class="star-rating" style="margin-top: 0.3rem;">
-                                            <input type="radio" name="rating" id="star5" value="5" checked required><label for="star5">★</label>
-                                            <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
-                                            <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
-                                            <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
-                                            <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
-                                        </div>
-                                    </div>
-
-                                    <!-- Real-Time Itemized Checkout Breakdown Summary Card -->
-                                    <div class="checkout-summary-box">
-                                        <div class="checkout-header">
-                                            <h4>🥛 AYYAPPA DAIRY FARM</h4>
-                                            <span id="summaryPlanBadge" style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800;">MONTHLY BASIC</span>
-                                        </div>
-                                        <div class="checkout-row">
-                                            <span>Milk / Product Base Value:</span>
-                                            <span id="sumMilkValue">₹3,000</span>
-                                        </div>
-                                        <div class="checkout-row discount" id="sumPlanDiscountRow">
-                                            <span>Monthly / Plan Discount:</span>
-                                            <span id="sumPlanDiscount">−₹150</span>
-                                        </div>
-                                        <div class="checkout-row discount" id="sumWelcomeDiscountRow">
-                                            <span>New Customer Discount:</span>
-                                            <span id="sumWelcomeDiscount">−₹100</span>
-                                        </div>
-                                        <div class="checkout-row">
-                                            <span>Home Delivery:</span>
-                                            <span style="color: #A8D5A2; font-weight: 800;">FREE</span>
-                                        </div>
-                                        <div class="checkout-row total">
-                                            <span>TOTAL FINAL AMOUNT:</span>
-                                            <span id="sumTotalAmount" style="color: #FFD700;">₹2,750</span>
-                                        </div>
-                                        <input type="hidden" id="bookAmount" value="2750">
-                                        <div class="advance-pay-badge" id="advanceBadgeText">💳 100% ADVANCE PAYMENT</div>
-                                    </div>
-
-                                    <div style="margin-top: 1.5rem;">
-                                        <button type="submit" class="booking-submit-btn" id="paySubmitBtn">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                            PAY ₹2,750 & SUBSCRIBE
-                                        </button>
-                                    </div>
-                                </div>
+                                <button type="submit" id="dailySubmitBtn" class="btn btn-primary" style="width:100%; padding:0.95rem; font-size:1.1rem; font-weight:800; border-radius:50px; cursor:pointer; background:var(--primary-color); color:white; border:none; margin-top:0.8rem; box-shadow:0 4px 15px rgba(26,92,42,0.35);">
+                                    🛒 Place Daily Order
+                                </button>
                             </form>
+
+                            <!-- Monthly Subscription Form Section -->
+                            <form id="monthlyOrderForm" onsubmit="handleMonthlyOrderSubmit(event)" style="display: none;">
+                                <div style="background: #eef6fc; border: 1.5px solid #b3d7f5; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
+                                    <h3 style="color: #1565c0; font-size: 1.2rem; margin-bottom: 0.3rem; font-weight: 800;">🔵 Monthly Subscription Order</h3>
+                                    <p style="font-size: 0.88rem; color: #444; margin: 0;">Set up your recurring monthly milk subscription.</p>
+                                </div>
+
+                                <div class="modal-input-group">
+                                    <label for="monthlyOrderQty" style="font-weight: 700; color: #333;">Daily Quantity (Litres per day) <span style="color:red;">*</span></label>
+                                    <select id="monthlyOrderQty" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:1rem; font-weight:700;" required>
+                                        <option value="1">1 Litre / Day (₹2,400 / month)</option>
+                                        <option value="2">2 Litres / Day (₹4,800 / month)</option>
+                                        <option value="3">3 Litres / Day (₹7,200 / month)</option>
+                                        <option value="4">4 Litres / Day (₹9,600 / month)</option>
+                                        <option value="5">5 Litres / Day (₹12,000 / month)</option>
+                                        <option value="6">6 Litres / Day (₹14,400 / month)</option>
+                                        <option value="7">7 Litres / Day (₹16,800 / month)</option>
+                                        <option value="8">8 Litres / Day (₹19,200 / month)</option>
+                                        <option value="9">9 Litres / Day (₹21,600 / month)</option>
+                                        <option value="10">10 Litres / Day (₹24,000 / month - Max Limit)</option>
+                                    </select>
+                                </div>
+
+                                <div class="modal-input-group" style="margin-bottom: 1rem;">
+                                    <label for="monthlyOrderSlot" style="font-weight: 700; color: #333;">Preferred Delivery Slot <span style="color:red;">*</span></label>
+                                    <select id="monthlyOrderSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                        <option value="Morning">Morning</option>
+                                        <option value="Evening">Evening</option>
+                                    </select>
+                                </div>
+
+                                <button type="submit" id="monthlySubmitBtn" class="btn btn-secondary" style="width:100%; padding:0.95rem; font-size:1.1rem; font-weight:800; border-radius:50px; cursor:pointer; background:#1565c0; color:white; border:none; margin-top:0.8rem; box-shadow:0 4px 15px rgba(21,101,192,0.35);">
+                                    📦 Confirm Monthly Subscription Order
+                                </button>
                             </form>
-                        </div>
+
+                            <!-- Order Confirmation Message Box -->
+                            <div id="orderSuccessBox" style="display: none; text-align: center; padding: 2rem 1rem;">
+                                <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉</div>
+                                <h3 style="color: var(--primary-color); font-size: 1.6rem; margin-bottom: 0.6rem; font-weight: 800;">Order Placed Successfully!</h3>
+                                <p style="font-size: 1.05rem; color: #333; margin-bottom: 0.8rem;">Your Order ID is: <strong id="orderSuccessId" style="color: var(--primary-color); font-size: 1.25rem;">AYY-D-20260901-0001</strong></p>
+                                <p style="color: #666; font-size: 0.95rem; margin-bottom: 1.5rem;">Our delivery agent will deliver your milk according to your selected slot.</p>
+                                <button onclick="resetAndBackToHome()" class="btn btn-primary" style="padding: 0.85rem 2.2rem; border-radius: 50px; font-weight: 700; cursor: pointer; background: var(--primary-color); color: white; border: none;">
+                                    Back to Home
+                                </button>
+                            </div>
 
                         </div>
                     </div>
                 </div>
             </section>
-        </div>
-
         <!-- OFFERS PAGE -->
         <div id="page-offers" class="page-view">
             <section class="section-padding" style="background: var(--bg-light); min-height: 80vh; padding-top: 120px;">
@@ -1090,21 +1139,21 @@
             <span class="m-icon">🥛</span>
             <span class="m-label">Products</span>
         </a>
-        <a href="#" onclick="showPage('order')" class="mobile-nav-item" id="m-nav-order">
-            <span class="m-icon">🛒</span>
-            <span class="m-label">Order</span>
-        </a>
         <a href="#" onclick="showPage('offers')" class="mobile-nav-item" id="m-nav-offers">
             <span class="m-icon">🎁</span>
             <span class="m-label">Grab Offers</span>
         </a>
+        <a href="#" onclick="showPage('order')" class="mobile-nav-item" id="m-nav-order" style="display: none;">
+            <span class="m-icon">🛒</span>
+            <span class="m-label">Order</span>
+        </a>
+        <a href="#" onclick="openCustomerOrdersModal()" class="mobile-nav-item" id="m-nav-profile" style="display: none;">
+            <span class="m-icon">👤</span>
+            <span class="m-label">My Profile</span>
+        </a>
         <a href="#" onclick="showPage('contact')" class="mobile-nav-item" id="m-nav-contact">
             <span class="m-icon">📞</span>
             <span class="m-label">Contact</span>
-        </a>
-        <a href="#" onclick="openCustomerOrdersModal()" class="mobile-nav-item" id="m-nav-orders">
-            <span class="m-icon">👤</span>
-            <span class="m-label">My Profile</span>
         </a>
         <a href="#" onclick="showPage('install')" class="mobile-nav-item" id="m-nav-install">
             <span class="m-icon">📲</span>
@@ -1155,6 +1204,13 @@
 
     // ΓöÇΓöÇ Page Switcher ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     function showPage(pageId) {
+        // Enforce customer authentication restriction for sensitive pages
+        if ((pageId === 'order' || pageId === 'orders' || pageId === 'profile') && typeof isCustomerSignedIn === 'function' && !isCustomerSignedIn()) {
+            alert('🔒 Access Restricted!\n\nPlease Sign In to access your Order Page, Profile, and Customer Dashboard.');
+            if (typeof openCustomerSigninModal === 'function') openCustomerSigninModal();
+            return false;
+        }
+
         // Handle Navbar background
         const navbar = document.querySelector('.navbar');
         if (pageId !== 'home') {
@@ -1181,8 +1237,8 @@
         const navEl = document.getElementById('nav-' + pageId);
         if (navEl) navEl.classList.add('nav-active');
 
-        // Special handling for Customer Dashboard
-        if (pageId === 'orders') {
+        // Special handling for Customer Dashboard / Profile
+        if (pageId === 'orders' || pageId === 'profile') {
             openCustomerOrdersModal();
             return false;
         }
@@ -3280,8 +3336,581 @@
         }
     }
 
-    // Initialize Order Page Menu, Tab Locks & ID Banner
+    // --- CUSTOMER AUTHENTICATION & ACCESS CONTROL LOGIC ---
+
+    function isCustomerSignedIn() {
+        const status = localStorage.getItem('ayyappa_signed_in');
+        return status === 'true';
+    }
+
+    function getSignedInCustomer() {
+        try {
+            const raw = localStorage.getItem('ayyappa_signed_in_customer');
+            return raw ? JSON.parse(raw) : null;
+        } catch(e) {
+            return null;
+        }
+    }
+
+    function checkAuthStateOnLoad() {
+        const isSignedIn = isCustomerSignedIn();
+        const customer = getSignedInCustomer();
+
+        // Desktop nav items
+        const navOrder = document.getElementById('nav-order-item');
+        const navProfile = document.getElementById('nav-profile-item');
+        const navDashboard = document.getElementById('nav-dashboard-item');
+        const navAuth = document.getElementById('nav-auth-item');
+
+        // Mobile nav items
+        const mobOrder = document.getElementById('mob-nav-order');
+        const mobProfile = document.getElementById('mob-nav-profile');
+
+        // Home hero boxes
+        const publicBox = document.getElementById('heroPublicBox');
+        const welcomeBox = document.getElementById('heroWelcomeBox');
+        const welcomeCustName = document.getElementById('welcomeCustName');
+        const welcomeCustId = document.getElementById('welcomeCustId');
+        const welcomeCustSub = document.getElementById('welcomeCustSub');
+
+        if (isSignedIn && customer) {
+            if (navOrder) navOrder.style.display = 'inline-block';
+            if (navProfile) navProfile.style.display = 'inline-block';
+            if (navDashboard) navDashboard.style.display = 'inline-block';
+            if (navAuth) navAuth.style.display = 'none';
+
+            if (mobOrder) mobOrder.style.display = 'flex';
+            if (mobProfile) mobProfile.style.display = 'flex';
+
+            if (publicBox) publicBox.style.display = 'none';
+            if (welcomeBox) welcomeBox.style.display = 'block';
+
+            if (welcomeCustName) welcomeCustName.textContent = customer.name || 'Valued Customer';
+            if (welcomeCustId) welcomeCustId.textContent = customer.membershipId || customer.id || 'AYY-M-1001';
+            if (welcomeCustSub) welcomeCustSub.textContent = customer.subType || 'Daily Subscription';
+
+            // Populate Order page header details
+            const orderCustName = document.getElementById('orderCustName');
+            const orderCustPhone = document.getElementById('orderCustPhone');
+            const orderCustMembershipId = document.getElementById('orderCustMembershipId');
+            const orderCustSubTypeDisplay = document.getElementById('orderCustSubTypeDisplay');
+
+            if (orderCustName) orderCustName.textContent = customer.name || 'Customer';
+            if (orderCustPhone) orderCustPhone.textContent = customer.phone || 'N/A';
+            if (orderCustMembershipId) orderCustMembershipId.textContent = customer.membershipId || customer.id || 'AYY-M-1001';
+            if (orderCustSubTypeDisplay) orderCustSubTypeDisplay.textContent = customer.subType || 'Daily Subscription';
+
+            // Setup Order Page subscription forms tab visibility based on customer subType
+            setupOrderSubscriptionViews(customer.subType || 'Daily Subscription');
+        } else {
+            if (navOrder) navOrder.style.display = 'none';
+            if (navProfile) navProfile.style.display = 'none';
+            if (navDashboard) navDashboard.style.display = 'none';
+            if (navAuth) navAuth.style.display = 'inline-block';
+
+            if (mobOrder) mobOrder.style.display = 'none';
+            if (mobProfile) mobProfile.style.display = 'none';
+
+            if (publicBox) publicBox.style.display = 'block';
+            if (welcomeBox) welcomeBox.style.display = 'none';
+        }
+    }
+
+    function setupOrderSubscriptionViews(subType) {
+        const tabsContainer = document.getElementById('orderSubscriptionTabs');
+        const dailyForm = document.getElementById('dailyOrderForm');
+        const monthlyForm = document.getElementById('monthlyOrderForm');
+
+        const isBoth = subType.toLowerCase().includes('both') || (subType.includes('Daily') && subType.includes('Monthly'));
+        const isMonthly = subType.toLowerCase().includes('monthly') && !isBoth;
+
+        if (isBoth) {
+            if (tabsContainer) tabsContainer.style.display = 'grid';
+            selectOrderSubTab('Daily');
+        } else if (isMonthly) {
+            if (tabsContainer) tabsContainer.style.display = 'none';
+            if (dailyForm) dailyForm.style.display = 'none';
+            if (monthlyForm) monthlyForm.style.display = 'block';
+        } else {
+            // Daily Subscription (Default)
+            if (tabsContainer) tabsContainer.style.display = 'none';
+            if (dailyForm) dailyForm.style.display = 'block';
+            if (monthlyForm) monthlyForm.style.display = 'none';
+        }
+    }
+
+    function selectOrderSubTab(type) {
+        const dailyForm = document.getElementById('dailyOrderForm');
+        const monthlyForm = document.getElementById('monthlyOrderForm');
+        const tabDailyBtn = document.getElementById('tabDailyBtn');
+        const tabMonthlyBtn = document.getElementById('tabMonthlyBtn');
+
+        if (type === 'Daily') {
+            if (dailyForm) dailyForm.style.display = 'block';
+            if (monthlyForm) monthlyForm.style.display = 'none';
+
+            if (tabDailyBtn) {
+                tabDailyBtn.style.background = 'var(--primary-color)';
+                tabDailyBtn.style.color = 'white';
+            }
+            if (tabMonthlyBtn) {
+                tabMonthlyBtn.style.background = 'white';
+                tabMonthlyBtn.style.color = '#1565c0';
+            }
+        } else {
+            if (dailyForm) dailyForm.style.display = 'none';
+            if (monthlyForm) monthlyForm.style.display = 'block';
+
+            if (tabDailyBtn) {
+                tabDailyBtn.style.background = 'white';
+                tabDailyBtn.style.color = 'var(--primary-color)';
+            }
+            if (tabMonthlyBtn) {
+                tabMonthlyBtn.style.background = '#1565c0';
+                tabMonthlyBtn.style.color = 'white';
+            }
+        }
+    }
+
+    async function handleCustomerSignin(e) {
+        if (e) e.preventDefault();
+
+        const inputId = document.getElementById('signinCustId')?.value.trim();
+        const inputPassword = document.getElementById('signinCustPassword')?.value.trim();
+
+        if (!inputId || !inputPassword) {
+            alert('Please enter both Phone / Customer ID and Password.');
+            return;
+        }
+
+        const btn = document.getElementById('customerSigninSubmitBtn');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Verifying credentials...';
+        }
+
+        try {
+            // Query Firestore customers collection
+            let matchedDoc = null;
+            let snapshot = await db.collection('customers').where('phone', '==', inputId).get();
+            if (snapshot.empty) {
+                snapshot = await db.collection('customers').where('customerId', '==', inputId).get();
+            }
+            if (snapshot.empty) {
+                snapshot = await db.collection('customers').where('membershipId', '==', inputId).get();
+            }
+
+            if (!snapshot.empty) {
+                matchedDoc = snapshot.docs[0].data();
+            } else {
+                // Fallback query in membership_approvals
+                let appSnap = await db.collection('membership_approvals').doc(inputId).get();
+                if (appSnap.exists) {
+                    matchedDoc = appSnap.data();
+                }
+            }
+
+            if (!matchedDoc) {
+                alert('❌ Account not found. Please register first to get your Customer ID & Password.');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '🔑 Sign In';
+                }
+                return;
+            }
+
+            // Check password match (if customer record has password)
+            if (matchedDoc.password && matchedDoc.password !== inputPassword) {
+                alert('❌ Invalid Password! Please check your credentials and try again.');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '🔑 Sign In';
+                }
+                return;
+            }
+
+            // Check approval status
+            if (matchedDoc.status === 'Pending') {
+                alert('⏳ Your account registration is still Pending Admin Approval.\n\nOnce approved by the Admin, you can sign in and start placing orders!');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '🔑 Sign In';
+                }
+                return;
+            }
+
+            // Successfully authenticated!
+            const custSession = {
+                name: matchedDoc.name || 'Customer',
+                phone: matchedDoc.phone || inputId,
+                whatsapp: matchedDoc.whatsapp || matchedDoc.phone || '',
+                id: matchedDoc.customerId || matchedDoc.membershipId || 'AYY-C-1001',
+                membershipId: matchedDoc.membershipId || 'AYY-M-1001',
+                subType: matchedDoc.subscriptionType || matchedDoc.subType || 'Daily Subscription',
+                location: matchedDoc.location || 'Narasaraopet',
+                area: matchedDoc.area || '',
+                address: matchedDoc.address || '',
+                deliverySlot: matchedDoc.deliverySlot || matchedDoc.slot || 'Morning'
+            };
+
+            localStorage.setItem('ayyappa_signed_in', 'true');
+            localStorage.setItem('ayyappa_signed_in_customer', JSON.stringify(custSession));
+
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '🔑 Sign In';
+            }
+
+            closeCustomerSigninModal();
+            checkAuthStateOnLoad();
+
+            alert(`🎉 Welcome back, ${custSession.name}!\n\nYou have successfully signed in (ID: ${custSession.id}).`);
+            showPage('order');
+
+        } catch (err) {
+            console.error("Sign in error:", err);
+            alert("Error signing in: " + err.message);
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '🔑 Sign In';
+            }
+        }
+    }
+
+    async function handleCustomerRegistration(e) {
+        if (e) e.preventDefault();
+
+        const name = document.getElementById('regName')?.value.trim();
+        const phone = document.getElementById('regPhone')?.value.trim();
+        const whatsapp = document.getElementById('regWhatsapp')?.value.trim();
+        const location = document.getElementById('regLocation')?.value || 'Narasaraopet';
+        const area = document.getElementById('regArea')?.value || '';
+        const address = document.getElementById('regAddress')?.value.trim();
+        const slot = document.getElementById('regSlot')?.value || 'Morning';
+        const subType = document.getElementById('regSubscriptionType')?.value || 'Daily Subscription';
+
+        if (!name || !phone || !whatsapp || !area || !address) {
+            alert('Please fill in all mandatory fields (*).');
+            return;
+        }
+
+        const btn = document.getElementById('regSubmitBtn');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Submitting Registration...';
+        }
+
+        const pendingDoc = {
+            name, phone, whatsapp, location, area, address, slot, subType,
+            status: 'Pending',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            date: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+        };
+
+        try {
+            await db.collection('membership_approvals').doc(phone).set(pendingDoc);
+
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '✨ Submit Registration';
+            }
+
+            closeCustomerRegModal();
+            openThankYouModal();
+
+        } catch (err) {
+            console.error("Registration submission error:", err);
+            alert("Error submitting registration: " + err.message);
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '✨ Submit Registration';
+            }
+        }
+    }
+
+    function handleCustomerLogout() {
+        if (confirm("Are you sure you want to sign out?")) {
+            localStorage.removeItem('ayyappa_signed_in');
+            localStorage.removeItem('ayyappa_signed_in_customer');
+            closeMyProfileModal();
+            checkAuthStateOnLoad();
+            alert("You have signed out successfully.");
+            showPage('home');
+        }
+    }
+
+    // Helper functions for modals
+    function openCustomerSigninModal() {
+        const m = document.getElementById('customerSigninModal');
+        if (m) m.classList.add('active');
+    }
+
+    function closeCustomerSigninModal() {
+        const m = document.getElementById('customerSigninModal');
+        if (m) m.classList.remove('active');
+    }
+
+    function openCustomerRegModal() {
+        const m = document.getElementById('customerRegistrationModal');
+        if (m) m.classList.add('active');
+    }
+
+    function closeCustomerRegModal() {
+        const m = document.getElementById('customerRegistrationModal');
+        if (m) m.classList.remove('active');
+    }
+
+    function openThankYouModal() {
+        const m = document.getElementById('thankYouModal');
+        if (m) m.classList.add('active');
+    }
+
+    function closeThankYouModal() {
+        const m = document.getElementById('thankYouModal');
+        if (m) m.classList.remove('active');
+    }
+
+    function openMyProfileModal() {
+        populateMyProfile();
+        const m = document.getElementById('myProfileModal');
+        if (m) m.classList.add('active');
+    }
+
+    function closeMyProfileModal() {
+        const m = document.getElementById('myProfileModal');
+        if (m) m.classList.remove('active');
+    }
+
+    function populateMyProfile() {
+        const customer = getSignedInCustomer();
+        if (!customer) return;
+
+        const profId = document.getElementById('profCustomerId');
+        const profMemId = document.getElementById('profMembershipId');
+        const profName = document.getElementById('profName');
+        const profPhone = document.getElementById('profPhone');
+        const profWhatsapp = document.getElementById('profWhatsapp');
+        const profSub = document.getElementById('profSubscriptionType');
+
+        const profArea = document.getElementById('profArea');
+        const profAddress = document.getElementById('profAddress');
+        const profSlot = document.getElementById('profSlot');
+
+        if (profId) profId.textContent = customer.id || 'N/A';
+        if (profMemId) profMemId.textContent = customer.membershipId || 'N/A';
+        if (profName) profName.textContent = customer.name || 'N/A';
+        if (profPhone) profPhone.textContent = customer.phone || 'N/A';
+        if (profWhatsapp) profWhatsapp.textContent = customer.whatsapp || customer.phone || 'N/A';
+        if (profSub) profSub.textContent = customer.subType || 'Daily Subscription';
+
+        if (profArea) profArea.value = customer.area || 'Arundelpet';
+        if (profAddress) profAddress.value = customer.address || '';
+        if (profSlot) profSlot.value = customer.deliverySlot || 'Morning';
+    }
+
+    async function handleProfileUpdate(e) {
+        if (e) e.preventDefault();
+
+        const customer = getSignedInCustomer();
+        if (!customer) return;
+
+        const area = document.getElementById('profArea')?.value;
+        const address = document.getElementById('profAddress')?.value.trim();
+        const slot = document.getElementById('profSlot')?.value;
+
+        if (!address) {
+            alert('Please enter your Delivery Address.');
+            return;
+        }
+
+        try {
+            customer.area = area;
+            customer.address = address;
+            customer.deliverySlot = slot;
+
+            localStorage.setItem('ayyappa_signed_in_customer', JSON.stringify(customer));
+
+            // Update in Firestore
+            if (customer.phone) {
+                await db.collection('customers').doc(customer.phone).update({
+                    area: area,
+                    address: address,
+                    deliverySlot: slot,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).catch(() => {
+                    db.collection('membership_approvals').doc(customer.phone).update({
+                        area: area,
+                        address: address,
+                        slot: slot
+                    });
+                });
+            }
+
+            alert('✅ Profile preferences updated successfully!');
+            closeMyProfileModal();
+        } catch (err) {
+            console.error("Profile update error:", err);
+            alert("Error updating profile: " + err.message);
+        }
+    }
+
+    async function handleDailyOrderSubmit(e) {
+        if (e) e.preventDefault();
+
+        const customer = getSignedInCustomer();
+        if (!customer) {
+            alert('Please sign in to place an order.');
+            openCustomerSigninModal();
+            return;
+        }
+
+        const qty = document.getElementById('dailyOrderQty')?.value || '1';
+        const slot = document.getElementById('dailyOrderSlot')?.value || 'Morning';
+        const payment = document.getElementById('dailyOrderPayment')?.value || 'Cash on Delivery';
+
+        const btn = document.getElementById('dailySubmitBtn');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Submitting Daily Order...';
+        }
+
+        // Generate Order ID: AYY-D-YYYYMMDD-XXXX
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        const orderID = `AYY-D-${yyyy}${mm}${dd}-${randomNum}`;
+
+        const orderDoc = {
+            orderID: orderID,
+            name: customer.name || 'Customer',
+            phone: customer.phone || 'N/A',
+            membershipId: customer.membershipId || customer.id || 'AYY-M-1001',
+            qty: `${qty} Litre${parseInt(qty) > 1 ? 's' : ''}`,
+            amount: (parseInt(qty) * 80).toString(),
+            deliverySlot: slot,
+            paymentType: 'Daily',
+            paymentOption: payment,
+            orderStatus: 'Pending',
+            paymentStatus: 'Payment Pending',
+            subscriptionStatus: 'Active',
+            address: customer.address || '',
+            area: customer.area || '',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            placedAt: now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+        };
+
+        try {
+            await db.collection('orders').add(orderDoc);
+
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '🛒 Place Daily Order';
+            }
+
+            document.getElementById('dailyOrderForm').style.display = 'none';
+            const successBox = document.getElementById('orderSuccessBox');
+            const successId = document.getElementById('orderSuccessId');
+            if (successId) successId.textContent = orderID;
+            if (successBox) successBox.style.display = 'block';
+
+        } catch (err) {
+            console.error("Daily order error:", err);
+            alert("Error placing daily order: " + err.message);
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '🛒 Place Daily Order';
+            }
+        }
+    }
+
+    async function handleMonthlyOrderSubmit(e) {
+        if (e) e.preventDefault();
+
+        const customer = getSignedInCustomer();
+        if (!customer) {
+            alert('Please sign in to place an order.');
+            openCustomerSigninModal();
+            return;
+        }
+
+        const qty = document.getElementById('monthlyOrderQty')?.value || '1';
+        const slot = document.getElementById('monthlyOrderSlot')?.value || 'Morning';
+
+        const btn = document.getElementById('monthlySubmitBtn');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Submitting Monthly Subscription Order...';
+        }
+
+        // Generate Order ID: AYY-M-YYYYMMDD-XXXX
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const randomNum = Math.floor(1000 + Math.random() * 9000);
+        const orderID = `AYY-M-${yyyy}${mm}${dd}-${randomNum}`;
+
+        const orderDoc = {
+            orderID: orderID,
+            name: customer.name || 'Customer',
+            phone: customer.phone || 'N/A',
+            membershipId: customer.membershipId || customer.id || 'AYY-M-1001',
+            qty: `${qty} Litre${parseInt(qty) > 1 ? 's' : ''} / Day`,
+            amount: (parseInt(qty) * 2400).toString(),
+            deliverySlot: slot,
+            paymentType: 'Monthly',
+            paymentOption: 'Prepaid Monthly',
+            orderStatus: 'Pending',
+            paymentStatus: 'Payment Completed',
+            subscriptionStatus: 'Active',
+            address: customer.address || '',
+            area: customer.area || '',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            placedAt: now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+        };
+
+        try {
+            await db.collection('orders').add(orderDoc);
+
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '📦 Confirm Monthly Subscription Order';
+            }
+
+            document.getElementById('monthlyOrderForm').style.display = 'none';
+            const successBox = document.getElementById('orderSuccessBox');
+            const successId = document.getElementById('orderSuccessId');
+            if (successId) successId.textContent = orderID;
+            if (successBox) successBox.style.display = 'block';
+
+        } catch (err) {
+            console.error("Monthly order error:", err);
+            alert("Error placing monthly order: " + err.message);
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '📦 Confirm Monthly Subscription Order';
+            }
+        }
+    }
+
+    function resetAndBackToHome() {
+        const successBox = document.getElementById('orderSuccessBox');
+        if (successBox) successBox.style.display = 'none';
+
+        const customer = getSignedInCustomer();
+        if (customer) {
+            setupOrderSubscriptionViews(customer.subType || 'Daily Subscription');
+        }
+
+        showPage('home');
+    }
+
+    // Initialize Order Page Menu, Auth State & ID Banner
     window.addEventListener('DOMContentLoaded', () => {
+        checkAuthStateOnLoad();
+
         const savedPhone = localStorage.getItem('ayyappa_signed_in_phone');
         if (savedPhone && typeof listenForAdminApproval === 'function') {
             listenForAdminApproval(savedPhone);
