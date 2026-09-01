@@ -179,6 +179,7 @@
                                 <th style="padding: 12px; text-align: left;">Mobile Number</th>
                                 <th style="padding: 12px; text-align: left;">Quantity</th>
                                 <th style="padding: 12px; text-align: left;">Plan Type</th>
+                                <th style="padding: 12px; text-align: center;">Update</th>
                             </tr>
                         </thead>
                         <tbody id="receiptsTableBody"></tbody>
@@ -2862,19 +2863,14 @@
 
         if (receiptsListener) receiptsListener();
 
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Listening for today\'s orders...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem;">Listening for today\'s orders...</td></tr>';
 
         // Get today's date boundaries in IST (UTC+5:30)
         function getTodayISTBounds() {
             const now = new Date();
-            const istOffset = 5.5 * 60 * 60 * 1000; // 5h 30m in ms
+            const istOffset = 5.5 * 60 * 60 * 1000;
             const istNow = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + istOffset);
-            const startOfDay = new Date(istNow.getFullYear(), istNow.getMonth(), istNow.getDate(), 0, 0, 0, 0);
-            const endOfDay = new Date(istNow.getFullYear(), istNow.getMonth(), istNow.getDate(), 23, 59, 59, 999);
-            // Convert back to UTC for Firestore comparison
-            const startUTC = new Date(startOfDay.getTime() - istOffset + (now.getTimezoneOffset() * -60000));
-            const endUTC = new Date(endOfDay.getTime() - istOffset + (now.getTimezoneOffset() * -60000));
-            return { startUTC, endUTC, istDateStr: istNow.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }) };
+            return { istDateStr: istNow.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }) };
         }
 
         const { istDateStr } = getTodayISTBounds();
@@ -2882,7 +2878,7 @@
         receiptsListener = db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
             tbody.innerHTML = '';
             if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
                 return;
             }
 
@@ -2903,7 +2899,6 @@
                     const istD = new Date(d.getTime() + (d.getTimezoneOffset() * 60000) + istOffset);
                     orderDate = istD.getFullYear() + '-' + String(istD.getMonth() + 1).padStart(2, '0') + '-' + String(istD.getDate()).padStart(2, '0');
                 } else if (order.placedAt) {
-                    // Fallback: try parsing placedAt string
                     try {
                         const d = new Date(order.placedAt);
                         if (!isNaN(d.getTime())) {
@@ -2923,6 +2918,8 @@
                 const slot = order.deliverySlot || 'Morning (7-9 AM)';
                 const plan = order.paymentType || 'Daily';
                 const qty = order.qty || '1L';
+                const orderStatus = order.orderStatus || 'SCHEDULED';
+                const isOutForDelivery = orderStatus === 'OUT FOR DELIVERY' || orderStatus === 'DELIVERED';
 
                 tr.innerHTML = `
                     <td style="padding: 10px 12px; font-weight: 800; color: var(--primary-color);">${order.orderID || 'ADF-ORD'}</td>
@@ -2931,19 +2928,64 @@
                     <td style="padding: 10px 12px; font-weight: 600;">📞 ${order.phone || 'N/A'}</td>
                     <td style="padding: 10px 12px; font-weight: 700; color: #2e7d32;">${qty}</td>
                     <td style="padding: 10px 12px;"><span style="background: ${plan === 'Monthly' ? '#1565c0' : '#2e7d32'}; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800;">${plan}</span></td>
+                    <td style="padding: 10px 12px; text-align: center;">
+                        ${isOutForDelivery 
+                            ? '<span style="background:#2e7d32; color:white; padding:5px 12px; border-radius:20px; font-size:0.75rem; font-weight:800;">🚚 Out for Delivery</span>'
+                            : `<button onclick="updateOrderAndNotify('${doc.id}')" style="background: linear-gradient(135deg, #e65100 0%, #ff8f00 100%); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; cursor: pointer; box-shadow: 0 3px 10px rgba(230,81,0,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🚚 Update</button>`
+                        }
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
 
             if (count === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #999;">No orders for today (${istDateStr}). Orders auto-refresh every 24hrs IST.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #999;">No orders for today (${istDateStr}). Orders auto-refresh every 24hrs IST.</td></tr>`;
             }
         }, err => {
             console.error("Receipts Listener Error:", err);
-            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #d32f2f;">
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 2rem; color: #d32f2f;">
                 Error syncing orders.<br><small style="color:#888; font-weight:400;">(${err.code || 'unknown'})</small>
             </td></tr>`;
         });
+    }
+
+    async function updateOrderAndNotify(docId) {
+        try {
+            // Get order data first
+            const docSnap = await db.collection('orders').doc(docId).get();
+            if (!docSnap.exists) {
+                alert('Order not found!');
+                return;
+            }
+            const order = docSnap.data();
+
+            // Update order status to OUT FOR DELIVERY
+            await db.collection('orders').doc(docId).update({
+                orderStatus: 'OUT FOR DELIVERY',
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Show popup confirmation
+            alert(`🚚 ORDER UPDATED — OUT FOR DELIVERY!\n\nOrder ID: ${order.orderID || 'ADF-ORD'}\nCustomer: ${order.name || 'Customer'}\nSlot: ${order.deliverySlot || 'Morning'}\nQuantity: ${order.qty || '1L'}\n\n✅ WhatsApp message is being sent to ${order.phone}...`);
+
+            // Send WhatsApp message
+            const customerName = order.name || 'Customer';
+            const orderId = order.orderID || 'ADF-ORD';
+            const slot = order.deliverySlot || 'Morning (7-9 AM)';
+            const qty = order.qty || '1L';
+            const plan = order.paymentType || 'Daily';
+            const phone = (order.phone || '').replace(/[^0-9]/g, '');
+            const whatsappPhone = phone.startsWith('91') ? phone : '91' + phone;
+
+            const message = `🥛 *AYYAPPA DAIRY FARM*\n━━━━━━━━━━━━━━━━━━\n\n🚚 *Your Order is Out for Delivery!*\n\n📋 *Order ID:* ${orderId}\n👤 *Name:* ${customerName}\n🕒 *Slot:* ${slot}\n📦 *Quantity:* ${qty}\n📌 *Plan:* ${plan} Subscription\n\n✅ Your fresh dairy products are on the way!\nPlease be available at your delivery address.\n\n━━━━━━━━━━━━━━━━━━\nThank you for choosing Ayyappa Dairy Farm! 🙏`;
+
+            const waUrl = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(message)}`;
+            window.open(waUrl, '_blank');
+
+        } catch(err) {
+            console.error('Update order error:', err);
+            alert('Failed to update order: ' + err.message);
+        }
     }
 
     async function adminSaveStatusOnly(docId) {
