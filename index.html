@@ -4301,7 +4301,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 btn.innerHTML = '🔑 Sign In';
             }
 
-            closeCustomerSigninModal();
+            closeCustomerSigninModal(null, true);
             checkAuthStateOnLoad();
 
             alert(`🎉 Welcome back, ${custSession.name}!\n\nYou have successfully signed in (ID: ${custSession.id}).`);
@@ -4386,7 +4386,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
     }
 
     function closeCustomerSigninModal(event, force) {
-        if (force || (event && event.target && event.target.id === 'customerSigninModal')) {
+        if (force || !event || (event && event.target && event.target.id === 'customerSigninModal')) {
             const m = document.getElementById('customerSigninModal');
             if (m) m.classList.remove('active');
         }
@@ -4402,7 +4402,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
     }
 
     function closeCustomerRegisterModal(event, force) {
-        if (force || (event && event.target && (event.target.id === 'customerRegisterModal' || event.target.id === 'customerRegistrationModal'))) {
+        if (force || !event || (event && event.target && (event.target.id === 'customerRegisterModal' || event.target.id === 'customerRegistrationModal'))) {
             const m = document.getElementById('customerRegisterModal') || document.getElementById('customerRegistrationModal');
             if (m) m.classList.remove('active');
         }
@@ -4422,7 +4422,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
     }
 
     function closeRegisterThankYouModal(event, force) {
-        if (force || (event && event.target && (event.target.id === 'registerThankYouModal' || event.target.id === 'thankYouModal'))) {
+        if (force || !event || (event && event.target && (event.target.id === 'registerThankYouModal' || event.target.id === 'thankYouModal'))) {
             const m = document.getElementById('registerThankYouModal') || document.getElementById('thankYouModal');
             if (m) m.classList.remove('active');
         }
