@@ -441,7 +441,9 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 }
 
 #adminModal .modal-box {
-    background-color: lightskyblue;
+    background: linear-gradient(145deg, #0d3320 0%, #164a27 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 35px rgba(37,211,102,0.15);
 }
 .modal-wide { max-width: 600px; }
 .modal-dashboard {
