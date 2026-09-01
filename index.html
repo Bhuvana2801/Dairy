@@ -3587,7 +3587,7 @@
         const area = document.getElementById('regArea')?.value || '';
         const address = document.getElementById('regAddress')?.value.trim();
         const slot = document.getElementById('regSlot')?.value || 'Morning';
-        const subType = document.getElementById('regSubscriptionType')?.value || 'Daily Subscription';
+        const subType = document.getElementById('regSubType')?.value || document.getElementById('regSubscriptionType')?.value || 'Daily Subscription';
 
         if (!name || !phone || !whatsapp || !area || !address) {
             alert('Please fill in all mandatory fields (*).');
@@ -3615,8 +3615,8 @@
                 btn.innerHTML = '✨ Submit Registration';
             }
 
-            closeCustomerRegModal();
-            openThankYouModal();
+            closeCustomerRegisterModal(null, true);
+            openRegisterThankYouModal();
 
         } catch (err) {
             console.error("Registration submission error:", err);
@@ -3632,7 +3632,7 @@
         if (confirm("Are you sure you want to sign out?")) {
             localStorage.removeItem('ayyappa_signed_in');
             localStorage.removeItem('ayyappa_signed_in_customer');
-            closeMyProfileModal();
+            closeMyProfileModal(null, true);
             checkAuthStateOnLoad();
             alert("You have signed out successfully.");
             showPage('home');
@@ -3645,40 +3645,64 @@
         if (m) m.classList.add('active');
     }
 
-    function closeCustomerSigninModal() {
-        const m = document.getElementById('customerSigninModal');
-        if (m) m.classList.remove('active');
+    function closeCustomerSigninModal(event, force) {
+        if (force || (event && event.target && event.target.id === 'customerSigninModal')) {
+            const m = document.getElementById('customerSigninModal');
+            if (m) m.classList.remove('active');
+        }
+    }
+
+    function openCustomerRegisterModal() {
+        const m = document.getElementById('customerRegisterModal') || document.getElementById('customerRegistrationModal');
+        if (m) m.classList.add('active');
     }
 
     function openCustomerRegModal() {
-        const m = document.getElementById('customerRegistrationModal');
-        if (m) m.classList.add('active');
+        openCustomerRegisterModal();
     }
 
-    function closeCustomerRegModal() {
-        const m = document.getElementById('customerRegistrationModal');
-        if (m) m.classList.remove('active');
+    function closeCustomerRegisterModal(event, force) {
+        if (force || (event && event.target && (event.target.id === 'customerRegisterModal' || event.target.id === 'customerRegistrationModal'))) {
+            const m = document.getElementById('customerRegisterModal') || document.getElementById('customerRegistrationModal');
+            if (m) m.classList.remove('active');
+        }
+    }
+
+    function closeCustomerRegModal(event, force) {
+        closeCustomerRegisterModal(event, force || true);
+    }
+
+    function openRegisterThankYouModal() {
+        const m = document.getElementById('registerThankYouModal') || document.getElementById('thankYouModal');
+        if (m) m.classList.add('active');
     }
 
     function openThankYouModal() {
-        const m = document.getElementById('thankYouModal');
-        if (m) m.classList.add('active');
+        openRegisterThankYouModal();
     }
 
-    function closeThankYouModal() {
-        const m = document.getElementById('thankYouModal');
-        if (m) m.classList.remove('active');
+    function closeRegisterThankYouModal(event, force) {
+        if (force || (event && event.target && (event.target.id === 'registerThankYouModal' || event.target.id === 'thankYouModal'))) {
+            const m = document.getElementById('registerThankYouModal') || document.getElementById('thankYouModal');
+            if (m) m.classList.remove('active');
+        }
+    }
+
+    function closeThankYouModal(event, force) {
+        closeRegisterThankYouModal(event, force || true);
     }
 
     function openMyProfileModal() {
         populateMyProfile();
-        const m = document.getElementById('myProfileModal');
+        const m = document.getElementById('myProfileModal') || document.getElementById('customerOrdersModal');
         if (m) m.classList.add('active');
     }
 
-    function closeMyProfileModal() {
-        const m = document.getElementById('myProfileModal');
-        if (m) m.classList.remove('active');
+    function closeMyProfileModal(event, force) {
+        if (force || (event && event.target && (event.target.id === 'myProfileModal' || event.target.id === 'customerOrdersModal'))) {
+            const m = document.getElementById('myProfileModal') || document.getElementById('customerOrdersModal');
+            if (m) m.classList.remove('active');
+        }
     }
 
     function populateMyProfile() {
