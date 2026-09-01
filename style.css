@@ -1639,6 +1639,7 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 
 /* Welcome offer selection pills */
 .welcome-offer-container {
+    display: none !important;
     background: #f8fdf8;
     border: 1.5px dashed var(--secondary-color);
     border-radius: 16px;
