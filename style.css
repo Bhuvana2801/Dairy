@@ -1910,4 +1910,43 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     }
 }
 
+/* Centered Sign-In Button & Locked Menu Cards */
+.btn-signin-center {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 800;
+    padding: 0.95rem 2.8rem;
+    border-radius: 50px;
+    border: 2px solid #a7f3d0;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(46, 125, 50, 0.35);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin: 0 auto;
+}
+
+.btn-signin-center:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 10px 28px rgba(46, 125, 50, 0.48);
+    background: linear-gradient(135deg, #2e7d32 0%, #388e3c 100%);
+    border-color: #ffffff;
+}
+
+.order-menu-card.locked {
+    opacity: 0.75;
+    background: #f5f5f5;
+    border-color: #e0e0e0;
+}
+
+.order-menu-card.locked .menu-label::after {
+    content: " 🔒";
+    font-size: 0.85rem;
+}
+
 

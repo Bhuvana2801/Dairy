@@ -490,13 +490,101 @@
                                 
                                 <!-- SECTION 1: NEW CUSTOMER -->
                                 <div id="order-sec-new" class="order-tab-content">
-                                    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
-                                        <h4 style="color: #166534; margin-bottom: 0.4rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
-                                            🎁 1) New Customer Welcome Offers
+                                    <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; padding: 1.2rem; border-radius: 16px; margin-bottom: 1.5rem; box-shadow: 0 4px 12px rgba(22,101,52,0.06);">
+                                        <h4 style="color: #166534; margin-bottom: 0.4rem; font-size: 1.1rem; display: flex; align-items: center; gap: 0.5rem; font-weight: 800;">
+                                            👤 1) New Customer Registration & Sign In
                                         </h4>
-                                        <p style="font-size: 0.85rem; color: #374151; margin: 0;">Welcome to Ayyappa Dairy Farm! Select your introductory welcome offer below:</p>
+                                        <p style="font-size: 0.88rem; color: #374151; margin: 0;">Fill in your details below to sign in, allocate your Membership ID, and unlock Daily & Monthly subscriptions.</p>
                                     </div>
-                                    
+
+                                    <!-- Personal & Contact Fields -->
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; margin-bottom: 1.2rem;">
+                                        <div>
+                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Full Name *</label>
+                                            <input type="text" id="newCustName" placeholder="Enter your full name" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem;" required>
+                                        </div>
+                                        <div>
+                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">Phone Number *</label>
+                                            <input type="tel" id="newCustPhone" placeholder="Enter 10-digit mobile number" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem;" required>
+                                        </div>
+                                        <div>
+                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">WhatsApp Number *</label>
+                                            <input type="tel" id="newCustWhatsapp" placeholder="Enter WhatsApp number" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem;" required>
+                                        </div>
+                                    </div>
+
+                                    <!-- Address: Location & Area Selection -->
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin-bottom: 1.2rem;">
+                                        <div>
+                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">📍 Location / City *</label>
+                                            <select id="newCustLocation" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem; font-weight: 700; background: white;" required>
+                                                <option value="Narasaraopet" selected>Narasaraopet</option>
+                                                <option value="Vinukonda">Vinukonda</option>
+                                                <option value="Chilakaluripet">Chilakaluripet</option>
+                                                <option value="Guntur">Guntur</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">🏘️ Select Area (Narasaraopet) *</label>
+                                            <select id="newCustArea" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem; font-weight: 700; background: white;" required>
+                                                <option value="" disabled selected>-- Choose Area --</option>
+                                                <option value="Arundelpet">Arundelpet</option>
+                                                <option value="Gandhi Chowk">Gandhi Chowk</option>
+                                                <option value="Clock Tower Area">Clock Tower Area</option>
+                                                <option value="Kota Centre">Kota Centre</option>
+                                                <option value="Mallamma Centre">Mallamma Centre</option>
+                                                <option value="Prakash Nagar">Prakash Nagar</option>
+                                                <option value="Rikshaw Centr">Rikshaw Centr</option>
+                                                <option value="Ramireddypeta">Ramireddypeta</option>
+                                                <option value="Barampet">Barampet</option>
+                                                <option value="Srirampuram">Srirampuram</option>
+                                                <option value="Reddy Nagar">Reddy Nagar</option>
+                                                <option value="Mahalakshmi Nagar">Mahalakshmi Nagar</option>
+                                                <option value="Kakatiya Nagar">Kakatiya Nagar</option>
+                                                <option value="Navodaya Nagar">Navodaya Nagar</option>
+                                                <option value="Guntur Road">Guntur Road</option>
+                                                <option value="Kotappakonda Road">Kotappakonda Road</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- House/Door No & Street Address -->
+                                    <div style="margin-bottom: 1.2rem;">
+                                        <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">🏠 House No / Street Address *</label>
+                                        <input type="text" id="newCustAddress" placeholder="Door No, Street Name, House Name, Landmark" style="width: 100%; padding: 0.75rem 1rem; border: 1.5px solid #ccc; border-radius: 10px; font-size: 0.95rem;" required>
+                                    </div>
+
+                                    <!-- Delivery Slot & Subscription Selection -->
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-bottom: 1.5rem;">
+                                        <div>
+                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">🚚 Delivery Slot *</label>
+                                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                                                <label style="flex:1; min-width: 90px; border: 1.5px solid #c2e2c4; background: white; padding: 0.6rem 0.4rem; border-radius: 10px; font-size: 0.82rem; cursor: pointer; text-align: center; font-weight: 700;">
+                                                    <input type="radio" name="newCustSlot" value="Morning" checked> Morning
+                                                </label>
+                                                <label style="flex:1; min-width: 90px; border: 1.5px solid #c2e2c4; background: white; padding: 0.6rem 0.4rem; border-radius: 10px; font-size: 0.82rem; cursor: pointer; text-align: center; font-weight: 700;">
+                                                    <input type="radio" name="newCustSlot" value="Evening"> Evening
+                                                </label>
+                                                <label style="flex:1.2; min-width: 130px; border: 1.5px solid #c2e2c4; background: white; padding: 0.6rem 0.4rem; border-radius: 10px; font-size: 0.82rem; cursor: pointer; text-align: center; font-weight: 700;">
+                                                    <input type="radio" name="newCustSlot" value="Morning & Evening"> Morning & Evening
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label style="font-weight: 700; color: var(--primary-color); font-size: 0.88rem; display: block; margin-bottom: 0.4rem;">📋 Subscription Type *</label>
+                                            <div style="display: flex; gap: 0.5rem;">
+                                                <label style="flex:1; border: 1.5px solid #166534; background: #f0fdf4; padding: 0.6rem; border-radius: 10px; font-size: 0.85rem; cursor: pointer; text-align: center; font-weight: 800; color: #166534;">
+                                                    <input type="radio" name="newCustSubType" value="Daily" checked> 🟢 Daily (ADFD2800)
+                                                </label>
+                                                <label style="flex:1; border: 1.5px solid #1565c0; background: #eef6fc; padding: 0.6rem; border-radius: 10px; font-size: 0.85rem; cursor: pointer; text-align: center; font-weight: 800; color: #1565c0;">
+                                                    <input type="radio" name="newCustSubType" value="Monthly"> 🔵 Monthly (ADFM20001)
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Welcome Offers Card Selection -->
                                     <div class="welcome-offer-container" style="margin-bottom: 1.5rem;">
                                         <div class="welcome-grid">
                                             <label class="welcome-card">
@@ -516,6 +604,13 @@
                                                 </div>
                                             </label>
                                         </div>
+                                    </div>
+
+                                    <!-- Centered Sign In Button at Bottom -->
+                                    <div style="text-align: center; margin-top: 2rem; margin-bottom: 1.5rem;">
+                                        <button type="button" class="btn-signin-center" id="newCustSigninBtn" onclick="handleNewCustomerSignin()">
+                                            🔑 Sign In & Allocate Membership ID
+                                        </button>
                                     </div>
                                 </div>
 
@@ -2392,14 +2487,106 @@
 
     let currentActiveSection = 'new';
 
+    function isCustomerSignedIn() {
+        return localStorage.getItem('ayyappa_signed_in') === 'true';
+    }
+
+    function unlockSubscriptionTabs() {
+        const dailyCard = document.getElementById('order-menu-daily');
+        const monthlyCard = document.getElementById('order-menu-monthly');
+        if (dailyCard) dailyCard.classList.remove('locked');
+        if (monthlyCard) monthlyCard.classList.remove('locked');
+    }
+
+    function handleNewCustomerSignin() {
+        const name = document.getElementById('newCustName')?.value.trim();
+        const phone = document.getElementById('newCustPhone')?.value.trim();
+        const whatsapp = document.getElementById('newCustWhatsapp')?.value.trim();
+        const location = document.getElementById('newCustLocation')?.value || 'Narasaraopet';
+        const area = document.getElementById('newCustArea')?.value || '';
+        const address = document.getElementById('newCustAddress')?.value.trim();
+        const slot = document.querySelector('input[name="newCustSlot"]:checked')?.value || 'Morning';
+        const subType = document.querySelector('input[name="newCustSubType"]:checked')?.value || 'Daily';
+
+        if (!name) {
+            alert('Please enter your Full Name.');
+            document.getElementById('newCustName')?.focus();
+            return;
+        }
+        if (!phone || phone.length < 10) {
+            alert('Please enter a valid 10-digit Phone Number.');
+            document.getElementById('newCustPhone')?.focus();
+            return;
+        }
+        if (!whatsapp) {
+            alert('Please enter your WhatsApp Number.');
+            document.getElementById('newCustWhatsapp')?.focus();
+            return;
+        }
+        if (!area) {
+            alert('Please select your Area in Narasaraopet.');
+            document.getElementById('newCustArea')?.focus();
+            return;
+        }
+        if (!address) {
+            alert('Please enter your House / Door No & Street Address.');
+            document.getElementById('newCustAddress')?.focus();
+            return;
+        }
+
+        let membershipId = '';
+
+        if (subType === 'Daily') {
+            let lastDaily = parseInt(localStorage.getItem('adfDailyCounter') || '2800');
+            membershipId = 'ADFD' + lastDaily;
+            localStorage.setItem('adfDailyCounter', (lastDaily + 1).toString());
+            localStorage.setItem('adfDailyMembershipId', membershipId);
+            localStorage.setItem('adfLastDailyID', membershipId);
+        } else {
+            let lastMonthly = parseInt(localStorage.getItem('adfMonthlyCounter') || '20001');
+            membershipId = 'ADFM' + lastMonthly;
+            localStorage.setItem('adfMonthlyCounter', (lastMonthly + 1).toString());
+            localStorage.setItem('adfMonthlyMembershipId', membershipId);
+        }
+
+        localStorage.setItem('ayyappa_signed_in', 'true');
+        localStorage.setItem('adfMembershipId', membershipId);
+        localStorage.setItem('adfPlanType', subType);
+
+        const userObj = {
+            name, phone, whatsapp, location, area, address, slot, subType, membershipId
+        };
+        localStorage.setItem('ayyappa_signed_in_customer', JSON.stringify(userObj));
+
+        // Unlock Daily & Monthly tabs
+        unlockSubscriptionTabs();
+
+        // Update ID banner immediately
+        updateIDBanner();
+
+        // Show alert confirmation
+        alert(`🎉 SIGN IN SUCCESSFUL!\n\nWelcome ${name}!\nAllocated Membership ID: ${membershipId}\nSelected Subscription: ${subType}\nLocation: ${area}, ${location}\n\n✅ Daily & Monthly subscriptions are now unlocked!`);
+
+        // Switch to chosen subscription tab
+        if (subType === 'Daily') {
+            switchOrderSection('daily');
+        } else {
+            switchOrderSection('monthly');
+        }
+    }
+
     function switchOrderSection(sectionKey) {
+        // Enforce lock if user tries to click Daily or Monthly without signing in
+        if ((sectionKey === 'daily' || sectionKey === 'monthly') && !isCustomerSignedIn()) {
+            alert('🔒 Please complete New Customer Sign In first to unlock Daily & Monthly Subscriptions!');
+            sectionKey = 'new';
+        }
+
         currentActiveSection = sectionKey;
-        // Highlight active menu tab card
         document.querySelectorAll('.order-menu-card').forEach(card => card.classList.remove('active'));
         const activeCard = document.getElementById(`order-menu-${sectionKey}`);
         if (activeCard) activeCard.classList.add('active');
 
-        // Toggle visibility of sub-sections inside booking form
         const secNew = document.getElementById('order-sec-new');
         const secDaily = document.getElementById('order-sec-daily');
         const secMonthly = document.getElementById('order-sec-monthly');
@@ -2436,13 +2623,15 @@
         const label = document.querySelector('.id-label');
         if (!display || !label) return;
 
+        const savedId = localStorage.getItem('adfMembershipId');
+        const dailyId = localStorage.getItem('adfDailyMembershipId') || (savedId && savedId.startsWith('ADFD') ? savedId : 'ADFD2800');
+        const monthlyId = localStorage.getItem('adfMonthlyMembershipId') || (savedId && savedId.startsWith('ADFM') ? savedId : 'ADFM20001');
+
         if (currentActiveSection === 'daily') {
-            let dailyId = localStorage.getItem('adfDailyMembershipId') || 'ADFD2001';
             label.textContent = 'DAILY SUBSCRIPTION MEMBERSHIP ID';
             display.textContent = dailyId;
             display.style.color = '#2e7d32';
         } else if (currentActiveSection === 'monthly') {
-            let monthlyId = localStorage.getItem('adfMonthlyMembershipId') || 'ADFM0920001';
             label.textContent = 'MONTHLY SUBSCRIPTION MEMBERSHIP ID';
             display.textContent = monthlyId;
             display.style.color = '#1565c0';
@@ -2453,11 +2642,15 @@
             display.textContent = refCode;
             display.style.color = '#e65100';
         } else {
-            // New Customer default
-            let newCustId = localStorage.getItem('adfDailyMembershipId') || 'ADFD2001';
-            label.textContent = 'NEW CUSTOMER MEMBERSHIP ID';
-            display.textContent = newCustId;
-            display.style.color = 'var(--primary-color)';
+            if (isCustomerSignedIn() && savedId) {
+                label.textContent = 'ALLOCATED MEMBERSHIP ID';
+                display.textContent = savedId;
+                display.style.color = 'var(--primary-color)';
+            } else {
+                label.textContent = 'NEW CUSTOMER MEMBERSHIP ID (SIGN IN TO ALLOCATE)';
+                display.textContent = 'ADFD2800 / ADFM20001';
+                display.style.color = 'var(--primary-color)';
+            }
         }
     }
 
@@ -2845,8 +3038,16 @@
         }
     }
 
-    // Initialize Order Page Menu & ID Banner
+    // Initialize Order Page Menu, Tab Locks & ID Banner
     window.addEventListener('DOMContentLoaded', () => {
+        if (typeof isCustomerSignedIn === 'function' && isCustomerSignedIn()) {
+            if (typeof unlockSubscriptionTabs === 'function') unlockSubscriptionTabs();
+        } else {
+            const dailyCard = document.getElementById('order-menu-daily');
+            const monthlyCard = document.getElementById('order-menu-monthly');
+            if (dailyCard) dailyCard.classList.add('locked');
+            if (monthlyCard) monthlyCard.classList.add('locked');
+        }
         if (typeof switchOrderSection === 'function') {
             switchOrderSection('new');
         }
