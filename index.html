@@ -211,57 +211,57 @@
     </div>
 
     <!-- Admin Customer Approval Modal -->
-    <div id="adminApproveCustomerModal" class="modal-overlay" onclick="closeAdminApproveCustomerModal(event)" style="z-index: 3000;">
-        <div class="modal-box modal-wide fade-in-up" style="max-width: 540px; padding: 2rem; position: relative; z-index: 3001;">
-            <button class="modal-close" onclick="closeAdminApproveCustomerModal(null, true)">&times;</button>
-            <h2 style="color: var(--primary-color); margin-bottom: 0.3rem; text-align: center;">Approve Customer Registration</h2>
-            <p style="text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 1.2rem;">Assign IDs, Password, and Subscription Type for <strong id="approveCustName">Customer</strong></p>
+    <div id="adminApproveCustomerModal" class="modal-overlay" onclick="closeAdminApproveCustomerModal(event)" style="z-index: 3000; padding: 1rem;">
+        <div class="modal-box modal-wide fade-in-up" style="max-width: 520px; max-height: 88vh; overflow-y: auto; padding: 1.4rem 1.6rem; position: relative; z-index: 3001; border-radius: 18px; box-shadow: 0 25px 60px rgba(0,0,0,0.35);">
+            <button class="modal-close" onclick="closeAdminApproveCustomerModal(null, true)" style="top: 0.8rem; right: 1rem;">&times;</button>
+            <h2 style="color: var(--primary-color); margin-bottom: 0.2rem; text-align: center; font-size: 1.4rem;">Approve Customer Registration</h2>
+            <p style="text-align: center; color: #666; font-size: 0.85rem; margin-bottom: 0.8rem;">Assign IDs, Password, and Subscription Type for <strong id="approveCustName">Customer</strong></p>
 
             <form id="adminApproveForm" onsubmit="submitAdminApproval(event)">
                 <input type="hidden" id="approveDocId">
                 <input type="hidden" id="approveCustPhone">
                 <input type="hidden" id="approveCustWa">
 
-                <div style="background: #f0f7f0; padding: 0.8rem 1rem; border-radius: 10px; margin-bottom: 1rem; font-size: 0.9rem;">
+                <div style="background: #f0f7f0; padding: 0.6rem 0.9rem; border-radius: 10px; margin-bottom: 0.8rem; font-size: 0.83rem; line-height: 1.45;">
                     <div><strong>Phone:</strong> <span id="approveDisplayPhone"></span> | <strong>WhatsApp:</strong> <span id="approveDisplayWa"></span></div>
                     <div><strong>Location:</strong> <span id="approveDisplayLoc"></span>, <span id="approveDisplayArea"></span></div>
                     <div><strong>Address:</strong> <span id="approveDisplayAddr"></span></div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; background: #eef7ee; padding: 6px 12px; border-radius: 8px;">
-                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-color);">🔑 Mobile-Based Assign</span>
-                    <button type="button" onclick="autoAssignFromMobile()" style="background: #2e7d32; color: white; border: none; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">⚡ Auto-Fill from Mobile No</button>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.7rem; background: #eef7ee; padding: 6px 12px; border-radius: 8px;">
+                    <span style="font-size: 0.82rem; font-weight: 700; color: var(--primary-color);">🔑 Mobile-Based Assign</span>
+                    <button type="button" onclick="autoAssignFromMobile()" style="background: #2e7d32; color: white; border: none; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: transform 0.15s ease;">⚡ Auto-Fill from Mobile No</button>
                 </div>
 
-                <div class="modal-input-group">
-                    <label for="approveMembershipId">Assigned Membership ID <span style="color:red;">*</span></label>
-                    <input type="text" id="approveMembershipId" placeholder="e.g. ADFD3808 or ADF-9392603808" required>
+                <div class="modal-input-group" style="margin-bottom: 0.6rem;">
+                    <label for="approveMembershipId" style="font-size: 0.85rem; margin-bottom: 0.2rem;">Assigned Membership ID <span style="color:red;">*</span></label>
+                    <input type="text" id="approveMembershipId" placeholder="e.g. ADFD3808 or ADF-9392603808" style="padding: 0.55rem 0.8rem; font-size: 0.9rem;" required>
                 </div>
-                <div class="modal-input-group">
-                    <label for="approveCustomerId">Assigned Customer ID / Login ID <span style="color:red;">*</span></label>
-                    <input type="text" id="approveCustomerId" placeholder="e.g. 9392603808" required>
+                <div class="modal-input-group" style="margin-bottom: 0.6rem;">
+                    <label for="approveCustomerId" style="font-size: 0.85rem; margin-bottom: 0.2rem;">Assigned Customer ID / Login ID <span style="color:red;">*</span></label>
+                    <input type="text" id="approveCustomerId" placeholder="e.g. 9392603808" style="padding: 0.55rem 0.8rem; font-size: 0.9rem;" required>
                 </div>
-                <div class="modal-input-group">
-                    <label for="approvePassword">Assigned Password <span style="color:red;">*</span></label>
-                    <input type="text" id="approvePassword" placeholder="e.g. Ayyappa@3808" required>
+                <div class="modal-input-group" style="margin-bottom: 0.6rem;">
+                    <label for="approvePassword" style="font-size: 0.85rem; margin-bottom: 0.2rem;">Assigned Password <span style="color:red;">*</span></label>
+                    <input type="text" id="approvePassword" placeholder="e.g. Ayyappa@3808" style="padding: 0.55rem 0.8rem; font-size: 0.9rem;" required>
                 </div>
-                <div class="modal-input-group">
-                    <label for="approveSubscriptionType">Active Subscription Type <span style="color:red;">*</span></label>
-                    <select id="approveSubscriptionType" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                <div class="modal-input-group" style="margin-bottom: 0.8rem;">
+                    <label for="approveSubscriptionType" style="font-size: 0.85rem; margin-bottom: 0.2rem;">Active Subscription Type <span style="color:red;">*</span></label>
+                    <select id="approveSubscriptionType" style="width:100%; padding:0.55rem 0.8rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.9rem;">
                         <option value="Daily Subscription">Daily Subscription</option>
                         <option value="Monthly Subscription">Monthly Subscription</option>
                         <option value="Daily Subscription + Monthly Subscription">Daily Subscription + Monthly Subscription</option>
                     </select>
                 </div>
 
-                <div style="display: flex; gap: 0.6rem; margin-top: 1.2rem; flex-wrap: wrap;">
-                    <button type="submit" class="btn btn-secondary" style="flex: 1.2; background: #2e7d32; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; min-width: 120px;">
+                <div style="display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;">
+                    <button type="submit" class="btn btn-secondary" style="flex: 1.2; background: #2e7d32; color: white; border: none; padding: 0.65rem; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer; min-width: 110px;">
                         ✅ Save & Approve
                     </button>
-                    <button type="button" onclick="sendApprovalWhatsApp()" class="btn btn-primary" style="flex: 1.2; background: #25D366; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; min-width: 130px;">
+                    <button type="button" onclick="sendApprovalWhatsApp()" class="btn btn-primary" style="flex: 1.2; background: #25D366; color: white; border: none; padding: 0.65rem; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer; min-width: 120px;">
                         💬 Send WhatsApp
                     </button>
-                    <button type="button" onclick="deleteFromModal()" class="btn btn-danger" style="flex: 1; background: #c62828; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; min-width: 90px;">
+                    <button type="button" onclick="deleteFromModal()" class="btn btn-danger" style="flex: 1; background: #c62828; color: white; border: none; padding: 0.65rem; border-radius: 8px; font-weight: 700; font-size: 0.88rem; cursor: pointer; min-width: 80px;">
                         🗑️ Delete
                     </button>
                 </div>
