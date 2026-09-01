@@ -112,8 +112,9 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 0.8rem;">
                         <div class="modal-input-group" style="margin-bottom:0;">
                             <label for="regLocation">Location / City / Town <span style="color:red;">*</span></label>
-                            <select id="regLocation" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
-                                <option value="Narasaraopet" selected>Narasaraopet</option>
+                            <select id="regLocation" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;" required>
+                                <option value="">-- Select Location --</option>
+                                <option value="Narasaraopet">Narasaraopet</option>
                             </select>
                         </div>
                         <div class="modal-input-group" style="margin-bottom:0;">
@@ -146,7 +147,8 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
                         <div class="modal-input-group" style="margin-bottom:0;">
                             <label for="regSlot">Delivery Slot <span style="color:red;">*</span></label>
-                            <select id="regSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                            <select id="regSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;" required>
+                                <option value="">-- Select Delivery Slot --</option>
                                 <option value="Morning">Morning</option>
                                 <option value="Evening">Evening</option>
                                 <option value="Morning & Evening">Morning & Evening</option>
@@ -154,7 +156,8 @@
                         </div>
                         <div class="modal-input-group" style="margin-bottom:0;">
                             <label for="regSubType">Subscription Type <span style="color:red;">*</span></label>
-                            <select id="regSubType" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
+                            <select id="regSubType" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;" required>
+                                <option value="">-- Select Subscription Type --</option>
                                 <option value="Daily Subscription">Daily Subscription</option>
                                 <option value="Monthly Subscription">Monthly Subscription</option>
                             </select>
@@ -3583,14 +3586,14 @@
         const name = document.getElementById('regName')?.value.trim();
         const phone = document.getElementById('regPhone')?.value.trim();
         const whatsapp = document.getElementById('regWhatsapp')?.value.trim();
-        const location = document.getElementById('regLocation')?.value || 'Narasaraopet';
+        const location = document.getElementById('regLocation')?.value || '';
         const area = document.getElementById('regArea')?.value || '';
         const address = document.getElementById('regAddress')?.value.trim();
-        const slot = document.getElementById('regSlot')?.value || 'Morning';
-        const subType = document.getElementById('regSubType')?.value || document.getElementById('regSubscriptionType')?.value || 'Daily Subscription';
+        const slot = document.getElementById('regSlot')?.value || '';
+        const subType = document.getElementById('regSubType')?.value || document.getElementById('regSubscriptionType')?.value || '';
 
-        if (!name || !phone || !whatsapp || !area || !address) {
-            alert('Please fill in all mandatory fields (*).');
+        if (!name || !phone || !whatsapp || !location || !area || !address || !slot || !subType) {
+            alert('Please fill in all mandatory fields (*) and select your options.');
             return;
         }
 
