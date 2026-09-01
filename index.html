@@ -170,18 +170,15 @@
                     <button class="btn btn-export" onclick="downloadReceiptsCSV()" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">📥 Download CSV</button>
                 </div>
                 <div class="table-container custom-scrollbar" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; max-height: 60vh; overflow-y: auto;">
-                    <table class="admin-table" style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                    <table class="admin-table" style="width: 100%; border-collapse: collapse; min-width: 600px;">
                         <thead style="background: var(--primary-color); color: white;">
                             <tr>
                                 <th style="padding: 12px; text-align: left;">Order ID</th>
-                                <th style="padding: 12px; text-align: left;">Customer & Slot</th>
-                                <th style="padding: 12px; text-align: left;">Plan & Qty</th>
-                                <th style="padding: 12px; text-align: left;">Amount</th>
-                                <th style="padding: 12px; text-align: left;">Order Status</th>
-                                <th style="padding: 12px; text-align: left;">Payment Status</th>
-                                <th style="padding: 12px; text-align: left;">Sub Status</th>
-                                <th style="padding: 12px; text-align: center;">Update</th>
-                                <th style="padding: 12px; text-align: left;">Action</th>
+                                <th style="padding: 12px; text-align: left;">Customer Name</th>
+                                <th style="padding: 12px; text-align: left;">Slot</th>
+                                <th style="padding: 12px; text-align: left;">Mobile Number</th>
+                                <th style="padding: 12px; text-align: left;">Quantity</th>
+                                <th style="padding: 12px; text-align: left;">Plan Type</th>
                             </tr>
                         </thead>
                         <tbody id="receiptsTableBody"></tbody>
@@ -2865,84 +2862,85 @@
 
         if (receiptsListener) receiptsListener();
 
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 2rem;">Listening for orders...</td></tr>';
-        
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Listening for today\'s orders...</td></tr>';
+
+        // Get today's date boundaries in IST (UTC+5:30)
+        function getTodayISTBounds() {
+            const now = new Date();
+            const istOffset = 5.5 * 60 * 60 * 1000; // 5h 30m in ms
+            const istNow = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + istOffset);
+            const startOfDay = new Date(istNow.getFullYear(), istNow.getMonth(), istNow.getDate(), 0, 0, 0, 0);
+            const endOfDay = new Date(istNow.getFullYear(), istNow.getMonth(), istNow.getDate(), 23, 59, 59, 999);
+            // Convert back to UTC for Firestore comparison
+            const startUTC = new Date(startOfDay.getTime() - istOffset + (now.getTimezoneOffset() * -60000));
+            const endUTC = new Date(endOfDay.getTime() - istOffset + (now.getTimezoneOffset() * -60000));
+            return { startUTC, endUTC, istDateStr: istNow.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', timeZone: 'Asia/Kolkata' }) };
+        }
+
+        const { istDateStr } = getTodayISTBounds();
+
         receiptsListener = db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
             tbody.innerHTML = '';
             if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
                 return;
             }
+
+            // Filter to today's IST date only
+            const now = new Date();
+            const istOffset = 5.5 * 60 * 60 * 1000;
+            const istNow = new Date(now.getTime() + (now.getTimezoneOffset() * 60000) + istOffset);
+            const todayStr = istNow.getFullYear() + '-' + String(istNow.getMonth() + 1).padStart(2, '0') + '-' + String(istNow.getDate()).padStart(2, '0');
+
+            let count = 0;
             snapshot.forEach(doc => {
                 const order = doc.data();
+
+                // Check if order was placed today (IST)
+                let orderDate = null;
+                if (order.createdAt && order.createdAt.toDate) {
+                    const d = order.createdAt.toDate();
+                    const istD = new Date(d.getTime() + (d.getTimezoneOffset() * 60000) + istOffset);
+                    orderDate = istD.getFullYear() + '-' + String(istD.getMonth() + 1).padStart(2, '0') + '-' + String(istD.getDate()).padStart(2, '0');
+                } else if (order.placedAt) {
+                    // Fallback: try parsing placedAt string
+                    try {
+                        const d = new Date(order.placedAt);
+                        if (!isNaN(d.getTime())) {
+                            const istD = new Date(d.getTime() + (d.getTimezoneOffset() * 60000) + istOffset);
+                            orderDate = istD.getFullYear() + '-' + String(istD.getMonth() + 1).padStart(2, '0') + '-' + String(istD.getDate()).padStart(2, '0');
+                        }
+                    } catch(e) {}
+                }
+
+                // Only show today's orders
+                if (orderDate && orderDate !== todayStr) return;
+
+                count++;
                 const tr = document.createElement('tr');
-                
-                const orderStatus = order.orderStatus || order.status || 'SCHEDULED';
-                const paymentStatus = order.paymentStatus || (order.paymentType === 'Monthly' ? 'PAYMENT COMPLETED' : 'PAYMENT PENDING');
-                const subStatus = order.subscriptionStatus || (order.paymentType === 'Monthly' ? 'ACTIVE' : 'UPCOMING');
+                tr.style.borderBottom = '1px solid #eee';
 
                 const slot = order.deliverySlot || 'Morning (7-9 AM)';
                 const plan = order.paymentType || 'Daily';
-                
+                const qty = order.qty || '1L';
+
                 tr.innerHTML = `
-                    <td style="padding: 10px 12px;">
-                        <strong>${order.orderID || 'ADF-ORD'}</strong>
-                        <div style="font-size:0.75rem; color:#888;">${order.placedAt ? order.placedAt.split(',')[0] : 'Today'}</div>
-                    </td>
-                    <td style="padding: 10px 12px;">
-                        <strong>${order.name || 'Customer'}</strong>
-                        <div style="font-size:0.75rem; color:#555;">📞 ${order.phone || ''}</div>
-                        <div style="font-size:0.75rem; color:#1976d2;">🕒 ${slot}</div>
-                    </td>
-                    <td style="padding: 10px 12px;">
-                        <div><strong>${plan} Sub</strong></div>
-                        <div style="font-size:0.8rem; color:#666;">${order.product || 'Milk'} (${order.qty || '1L'})</div>
-                    </td>
-                    <td style="padding: 10px 12px; font-weight:800; color:#2e7d32;">₹${order.amount || 0}</td>
-                    <td style="padding: 10px 12px;">
-                        <select id="orderStatus_${doc.id}" onchange="updateAdminOrderStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #fff8e1;">
-                            <option value="SCHEDULED" ${orderStatus === 'SCHEDULED' ? 'selected' : ''}>🟡 SCHEDULED</option>
-                            <option value="OUT FOR DELIVERY" ${orderStatus === 'OUT FOR DELIVERY' ? 'selected' : ''}>🚚 OUT FOR DELIVERY</option>
-                            <option value="DELIVERED" ${orderStatus === 'DELIVERED' ? 'selected' : ''}>🟢 DELIVERED</option>
-                            <option value="DELIVERY FAILED" ${orderStatus === 'DELIVERY FAILED' ? 'selected' : ''}>🔴 DELIVERY FAILED</option>
-                            <option value="CANCELLED" ${orderStatus === 'CANCELLED' ? 'selected' : ''}>⚪ CANCELLED</option>
-                        </select>
-                    </td>
-                    <td style="padding: 10px 12px;">
-                        <select id="paymentStatus_${doc.id}" onchange="updateAdminPaymentStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #e8f5e9;">
-                            <option value="PAYMENT PENDING" ${paymentStatus === 'PAYMENT PENDING' ? 'selected' : ''}>🟠 PENDING</option>
-                            <option value="PAYMENT COMPLETED" ${paymentStatus === 'PAYMENT COMPLETED' ? 'selected' : ''}>🟢 COMPLETED</option>
-                            <option value="COVERED BY SUBSCRIPTION" ${paymentStatus === 'COVERED BY SUBSCRIPTION' ? 'selected' : ''}>💳 COVERED BY SUB</option>
-                            <option value="PAYMENT FAILED" ${paymentStatus === 'PAYMENT FAILED' ? 'selected' : ''}>🔴 FAILED</option>
-                            <option value="REFUNDED" ${paymentStatus === 'REFUNDED' ? 'selected' : ''}>⚪ REFUNDED</option>
-                        </select>
-                    </td>
-                    <td style="padding: 10px 12px;">
-                        <select id="subscriptionStatus_${doc.id}" onchange="updateAdminSubStatus('${doc.id}', this.value)" style="padding: 4px 8px; border-radius: 6px; border: 1px solid #ccc; font-size: 0.75rem; font-weight: 700; background: #e3f2fd;">
-                            <option value="UPCOMING" ${subStatus === 'UPCOMING' ? 'selected' : ''}>🟡 UPCOMING</option>
-                            <option value="ACTIVE" ${subStatus === 'ACTIVE' ? 'selected' : ''}>🟢 ACTIVE</option>
-                            <option value="PAUSED" ${subStatus === 'PAUSED' ? 'selected' : ''}>🟠 PAUSED</option>
-                            <option value="EXPIRED" ${subStatus === 'EXPIRED' ? 'selected' : ''}>🔴 EXPIRED</option>
-                            <option value="CANCELLED" ${subStatus === 'CANCELLED' ? 'selected' : ''}>⚪ CANCELLED</option>
-                        </select>
-                    </td>
-                    <!-- DEDICATED UPDATE COLUMN -->
-                    <td style="padding: 10px 12px; text-align: center;">
-                        <button class="btn" style="padding:6px 14px; font-size:0.75rem; background:#00897b; color:white; border-radius:6px; font-weight:800; border:none; cursor:pointer; box-shadow:0 2px 6px rgba(0,137,123,0.3);" onclick="adminSaveStatusOnly('${doc.id}')" title="Save updated status to database">⚡ Update</button>
-                    </td>
-                    <td style="padding: 10px 12px;">
-                        <div style="display:flex; gap:0.3rem; flex-wrap:wrap;">
-                            <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:#25D366; color:white; border-radius:4px; font-weight:700;" onclick="adminSendWhatsAppNotification('${doc.id}')" title="Send WhatsApp details to customer">💬 Notify</button>
-                            <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:var(--primary-color); color:white; border-radius:4px; font-weight:700;" onclick="adminVerifyOrder('${doc.id}')">Bill</button>
-                            <button class="btn" style="padding:5px 8px; font-size:0.75rem; background:#d32f2f; color:white; border-radius:4px; font-weight:700;" onclick="deleteOrder('${doc.id}')">Delete</button>
-                        </div>
-                    </td>
+                    <td style="padding: 10px 12px; font-weight: 800; color: var(--primary-color);">${order.orderID || 'ADF-ORD'}</td>
+                    <td style="padding: 10px 12px; font-weight: 600;">${order.name || 'Customer'}</td>
+                    <td style="padding: 10px 12px; color: #1976d2; font-weight: 600;">🕒 ${slot}</td>
+                    <td style="padding: 10px 12px; font-weight: 600;">📞 ${order.phone || 'N/A'}</td>
+                    <td style="padding: 10px 12px; font-weight: 700; color: #2e7d32;">${qty}</td>
+                    <td style="padding: 10px 12px;"><span style="background: ${plan === 'Monthly' ? '#1565c0' : '#2e7d32'}; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800;">${plan}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            if (count === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #999;">No orders for today (${istDateStr}). Orders auto-refresh every 24hrs IST.</td></tr>`;
+            }
         }, err => {
             console.error("Receipts Listener Error:", err);
-            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 2rem; color: #d32f2f;">
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding: 2rem; color: #d32f2f;">
                 Error syncing orders.<br><small style="color:#888; font-weight:400;">(${err.code || 'unknown'})</small>
             </td></tr>`;
         });
