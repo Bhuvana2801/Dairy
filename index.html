@@ -36,11 +36,9 @@
             <ul class="nav-links">
                 <li><a href="#" onclick="showPage('home')" id="nav-home" class="nav-active">Home</a></li>
                 <li><a href="#" onclick="showPage('products')" id="nav-products">Products</a></li>
-                <li id="nav-offers-li"><a href="#" onclick="showPage('offers')" id="nav-offers">Grab Offers</a></li>
-                <li id="nav-order-li" style="display: none;"><a href="#" onclick="showPage('order')" id="nav-order">Order</a></li>
-                <li id="nav-profile-li" style="display: none;"><a href="#" onclick="openCustomerOrdersModal()" id="nav-profile">My Profile</a></li>
                 <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
                 <li><a href="#" onclick="showPage('install')" id="nav-install">Install</a></li>
+                <li id="nav-dashboard-li" style="display: none;"><a href="#" onclick="openCustomerOrdersModal()" id="nav-dashboard">My Dashboard</a></li>
             </ul>
         </nav>
         <div class="nav-actions" style="display: flex; gap: 0.8rem; align-items: center;">
@@ -49,8 +47,8 @@
                 <button class="btn btn-register" onclick="openCustomerRegisterModal()" style="background: #25D366; color: white; border: none; padding: 0.5rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(37,211,102,0.3);">📋 Register</button>
             </div>
             <div id="loggedInNavBtns" style="display: none; gap: 0.6rem; align-items: center;">
-                <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">👤 My Profile</button>
-                <button class="btn btn-logout" onclick="handleCustomerLogout()" style="background: #e53e3e; color: white; border: none; padding: 0.5rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: 0.3s;">🚪 Logout</button>
+                <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">👤 My Dashboard</button>
+                <button class="btn btn-logout" onclick="handleCustomerLogout()" style="background: #e53e3e; color: white; border: none; padding: 0.5rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: 0.3s;">🚪 Sign Out</button>
             </div>
             <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
         </div>
@@ -149,9 +147,9 @@
                             <label for="regSlot">Delivery Slot <span style="color:red;">*</span></label>
                             <select id="regSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;" required>
                                 <option value="">-- Select Delivery Slot --</option>
-                                <option value="Morning">Morning</option>
-                                <option value="Evening">Evening</option>
-                                <option value="Morning & Evening">Morning & Evening</option>
+                                <option value="Morning (7:00 AM – 9:00 AM)">Morning (7:00 AM – 9:00 AM)</option>
+                                <option value="Evening (7:00 PM – 9:00 PM)">Evening (7:00 PM – 9:00 PM)</option>
+                                <option value="Morning & Evening (7:00 AM – 9:00 AM & 7:00 PM – 9:00 PM)">Morning & Evening (7:00 AM – 9:00 AM & 7:00 PM – 9:00 PM)</option>
                             </select>
                         </div>
                         <div class="modal-input-group" style="margin-bottom:0;">
@@ -451,26 +449,28 @@
     <div id="customerOrdersModal" class="modal-overlay premium-modal-overlay" onclick="closeCustomerOrdersModal(event)">
         <div class="modal-box premium-modal-box" onclick="event.stopPropagation()" style="background:white; border-radius:20px; width:90%; max-width:600px; max-height:90vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.3); position:relative;">
             <!-- Sticky Header -->
-            <div class="profile-modal-header premium-header" style="display:flex; justify-content:space-between; align-items:center; padding:1.2rem 1.5rem; border-bottom:2px solid #f0f0f0; background:white; flex-shrink:0;">
-                <h2 style="margin:0; font-family:var(--font-heading); color:var(--primary-color); font-size:1.4rem;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-purple"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    My Profile
+            <div class="profile-modal-header premium-header" style="display:flex; justify-content:space-between; align-items:center; padding:1rem 1.5rem; border-bottom:2px solid #f0f0f0; background:white; flex-shrink:0;">
+                <h2 style="margin:0; font-family:var(--font-heading); color:var(--primary-color); font-size:1.35rem; display:flex; align-items:center; gap:0.5rem;">
+                    🥛 My Dashboard
                 </h2>
-                <button class="modal-close premium-close-btn" onclick="closeCustomerOrdersModal(null, true)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
+                <div style="display:flex; align-items:center; gap:0.8rem;">
+                    <button class="btn btn-logout" onclick="handleCustomerLogout()" style="background: #e53e3e; color: white; border: none; padding: 0.4rem 0.9rem; border-radius: 50px; font-weight: 700; font-size: 0.82rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.3rem;">🚪 Sign Out</button>
+                    <button class="modal-close premium-close-btn" onclick="closeCustomerOrdersModal(null, true)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
             </div>
 
             <!-- Sticky Tabs -->
             <div class="profile-tabs premium-tabs" style="display:flex; background:white; border-bottom:2px solid #eee; flex-shrink:0;">
                 <div class="profile-tab active premium-tab" id="tab-aboutme" onclick="switchProfileTab('aboutme')" style="flex:1; padding:0.8rem; cursor:pointer; font-weight:700; font-size:0.9rem; text-align:center;">
-                    👤 About Me
+                    👤 Registered Details
                 </div>
                 <div class="profile-tab premium-tab" id="tab-mysubscription" onclick="switchProfileTab('mysubscription')" style="flex:1; padding:0.8rem; cursor:pointer; font-weight:700; font-size:0.9rem; text-align:center;">
-                    🥛 Subscription & Wallet
+                    📅 30-Day Plan Days
                 </div>
                 <div class="profile-tab premium-tab" id="tab-myorders" onclick="switchProfileTab('myorders')" style="flex:1; padding:0.8rem; cursor:pointer; font-weight:700; font-size:0.9rem; text-align:center;">
-                    📦 My Orders
+                    🚚 Order Status
                 </div>
             </div>
 
@@ -489,6 +489,23 @@
                        <p class="profile-subtitle" id="profile-display-phone" style="color: white; font-size: 0.9rem; opacity: 0.85;"></p>
                     </div>
 
+                    <!-- 30-Day Plan Days Counter Card -->
+                    <div id="planDaysBannerCard" style="background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color: white; padding: 1.2rem; border-radius: 16px; margin: 1rem 0; box-shadow: 0 4px 15px rgba(27,94,32,0.25);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+                            <div>
+                                <div style="font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.8px; opacity: 0.9;">⏳ 30-Day Plan Remaining Days (IST Auto-24hr Cycle)</div>
+                                <div id="planDaysSummaryText" style="font-size: 1.35rem; font-weight: 800; margin-top: 2px;">Day 1 of 30 — <span style="color: #FFD700;">30 Days Remaining</span></div>
+                            </div>
+                            <div style="font-size: 2rem;">🗓️</div>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.25); height: 10px; border-radius: 5px; overflow: hidden; margin-bottom: 0.5rem;">
+                            <div id="planDaysProgressBar" style="width: 100%; height: 100%; background: #FFD700; border-radius: 5px; transition: width 0.5s;"></div>
+                        </div>
+                        <div style="font-size: 0.78rem; opacity: 0.85; text-align: right;">
+                            Reduces 1 day every 24 hrs IST starting from 1 to 30 days
+                        </div>
+                    </div>
+
                     <!-- Read-only Account Details & Editable Address -->
                     <div class="premium-form-section" style="display:flex; flex-direction:column; gap:1rem;">
                         <div style="background: #f8faf8; padding: 1rem; border-radius: 14px; border: 1px solid #e0eee0;">
@@ -504,7 +521,7 @@
                         </div>
 
                         <div style="background: #f8faf8; padding: 1rem; border-radius: 14px; border: 1px solid #e0eee0;">
-                            <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">📍 Delivery Address (Editable)</h4>
+                            <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">📍 Delivery Address & Slot (Editable)</h4>
                             
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 0.8rem;">
                                 <div class="premium-field">
@@ -537,9 +554,9 @@
                             <div class="premium-field">
                                 <label>Delivery Slot</label>
                                 <select id="profile-slot" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;">
-                                    <option value="Morning">Morning</option>
-                                    <option value="Evening">Evening</option>
-                                    <option value="Morning & Evening">Morning & Evening</option>
+                                    <option value="Morning (7:00 AM – 9:00 AM)">Morning (7:00 AM – 9:00 AM)</option>
+                                    <option value="Evening (7:00 PM – 9:00 PM)">Evening (7:00 PM – 9:00 PM)</option>
+                                    <option value="Morning & Evening (7:00 AM – 9:00 AM & 7:00 PM – 9:00 PM)">Morning & Evening (7:00 AM – 9:00 AM & 7:00 PM – 9:00 PM)</option>
                                 </select>
                             </div>
                         </div>
@@ -786,8 +803,9 @@
                                 </div>
 
                                 <div class="modal-input-group">
-                                    <label for="dailyOrderQty" style="font-weight: 700; color: #333;">Milk Quantity (Litres) <span style="color:red;">*</span></label>
+                                    <label for="dailyOrderQty" style="font-weight: 700; color: #333;">Milk Quantity <span style="color:red;">*</span></label>
                                     <select id="dailyOrderQty" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:1rem; font-weight:700;" required>
+                                        <option value="0.5">500 ml (₹40)</option>
                                         <option value="1">1 Litre (₹80)</option>
                                         <option value="2">2 Litres (₹160)</option>
                                         <option value="3">3 Litres (₹240)</option>
@@ -805,8 +823,8 @@
                                     <div class="modal-input-group" style="margin-bottom:0;">
                                         <label for="dailyOrderSlot" style="font-weight: 700; color: #333;">Delivery Slot <span style="color:red;">*</span></label>
                                         <select id="dailyOrderSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
-                                            <option value="Morning">Morning</option>
-                                            <option value="Evening">Evening</option>
+                                            <option value="Morning (7:00 AM – 9:00 AM)">Morning (7:00 AM – 9:00 AM)</option>
+                                            <option value="Evening (7:00 PM – 9:00 PM)">Evening (7:00 PM – 9:00 PM)</option>
                                         </select>
                                     </div>
                                     <div class="modal-input-group" style="margin-bottom:0;">
@@ -831,26 +849,27 @@
                                 </div>
 
                                 <div class="modal-input-group">
-                                    <label for="monthlyOrderQty" style="font-weight: 700; color: #333;">Daily Quantity (Litres per day) <span style="color:red;">*</span></label>
+                                    <label for="monthlyOrderQty" style="font-weight: 700; color: #333;">Daily Quantity <span style="color:red;">*</span></label>
                                     <select id="monthlyOrderQty" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:1rem; font-weight:700;" required>
-                                        <option value="1">1 Litre / Day (₹2,400 / month)</option>
-                                        <option value="2">2 Litres / Day (₹4,800 / month)</option>
-                                        <option value="3">3 Litres / Day (₹7,200 / month)</option>
-                                        <option value="4">4 Litres / Day (₹9,600 / month)</option>
-                                        <option value="5">5 Litres / Day (₹12,000 / month)</option>
-                                        <option value="6">6 Litres / Day (₹14,400 / month)</option>
-                                        <option value="7">7 Litres / Day (₹16,800 / month)</option>
-                                        <option value="8">8 Litres / Day (₹19,200 / month)</option>
-                                        <option value="9">9 Litres / Day (₹21,600 / month)</option>
-                                        <option value="10">10 Litres / Day (₹24,000 / month - Max Limit)</option>
+                                        <option value="0.5">500 ml (₹1,200 / month)</option>
+                                        <option value="1">1 Litre (₹2,400 / month)</option>
+                                        <option value="2">2 Litres (₹4,800 / month)</option>
+                                        <option value="3">3 Litres (₹7,200 / month)</option>
+                                        <option value="4">4 Litres (₹9,600 / month)</option>
+                                        <option value="5">5 Litres (₹12,000 / month)</option>
+                                        <option value="6">6 Litres (₹14,400 / month)</option>
+                                        <option value="7">7 Litres (₹16,800 / month)</option>
+                                        <option value="8">8 Litres (₹19,200 / month)</option>
+                                        <option value="9">9 Litres (₹21,600 / month)</option>
+                                        <option value="10">10 Litres (₹24,000 / month - Max Limit)</option>
                                     </select>
                                 </div>
 
                                 <div class="modal-input-group" style="margin-bottom: 1rem;">
                                     <label for="monthlyOrderSlot" style="font-weight: 700; color: #333;">Preferred Delivery Slot <span style="color:red;">*</span></label>
                                     <select id="monthlyOrderSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
-                                        <option value="Morning">Morning</option>
-                                        <option value="Evening">Evening</option>
+                                        <option value="Morning (7:00 AM – 9:00 AM)">Morning (7:00 AM – 9:00 AM)</option>
+                                        <option value="Evening (7:00 PM – 9:00 PM)">Evening (7:00 PM – 9:00 PM)</option>
                                     </select>
                                 </div>
 
@@ -1518,30 +1537,212 @@
         }
     }
 
+    function calculatePlanRemainingDays(startDateInput) {
+        const totalDays = 30;
+        const now = new Date();
+        // Convert current UTC time to IST (UTC + 5:30)
+        const istNow = new Date(now.getTime() + (5.5 * 60 * 60 * 1000) + (now.getTimezoneOffset() * 60000));
+
+        let start = startDateInput ? (startDateInput.toDate ? startDateInput.toDate() : new Date(startDateInput)) : new Date();
+        if (isNaN(start.getTime())) start = new Date();
+        const istStart = new Date(start.getTime() + (5.5 * 60 * 60 * 1000) + (start.getTimezoneOffset() * 60000));
+
+        // Compare dates in IST (12:00 AM IST cutoff)
+        const d1 = new Date(istStart.getFullYear(), istStart.getMonth(), istStart.getDate());
+        const d2 = new Date(istNow.getFullYear(), istNow.getMonth(), istNow.getDate());
+
+        const diffMs = d2 - d1;
+        const daysElapsed = Math.max(0, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+        const remainingDays = Math.max(0, totalDays - daysElapsed);
+        const currentDay = Math.min(totalDays, daysElapsed + 1);
+
+        return { totalDays, daysElapsed, remainingDays, currentDay };
+    }
+
+    function updatePlanDaysCounter(startDateInput) {
+        const { totalDays, daysElapsed, remainingDays, currentDay } = calculatePlanRemainingDays(startDateInput);
+        
+        const summaryText = document.getElementById('planDaysSummaryText');
+        const progressBar = document.getElementById('planDaysProgressBar');
+
+        if (summaryText) {
+            summaryText.innerHTML = `Day ${currentDay} of ${totalDays} — <span style="color: #FFD700;">${remainingDays} Days Remaining</span>`;
+        }
+        if (progressBar) {
+            const pct = Math.round((remainingDays / totalDays) * 100);
+            progressBar.style.width = `${pct}%`;
+        }
+    }
+
     function loadProfileInfo() {
-        const profile = JSON.parse(localStorage.getItem('ayyappa_profile') || '{}');
-        document.getElementById('profile-name').value = profile.name || '';
-        document.getElementById('profile-phone').value = profile.phone || '';
-        document.getElementById('profile-city').value = profile.city || '';
-        document.getElementById('profile-address').value = profile.address || '';
-        document.getElementById('profile-display-name').textContent = profile.name || 'My Profile';
-        document.getElementById('profile-display-phone').textContent = profile.phone ? '📞 ' + profile.phone : '';
-        document.getElementById('profile-save-msg').style.display = 'none';
+        const customer = getSignedInCustomer() || JSON.parse(localStorage.getItem('ayyappa_profile') || '{}');
+        
+        // Read-only Account Information
+        const readName = document.getElementById('profile-read-name');
+        const readPhone = document.getElementById('profile-read-phone');
+        const readWhatsapp = document.getElementById('profile-read-whatsapp');
+        const memId = document.getElementById('profile-membership-id');
+        const readSubType = document.getElementById('profile-read-subtype');
+        const dispName = document.getElementById('profile-display-name');
+        const dispPhone = document.getElementById('profile-display-phone');
+
+        if (readName) readName.textContent = customer.name || 'Customer';
+        if (readPhone) readPhone.textContent = customer.phone || 'N/A';
+        if (readWhatsapp) readWhatsapp.textContent = customer.whatsapp || customer.phone || 'N/A';
+        if (memId) memId.textContent = customer.membershipId || customer.id || 'ADFD1001';
+        if (readSubType) readSubType.textContent = customer.subType || customer.subscriptionType || 'Daily Subscription';
+        if (dispName) dispName.textContent = customer.name || 'My Profile';
+        if (dispPhone) dispPhone.textContent = customer.phone ? '📞 ' + customer.phone : '';
+
+        // Form inputs
+        const cityEl = document.getElementById('profile-city');
+        const areaEl = document.getElementById('profile-area');
+        const addrEl = document.getElementById('profile-address');
+        const slotEl = document.getElementById('profile-slot');
+
+        if (cityEl) cityEl.value = customer.location || customer.city || 'Narasaraopet';
+        if (areaEl && customer.area) areaEl.value = customer.area;
+        if (addrEl) addrEl.value = customer.address || '';
+        if (slotEl && customer.deliverySlot) slotEl.value = customer.deliverySlot;
+
+        // Update 30-Day Plan Counter
+        updatePlanDaysCounter(customer.createdAt || customer.date);
     }
 
     function saveProfileInfo() {
-        const profile = {
-            name: document.getElementById('profile-name').value.trim(),
-            phone: document.getElementById('profile-phone').value.trim(),
-            city: document.getElementById('profile-city').value.trim(),
-            address: document.getElementById('profile-address').value.trim()
-        };
-        localStorage.setItem('ayyappa_profile', JSON.stringify(profile));
-        document.getElementById('profile-display-name').textContent = profile.name || 'My Profile';
-        document.getElementById('profile-display-phone').textContent = profile.phone ? '📞 ' + profile.phone : '';
+        const customer = getSignedInCustomer();
+        const updatedAddress = document.getElementById('profile-address')?.value.trim();
+        const updatedArea = document.getElementById('profile-area')?.value;
+        const updatedSlot = document.getElementById('profile-slot')?.value;
+
+        if (customer) {
+            customer.address = updatedAddress;
+            customer.area = updatedArea;
+            customer.deliverySlot = updatedSlot;
+            localStorage.setItem('ayyappa_signed_in_customer', JSON.stringify(customer));
+        }
+
         const msg = document.getElementById('profile-save-msg');
-        msg.style.display = 'block';
-        setTimeout(() => { msg.style.display = 'none'; }, 3000);
+        if (msg) {
+            msg.style.display = 'block';
+            setTimeout(() => { msg.style.display = 'none'; }, 3000);
+        }
+    }
+
+    async function renderCustomerOrders() {
+        const container = document.getElementById('profile-tab-myorders');
+        if (!container) return;
+
+        const customer = getSignedInCustomer();
+        if (!customer) {
+            container.innerHTML = `
+                <div style="text-align:center; padding: 2rem; color: #666;">
+                    <p>Please sign in to view your live orders and status.</p>
+                    <button onclick="openCustomerSigninModal()" class="btn" style="background:var(--primary-color); color:white; padding:0.6rem 1.2rem; border-radius:50px; font-weight:700; border:none; cursor:pointer;">🔑 Sign In Now</button>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = `
+            <div style="text-align:center; padding: 1.5rem; color: #666;">
+                <p>⏳ Loading your order history and live delivery status...</p>
+            </div>
+        `;
+
+        try {
+            let orders = [];
+            // Query Firestore orders collection if available
+            if (typeof db !== 'undefined' && db) {
+                let snapshot = await db.collection('orders').where('phone', '==', customer.phone).get();
+                if (!snapshot.empty) {
+                    snapshot.forEach(doc => {
+                        orders.push({ id: doc.id, ...doc.data() });
+                    });
+                }
+            }
+
+            // Also fallback to local storage orders if empty
+            if (orders.length === 0) {
+                const localOrders = JSON.parse(localStorage.getItem('adfMyOrders') || '[]');
+                orders = localOrders;
+            }
+
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 2.5rem 1rem; background:#f9fafb; border-radius:16px; border:1px dashed #ccc;">
+                        <div style="font-size:2.5rem; margin-bottom:0.5rem;">🥛</div>
+                        <h4 style="color:#333; margin-bottom:0.4rem;">No Orders Placed Yet</h4>
+                        <p style="font-size:0.88rem; color:#666; margin-bottom:1.2rem;">Place your first order to get pure fresh milk delivered daily to your doorstep!</p>
+                        <button onclick="closeCustomerOrdersModal(); showPage('order');" style="background:var(--primary-color); color:white; padding:0.7rem 1.4rem; border-radius:50px; font-weight:800; border:none; cursor:pointer; box-shadow:0 4px 12px rgba(26,92,42,0.3);">
+                            🛒 Order Fresh Milk Now
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Render Orders List
+            let html = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+                    <h4 style="margin:0; color:var(--primary-color); font-size:1.1rem;">🚚 Live Delivery & Order Status</h4>
+                    <span style="font-size:0.8rem; background:#e8f5e9; color:#2e7d32; padding:3px 10px; border-radius:12px; font-weight:700;">${orders.length} Order(s)</span>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:1rem;">
+            `;
+
+            const todayISTStr = new Date().toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
+
+            orders.reverse().forEach(ord => {
+                const status = ord.orderStatus || ord.status || 'SCHEDULED';
+                let badgeBg = '#1976d2';
+                let statusIcon = '🚚';
+                if (status.toUpperCase() === 'DELIVERED') { badgeBg = '#2e7d32'; statusIcon = '✅'; }
+                else if (status.toUpperCase() === 'CANCELLED') { badgeBg = '#d32f2f'; statusIcon = '❌'; }
+                else if (status.toUpperCase() === 'PENDING') { badgeBg = '#ed6c02'; statusIcon = '⏳'; }
+
+                const deliveryDateDisp = ord.deliveryDate || `${todayISTStr} (12:00 AM – 11:59 PM IST)`;
+                const slotDisp = ord.deliverySlot || ord.slot || 'Morning (7:00 AM – 9:00 AM)';
+                const qtyDisp = ord.qty || ord.quantity || '1 Litre';
+
+                html += `
+                    <div style="background:white; border:1.5px solid #e2e8f0; border-radius:16px; padding:1.2rem; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.8rem; border-bottom:1px solid #f1f5f9; padding-bottom:0.6rem;">
+                            <div>
+                                <span style="font-size:0.75rem; color:#64748b; text-transform:uppercase; letter-spacing:0.5px; font-weight:700;">ORDER ID</span>
+                                <div style="font-size:1rem; font-weight:800; color:#0f172a;">${ord.orderID || ord.id || 'AYY-ORD-1001'}</div>
+                            </div>
+                            <span style="background:${badgeBg}; color:white; padding:4px 10px; border-radius:20px; font-size:0.78rem; font-weight:800; display:flex; align-items:center; gap:0.3rem;">
+                                ${statusIcon} ${status.toUpperCase()}
+                            </span>
+                        </div>
+
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; font-size:0.88rem; margin-bottom:0.8rem;">
+                            <div><span style="color:#64748b; font-size:0.78rem;">🥛 Product / Qty:</span><br><strong>${qtyDisp}</strong></div>
+                            <div><span style="color:#64748b; font-size:0.78rem;">💳 Payment Status:</span><br><strong style="color:#2e7d32;">${ord.paymentStatus || 'COMPLETED'}</strong></div>
+                            <div><span style="color:#64748b; font-size:0.78rem;">⏰ Time Slot:</span><br><strong>${slotDisp}</strong></div>
+                            <div><span style="color:#64748b; font-size:0.78rem;">💰 Total Amount:</span><br><strong>₹${ord.amount || '80'}</strong></div>
+                        </div>
+
+                        <div style="background:#f8fafc; padding:0.6rem 0.8rem; border-radius:10px; font-size:0.8rem; color:#334155; display:flex; justify-content:space-between; align-items:center;">
+                            <span>📅 Delivery Window: <strong>${deliveryDateDisp}</strong></span>
+                            <span style="color:#0284c7; font-weight:700;">🇮🇳 IST Operating Hours</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+
+        } catch (err) {
+            console.error("Error loading customer orders:", err);
+            container.innerHTML = `
+                <div style="padding:1.5rem; text-align:center; color:#d32f2f;">
+                    <p>Failed to load order status. Please try refreshing.</p>
+                </div>
+            `;
+        }
     }
 
     // ΓöÇΓöÇ Firebase Configuration ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
@@ -4242,7 +4443,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         }
 
         const qty = document.getElementById('dailyOrderQty')?.value || '1';
-        const slot = document.getElementById('dailyOrderSlot')?.value || 'Morning';
+        const slot = document.getElementById('dailyOrderSlot')?.value || 'Morning (7:00 AM – 9:00 AM)';
         const payment = document.getElementById('dailyOrderPayment')?.value || 'Cash on Delivery';
 
         const btn = document.getElementById('dailySubmitBtn');
@@ -4259,14 +4460,23 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         const randomNum = Math.floor(1000 + Math.random() * 9000);
         const orderID = `AYY-D-${yyyy}${mm}${dd}-${randomNum}`;
 
+        const qtyVal = parseFloat(qty);
+        let qtyStr = `${qtyVal} Litre${qtyVal > 1 ? 's' : ''}`;
+        if (qtyVal === 0.5) qtyStr = '500 ml';
+        const amountStr = Math.round(qtyVal * 80).toString();
+
+        const todayISTDate = now.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
+        const deliveryDateStr = `${todayISTDate} (12:00 AM – 11:59 PM IST)`;
+
         const orderDoc = {
             orderID: orderID,
             name: customer.name || 'Customer',
             phone: customer.phone || 'N/A',
             membershipId: customer.membershipId || customer.id || 'AYY-M-1001',
-            qty: `${qty} Litre${parseInt(qty) > 1 ? 's' : ''}`,
-            amount: (parseInt(qty) * 80).toString(),
+            qty: qtyStr,
+            amount: amountStr,
             deliverySlot: slot,
+            deliveryDate: deliveryDateStr,
             paymentType: 'Daily',
             paymentOption: payment,
             orderStatus: 'Pending',
@@ -4313,7 +4523,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         }
 
         const qty = document.getElementById('monthlyOrderQty')?.value || '1';
-        const slot = document.getElementById('monthlyOrderSlot')?.value || 'Morning';
+        const slot = document.getElementById('monthlyOrderSlot')?.value || 'Morning (7:00 AM – 9:00 AM)';
 
         const btn = document.getElementById('monthlySubmitBtn');
         if (btn) {
@@ -4329,14 +4539,23 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         const randomNum = Math.floor(1000 + Math.random() * 9000);
         const orderID = `AYY-M-${yyyy}${mm}${dd}-${randomNum}`;
 
+        const qtyVal = parseFloat(qty);
+        let qtyStr = `${qtyVal} Litre${qtyVal > 1 ? 's' : ''} / Day`;
+        if (qtyVal === 0.5) qtyStr = '500 ml / Day';
+        const amountStr = Math.round(qtyVal * 2400).toString();
+
+        const todayISTDate = now.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
+        const deliveryDateStr = `${todayISTDate} (12:00 AM – 11:59 PM IST)`;
+
         const orderDoc = {
             orderID: orderID,
             name: customer.name || 'Customer',
             phone: customer.phone || 'N/A',
             membershipId: customer.membershipId || customer.id || 'AYY-M-1001',
-            qty: `${qty} Litre${parseInt(qty) > 1 ? 's' : ''} / Day`,
-            amount: (parseInt(qty) * 2400).toString(),
+            qty: qtyStr,
+            amount: amountStr,
             deliverySlot: slot,
+            deliveryDate: deliveryDateStr,
             paymentType: 'Monthly',
             paymentOption: 'Prepaid Monthly',
             orderStatus: 'Pending',
