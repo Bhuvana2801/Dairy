@@ -116,6 +116,48 @@
                     <div class="dash-card-desc">Track & manage all monthly expenses</div>
                     <div class="dash-card-arrow">→</div>
                 </div>
+
+                <!-- Membership Approvals Card -->
+                <div class="dash-card dash-card-premium" onclick="openSection('membership-approvals')" style="animation-delay: 0.35s;">
+                    <div class="dash-card-icon" style="background: linear-gradient(135deg, #166534 0%, #2e7d32 100%); color: white;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+                    </div>
+                    <div class="dash-card-title">Membership Approvals</div>
+                    <div class="dash-card-desc">Approve pending new customer membership IDs</div>
+                    <div class="dash-card-arrow">→</div>
+                </div>
+            </div>
+
+            <!-- Membership Approvals Section -->
+            <div id="membership-approvals-section" class="dash-section" style="display:none; padding: 1.5rem;">
+                <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent-color); display: inline-block;">🔑 New Customer Membership Approvals</h3>
+                        <p style="font-size:0.9rem; color:#666; margin-bottom: 0;">Approve or reject customer requests to unlock Daily & Monthly subscription access.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="renderMembershipApprovals()" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">🔄 Refresh List</button>
+                </div>
+                <div class="table-container custom-scrollbar" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; max-height: 60vh; overflow-y: auto;">
+                    <table class="admin-table" style="width: 100%; border-collapse: collapse; min-width: 900px;">
+                        <thead style="background: var(--primary-color); color: white;">
+                            <tr>
+                                <th style="padding: 12px; text-align: left;">Date</th>
+                                <th style="padding: 12px; text-align: left;">Customer & Contact</th>
+                                <th style="padding: 12px; text-align: left;">Location & Area</th>
+                                <th style="padding: 12px; text-align: left;">Address</th>
+                                <th style="padding: 12px; text-align: left;">Requested ID</th>
+                                <th style="padding: 12px; text-align: left;">Sub & Slot</th>
+                                <th style="padding: 12px; text-align: left;">Status</th>
+                                <th style="padding: 12px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminMembershipTableBody">
+                            <tr>
+                                <td colspan="8" style="text-align: center; padding: 20px; color: #888;">Loading membership approval requests...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Order Receipts Section -->
@@ -686,79 +728,83 @@
                                     <input type="radio" name="planType" value="Monthly" onchange="calculateAmount()">
                                 </div>
 
-                                <!-- Optional Delivery Slot Selection -->
-                                <div style="margin-top: 1.5rem;">
-                                    <h4 style="color: var(--primary-color); margin-bottom: 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                        🚚 Delivery Slot (Optional)
-                                    </h4>
-                                    <p style="font-size: 0.82rem; color: #666; margin-bottom: 0.6rem;">You can pick a slot or leave as 'No Preference' (To Be Assigned).</p>
-                                    <div class="slot-grid">
-                                        <label class="slot-pill">
-                                            <input type="radio" name="deliverySlot" value="Morning (7:00 AM – 9:00 AM)" class="slot-pill-input" onchange="calculateAmount()">
-                                            <div class="slot-title">🌅 Morning</div>
-                                            <div class="slot-time">7:00 – 9:00 AM</div>
-                                        </label>
-                                        <label class="slot-pill">
-                                            <input type="radio" name="deliverySlot" value="Evening (7:00 PM – 9:00 PM)" class="slot-pill-input" onchange="calculateAmount()">
-                                            <div class="slot-title">🌙 Evening</div>
-                                            <div class="slot-time">7:00 – 9:00 PM</div>
-                                        </label>
-                                        <label class="slot-pill">
-                                            <input type="radio" name="deliverySlot" value="No Preference" class="slot-pill-input" checked onchange="calculateAmount()">
-                                            <div class="slot-title">⚪ No Preference</div>
-                                            <div class="slot-time">To Be Assigned</div>
-                                        </label>
+                                <!-- Order Checkout Section (Only visible on Daily / Monthly / Refer tabs after sign-in & approval) -->
+                                <div id="orderCheckoutSection" style="display: none;">
+                                    <!-- Optional Delivery Slot Selection -->
+                                    <div style="margin-top: 1.5rem;">
+                                        <h4 style="color: var(--primary-color); margin-bottom: 0.5rem; font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                            🚚 Delivery Slot (Optional)
+                                        </h4>
+                                        <p style="font-size: 0.82rem; color: #666; margin-bottom: 0.6rem;">You can pick a slot or leave as 'No Preference' (To Be Assigned).</p>
+                                        <div class="slot-grid">
+                                            <label class="slot-pill">
+                                                <input type="radio" name="deliverySlot" value="Morning (7:00 AM – 9:00 AM)" class="slot-pill-input" onchange="calculateAmount()">
+                                                <div class="slot-title">🌅 Morning</div>
+                                                <div class="slot-time">7:00 – 9:00 AM</div>
+                                            </label>
+                                            <label class="slot-pill">
+                                                <input type="radio" name="deliverySlot" value="Evening (7:00 PM – 9:00 PM)" class="slot-pill-input" onchange="calculateAmount()">
+                                                <div class="slot-title">🌙 Evening</div>
+                                                <div class="slot-time">7:00 – 9:00 PM</div>
+                                            </label>
+                                            <label class="slot-pill">
+                                                <input type="radio" name="deliverySlot" value="No Preference" class="slot-pill-input" checked onchange="calculateAmount()">
+                                                <div class="slot-title">⚪ No Preference</div>
+                                                <div class="slot-time">To Be Assigned</div>
+                                            </label>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- Service Rating -->
-                                <div style="margin-top: 1.5rem;">
-                                    <label style="font-weight: 700; color: var(--primary-color); font-size: 0.95rem;">Rate Our Service *</label>
-                                    <div class="star-rating" style="margin-top: 0.3rem;">
-                                        <input type="radio" name="rating" id="star5" value="5" checked required><label for="star5">★</label>
-                                        <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
-                                        <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
-                                        <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
-                                        <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+                                    <!-- Service Rating -->
+                                    <div style="margin-top: 1.5rem;">
+                                        <label style="font-weight: 700; color: var(--primary-color); font-size: 0.95rem;">Rate Our Service *</label>
+                                        <div class="star-rating" style="margin-top: 0.3rem;">
+                                            <input type="radio" name="rating" id="star5" value="5" checked required><label for="star5">★</label>
+                                            <input type="radio" name="rating" id="star4" value="4"><label for="star4">★</label>
+                                            <input type="radio" name="rating" id="star3" value="3"><label for="star3">★</label>
+                                            <input type="radio" name="rating" id="star2" value="2"><label for="star2">★</label>
+                                            <input type="radio" name="rating" id="star1" value="1"><label for="star1">★</label>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- Real-Time Itemized Checkout Breakdown Summary Card -->
-                                <div class="checkout-summary-box">
-                                    <div class="checkout-header">
-                                        <h4>🥛 AYYAPPA DAIRY FARM</h4>
-                                        <span id="summaryPlanBadge" style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800;">MONTHLY BASIC</span>
+                                    <!-- Real-Time Itemized Checkout Breakdown Summary Card -->
+                                    <div class="checkout-summary-box">
+                                        <div class="checkout-header">
+                                            <h4>🥛 AYYAPPA DAIRY FARM</h4>
+                                            <span id="summaryPlanBadge" style="background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800;">MONTHLY BASIC</span>
+                                        </div>
+                                        <div class="checkout-row">
+                                            <span>Milk / Product Base Value:</span>
+                                            <span id="sumMilkValue">₹3,000</span>
+                                        </div>
+                                        <div class="checkout-row discount" id="sumPlanDiscountRow">
+                                            <span>Monthly / Plan Discount:</span>
+                                            <span id="sumPlanDiscount">−₹150</span>
+                                        </div>
+                                        <div class="checkout-row discount" id="sumWelcomeDiscountRow">
+                                            <span>New Customer Discount:</span>
+                                            <span id="sumWelcomeDiscount">−₹100</span>
+                                        </div>
+                                        <div class="checkout-row">
+                                            <span>Home Delivery:</span>
+                                            <span style="color: #A8D5A2; font-weight: 800;">FREE</span>
+                                        </div>
+                                        <div class="checkout-row total">
+                                            <span>TOTAL FINAL AMOUNT:</span>
+                                            <span id="sumTotalAmount" style="color: #FFD700;">₹2,750</span>
+                                        </div>
+                                        <input type="hidden" id="bookAmount" value="2750">
+                                        <div class="advance-pay-badge" id="advanceBadgeText">💳 100% ADVANCE PAYMENT</div>
                                     </div>
-                                    <div class="checkout-row">
-                                        <span>Milk / Product Base Value:</span>
-                                        <span id="sumMilkValue">₹3,000</span>
-                                    </div>
-                                    <div class="checkout-row discount" id="sumPlanDiscountRow">
-                                        <span>Monthly / Plan Discount:</span>
-                                        <span id="sumPlanDiscount">−₹150</span>
-                                    </div>
-                                    <div class="checkout-row discount" id="sumWelcomeDiscountRow">
-                                        <span>New Customer Discount:</span>
-                                        <span id="sumWelcomeDiscount">−₹100</span>
-                                    </div>
-                                    <div class="checkout-row">
-                                        <span>Home Delivery:</span>
-                                        <span style="color: #A8D5A2; font-weight: 800;">FREE</span>
-                                    </div>
-                                    <div class="checkout-row total">
-                                        <span>TOTAL FINAL AMOUNT:</span>
-                                        <span id="sumTotalAmount" style="color: #FFD700;">₹2,750</span>
-                                    </div>
-                                    <input type="hidden" id="bookAmount" value="2750">
-                                    <div class="advance-pay-badge" id="advanceBadgeText">💳 100% ADVANCE PAYMENT</div>
-                                </div>
 
-                                <div style="margin-top: 1.5rem;">
-                                    <button type="submit" class="booking-submit-btn" id="paySubmitBtn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                        PAY ₹2,750 & SUBSCRIBE
-                                    </button>
+                                    <div style="margin-top: 1.5rem;">
+                                        <button type="submit" class="booking-submit-btn" id="paySubmitBtn">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
+                                            PAY ₹2,750 & SUBSCRIBE
+                                        </button>
+                                    </div>
                                 </div>
+                            </form>
                             </form>
                         </div>
 
@@ -1631,7 +1677,7 @@
         console.log("Showing Admin Grid");
         
         // Hide ALL detail/custom sections
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
@@ -1649,13 +1695,22 @@
         
         // 1. Hide everything first for a clean slate
         document.getElementById('dashGrid').style.display = 'none';
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
         });
 
         // 2. Handle Special Sections
+        if (section === 'membership-approvals') {
+            const approvalsSec = document.getElementById('membership-approvals-section');
+            if (approvalsSec) approvalsSec.style.display = 'block';
+            document.getElementById('dashHeading').textContent = 'Membership ID Approvals';
+            document.getElementById('backBtn').style.display = 'inline-block';
+            renderMembershipApprovals();
+            return;
+        }
+
         if (section === 'order-receipts') {
             const receiptSec = document.getElementById('order-receipts-section');
             if (receiptSec) receiptSec.style.display = 'block';
@@ -2488,7 +2543,9 @@
     let currentActiveSection = 'new';
 
     function isCustomerSignedIn() {
-        return localStorage.getItem('ayyappa_signed_in') === 'true';
+        const signedIn = localStorage.getItem('ayyappa_signed_in') === 'true';
+        const approvalStatus = localStorage.getItem('ayyappa_approval_status');
+        return signedIn && approvalStatus === 'Approved';
     }
 
     function unlockSubscriptionTabs() {
@@ -2498,7 +2555,7 @@
         if (monthlyCard) monthlyCard.classList.remove('locked');
     }
 
-    function handleNewCustomerSignin() {
+    async function handleNewCustomerSignin() {
         const name = document.getElementById('newCustName')?.value.trim();
         const phone = document.getElementById('newCustPhone')?.value.trim();
         const whatsapp = document.getElementById('newCustWhatsapp')?.value.trim();
@@ -2535,50 +2592,99 @@
         }
 
         let membershipId = '';
-
         if (subType === 'Daily') {
             let lastDaily = parseInt(localStorage.getItem('adfDailyCounter') || '2800');
             membershipId = 'ADFD' + lastDaily;
             localStorage.setItem('adfDailyCounter', (lastDaily + 1).toString());
-            localStorage.setItem('adfDailyMembershipId', membershipId);
-            localStorage.setItem('adfLastDailyID', membershipId);
         } else {
             let lastMonthly = parseInt(localStorage.getItem('adfMonthlyCounter') || '20001');
             membershipId = 'ADFM' + lastMonthly;
             localStorage.setItem('adfMonthlyCounter', (lastMonthly + 1).toString());
-            localStorage.setItem('adfMonthlyMembershipId', membershipId);
         }
 
-        localStorage.setItem('ayyappa_signed_in', 'true');
-        localStorage.setItem('adfMembershipId', membershipId);
-        localStorage.setItem('adfPlanType', subType);
+        const btn = document.getElementById('newCustSigninBtn');
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Submitting Request to Admin...';
+        }
 
-        const userObj = {
-            name, phone, whatsapp, location, area, address, slot, subType, membershipId
+        const approvalDoc = {
+            name, phone, whatsapp, location, area, address, slot, subType,
+            membershipId, status: 'Pending',
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            date: new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
         };
-        localStorage.setItem('ayyappa_signed_in_customer', JSON.stringify(userObj));
 
-        // Unlock Daily & Monthly tabs
-        unlockSubscriptionTabs();
+        try {
+            await db.collection('membership_approvals').doc(phone).set(approvalDoc);
+        } catch(err) {
+            console.error("Firestore submission error:", err);
+        }
 
-        // Update ID banner immediately
+        localStorage.setItem('ayyappa_signed_in_phone', phone);
+        localStorage.setItem('ayyappa_approval_status', 'Pending');
+        localStorage.setItem('adfRequestedId', membershipId);
+        localStorage.setItem('ayyappa_signed_in_customer', JSON.stringify(approvalDoc));
+
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '🔑 Sign In & Request Membership Approval';
+        }
+
+        alert(`⏳ REGISTRATION SUBMITTED FOR ADMIN APPROVAL!\n\nHello ${name}!\nYour details and requested Membership ID (${membershipId}) have been sent to the Admin Portal for approval.\n\nOnce the Admin approves your request, your Membership ID and Daily/Monthly Subscriptions will be unlocked!`);
+
         updateIDBanner();
+        listenForAdminApproval(phone);
+    }
 
-        // Show alert confirmation
-        alert(`🎉 SIGN IN SUCCESSFUL!\n\nWelcome ${name}!\nAllocated Membership ID: ${membershipId}\nSelected Subscription: ${subType}\nLocation: ${area}, ${location}\n\n✅ Daily & Monthly subscriptions are now unlocked!`);
+    let approvalUnsubscribe = null;
 
-        // Switch to chosen subscription tab
-        if (subType === 'Daily') {
-            switchOrderSection('daily');
-        } else {
-            switchOrderSection('monthly');
+    function listenForAdminApproval(phone) {
+        if (!phone) phone = localStorage.getItem('ayyappa_signed_in_phone');
+        if (!phone) return;
+
+        if (approvalUnsubscribe) approvalUnsubscribe();
+
+        try {
+            approvalUnsubscribe = db.collection('membership_approvals').doc(phone).onSnapshot(doc => {
+                if (doc && doc.exists) {
+                    const data = doc.data();
+                    if (data.status === 'Approved') {
+                        localStorage.setItem('ayyappa_signed_in', 'true');
+                        localStorage.setItem('ayyappa_approval_status', 'Approved');
+                        localStorage.setItem('adfMembershipId', data.membershipId);
+                        localStorage.setItem('adfPlanType', data.subType);
+                        if (data.subType === 'Daily') {
+                            localStorage.setItem('adfDailyMembershipId', data.membershipId);
+                        } else {
+                            localStorage.setItem('adfMonthlyMembershipId', data.membershipId);
+                        }
+
+                        unlockSubscriptionTabs();
+                        updateIDBanner();
+                    } else if (data.status === 'Rejected') {
+                        localStorage.setItem('ayyappa_signed_in', 'false');
+                        localStorage.setItem('ayyappa_approval_status', 'Rejected');
+                        updateIDBanner();
+                    }
+                }
+            });
+        } catch(err) {
+            console.log("Approval listener fallback check:", err);
         }
     }
 
     function switchOrderSection(sectionKey) {
-        // Enforce lock if user tries to click Daily or Monthly without signing in
-        if ((sectionKey === 'daily' || sectionKey === 'monthly') && !isCustomerSignedIn()) {
-            alert('🔒 Please complete New Customer Sign In first to unlock Daily & Monthly Subscriptions!');
+        const isApproved = isCustomerSignedIn();
+        
+        // Enforce lock if user tries to click Daily or Monthly without admin approval
+        if ((sectionKey === 'daily' || sectionKey === 'monthly') && !isApproved) {
+            const status = localStorage.getItem('ayyappa_approval_status');
+            if (status === 'Pending') {
+                alert('⏳ Your Membership ID is pending Admin Approval! Please wait for Admin to approve your request in the Admin Portal.');
+            } else {
+                alert('🔒 Please complete New Customer Sign In and get Admin Approval first to unlock Daily & Monthly Subscriptions!');
+            }
             sectionKey = 'new';
         }
 
@@ -2614,6 +2720,16 @@
             if (radioMonthly) radioMonthly.checked = true;
         }
 
+        // Toggle checkout container (Only show checkout on Daily/Monthly/Refer when approved)
+        const checkoutSec = document.getElementById('orderCheckoutSection');
+        if (checkoutSec) {
+            if (sectionKey === 'new') {
+                checkoutSec.style.display = 'none';
+            } else {
+                checkoutSec.style.display = 'block';
+            }
+        }
+
         updateIDBanner();
         if (typeof calculateAmount === 'function') calculateAmount();
     }
@@ -2623,7 +2739,9 @@
         const label = document.querySelector('.id-label');
         if (!display || !label) return;
 
+        const status = localStorage.getItem('ayyappa_approval_status');
         const savedId = localStorage.getItem('adfMembershipId');
+        const reqId = localStorage.getItem('adfRequestedId');
         const dailyId = localStorage.getItem('adfDailyMembershipId') || (savedId && savedId.startsWith('ADFD') ? savedId : 'ADFD2800');
         const monthlyId = localStorage.getItem('adfMonthlyMembershipId') || (savedId && savedId.startsWith('ADFM') ? savedId : 'ADFM20001');
 
@@ -2642,15 +2760,99 @@
             display.textContent = refCode;
             display.style.color = '#e65100';
         } else {
-            if (isCustomerSignedIn() && savedId) {
-                label.textContent = 'ALLOCATED MEMBERSHIP ID';
+            if (status === 'Approved' && savedId) {
+                label.textContent = 'APPROVED MEMBERSHIP ID';
                 display.textContent = savedId;
-                display.style.color = 'var(--primary-color)';
+                display.style.color = '#2e7d32';
+            } else if (status === 'Pending' && reqId) {
+                label.textContent = 'PENDING ADMIN APPROVAL';
+                display.textContent = reqId + ' (APPROVAL PENDING)';
+                display.style.color = '#f57c00';
             } else {
-                label.textContent = 'NEW CUSTOMER MEMBERSHIP ID (SIGN IN TO ALLOCATE)';
+                label.textContent = 'NEW CUSTOMER MEMBERSHIP ID (SIGN IN TO REQUEST APPROVAL)';
                 display.textContent = 'ADFD2800 / ADFM20001';
                 display.style.color = 'var(--primary-color)';
             }
+        }
+    }
+
+    async function renderMembershipApprovals() {
+        const tbody = document.getElementById('adminMembershipTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: #888;">Loading membership requests...</td></tr>';
+
+        try {
+            const snapshot = await db.collection('membership_approvals').get();
+            if (snapshot.empty) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: #888;">No pending membership approval requests found.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                const id = doc.id;
+                const status = data.status || 'Pending';
+                let statusBadge = '';
+                if (status === 'Approved') {
+                    statusBadge = '<span style="background:#2e7d32; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800;">APPROVED</span>';
+                } else if (status === 'Rejected') {
+                    statusBadge = '<span style="background:#c62828; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800;">REJECTED</span>';
+                } else {
+                    statusBadge = '<span style="background:#f57c00; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800;">PENDING APPROVAL</span>';
+                }
+
+                html += `
+                    <tr style="border-bottom: 1px solid #eee;">
+                        <td style="padding: 10px; font-size:0.85rem; font-weight:600;">${data.date || 'Today'}</td>
+                        <td style="padding: 10px; font-size:0.85rem;"><strong>${data.name}</strong><br><span style="color:#666;">📞 ${data.phone}</span><br><span style="color:#25D366; font-size:0.8rem;">💬 WA: ${data.whatsapp || data.phone}</span></td>
+                        <td style="padding: 10px; font-size:0.85rem;"><strong>${data.location || 'Narasaraopet'}</strong><br><span style="color:#444;">📍 ${data.area || 'N/A'}</span></td>
+                        <td style="padding: 10px; font-size:0.85rem; max-width:180px;">${data.address || 'N/A'}</td>
+                        <td style="padding: 10px; font-size:0.9rem; font-weight:800; color:var(--primary-color);">${data.membershipId}</td>
+                        <td style="padding: 10px; font-size:0.85rem;"><strong>${data.subType}</strong><br><span style="color:#555;">🚚 ${data.slot || 'Morning'}</span></td>
+                        <td style="padding: 10px;">${statusBadge}</td>
+                        <td style="padding: 10px; text-align: center;">
+                            ${status === 'Pending' ? `
+                                <button onclick="approveMembership('${id}')" style="background:#2e7d32; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:800; cursor:pointer; margin-right:4px;">✅ Approve</button>
+                                <button onclick="rejectMembership('${id}')" style="background:#c62828; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:800; cursor:pointer;">❌ Reject</button>
+                            ` : `
+                                <button onclick="approveMembership('${id}')" style="background:#555; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer;">Re-Approve</button>
+                            `}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        } catch(err) {
+            console.error("Error loading approvals:", err);
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: #c62828;">Error loading membership approvals: ' + err.message + '</td></tr>';
+        }
+    }
+
+    async function approveMembership(docId) {
+        try {
+            await db.collection('membership_approvals').doc(docId).update({
+                status: 'Approved',
+                approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert("✅ Membership Approved successfully!\nDaily & Monthly Subscriptions unlocked for customer (" + docId + ").");
+            renderMembershipApprovals();
+        } catch(err) {
+            alert("Failed to approve membership: " + err.message);
+        }
+    }
+
+    async function rejectMembership(docId) {
+        try {
+            await db.collection('membership_approvals').doc(docId).update({
+                status: 'Rejected',
+                rejectedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert("❌ Membership Rejected for customer (" + docId + ").");
+            renderMembershipApprovals();
+        } catch(err) {
+            alert("Failed to reject membership: " + err.message);
         }
     }
 
@@ -3040,6 +3242,11 @@
 
     // Initialize Order Page Menu, Tab Locks & ID Banner
     window.addEventListener('DOMContentLoaded', () => {
+        const savedPhone = localStorage.getItem('ayyappa_signed_in_phone');
+        if (savedPhone && typeof listenForAdminApproval === 'function') {
+            listenForAdminApproval(savedPhone);
+        }
+
         if (typeof isCustomerSignedIn === 'function' && isCustomerSignedIn()) {
             if (typeof unlockSubscriptionTabs === 'function') unlockSubscriptionTabs();
         } else {
