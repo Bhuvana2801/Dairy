@@ -4002,14 +4002,11 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         const customer = getSignedInCustomer();
 
         // Desktop nav items
-        const navOrder = document.getElementById('nav-order-item');
-        const navProfile = document.getElementById('nav-profile-item');
-        const navDashboard = document.getElementById('nav-dashboard-item');
-        const navAuth = document.getElementById('nav-auth-item');
+        const navDashboardLi = document.getElementById('nav-dashboard-li');
 
-        // Mobile nav items
-        const mobOrder = document.getElementById('mob-nav-order');
-        const mobProfile = document.getElementById('mob-nav-profile');
+        // Nav action buttons
+        const publicNavBtns = document.getElementById('publicNavBtns');
+        const loggedInNavBtns = document.getElementById('loggedInNavBtns');
 
         // Home hero boxes
         const publicBox = document.getElementById('heroPublicBox');
@@ -4018,15 +4015,23 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         const welcomeCustId = document.getElementById('welcomeCustId');
         const welcomeCustSub = document.getElementById('welcomeCustSub');
 
-        if (isSignedIn && customer) {
-            if (navOrder) navOrder.style.display = 'inline-block';
-            if (navProfile) navProfile.style.display = 'inline-block';
-            if (navDashboard) navDashboard.style.display = 'inline-block';
-            if (navAuth) navAuth.style.display = 'none';
+        // Mobile nav items
+        const mobOrder = document.getElementById('mob-nav-order');
+        const mobProfile = document.getElementById('mob-nav-profile');
 
+        if (isSignedIn && customer) {
+            // Show My Dashboard in navbar
+            if (navDashboardLi) navDashboardLi.style.display = 'inline-block';
+
+            // Toggle header buttons
+            if (publicNavBtns) publicNavBtns.style.display = 'none';
+            if (loggedInNavBtns) loggedInNavBtns.style.display = 'flex';
+
+            // Mobile nav
             if (mobOrder) mobOrder.style.display = 'flex';
             if (mobProfile) mobProfile.style.display = 'flex';
 
+            // Hero section
             if (publicBox) publicBox.style.display = 'none';
             if (welcomeBox) welcomeBox.style.display = 'block';
 
@@ -4048,14 +4053,18 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             // Setup Order Page subscription forms tab visibility based on customer subType
             setupOrderSubscriptionViews(customer.subType || 'Daily Subscription');
         } else {
-            if (navOrder) navOrder.style.display = 'none';
-            if (navProfile) navProfile.style.display = 'none';
-            if (navDashboard) navDashboard.style.display = 'none';
-            if (navAuth) navAuth.style.display = 'inline-block';
+            // Hide My Dashboard from navbar
+            if (navDashboardLi) navDashboardLi.style.display = 'none';
 
+            // Toggle header buttons
+            if (publicNavBtns) publicNavBtns.style.display = 'flex';
+            if (loggedInNavBtns) loggedInNavBtns.style.display = 'none';
+
+            // Mobile nav
             if (mobOrder) mobOrder.style.display = 'none';
             if (mobProfile) mobProfile.style.display = 'none';
 
+            // Hero section
             if (publicBox) publicBox.style.display = 'block';
             if (welcomeBox) welcomeBox.style.display = 'none';
         }
