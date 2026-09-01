@@ -381,12 +381,14 @@
                             <tr>
                                 <th style="padding: 12px; text-align: left;">Order ID</th>
                                 <th style="padding: 12px; text-align: left;">Customer Name</th>
+                                <th style="padding: 12px; text-align: left;">Delivery Date</th>
                                 <th style="padding: 12px; text-align: left;">Slot</th>
                                 <th style="padding: 12px; text-align: left;">Mobile Number</th>
                                 <th style="padding: 12px; text-align: left;">Membership ID</th>
                                 <th style="padding: 12px; text-align: left;">Quantity</th>
                                 <th style="padding: 12px; text-align: left;">Plan Type</th>
                                 <th style="padding: 12px; text-align: center;">Update</th>
+                                <th style="padding: 12px; text-align: center;">Delivery Status</th>
                             </tr>
                         </thead>
                         <tbody id="receiptsTableBody"></tbody>
@@ -3545,7 +3547,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         }
     }
 
-    // ΓöÇΓöÇ Admin Order Receipts Logic ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    // ─── Admin Order Receipts Logic ───────────────────────────
     let receiptsListener = null;
 
     function renderOrderReceipts() {
@@ -3554,7 +3556,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
 
         if (receiptsListener) receiptsListener();
 
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem;">Listening for today\'s orders...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding: 2rem;">Listening for today\'s orders...</td></tr>';
 
         // Get today's date boundaries in IST (UTC+5:30)
         function getTodayISTBounds() {
@@ -3569,7 +3571,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         receiptsListener = db.collection('orders').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
             tbody.innerHTML = '';
             if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding: 2rem; color: #999;">No orders found.</td></tr>';
                 return;
             }
 
@@ -3610,7 +3612,22 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 const plan = order.paymentType || 'Daily';
                 const qty = order.qty || '1L';
                 const orderStatus = order.orderStatus || 'SCHEDULED';
-                const isOutForDelivery = orderStatus === 'OUT FOR DELIVERY' || orderStatus === 'DELIVERED';
+                const isDelivered = orderStatus === 'DELIVERED';
+                const isOut = orderStatus === 'OUT FOR DELIVERY';
+
+                // Format delivery date string
+                let delDateStr = order.deliveryDate;
+                if (!delDateStr) {
+                    if (order.placedAt) {
+                        delDateStr = order.placedAt.split(',')[0];
+                    } else if (order.createdAt && order.createdAt.toDate) {
+                        const d = order.createdAt.toDate();
+                        const istD = new Date(d.getTime() + (d.getTimezoneOffset() * 60000) + (5.5 * 60 * 60 * 1000));
+                        delDateStr = istD.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    } else {
+                        delDateStr = istNow.toLocaleDateString('en-IN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    }
+                }
 
                 // Derive Membership ID based on mobile number and subscription plan if not set
                 let memId = order.membershipId;
@@ -3627,16 +3644,29 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 tr.innerHTML = `
                     <td style="padding: 10px 12px; font-weight: 800; color: var(--primary-color);">${order.orderID || 'ADF-ORD'}</td>
                     <td style="padding: 10px 12px; font-weight: 600;">${order.name || 'Customer'}</td>
+                    <td style="padding: 10px 12px; font-weight: 700; color: #333;">📅 ${delDateStr}</td>
                     <td style="padding: 10px 12px; color: #1976d2; font-weight: 600;">🕒 ${slot}</td>
                     <td style="padding: 10px 12px; font-weight: 600;">📞 ${order.phone || 'N/A'}</td>
                     <td style="padding: 10px 12px;"><span style="background: #e8f5e9; color: #1b5e20; padding: 4px 10px; border-radius: 12px; font-size: 0.83rem; font-weight: 800; border: 1px solid #c8e6c9;">🔑 ${memId}</span></td>
                     <td style="padding: 10px 12px; font-weight: 700; color: #2e7d32;">${qty}</td>
                     <td style="padding: 10px 12px;"><span style="background: ${plan === 'Monthly' ? '#1565c0' : '#2e7d32'}; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 800;">${plan}</span></td>
                     <td style="padding: 10px 12px; text-align: center;">
-                        ${isOutForDelivery 
-                            ? '<span style="background:#2e7d32; color:white; padding:5px 12px; border-radius:20px; font-size:0.75rem; font-weight:800;">🚚 Out for Delivery</span>'
-                            : `<button onclick="updateOrderAndNotify('${doc.id}')" style="background: linear-gradient(135deg, #e65100 0%, #ff8f00 100%); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; cursor: pointer; box-shadow: 0 3px 10px rgba(230,81,0,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🚚 Update</button>`
+                        ${isDelivered 
+                            ? '<span style="background:#2e7d32; color:white; padding:5px 12px; border-radius:20px; font-size:0.75rem; font-weight:800;">✅ Delivered</span>'
+                            : isOut
+                                ? '<span style="background:#e65100; color:white; padding:5px 12px; border-radius:20px; font-size:0.75rem; font-weight:800;">🚚 Out for Delivery</span>'
+                                : `<button onclick="updateOrderAndNotify('${doc.id}')" style="background: linear-gradient(135deg, #e65100 0%, #ff8f00 100%); color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; cursor: pointer; box-shadow: 0 3px 10px rgba(230,81,0,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🚚 Out for Delivery</button>`
                         }
+                    </td>
+                    <td style="padding: 10px 12px; text-align: center;">
+                        <div style="display:flex; align-items:center; justify-content:center; gap:0.4rem;">
+                            <select id="delSelect_${doc.id}" style="padding: 5px 8px; border-radius: 8px; border: 1.5px solid #ccc; font-weight: 700; font-size: 0.8rem;">
+                                <option value="DELIVERED" ${isDelivered ? 'selected' : ''}>✅ Delivered</option>
+                                <option value="OUT FOR DELIVERY" ${isOut ? 'selected' : ''}>🚚 Out for Delivery</option>
+                                <option value="SCHEDULED" ${(!isDelivered && !isOut) ? 'selected' : ''}>🟡 Scheduled</option>
+                            </select>
+                            <button onclick="updateDeliveryStatusFromSelect('${doc.id}')" style="background: #2e7d32; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 0.78rem; cursor: pointer; box-shadow: 0 2px 6px rgba(46,125,50,0.3);">Update</button>
+                        </div>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -3815,20 +3845,24 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             return;
         }
 
-        let csv = "Order ID,Date,Customer,Amount,Plan,Payment,Status\n";
+        let csv = "Order ID,Customer Name,Delivery Date,Slot,Mobile Number,Membership ID,Quantity,Plan Type,Update Status,Delivery Status\n";
         rows.forEach(tr => {
             const cells = tr.querySelectorAll('td');
-            if (cells.length < 7) return;
+            if (cells.length < 10) return;
             
-            const orderId = cells[0].innerText.trim();
-            const date = cells[1].innerText.trim();
-            const customer = cells[2].innerText.trim();
-            const amount = cells[3].innerText.trim();
-            const plan = cells[4].innerText.trim();
-            const payment = cells[5].innerText.trim();
-            const status = cells[6].innerText.trim();
+            const orderId = cells[0].innerText.replace(/\n/g, ' ').trim();
+            const customer = cells[1].innerText.replace(/\n/g, ' ').trim();
+            const delDate = cells[2].innerText.replace(/\n/g, ' ').trim();
+            const slot = cells[3].innerText.replace(/\n/g, ' ').trim();
+            const mobile = cells[4].innerText.replace(/\n/g, ' ').trim();
+            const memId = cells[5].innerText.replace(/\n/g, ' ').trim();
+            const qty = cells[6].innerText.replace(/\n/g, ' ').trim();
+            const plan = cells[7].innerText.replace(/\n/g, ' ').trim();
+            const updateStatus = cells[8].innerText.replace(/\n/g, ' ').trim();
+            const selectElem = cells[9].querySelector('select');
+            const delStatus = selectElem ? selectElem.value : cells[9].innerText.replace(/\n/g, ' ').trim();
             
-            csv += `"${orderId}","${date}","${customer}","${amount}","${plan}","${payment}","${status}"\n`;
+            csv += `"${orderId}","${customer}","${delDate}","${slot}","${mobile}","${memId}","${qty}","${plan}","${updateStatus}","${delStatus}"\n`;
         });
 
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
