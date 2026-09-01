@@ -339,7 +339,7 @@
                     <button class="btn btn-primary" onclick="renderMembershipApprovals()" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">🔄 Refresh List</button>
                 </div>
                 <div class="table-container custom-scrollbar" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; max-height: 60vh; overflow-y: auto;">
-                    <table class="admin-table" style="width: 100%; border-collapse: collapse; min-width: 900px;">
+                    <table class="admin-table" style="width: 100%; border-collapse: collapse; min-width: 980px;">
                         <thead style="background: var(--primary-color); color: white;">
                             <tr>
                                 <th style="padding: 12px; text-align: left;">Date</th>
@@ -350,11 +350,12 @@
                                 <th style="padding: 12px; text-align: left;">Sub & Slot</th>
                                 <th style="padding: 12px; text-align: left;">Status</th>
                                 <th style="padding: 12px; text-align: center;">Action</th>
+                                <th style="padding: 12px; text-align: center;">Progress / Update</th>
                             </tr>
                         </thead>
                         <tbody id="adminMembershipTableBody">
                             <tr>
-                                <td colspan="8" style="text-align: center; padding: 20px; color: #888;">Loading membership approval requests...</td>
+                                <td colspan="9" style="text-align: center; padding: 20px; color: #888;">Loading membership approval requests...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -2867,12 +2868,12 @@
     async function renderMembershipApprovals() {
         const tbody = document.getElementById('adminMembershipTableBody');
         if (!tbody) return;
-        tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: #888;">Loading membership requests...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 20px; color: #888;">Loading membership requests...</td></tr>';
 
         try {
             const snapshot = await db.collection('membership_approvals').get();
             if (snapshot.empty) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: #888;">No pending membership approval requests found.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 20px; color: #888;">No pending membership approval requests found.</td></tr>';
                 return;
             }
 
@@ -2927,6 +2928,18 @@
                                 <button onclick="deleteMembershipApproval('${id}', '${safeName}')" title="Delete Request" style="background:#c62828; color:white; border:none; padding:6px 8px; border-radius:6px; font-weight:800; font-size:0.78rem; cursor:pointer;">🗑️ Delete</button>
                             </div>
                         </td>
+                        <td style="padding: 10px; text-align: center; background: #fbfdfb;">
+                            <div style="display: flex; flex-direction: column; align-items: center; gap: 5px;">
+                                <select id="progressSelect_${id}" style="padding: 4px 6px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; border: 1.5px solid #2e7d32; background: #f0f7f0; color: #1b5e20; cursor: pointer;">
+                                    <option value="Approved" ${status === 'Approved' ? 'selected' : ''}>🟢 Active (Enable Sign-In)</option>
+                                    <option value="Pending" ${status === 'Pending' ? 'selected' : ''}>🟡 Pending Approval</option>
+                                    <option value="Rejected" ${status === 'Rejected' ? 'selected' : ''}>🔴 Disabled</option>
+                                </select>
+                                <button onclick="updateCustomerProgress('${id}', '${safeName}')" style="background: #2e7d32; color: white; border: none; padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(46,125,50,0.3);">
+                                    🔄 Update Progress
+                                </button>
+                            </div>
+                        </td>
                     </tr>
                 `;
             });
@@ -2934,7 +2947,90 @@
             tbody.innerHTML = html;
         } catch(err) {
             console.error("Error loading approvals:", err);
-            tbody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: #c62828;">Error loading membership approvals: ' + err.message + '</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 20px; color: #c62828;">Error loading membership approvals: ' + err.message + '</td></tr>';
+        }
+    }
+
+    async function updateCustomerProgress(docId, custName) {
+        try {
+            const select = document.getElementById(`progressSelect_${docId}`);
+            const newProgress = select ? select.value : 'Approved';
+
+            const docRef = await db.collection('membership_approvals').doc(docId).get();
+            if (!docRef.exists) {
+                alert("Registration request not found!");
+                return;
+            }
+
+            let data = docRef.data();
+            const phone = data.phone || docId;
+            const wa = data.whatsapp || phone;
+            const phoneSuffix = phone.slice(-4) || '1001';
+            const subType = data.subType || 'Daily Subscription';
+
+            let membershipId = data.membershipId;
+            let password = data.password;
+            let customerId = data.customerId || phone;
+
+            // If updating to Approved / Active, ensure Membership ID and Password are set
+            if (newProgress === 'Approved') {
+                if (!membershipId || membershipId === 'Not Assigned') {
+                    if (subType.includes('Monthly')) {
+                        membershipId = 'ADFM' + phoneSuffix;
+                    } else {
+                        membershipId = 'ADFD' + phoneSuffix;
+                    }
+                }
+                if (!password) {
+                    password = 'Ayyappa@' + phoneSuffix;
+                }
+            }
+
+            // Update Firestore membership_approvals payload
+            const appPayload = {
+                status: newProgress,
+                progressStatus: newProgress,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            if (membershipId) appPayload.membershipId = membershipId;
+            if (password) appPayload.password = password;
+            if (customerId) appPayload.customerId = customerId;
+
+            await db.collection('membership_approvals').doc(docId).update(appPayload);
+
+            // Upsert customer record into Firestore customers collection to enable sign-in access
+            const custPayload = {
+                phone: phone,
+                name: data.name || custName || 'Customer',
+                whatsapp: wa,
+                location: data.location || 'Narasaraopet',
+                area: data.area || '',
+                address: data.address || '',
+                deliverySlot: data.slot || 'Morning',
+                slot: data.slot || 'Morning',
+                subType: subType,
+                subscriptionType: subType,
+                membershipId: membershipId || ('ADFD' + phoneSuffix),
+                customerId: customerId,
+                password: password || ('Ayyappa@' + phoneSuffix),
+                status: newProgress,
+                progressStatus: newProgress,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            await db.collection('customers').doc(docId).set(custPayload, { merge: true });
+
+            if (newProgress === 'Approved') {
+                alert(`✅ PROGRESS UPDATED TO ACTIVE!\n\nCustomer: ${custPayload.name}\nMembership ID: ${custPayload.membershipId}\nPassword: ${custPayload.password}\n\n🔑 Customer Sign-In is now ENABLED! The customer can log in with Phone/ID (${phone}) and Password (${custPayload.password}).`);
+            } else {
+                alert(`ℹ️ Progress status updated to "${newProgress}" for customer ${custPayload.name}. Sign-In is now ${newProgress === 'Approved' ? 'ENABLED' : 'DISABLED'}.`);
+            }
+
+            renderMembershipApprovals();
+
+        } catch(err) {
+            console.error("Error updating customer progress:", err);
+            alert("Failed to update progress: " + err.message);
         }
     }
 
@@ -3809,15 +3905,15 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
     async function handleCustomerSignin(e) {
         if (e) e.preventDefault();
 
-        const inputId = document.getElementById('signinCustId')?.value.trim();
-        const inputPassword = document.getElementById('signinCustPassword')?.value.trim();
+        const inputId = (document.getElementById('signinLoginId')?.value || document.getElementById('signinCustId')?.value || '').trim();
+        const inputPassword = (document.getElementById('signinPassword')?.value || document.getElementById('signinCustPassword')?.value || '').trim();
 
         if (!inputId || !inputPassword) {
             alert('Please enter both Phone / Customer ID and Password.');
             return;
         }
 
-        const btn = document.getElementById('customerSigninSubmitBtn');
+        const btn = document.getElementById('signinSubmitBtn') || document.getElementById('customerSigninSubmitBtn');
         if (btn) {
             btn.disabled = true;
             btn.innerHTML = '⏳ Verifying credentials...';
@@ -3863,9 +3959,18 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 return;
             }
 
-            // Check approval status
-            if (matchedDoc.status === 'Pending') {
-                alert('⏳ Your account registration is still Pending Admin Approval.\n\nOnce approved by the Admin, you can sign in and start placing orders!');
+            // Check approval & progress status
+            if (matchedDoc.status === 'Pending' || matchedDoc.progressStatus === 'Pending') {
+                alert('⏳ Your account registration progress is Pending Admin Approval.\n\nOnce updated to Active by Admin, your Sign-In will be enabled!');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '🔑 Sign In';
+                }
+                return;
+            }
+
+            if (matchedDoc.status === 'Rejected' || matchedDoc.progressStatus === 'Rejected') {
+                alert('🔴 Your account registration has been Disabled or Rejected by Admin.');
                 if (btn) {
                     btn.disabled = false;
                     btn.innerHTML = '🔑 Sign In';
