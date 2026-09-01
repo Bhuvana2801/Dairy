@@ -426,6 +426,7 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     align-items: center;
 }
 .modal-overlay.active { display: flex; animation: fadeIn 0.25s ease; }
+#adminApproveCustomerModal { z-index: 3000 !important; }
 
 /* Modal Box */
 .modal-box {
