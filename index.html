@@ -28,27 +28,33 @@
 </head>
 <body>
     <header class="navbar">
-        <a href="#home" onclick="showPage('home')" class="logo logo-img">
+        <a href="#home" onclick="showPage('home')" class="logo logo-img" style="display: flex; align-items: center; gap: 0.8rem; text-decoration: none;">
             <img src="images/logo.png" alt="Logo">
-            <span>Ayyappa Dairy Farm</span>
+            <span style="line-height: 1.1; font-weight: 800; font-size: 1.55rem; color: white; display: inline-block;">Ayyappa Dairy<br>Farm</span>
         </a>
         <nav>
-            <ul class="nav-links">
-                <li><a href="#" onclick="showPage('home')" id="nav-home" class="nav-active">Home</a></li>
-                <li><a href="#" onclick="showPage('products')" id="nav-products">Products</a></li>
-                <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
-                <li><a href="#" onclick="showPage('install')" id="nav-install">Install</a></li>
-                <li id="nav-dashboard-li" style="display: none;"><a href="#" onclick="openCustomerOrdersModal()" id="nav-dashboard">My Dashboard</a></li>
+            <ul class="nav-links" style="display: flex; align-items: center; gap: 2rem; list-style: none;">
+                <li><a href="#" onclick="showPage('home')" id="nav-home" class="nav-active" style="font-weight: 700;">Home</a></li>
+                <li><a href="#" onclick="showPage('products')" id="nav-products" style="font-weight: 700;">Products</a></li>
+                <li><a href="#" onclick="showPage('contact')" id="nav-contact" style="font-weight: 700;">Contact</a></li>
+                <li><a href="#" onclick="showPage('install')" id="nav-install" style="font-weight: 700;">Install</a></li>
+                <li id="nav-dashboard-li" style="display: none;"><a href="#" onclick="openCustomerOrdersModal()" id="nav-dashboard" style="font-weight: 700; line-height: 1.1; display: inline-block; text-align: center;">My<br>Dashboard</a></li>
             </ul>
         </nav>
         <div class="nav-actions" style="display: flex; gap: 0.8rem; align-items: center;">
-            <div id="publicNavBtns" style="display: flex; gap: 0.6rem;">
+            <div id="publicNavBtns" style="display: flex; gap: 0.6rem; align-items: center;">
                 <button class="btn btn-signin" onclick="openCustomerSigninModal()" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.4); padding: 0.5rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: 0.3s;">🔑 Sign In</button>
                 <button class="btn btn-register" onclick="openCustomerRegisterModal()" style="background: #25D366; color: white; border: none; padding: 0.5rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(37,211,102,0.3);">📋 Register</button>
             </div>
             <div id="loggedInNavBtns" style="display: none; gap: 0.6rem; align-items: center;">
-                <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.15); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">👤 My Dashboard</button>
-                <button class="btn btn-logout" onclick="handleCustomerLogout()" style="background: #e53e3e; color: white; border: none; padding: 0.5rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.88rem; cursor: pointer; transition: 0.3s;">🚪 Sign Out</button>
+                <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.18); color: white; border: 1.5px solid rgba(255,255,255,0.35); padding: 0.45rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(8px); display: flex; align-items: center; gap: 0.4rem;">
+                    <span style="color: #ba68c8; font-size: 1.1rem;">👤</span>
+                    <span style="line-height: 1.1; text-align: left;">My<br>Dashboard</span>
+                </button>
+                <button class="btn btn-logout" onclick="handleCustomerLogout()" style="background: #e53e3e; color: white; border: none; padding: 0.45rem 0.9rem; border-radius: 50px; font-weight: 800; font-size: 0.78rem; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; min-width: 60px;">
+                    <span style="font-size: 0.95rem; margin-bottom: 2px;">🚪</span>
+                    <span>Sign<br>Out</span>
+                </button>
             </div>
             <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
         </div>
