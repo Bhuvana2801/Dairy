@@ -228,17 +228,22 @@
                     <div><strong>Address:</strong> <span id="approveDisplayAddr"></span></div>
                 </div>
 
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem; background: #eef7ee; padding: 6px 12px; border-radius: 8px;">
+                    <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-color);">🔑 Mobile-Based Assign</span>
+                    <button type="button" onclick="autoAssignFromMobile()" style="background: #2e7d32; color: white; border: none; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">⚡ Auto-Fill from Mobile No</button>
+                </div>
+
                 <div class="modal-input-group">
                     <label for="approveMembershipId">Assigned Membership ID <span style="color:red;">*</span></label>
-                    <input type="text" id="approveMembershipId" placeholder="e.g. AYY-M-1001" required>
+                    <input type="text" id="approveMembershipId" placeholder="e.g. ADFD3808 or ADF-9392603808" required>
                 </div>
                 <div class="modal-input-group">
                     <label for="approveCustomerId">Assigned Customer ID / Login ID <span style="color:red;">*</span></label>
-                    <input type="text" id="approveCustomerId" placeholder="e.g. CUST-1001" required>
+                    <input type="text" id="approveCustomerId" placeholder="e.g. 9392603808" required>
                 </div>
                 <div class="modal-input-group">
                     <label for="approvePassword">Assigned Password <span style="color:red;">*</span></label>
-                    <input type="text" id="approvePassword" placeholder="e.g. Ayyappa@123" required>
+                    <input type="text" id="approvePassword" placeholder="e.g. Ayyappa@3808" required>
                 </div>
                 <div class="modal-input-group">
                     <label for="approveSubscriptionType">Active Subscription Type <span style="color:red;">*</span></label>
@@ -249,12 +254,15 @@
                     </select>
                 </div>
 
-                <div style="display: flex; gap: 0.8rem; margin-top: 1.2rem;">
-                    <button type="submit" class="btn btn-secondary" style="flex: 1; background: #2e7d32; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                <div style="display: flex; gap: 0.6rem; margin-top: 1.2rem; flex-wrap: wrap;">
+                    <button type="submit" class="btn btn-secondary" style="flex: 1.2; background: #2e7d32; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; min-width: 120px;">
                         ✅ Save & Approve
                     </button>
-                    <button type="button" onclick="sendApprovalWhatsApp()" class="btn btn-primary" style="flex: 1; background: #25D366; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer;">
+                    <button type="button" onclick="sendApprovalWhatsApp()" class="btn btn-primary" style="flex: 1.2; background: #25D366; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; min-width: 130px;">
                         💬 Send WhatsApp
+                    </button>
+                    <button type="button" onclick="deleteFromModal()" class="btn btn-danger" style="flex: 1; background: #c62828; color: white; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; min-width: 90px;">
+                        🗑️ Delete
                     </button>
                 </div>
             </form>
@@ -2835,6 +2843,27 @@
 
     let currentApprovalData = null;
 
+    function autoAssignFromMobile() {
+        const phone = document.getElementById('approveCustPhone')?.value || '';
+        if (!phone) {
+            alert("No mobile number available to assign.");
+            return;
+        }
+        const phoneSuffix = phone.slice(-4) || '1001';
+        const subType = document.getElementById('approveSubscriptionType')?.value || 'Daily Subscription';
+
+        let memId = '';
+        if (subType.includes('Monthly')) {
+            memId = 'ADFM' + phoneSuffix;
+        } else {
+            memId = 'ADFD' + phoneSuffix;
+        }
+
+        document.getElementById('approveMembershipId').value = memId;
+        document.getElementById('approveCustomerId').value = phone;
+        document.getElementById('approvePassword').value = 'Ayyappa@' + phoneSuffix;
+    }
+
     async function renderMembershipApprovals() {
         const tbody = document.getElementById('adminMembershipTableBody');
         if (!tbody) return;
@@ -2862,23 +2891,41 @@
                 }
 
                 const memIdDisplay = data.membershipId || '<span style="color:#f57c00; font-weight:600; font-style:italic;">Not Assigned</span>';
+                const safeName = (data.name || 'Customer').replace(/'/g, "\\'");
 
                 html += `
                     <tr style="border-bottom: 1px solid #eee;">
                         <td style="padding: 10px; font-size:0.85rem; font-weight:600;">${data.date || 'Today'}</td>
-                        <td style="padding: 10px; font-size:0.85rem;"><strong>${data.name}</strong><br><span style="color:#666;">📞 ${data.phone}</span><br><span style="color:#25D366; font-size:0.8rem;">💬 WA: ${data.whatsapp || data.phone}</span></td>
-                        <td style="padding: 10px; font-size:0.85rem;"><strong>${data.location || 'Narasaraopet'}</strong><br><span style="color:#444;">📍 ${data.area || 'N/A'}</span></td>
+                        <td style="padding: 10px; font-size:0.85rem;">
+                            <strong>${data.name || 'Customer'}</strong><br>
+                            <span style="color:#666;">📞 ${data.phone || id}</span><br>
+                            <span style="color:#25D366; font-size:0.8rem;">💬 WA: ${data.whatsapp || data.phone || id}</span>
+                        </td>
+                        <td style="padding: 10px; font-size:0.85rem;">
+                            <strong>${data.location || 'Narasaraopet'}</strong><br>
+                            <span style="color:#444;">📍 ${data.area || 'N/A'}</span>
+                        </td>
                         <td style="padding: 10px; font-size:0.85rem; max-width:180px;">${data.address || 'N/A'}</td>
-                        <td style="padding: 10px; font-size:0.9rem; font-weight:800; color:var(--primary-color);">${memIdDisplay}</td>
-                        <td style="padding: 10px; font-size:0.85rem;"><strong>${data.subType}</strong><br><span style="color:#555;">🚚 ${data.slot || 'Morning'}</span></td>
+                        <td style="padding: 10px; font-size:0.9rem; font-weight:800; color:var(--primary-color);">
+                            ${memIdDisplay}
+                            ${data.password ? `<br><small style="color:#444; font-weight:normal; font-size:0.75rem;">🔒 ${data.password}</small>` : ''}
+                        </td>
+                        <td style="padding: 10px; font-size:0.85rem;">
+                            <strong>${data.subType || 'Daily Subscription'}</strong><br>
+                            <span style="color:#555;">🚚 ${data.slot || 'Morning'}</span>
+                        </td>
                         <td style="padding: 10px;">${statusBadge}</td>
                         <td style="padding: 10px; text-align: center;">
-                            ${status === 'Pending' ? `
-                                <button onclick="openAdminApproveModal('${id}')" style="background:#2e7d32; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:800; cursor:pointer; margin-right:4px;">✅ Approve</button>
-                                <button onclick="rejectMembership('${id}')" style="background:#c62828; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:800; cursor:pointer;">❌ Reject</button>
-                            ` : `
-                                <button onclick="openAdminApproveModal('${id}')" style="background:#555; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer;">Re-Approve</button>
-                            `}
+                            <div style="display: flex; gap: 4px; justify-content: center; flex-wrap: wrap;">
+                                ${status === 'Pending' ? `
+                                    <button onclick="openAdminApproveModal('${id}')" title="Approve & Assign Credentials" style="background:#2e7d32; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:800; font-size:0.78rem; cursor:pointer;">✅ Approve</button>
+                                    <button onclick="rejectMembership('${id}')" title="Reject Request" style="background:#f57c00; color:white; border:none; padding:6px 8px; border-radius:6px; font-weight:800; font-size:0.78rem; cursor:pointer;">❌ Reject</button>
+                                ` : `
+                                    <button onclick="openAdminApproveModal('${id}')" title="Edit Credentials" style="background:#1565c0; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:700; font-size:0.78rem; cursor:pointer;">✏️ Edit</button>
+                                `}
+                                <button onclick="sendDirectWhatsApp('${id}')" title="Send ID & Password on WhatsApp" style="background:#25D366; color:white; border:none; padding:6px 10px; border-radius:6px; font-weight:800; font-size:0.78rem; cursor:pointer;">💬 WA</button>
+                                <button onclick="deleteMembershipApproval('${id}', '${safeName}')" title="Delete Request" style="background:#c62828; color:white; border:none; padding:6px 8px; border-radius:6px; font-weight:800; font-size:0.78rem; cursor:pointer;">🗑️ Delete</button>
+                            </div>
                         </td>
                     </tr>
                 `;
@@ -2908,7 +2955,7 @@
 
             // Generate default Membership ID based on subscription type & mobile number
             let defaultMemId = data.membershipId;
-            if (!defaultMemId) {
+            if (!defaultMemId || defaultMemId === 'Not Assigned') {
                 if (subType.includes('Monthly')) {
                     defaultMemId = 'ADFM' + phoneSuffix;
                 } else {
@@ -3010,7 +3057,7 @@
                 currentApprovalData.status = 'Approved';
             }
 
-            alert(`✅ MEMBERSHIP APPROVED SUCCESSFULLY!\n\nCustomer: ${custPayload.name}\nMembership ID: ${membershipId}\nPassword: ${password}\n\nClick '💬 Send WhatsApp' button in the modal to send credentials directly to the customer on WhatsApp.`);
+            alert(`✅ MEMBERSHIP APPROVED SUCCESSFULLY!\n\nCustomer: ${custPayload.name}\nMembership ID: ${membershipId}\nPassword: ${password}\n\nClick '💬 Send WhatsApp' button to send credentials directly to the customer on WhatsApp.`);
 
             renderMembershipApprovals();
 
@@ -3059,6 +3106,129 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
 
         const waUrl = `https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`;
         window.open(waUrl, '_blank');
+    }
+
+    async function sendDirectWhatsApp(docId) {
+        try {
+            const docRef = await db.collection('membership_approvals').doc(docId).get();
+            if (!docRef.exists) {
+                alert("Registration request not found!");
+                return;
+            }
+            let data = docRef.data();
+            const phone = data.phone || docId;
+            const wa = data.whatsapp || phone;
+            const phoneSuffix = phone.slice(-4) || '1001';
+            const subType = data.subType || 'Daily Subscription';
+
+            let membershipId = data.membershipId;
+            let password = data.password;
+            let customerId = data.customerId || phone;
+
+            // If credentials are missing, auto-assign based on mobile number!
+            if (!membershipId || membershipId === 'Not Assigned' || !password) {
+                if (subType.includes('Monthly')) {
+                    membershipId = 'ADFM' + phoneSuffix;
+                } else {
+                    membershipId = 'ADFD' + phoneSuffix;
+                }
+                password = 'Ayyappa@' + phoneSuffix;
+
+                await db.collection('membership_approvals').doc(docId).update({
+                    membershipId: membershipId,
+                    customerId: customerId,
+                    password: password,
+                    status: 'Approved',
+                    approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                await db.collection('customers').doc(docId).set({
+                    phone: phone,
+                    name: data.name || 'Customer',
+                    whatsapp: wa,
+                    location: data.location || 'Narasaraopet',
+                    area: data.area || '',
+                    address: data.address || '',
+                    deliverySlot: data.slot || 'Morning',
+                    slot: data.slot || 'Morning',
+                    subType: subType,
+                    subscriptionType: subType,
+                    membershipId: membershipId,
+                    customerId: customerId,
+                    password: password,
+                    status: 'Approved',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+
+                renderMembershipApprovals();
+            }
+
+            let waNum = wa.replace(/\D/g, '');
+            if (waNum.length === 10) waNum = '91' + waNum;
+
+            const msg = `Hello ${data.name || 'Customer'}! 🥛
+
+🎉 Your Ayyappa Dairy Farm Membership has been APPROVED!
+
+🔑 Your Login Credentials:
+----------------------------------------
+📱 Phone / Login ID: ${customerId}
+🆔 Membership ID: ${membershipId}
+🔒 Password: ${password}
+📦 Subscription Type: ${subType}
+🚚 Delivery Slot: ${data.slot || 'Morning'}
+📍 Delivery Location: ${data.area || ''}, ${data.location || 'Narasaraopet'}
+
+🌐 Sign In & Place Orders at:
+https://ayyappadairyfarm.com
+
+Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
+
+            const waUrl = `https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`;
+            window.open(waUrl, '_blank');
+
+        } catch(err) {
+            console.error("Error sending WhatsApp message:", err);
+            alert("Failed to send WhatsApp message: " + err.message);
+        }
+    }
+
+    async function deleteMembershipApproval(docId, custName) {
+        if (!docId) return;
+        const name = custName || 'Customer';
+
+        if (!confirm(`⚠️ Are you sure you want to DELETE the membership approval request for "${name}" (${docId})?\n\nThis will remove the customer request permanently.`)) {
+            return;
+        }
+
+        try {
+            await db.collection('membership_approvals').doc(docId).delete();
+            try {
+                await db.collection('customers').doc(docId).delete();
+            } catch(e) {
+                console.log("Customer record cleanup notice:", e);
+            }
+
+            alert(`🗑️ Membership request for "${name}" deleted successfully.`);
+
+            const activeDocId = document.getElementById('approveDocId')?.value;
+            if (activeDocId === docId) {
+                closeAdminApproveCustomerModal(null, true);
+            }
+
+            renderMembershipApprovals();
+        } catch(err) {
+            console.error("Error deleting request:", err);
+            alert("Failed to delete request: " + err.message);
+        }
+    }
+
+    function deleteFromModal() {
+        const docId = document.getElementById('approveDocId')?.value;
+        const name = document.getElementById('approveCustName')?.textContent;
+        if (docId) {
+            deleteMembershipApproval(docId, name);
+        }
     }
 
     async function rejectMembership(docId) {
