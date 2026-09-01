@@ -449,189 +449,84 @@
                     <div class="booking-layout">
                         <!-- Booking Form -->
                         <div class="booking-form-card">
-                            <div style="display:flex; align-items:center; gap:0.8rem; margin-bottom:2rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 1rem;">
+                            <div style="display:flex; align-items:center; justify-content:center; gap:0.8rem; margin-bottom:1.8rem; border-bottom: 2px solid var(--bg-light); padding-bottom: 1rem; text-align: center;">
                                 <span style="font-size: 1.8rem;">🛒</span>
-                                <h3 style="color:var(--primary-color); margin:0; font-size:1.6rem; font-family:var(--font-heading);">Proceed to Order (Home Delivery)</h3>
+                                <h3 style="color:var(--primary-color); margin:0; font-size:1.6rem; font-family:var(--font-heading); text-align: center;">Proceed to Order (Home Delivery)</h3>
                             </div>
                             
+                            <!-- 4-Section Menu Navigation Grid -->
+                            <div class="order-menu-grid">
+                                <div class="order-menu-card active" id="order-menu-new" onclick="switchOrderSection('new')">
+                                    <span class="menu-num">1</span>
+                                    <span class="menu-icon">👤</span>
+                                    <span class="menu-label">New Customer</span>
+                                </div>
+                                <div class="order-menu-card" id="order-menu-daily" onclick="switchOrderSection('daily')">
+                                    <span class="menu-num">2</span>
+                                    <span class="menu-icon">🟢</span>
+                                    <span class="menu-label">Daily Subscription</span>
+                                </div>
+                                <div class="order-menu-card" id="order-menu-monthly" onclick="switchOrderSection('monthly')">
+                                    <span class="menu-num">3</span>
+                                    <span class="menu-icon">🔵</span>
+                                    <span class="menu-label">Monthly Subscription</span>
+                                </div>
+                                <div class="order-menu-card" id="order-menu-refer" onclick="switchOrderSection('refer')">
+                                    <span class="menu-num">4</span>
+                                    <span class="menu-icon">🤝</span>
+                                    <span class="menu-label">Refer a Friend</span>
+                                </div>
+                            </div>
+
+                            <div id="idDisplayBanner" style="background: var(--bg-light); padding: 1rem 1.2rem; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; border: 1.5px dashed var(--primary-color);">
+                                <span style="font-size: 1.5rem;">🆔</span>
+                                <div>
+                                    <div class="id-label" style="font-size: 0.8rem; color: #555; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;">NEW CUSTOMER MEMBERSHIP ID</div>
+                                    <div id="currentIDDisplay" style="font-size: 1.3rem; font-weight: 800; color: var(--primary-color);">ADFD2001</div>
+                                </div>
+                            </div>
+
                             <form id="bookingForm" onsubmit="sendBookingWhatsApp(event)">
-                                <div id="idDisplayBanner" style="background: var(--bg-light); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; border: 1px dashed var(--primary-color);">
-                                    <span style="font-size: 1.5rem;">🆔</span>
-                                    <div>
-                                        <div style="font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 1px;">Current Membership / Order ID</div>
-                                        <div id="currentIDDisplay" style="font-size: 1.2rem; font-weight: 800; color: var(--primary-color);">Not Generated Yet</div>
+                                
+                                <!-- SECTION 1: NEW CUSTOMER -->
+                                <div id="order-sec-new" class="order-tab-content">
+                                    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                                        <h4 style="color: #166534; margin-bottom: 0.4rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
+                                            🎁 1) New Customer Welcome Offers
+                                        </h4>
+                                        <p style="font-size: 0.85rem; color: #374151; margin: 0;">Welcome to Ayyappa Dairy Farm! Select your introductory welcome offer below:</p>
                                     </div>
-                                </div>
-
-                                <!-- Personal Details Section -->
-                                <div style="margin-bottom: 1.5rem;">
-                                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.1rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                                        👤 Personal Details
-                                    </h4>
-                                    <div class="booking-row">
-                                        <div class="booking-field">
-                                            <label for="bookName">Full Name *</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">👤</span>
-                                                <input type="text" id="bookName" placeholder="Enter your full name" required>
-                                            </div>
-                                        </div>
-                                        <div class="booking-field">
-                                            <label for="bookPhone">Mobile Number *</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">📞</span>
-                                                <input type="tel" id="bookPhone" placeholder="Enter 10-digit mobile number" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="booking-row">
-                                        <div class="booking-field" style="width: 100%;">
-                                            <label for="bookEmail">Email Address (Optional)</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">📧</span>
-                                                <input type="email" id="bookEmail" placeholder="Enter email for receipts (optional)">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Delivery Address Section -->
-                                <div style="margin-bottom: 1.5rem;">
-                                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.1rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                                        📍 Delivery Address (Home Delivery)
-                                    </h4>
-                                    <div class="booking-row">
-                                        <div class="booking-field">
-                                            <label for="bookHouse">House / Flat / Door No. *</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">🏠</span>
-                                                <input type="text" id="bookHouse" placeholder="e.g. Flat 302, Door No 4-12" required>
-                                            </div>
-                                        </div>
-                                        <div class="booking-field">
-                                            <label for="bookStreet">Street / Area *</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">🛣️</span>
-                                                <input type="text" id="bookStreet" placeholder="e.g. Main Street, SBI Colony" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="booking-row">
-                                        <div class="booking-field">
-                                            <label for="bookState">State *</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">🗺️</span>
-                                                <select id="bookState" required onchange="updateCities()">
-                                                    <option value="">-- Select State --</option>
-                                                    <option value="Andhra Pradesh" selected>Andhra Pradesh</option>
-                                                    <option value="Telangana">Telangana</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="booking-field">
-                                            <label for="bookCity">City / District / Mandal *</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">🏙️</span>
-                                                <select id="bookCity" required>
-                                                    <option value="Vinukonda">Vinukonda (Palnadu Dist)</option>
-                                                    <option value="Velamavaripalem">Velamavaripalem</option>
-                                                    <option value="Guntur">Guntur</option>
-                                                    <option value="Vijayawada">Vijayawada</option>
-                                                    <option value="Narsaraopet">Narsaraopet</option>
-                                                    <option value="Chilakaluripet">Chilakaluripet</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="booking-row">
-                                        <div class="booking-field">
-                                            <label for="bookPin">PIN Code *</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">📮</span>
-                                                <input type="text" id="bookPin" placeholder="e.g. 522647" required pattern="[0-9]{6}">
-                                            </div>
-                                        </div>
-                                        <div class="booking-field">
-                                            <label for="bookLandmark">Landmark (Optional)</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">🚩</span>
-                                                <input type="text" id="bookLandmark" placeholder="e.g. Near Water Tank">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="booking-field" style="margin-top: 0.5rem;">
-                                        <label for="bookAddress">Full Address Summary *</label>
-                                        <div class="input-container textarea-container">
-                                            <span class="field-icon">📍</span>
-                                            <textarea id="bookAddress" rows="2" placeholder="Full address string" required></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Milk & Order Details -->
-                                <div style="margin-bottom: 1.5rem;">
-                                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.1rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                                        🥛 Product & Quantity Details
-                                    </h4>
-                                    <div class="booking-row">
-                                        <div class="booking-field">
-                                            <label for="bookProduct">Product *</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">🥛</span>
-                                                <select id="bookProduct" required onchange="calculateAmount()">
-                                                    <option value="Buffalo Milk">🐃 Pure Buffalo Milk (₹100/L)</option>
-                                                    <option value="Fresh Curd">🍶 Fresh Curd (₹50/Kg)</option>
-                                                    <option value="Pure Desi Ghee">🧈 Pure Desi Ghee (₹600/Kg)</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="booking-field">
-                                            <label for="bookQty">Quantity *</label>
-                                            <div class="input-container">
-                                                <span class="field-icon">⚖️</span>
-                                                <select id="bookQty" required onchange="calculateAmount()">
-                                                    <option value="500 ml">500 ml — ₹50</option>
-                                                    <option value="1 Litre" selected>1 Litre — ₹100</option>
-                                                    <option value="2 Litres">2 Litres — ₹200</option>
-                                                    <option value="3 Litres">3 Litres — ₹300</option>
-                                                    <option value="4 Litres">4 Litres — ₹400</option>
-                                                    <option value="5 Litres">5 Litres — ₹500</option>
-                                                    <option value="10 Litres">10 Litres — ₹1000</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Subscription & Plan Structure -->
-                                <div style="margin-bottom: 1.5rem;">
-                                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1.1rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem;">
-                                        📋 Select Subscription Model *
-                                    </h4>
                                     
-                                    <div class="plan-type-grid">
-                                        <label class="plan-option-wrapper">
-                                            <input type="radio" name="planType" value="Daily" checked onchange="togglePlanOptions()">
-                                            <div class="plan-option">
-                                                <div class="plan-icon">🟢</div>
-                                                <div class="plan-label">Daily Subscription</div>
-                                                <div class="plan-desc">Pay per order daily. Duration discounts up to ₹150 OFF!</div>
-                                            </div>
-                                        </label>
-                                        <label class="plan-option-wrapper">
-                                            <input type="radio" name="planType" value="Monthly" onchange="togglePlanOptions()">
-                                            <div class="plan-option">
-                                                <div class="plan-icon">🔵</div>
-                                                <div class="plan-label">Monthly Subscription</div>
-                                                <div class="plan-desc">Pay once in advance for 30 days. Auto daily deliveries!</div>
-                                            </div>
-                                        </label>
+                                    <div class="welcome-offer-container" style="margin-bottom: 1.5rem;">
+                                        <div class="welcome-grid">
+                                            <label class="welcome-card">
+                                                <input type="radio" name="welcomeOffer" value="A" class="welcome-card-input" onchange="calculateAmount()">
+                                                <div class="welcome-card-body">
+                                                    <span class="welcome-badge">OPTION A</span>
+                                                    <div class="welcome-text">First Order — ₹20 OFF</div>
+                                                    <div class="welcome-sub">Get Milk at ₹80/L for your first order!</div>
+                                                </div>
+                                            </label>
+                                            <label class="welcome-card">
+                                                <input type="radio" name="welcomeOffer" value="B" class="welcome-card-input" checked onchange="calculateAmount()">
+                                                <div class="welcome-card-body">
+                                                    <span class="welcome-badge">OPTION B</span>
+                                                    <div class="welcome-text">First Monthly Sub — ₹100 OFF</div>
+                                                    <div class="welcome-sub">1L/day = ₹2,750 full month!</div>
+                                                </div>
+                                            </label>
+                                        </div>
                                     </div>
+                                </div>
 
-                                    <!-- Daily Sub Duration Options -->
-                                    <div id="dailyPlanSection" style="margin-top: 1rem; background: #f8fdf8; padding: 1rem; border-radius: 12px; border: 1px solid #d2e8d4;">
-                                        <label style="font-weight: 700; color: var(--primary-color); font-size: 0.9rem;">Daily Subscription Duration & Discount:</label>
-                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.5rem;">
+                                <!-- SECTION 2: DAILY SUBSCRIPTION -->
+                                <div id="order-sec-daily" class="order-tab-content" style="display: none;">
+                                    <div style="background: #f8fdf8; border: 1px solid #c2e2c4; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                                        <h4 style="color: #2e7d32; margin-bottom: 0.4rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
+                                            🟢 2) Daily Subscription (Pay Per Order Daily)
+                                        </h4>
+                                        <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;">Daily fresh delivery at your doorstep with duration discounts up to ₹150 OFF!</p>
+                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
                                             <label style="border: 1px solid #c2e2c4; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.82rem; cursor: pointer; text-align: center;">
                                                 <input type="radio" name="dailyDuration" value="7 Days" onchange="calculateAmount()">
                                                 <strong>7 Days</strong><br><span style="color:#2e7d32; font-weight:700;">₹50 OFF</span>
@@ -646,11 +541,16 @@
                                             </label>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <!-- Monthly Sub Plans Info -->
-                                    <div id="monthlyPlanSection" style="display: none; margin-top: 1rem; background: #eef6fc; padding: 1rem; border-radius: 12px; border: 1px solid #b3d7f5;">
-                                        <label style="font-weight: 700; color: #1565c0; font-size: 0.9rem;">Select Monthly Prepaid Plan (30 Days):</label>
-                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.5rem;">
+                                <!-- SECTION 3: MONTHLY SUBSCRIPTION -->
+                                <div id="order-sec-monthly" class="order-tab-content" style="display: none;">
+                                    <div style="background: #eef6fc; border: 1px solid #b3d7f5; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                                        <h4 style="color: #1565c0; margin-bottom: 0.4rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
+                                            🔵 3) Monthly Subscription (30 Days Prepaid)
+                                        </h4>
+                                        <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;">Pay once for 30 days advance & enjoy hassle-free daily milk deliveries!</p>
+                                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
                                             <label style="border: 1px solid #90caf9; background: white; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; cursor: pointer; text-align: center;">
                                                 <input type="radio" name="monthlyPlan" value="Basic" checked onchange="calculateAmount()">
                                                 <strong>Basic (1L/day)</strong><br><span style="color:#1565c0; font-weight:800;">₹2,850</span>
@@ -670,41 +570,25 @@
                                     </div>
                                 </div>
 
-                                <!-- New Customer Welcome Offers -->
-                                <div class="welcome-offer-container">
-                                    <div class="welcome-offer-title">
-                                        🎁 New Customer Welcome Offer (Choose 1)
-                                    </div>
-                                    <div class="welcome-grid">
-                                        <label class="welcome-card">
-                                            <input type="radio" name="welcomeOffer" value="A" class="welcome-card-input" onchange="calculateAmount()">
-                                            <div class="welcome-card-body">
-                                                <span class="welcome-badge">OPTION A</span>
-                                                <div class="welcome-text">First Order — ₹20 OFF</div>
-                                                <div class="welcome-sub">Get Milk at ₹80/L for your first order!</div>
-                                            </div>
-                                        </label>
-                                        <label class="welcome-card">
-                                            <input type="radio" name="welcomeOffer" value="B" class="welcome-card-input" checked onchange="calculateAmount()">
-                                            <div class="welcome-card-body">
-                                                <span class="welcome-badge">OPTION B</span>
-                                                <div class="welcome-text">First Monthly Sub — ₹100 OFF</div>
-                                                <div class="welcome-sub">1L/day = ₹2,750 full month!</div>
-                                            </div>
-                                        </label>
+                                <!-- SECTION 4: REFER A FRIEND -->
+                                <div id="order-sec-refer" class="order-tab-content" style="display: none;">
+                                    <div style="background: #fff8e1; border: 1px solid #ffe082; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem;">
+                                        <h4 style="color: #e65100; margin-bottom: 0.4rem; font-size: 1.05rem; display: flex; align-items: center; gap: 0.4rem;">
+                                            🤝 4) Refer a Friend & Get 1 KG Pure Desi Ghee!
+                                        </h4>
+                                        <p style="font-size: 0.85rem; color: #555; margin-bottom: 0.8rem;">Refer a friend for a monthly subscription and get 1 KG Pure Desi Ghee or ₹100 credit on your reward wallet!</p>
+                                        <div style="display: flex; gap: 0.5rem;">
+                                            <input type="text" id="bookReferral" placeholder="e.g. AYYAPPA-BHU123" style="flex: 1; padding: 0.6rem 0.8rem; border: 1px solid #ffd54f; border-radius: 8px; font-weight: 700; text-transform: uppercase;" oninput="calculateAmount()">
+                                            <button type="button" onclick="verifyReferralCode()" style="background: #e65100; color: white; border: none; padding: 0 1rem; border-radius: 8px; font-weight: 700; cursor: pointer;">Apply Code</button>
+                                        </div>
+                                        <div id="referralStatusMsg" style="font-size: 0.8rem; margin-top: 0.4rem; font-weight: 600;"></div>
                                     </div>
                                 </div>
 
-                                <!-- Referral Code & Reward Credit Section -->
-                                <div style="margin-top: 1.2rem; background: #fff8e1; border: 1px solid #ffe082; padding: 1rem; border-radius: 14px;">
-                                    <div style="font-weight: 700; color: #e65100; font-size: 0.95rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
-                                        🤝 Refer & Earn (Have a Code?)
-                                    </div>
-                                    <div style="display: flex; gap: 0.5rem;">
-                                        <input type="text" id="bookReferral" placeholder="e.g. AYYAPPA-BHU123" style="flex: 1; padding: 0.6rem 0.8rem; border: 1px solid #ffd54f; border-radius: 8px; font-weight: 700; text-transform: uppercase;" oninput="calculateAmount()">
-                                        <button type="button" onclick="verifyReferralCode()" style="background: #e65100; color: white; border: none; padding: 0 1rem; border-radius: 8px; font-weight: 700; cursor: pointer;">Apply</button>
-                                    </div>
-                                    <div id="referralStatusMsg" style="font-size: 0.8rem; margin-top: 0.4rem; font-weight: 600;"></div>
+                                <!-- Hidden radio group for planType so JS calculation logic remains backward compatible -->
+                                <div style="display: none;">
+                                    <input type="radio" name="planType" value="Daily" checked onchange="calculateAmount()">
+                                    <input type="radio" name="planType" value="Monthly" onchange="calculateAmount()">
                                 </div>
 
                                 <!-- Optional Delivery Slot Selection -->
@@ -2251,15 +2135,19 @@
                     transaction.set(counterRef, { count, lastUpdated: firebase.firestore.FieldValue.serverTimestamp() });
                     return count;
                 });
-                orderID = 'ADFD' + newCount.toString().padStart(4, '0');
+                orderID = 'ADFD' + (2000 + newCount);
             } catch (err) {
                 console.error("ID Generation Error:", err);
-                const dailyCount = Math.floor(1000 + Math.random() * 9000);
-                orderID = 'ADFD' + dailyCount;
+                let lastCount = parseInt(localStorage.getItem('adfDailyCounter') || '2001');
+                orderID = 'ADFD' + lastCount;
+                localStorage.setItem('adfDailyCounter', (lastCount + 1).toString());
             }
+            localStorage.setItem('adfDailyMembershipId', orderID);
+            localStorage.setItem('adfLastDailyID', orderID);
         } else {
             const cleanPhone = phone.replace(/\D/g, '').slice(-10);
             const currentMonthYear = new Date().toLocaleString('en-IN', { month: '2-digit', year: 'numeric' }).replace('/', '');
+            const monthNum = new Date().toLocaleString('en-IN', { month: '2-digit', timeZone: 'Asia/Kolkata' }) || '09';
             try {
                 const userDocRef = db.collection('monthly_customers_' + currentMonthYear).doc(cleanPhone);
                 const counterRef = db.collection('order_counters').doc('monthly_' + currentMonthYear);
@@ -2269,7 +2157,7 @@
                     if (userDoc.exists) return userDoc.data().orderID;
                     const counterDoc = await transaction.get(counterRef);
                     const count = (counterDoc.exists ? (counterDoc.data().count || 0) : 0) + 1;
-                    const newID = 'ADFM' + count.toString().padStart(4, '0');
+                    const newID = 'ADFM' + monthNum + (20000 + count);
                     transaction.set(counterRef, { count, lastUpdated: firebase.firestore.FieldValue.serverTimestamp() });
                     transaction.set(userDocRef, { orderID: newID, phone: cleanPhone, timestamp: firebase.firestore.FieldValue.serverTimestamp() });
                     return newID;
@@ -2278,10 +2166,13 @@
                 membershipId = assignedID;
             } catch (err) {
                 console.error("Monthly ID Generation Error:", err);
-                const count = Math.floor(1000 + Math.random() * 9000);
-                orderID = 'ADFM' + count;
+                let lastCount = parseInt(localStorage.getItem('adfMonthlyCounter') || '20001');
+                orderID = 'ADFM' + monthNum + lastCount;
+                localStorage.setItem('adfMonthlyCounter', (lastCount + 1).toString());
                 membershipId = orderID;
             }
+            localStorage.setItem('adfMonthlyMembershipId', orderID);
+            localStorage.setItem('adfMonthlyExpiry', new Date(Date.now() + 30*24*60*60*1000).toISOString());
         }
 
         const now = new Date();
@@ -2499,36 +2390,74 @@
         }
     }
 
+    let currentActiveSection = 'new';
+
+    function switchOrderSection(sectionKey) {
+        currentActiveSection = sectionKey;
+        // Highlight active menu tab card
+        document.querySelectorAll('.order-menu-card').forEach(card => card.classList.remove('active'));
+        const activeCard = document.getElementById(`order-menu-${sectionKey}`);
+        if (activeCard) activeCard.classList.add('active');
+
+        // Toggle visibility of sub-sections inside booking form
+        const secNew = document.getElementById('order-sec-new');
+        const secDaily = document.getElementById('order-sec-daily');
+        const secMonthly = document.getElementById('order-sec-monthly');
+        const secRefer = document.getElementById('order-sec-refer');
+
+        if (secNew) secNew.style.display = 'none';
+        if (secDaily) secDaily.style.display = 'none';
+        if (secMonthly) secMonthly.style.display = 'none';
+        if (secRefer) secRefer.style.display = 'none';
+
+        const radioDaily = document.querySelector('input[name="planType"][value="Daily"]');
+        const radioMonthly = document.querySelector('input[name="planType"][value="Monthly"]');
+
+        if (sectionKey === 'new') {
+            if (secNew) secNew.style.display = 'block';
+            if (radioDaily) radioDaily.checked = true;
+        } else if (sectionKey === 'daily') {
+            if (secDaily) secDaily.style.display = 'block';
+            if (radioDaily) radioDaily.checked = true;
+        } else if (sectionKey === 'monthly') {
+            if (secMonthly) secMonthly.style.display = 'block';
+            if (radioMonthly) radioMonthly.checked = true;
+        } else if (sectionKey === 'refer') {
+            if (secRefer) secRefer.style.display = 'block';
+            if (radioMonthly) radioMonthly.checked = true;
+        }
+
+        updateIDBanner();
+        if (typeof calculateAmount === 'function') calculateAmount();
+    }
+
     function updateIDBanner() {
         const display = document.getElementById('currentIDDisplay');
         const label = document.querySelector('.id-label');
         if (!display || !label) return;
 
-        const mId = localStorage.getItem('adfMonthlyMembershipId');
-        const lastDaily = localStorage.getItem('adfLastDailyID');
-        const expiryStr = localStorage.getItem('adfMonthlyExpiry');
-
-        if (mId && expiryStr) {
-            const expiry = new Date(expiryStr);
-            if (expiry > new Date()) {
-                label.textContent = 'CURRENT MEMBERSHIP ID';
-                display.textContent = mId;
-                display.style.color = 'var(--primary-color)';
-                return;
-            } else {
-                localStorage.removeItem('adfMonthlyMembershipId');
-                localStorage.removeItem('adfMonthlyExpiry');
-            }
-        }
-
-        if (lastDaily) {
-            label.textContent = 'LAST ORDER ID (DAILY)';
-            display.textContent = lastDaily;
-            display.style.color = '#666';
+        if (currentActiveSection === 'daily') {
+            let dailyId = localStorage.getItem('adfDailyMembershipId') || 'ADFD2001';
+            label.textContent = 'DAILY SUBSCRIPTION MEMBERSHIP ID';
+            display.textContent = dailyId;
+            display.style.color = '#2e7d32';
+        } else if (currentActiveSection === 'monthly') {
+            let monthlyId = localStorage.getItem('adfMonthlyMembershipId') || 'ADFM0920001';
+            label.textContent = 'MONTHLY SUBSCRIPTION MEMBERSHIP ID';
+            display.textContent = monthlyId;
+            display.style.color = '#1565c0';
+        } else if (currentActiveSection === 'refer') {
+            let userProfile = JSON.parse(localStorage.getItem('ayyappa_profile') || '{}');
+            let refCode = userProfile.referralCode || 'AYYAPPA-BHU123';
+            label.textContent = 'YOUR REFERRAL CODE / MEMBERSHIP ID';
+            display.textContent = refCode;
+            display.style.color = '#e65100';
         } else {
-            label.textContent = 'MEMBERSHIP / ORDER ID';
-            display.textContent = 'Not Generated Yet';
-            display.style.color = '#999';
+            // New Customer default
+            let newCustId = localStorage.getItem('adfDailyMembershipId') || 'ADFD2001';
+            label.textContent = 'NEW CUSTOMER MEMBERSHIP ID';
+            display.textContent = newCustId;
+            display.style.color = 'var(--primary-color)';
         }
     }
 
@@ -2915,6 +2844,13 @@
             alert('App link copied to clipboard! Share it with your friends. ≡ƒÑ¢');
         }
     }
+
+    // Initialize Order Page Menu & ID Banner
+    window.addEventListener('DOMContentLoaded', () => {
+        if (typeof switchOrderSection === 'function') {
+            switchOrderSection('new');
+        }
+    });
 
     </script>
 </body>

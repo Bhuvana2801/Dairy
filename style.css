@@ -1817,3 +1817,97 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     margin-top: 0.8rem;
 }
 
+/* ── Order Page Menu Navigation Grid ── */
+.order-menu-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+    margin-bottom: 1.8rem;
+}
+
+.order-menu-card {
+    background: #f4fbf4;
+    border: 2px solid #c2e2c4;
+    border-radius: 16px;
+    padding: 1.1rem 0.6rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    user-select: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.order-menu-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 20px rgba(26, 92, 42, 0.15);
+    background: #eaf7ea;
+}
+
+.order-menu-card.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 10px 25px rgba(26, 92, 42, 0.3);
+    transform: translateY(-2px);
+}
+
+.order-menu-card .menu-num {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: #000;
+    font-weight: 800;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.order-menu-card.active .menu-num {
+    background: #FFD700;
+    color: #000;
+}
+
+.order-menu-card .menu-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.4rem;
+    line-height: 1;
+}
+
+.order-menu-card .menu-label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    line-height: 1.25;
+    color: var(--text-dark);
+    display: block;
+}
+
+.order-menu-card.active .menu-label {
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .order-menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.6rem;
+    }
+    .order-menu-card {
+        padding: 0.9rem 0.4rem;
+    }
+    .order-menu-card .menu-icon {
+        font-size: 1.6rem;
+    }
+    .order-menu-card .menu-label {
+        font-size: 0.85rem;
+    }
+}
+
+
