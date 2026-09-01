@@ -2833,6 +2833,8 @@
         }
     }
 
+    let currentApprovalData = null;
+
     async function renderMembershipApprovals() {
         const tbody = document.getElementById('adminMembershipTableBody');
         if (!tbody) return;
@@ -2859,21 +2861,23 @@
                     statusBadge = '<span style="background:#f57c00; color:white; padding:4px 10px; border-radius:20px; font-size:0.75rem; font-weight:800;">PENDING APPROVAL</span>';
                 }
 
+                const memIdDisplay = data.membershipId || '<span style="color:#f57c00; font-weight:600; font-style:italic;">Not Assigned</span>';
+
                 html += `
                     <tr style="border-bottom: 1px solid #eee;">
                         <td style="padding: 10px; font-size:0.85rem; font-weight:600;">${data.date || 'Today'}</td>
                         <td style="padding: 10px; font-size:0.85rem;"><strong>${data.name}</strong><br><span style="color:#666;">📞 ${data.phone}</span><br><span style="color:#25D366; font-size:0.8rem;">💬 WA: ${data.whatsapp || data.phone}</span></td>
                         <td style="padding: 10px; font-size:0.85rem;"><strong>${data.location || 'Narasaraopet'}</strong><br><span style="color:#444;">📍 ${data.area || 'N/A'}</span></td>
                         <td style="padding: 10px; font-size:0.85rem; max-width:180px;">${data.address || 'N/A'}</td>
-                        <td style="padding: 10px; font-size:0.9rem; font-weight:800; color:var(--primary-color);">${data.membershipId}</td>
+                        <td style="padding: 10px; font-size:0.9rem; font-weight:800; color:var(--primary-color);">${memIdDisplay}</td>
                         <td style="padding: 10px; font-size:0.85rem;"><strong>${data.subType}</strong><br><span style="color:#555;">🚚 ${data.slot || 'Morning'}</span></td>
                         <td style="padding: 10px;">${statusBadge}</td>
                         <td style="padding: 10px; text-align: center;">
                             ${status === 'Pending' ? `
-                                <button onclick="approveMembership('${id}')" style="background:#2e7d32; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:800; cursor:pointer; margin-right:4px;">✅ Approve</button>
+                                <button onclick="openAdminApproveModal('${id}')" style="background:#2e7d32; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:800; cursor:pointer; margin-right:4px;">✅ Approve</button>
                                 <button onclick="rejectMembership('${id}')" style="background:#c62828; color:white; border:none; padding:6px 12px; border-radius:6px; font-weight:800; cursor:pointer;">❌ Reject</button>
                             ` : `
-                                <button onclick="approveMembership('${id}')" style="background:#555; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer;">Re-Approve</button>
+                                <button onclick="openAdminApproveModal('${id}')" style="background:#555; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:0.75rem; cursor:pointer;">Re-Approve</button>
                             `}
                         </td>
                     </tr>
@@ -2887,17 +2891,174 @@
         }
     }
 
-    async function approveMembership(docId) {
+    async function openAdminApproveModal(docId) {
         try {
+            const docRef = await db.collection('membership_approvals').doc(docId).get();
+            if (!docRef.exists) {
+                alert("Registration request not found!");
+                return;
+            }
+            const data = docRef.data();
+            currentApprovalData = { id: docId, ...data };
+
+            const phone = data.phone || docId;
+            const wa = data.whatsapp || phone;
+            const phoneSuffix = phone.slice(-4) || '1001';
+            const subType = data.subType || 'Daily Subscription';
+
+            // Generate default Membership ID based on subscription type & mobile number
+            let defaultMemId = data.membershipId;
+            if (!defaultMemId) {
+                if (subType.includes('Monthly')) {
+                    defaultMemId = 'ADFM' + phoneSuffix;
+                } else {
+                    defaultMemId = 'ADFD' + phoneSuffix;
+                }
+            }
+
+            const defaultCustId = data.customerId || phone;
+            const defaultPassword = data.password || ('Ayyappa@' + phoneSuffix);
+
+            document.getElementById('approveDocId').value = docId;
+            document.getElementById('approveCustPhone').value = phone;
+            document.getElementById('approveCustWa').value = wa;
+
+            document.getElementById('approveCustName').textContent = data.name || 'Customer';
+            document.getElementById('approveDisplayPhone').textContent = phone;
+            document.getElementById('approveDisplayWa').textContent = wa;
+            document.getElementById('approveDisplayLoc').textContent = data.location || 'Narasaraopet';
+            document.getElementById('approveDisplayArea').textContent = data.area || 'N/A';
+            document.getElementById('approveDisplayAddr').textContent = data.address || 'N/A';
+
+            document.getElementById('approveMembershipId').value = defaultMemId;
+            document.getElementById('approveCustomerId').value = defaultCustId;
+            document.getElementById('approvePassword').value = defaultPassword;
+            document.getElementById('approveSubscriptionType').value = subType;
+
+            const m = document.getElementById('adminApproveCustomerModal');
+            if (m) m.classList.add('active');
+
+        } catch(err) {
+            console.error("Error opening approval modal:", err);
+            alert("Error loading customer details: " + err.message);
+        }
+    }
+
+    function closeAdminApproveCustomerModal(event, force) {
+        if (force || (event && event.target && event.target.id === 'adminApproveCustomerModal')) {
+            const m = document.getElementById('adminApproveCustomerModal');
+            if (m) m.classList.remove('active');
+        }
+    }
+
+    async function approveMembership(docId) {
+        openAdminApproveModal(docId);
+    }
+
+    async function submitAdminApproval(e) {
+        if (e) e.preventDefault();
+
+        const docId = document.getElementById('approveDocId').value;
+        const membershipId = document.getElementById('approveMembershipId').value.trim();
+        const customerId = document.getElementById('approveCustomerId').value.trim();
+        const password = document.getElementById('approvePassword').value.trim();
+        const subType = document.getElementById('approveSubscriptionType').value;
+
+        if (!docId || !membershipId || !customerId || !password) {
+            alert("Please fill in all mandatory approval fields.");
+            return;
+        }
+
+        try {
+            // 1. Update membership_approvals in Firestore
             await db.collection('membership_approvals').doc(docId).update({
                 status: 'Approved',
+                membershipId: membershipId,
+                customerId: customerId,
+                password: password,
+                subType: subType,
+                subscriptionType: subType,
                 approvedAt: firebase.firestore.FieldValue.serverTimestamp()
             });
-            alert("✅ Membership Approved successfully!\nDaily & Monthly Subscriptions unlocked for customer (" + docId + ").");
+
+            // 2. Upsert customer document in customers collection
+            const custPayload = {
+                phone: docId,
+                name: currentApprovalData?.name || 'Customer',
+                whatsapp: currentApprovalData?.whatsapp || docId,
+                location: currentApprovalData?.location || 'Narasaraopet',
+                area: currentApprovalData?.area || '',
+                address: currentApprovalData?.address || '',
+                deliverySlot: currentApprovalData?.slot || 'Morning',
+                slot: currentApprovalData?.slot || 'Morning',
+                subType: subType,
+                subscriptionType: subType,
+                membershipId: membershipId,
+                customerId: customerId,
+                password: password,
+                status: 'Approved',
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            await db.collection('customers').doc(docId).set(custPayload, { merge: true });
+
+            if (currentApprovalData) {
+                currentApprovalData.membershipId = membershipId;
+                currentApprovalData.customerId = customerId;
+                currentApprovalData.password = password;
+                currentApprovalData.subType = subType;
+                currentApprovalData.status = 'Approved';
+            }
+
+            alert(`✅ MEMBERSHIP APPROVED SUCCESSFULLY!\n\nCustomer: ${custPayload.name}\nMembership ID: ${membershipId}\nPassword: ${password}\n\nClick '💬 Send WhatsApp' button in the modal to send credentials directly to the customer on WhatsApp.`);
+
             renderMembershipApprovals();
+
         } catch(err) {
-            alert("Failed to approve membership: " + err.message);
+            console.error("Error submitting admin approval:", err);
+            alert("Error completing approval: " + err.message);
         }
+    }
+
+    function sendApprovalWhatsApp() {
+        const docId = document.getElementById('approveDocId').value;
+        const phone = document.getElementById('approveCustPhone').value || docId;
+        const wa = document.getElementById('approveCustWa').value || phone;
+        const name = document.getElementById('approveCustName').textContent;
+        const membershipId = document.getElementById('approveMembershipId').value;
+        const customerId = document.getElementById('approveCustomerId').value;
+        const password = document.getElementById('approvePassword').value;
+        const subType = document.getElementById('approveSubscriptionType').value;
+        const area = document.getElementById('approveDisplayArea').textContent;
+        const location = document.getElementById('approveDisplayLoc').textContent;
+
+        if (!membershipId || !password) {
+            alert("Please assign and save the Membership ID and Password first.");
+            return;
+        }
+
+        let waNum = wa.replace(/\D/g, '');
+        if (waNum.length === 10) waNum = '91' + waNum;
+
+        const msg = `Hello ${name}! 🥛
+
+🎉 Your Ayyappa Dairy Farm Membership has been APPROVED!
+
+🔑 Your Login Credentials:
+----------------------------------------
+📱 Phone / Login ID: ${customerId || phone}
+🆔 Membership ID: ${membershipId}
+🔒 Password: ${password}
+📦 Subscription Type: ${subType}
+📍 Delivery Area: ${area}, ${location}
+
+🌐 Sign In & Place Orders at:
+https://ayyappadairyfarm.com
+
+Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
+
+        const waUrl = `https://wa.me/${waNum}?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
     }
 
     async function rejectMembership(docId) {
