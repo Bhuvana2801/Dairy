@@ -2066,17 +2066,18 @@
 
     function getSubscriptionType(customer) {
         if (!customer) return 'Daily Subscription';
+        const memId = (customer.membershipId || customer.customerId || customer.customerID || customer.id || '').toUpperCase();
+        if (memId.startsWith('ADFD') || memId.includes('ADFD')) {
+            return 'Daily Subscription';
+        }
+        if (memId.startsWith('ADFM') || memId.includes('ADFM')) {
+            return 'Monthly Subscription';
+        }
         let sub = customer.subType || customer.subscriptionType || customer.planType;
         if (sub && sub !== 'N/A') {
-            if (sub === 'Monthly') return 'Monthly Subscription';
-            if (sub === 'Daily') return 'Daily Subscription';
+            if (sub === 'Monthly' || sub.toLowerCase().includes('monthly')) return 'Monthly Subscription';
+            if (sub === 'Daily' || sub.toLowerCase().includes('daily')) return 'Daily Subscription';
             return sub;
-        }
-        const memId = (customer.membershipId || customer.id || '').toUpperCase();
-        if (memId.startsWith('ADFM')) {
-            return 'Monthly Subscription';
-        } else if (memId.startsWith('ADFD')) {
-            return 'Daily Subscription';
         }
         return 'Daily Subscription';
     }
@@ -5003,7 +5004,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         if (profName) profName.textContent = customer.name || 'N/A';
         if (profPhone) profPhone.textContent = customer.phone || 'N/A';
         if (profWhatsapp) profWhatsapp.textContent = customer.whatsapp || customer.phone || 'N/A';
-        if (profSub) profSub.textContent = customer.subType || 'Daily Subscription';
+        if (profSub) profSub.textContent = getSubscriptionType(customer);
 
         if (profArea) profArea.value = customer.area || 'Arundelpet';
         if (profAddress) profAddress.value = customer.address || '';
@@ -5225,7 +5226,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
 
         const customer = getSignedInCustomer();
         if (customer) {
-            setupOrderSubscriptionViews(customer.subType || 'Daily Subscription');
+            setupOrderSubscriptionViews(getSubscriptionType(customer));
         }
 
         showPage('home');
