@@ -670,8 +670,13 @@
                                 </select>
                             </div>
 
+                            <div class="modal-input-group" style="margin-bottom: 1.2rem;">
+                                <label style="font-weight: 700; color: #333; font-size: 0.9rem;">Delivery Date <span style="color:red;">*</span></label>
+                                <input type="date" id="portalMonthlyOrderDate" style="width:100%; padding:0.8rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.92rem;" required>
+                            </div>
+
                             <button type="submit" id="portalMonthlySubmitBtn" style="width:100%; padding:0.9rem; font-size:1.05rem; font-weight:800; border-radius:50px; cursor:pointer; background:#1565c0; color:white; border:none; box-shadow:0 4px 15px rgba(21,101,192,0.35);">
-                                📦 Confirm monthly subscription order
+                                🛒 Place Order
                             </button>
                         </form>
 
@@ -694,7 +699,7 @@
                                 </select>
                             </div>
 
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.2rem;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
                                 <div class="modal-input-group" style="margin-bottom:0;">
                                     <label style="font-weight: 700; color: #333; font-size: 0.88rem;">Delivery Slot <span style="color:red;">*</span></label>
                                     <select id="portalDailyOrderSlot" style="width:100%; padding:0.8rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required>
@@ -709,6 +714,11 @@
                                         <option value="UPI">UPI</option>
                                     </select>
                                 </div>
+                            </div>
+
+                            <div class="modal-input-group" style="margin-bottom: 1.2rem;">
+                                <label style="font-weight: 700; color: #333; font-size: 0.88rem;">Delivery Date <span style="color:red;">*</span></label>
+                                <input type="date" id="portalDailyOrderDate" style="width:100%; padding:0.8rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required>
                             </div>
 
                             <button type="submit" id="portalDailySubmitBtn" style="width:100%; padding:0.9rem; font-size:1.05rem; font-weight:800; border-radius:50px; cursor:pointer; background:var(--primary-color); color:white; border:none; box-shadow:0 4px 15px rgba(26,92,42,0.35);">
@@ -1056,6 +1066,11 @@
                                     </div>
                                 </div>
 
+                                <div class="modal-input-group" style="margin-bottom: 1rem;">
+                                    <label for="dailyOrderDate" style="font-weight: 700; color: #333;">Delivery Date <span style="color:red;">*</span></label>
+                                    <input type="date" id="dailyOrderDate" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                </div>
+
                                 <button type="submit" id="dailySubmitBtn" class="btn btn-primary" style="width:100%; padding:0.95rem; font-size:1.1rem; font-weight:800; border-radius:50px; cursor:pointer; background:var(--primary-color); color:white; border:none; margin-top:0.8rem; box-shadow:0 4px 15px rgba(26,92,42,0.35);">
                                     🛒 Place Daily Order
                                 </button>
@@ -1093,15 +1108,20 @@
                                     </select>
                                 </div>
 
+                                <div class="modal-input-group" style="margin-bottom: 1rem;">
+                                    <label for="monthlyOrderDate" style="font-weight: 700; color: #333;">Delivery Date <span style="color:red;">*</span></label>
+                                    <input type="date" id="monthlyOrderDate" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                </div>
+
                                 <button type="submit" id="monthlySubmitBtn" class="btn btn-secondary" style="width:100%; padding:0.95rem; font-size:1.1rem; font-weight:800; border-radius:50px; cursor:pointer; background:#1565c0; color:white; border:none; margin-top:0.8rem; box-shadow:0 4px 15px rgba(21,101,192,0.35);">
-                                    📦 Confirm Monthly Subscription Order
+                                    🛒 Place Order
                                 </button>
                             </form>
 
                             <!-- Order Confirmation Message Box -->
                             <div id="orderSuccessBox" style="display: none; text-align: center; padding: 2rem 1rem;">
                                 <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉</div>
-                                <h3 style="color: var(--primary-color); font-size: 1.6rem; margin-bottom: 0.6rem; font-weight: 800;">Order Placed Successfully!</h3>
+                                <h3 style="color: var(--primary-color); font-size: 1.6rem; margin-bottom: 0.6rem; font-weight: 800;">Thank You! Your Order has been placed successfully.</h3>
                                 <p style="font-size: 1.05rem; color: #333; margin-bottom: 0.8rem;">Your Order ID is: <strong id="orderSuccessId" style="color: var(--primary-color); font-size: 1.25rem;">AYY-D-20260901-0001</strong></p>
                                 <p style="color: #666; font-size: 0.95rem; margin-bottom: 1.5rem;">Our delivery agent will deliver your milk according to your selected slot.</p>
                                 <button onclick="resetAndBackToHome()" class="btn btn-primary" style="padding: 0.85rem 2.2rem; border-radius: 50px; font-weight: 700; cursor: pointer; background: var(--primary-color); color: white; border: none;">
@@ -1639,6 +1659,36 @@
         }
     }
 
+    function setDefaultOrderDates() {
+        const now = new Date();
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, '0');
+        const dd = String(now.getDate()).padStart(2, '0');
+        const defaultDateStr = `${yyyy}-${mm}-${dd}`;
+
+        ['portalMonthlyOrderDate', 'portalDailyOrderDate', 'monthlyOrderDate', 'dailyOrderDate'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el && !el.value) {
+                el.value = defaultDateStr;
+            }
+        });
+    }
+
+    function getFormattedDeliveryDate(dateInputId) {
+        const selectedDateVal = document.getElementById(dateInputId)?.value;
+        if (selectedDateVal) {
+            const parts = selectedDateVal.split('-');
+            if (parts.length === 3) {
+                const d = new Date(parts[0], parts[1] - 1, parts[2]);
+                const formattedDate = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+                return `${formattedDate} (12:00 AM – 11:59 PM IST)`;
+            }
+        }
+        const now = new Date();
+        const todayISTDate = now.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
+        return `${todayISTDate} (12:00 AM – 11:59 PM IST)`;
+    }
+
     async function handlePortalMonthlyOrderSubmit(e) {
         if (e) e.preventDefault();
 
@@ -1655,7 +1705,7 @@
         const btn = document.getElementById('portalMonthlySubmitBtn');
         if (btn) {
             btn.disabled = true;
-            btn.innerHTML = '⏳ Submitting Monthly Subscription...';
+            btn.innerHTML = '⏳ Submitting Monthly Order...';
         }
 
         const now = new Date();
@@ -1670,8 +1720,7 @@
         if (qtyVal === 0.5) qtyStr = '500 ml / Day';
         const amountStr = Math.round(qtyVal * 2400).toString();
 
-        const todayISTDate = now.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
-        const deliveryDateStr = `${todayISTDate} (12:00 AM – 11:59 PM IST)`;
+        const deliveryDateStr = getFormattedDeliveryDate('portalMonthlyOrderDate');
 
         const orderDoc = {
             orderID: orderID,
@@ -1698,7 +1747,7 @@
 
             if (btn) {
                 btn.disabled = false;
-                btn.innerHTML = '📦 Confirm monthly subscription order';
+                btn.innerHTML = '🛒 Place Order';
             }
 
             const msg = `🥛 *AYYAPPA DAIRY FARM - MONTHLY SUBSCRIPTION ORDER*\n\n` +
@@ -1715,7 +1764,7 @@
             const waUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
             window.open(waUrl, '_blank');
 
-            alert(`🎉 Monthly Subscription Order Confirmed Successfully!\n\nOrder ID: ${orderID}\n\nRedirecting to Customer Dashboard Home page...`);
+            alert(`🎉 Thank You! Your Order has been placed successfully.\n\nOrder ID: ${orderID}\n\nRedirecting to Customer Dashboard Home page...`);
 
             // Automatically switch back to Customer Dashboard Home Page
             switchCustomerDashTab('home');
@@ -1725,7 +1774,7 @@
             alert("Error placing monthly subscription order: " + err.message);
             if (btn) {
                 btn.disabled = false;
-                btn.innerHTML = '📦 Confirm monthly subscription order';
+                btn.innerHTML = '🛒 Place Order';
             }
         }
     }
@@ -1807,7 +1856,7 @@
             const waUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
             window.open(waUrl, '_blank');
 
-            alert(`🎉 Daily Order Placed Successfully!\n\nOrder ID: ${orderID}\n\nRedirecting to Customer Dashboard Home page...`);
+            alert(`🎉 Thank You! Your Order has been placed successfully.\n\nOrder ID: ${orderID}\n\nRedirecting to Customer Dashboard Home page...`);
 
             // Automatically switch back to Customer Dashboard Home Page
             switchCustomerDashTab('home');
@@ -2111,6 +2160,9 @@
 
         // Update 30-Day Plan Counter
         updatePlanDaysCounter(customer.createdAt || customer.date);
+
+        // Pre-fill default delivery dates
+        setDefaultOrderDates();
     }
 
     function saveProfileInfo() {
@@ -5116,8 +5168,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         if (qtyVal === 0.5) qtyStr = '500 ml / Day';
         const amountStr = Math.round(qtyVal * 2400).toString();
 
-        const todayISTDate = now.toLocaleDateString('en-IN', { timeZone: 'Asia/Kolkata', day: '2-digit', month: 'short', year: 'numeric' });
-        const deliveryDateStr = `${todayISTDate} (12:00 AM – 11:59 PM IST)`;
+        const deliveryDateStr = getFormattedDeliveryDate('monthlyOrderDate');
 
         const orderDoc = {
             orderID: orderID,
@@ -5144,7 +5195,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
 
             if (btn) {
                 btn.disabled = false;
-                btn.innerHTML = '📦 Confirm Monthly Subscription Order';
+                btn.innerHTML = '🛒 Place Order';
             }
 
             document.getElementById('monthlyOrderForm').style.display = 'none';
@@ -5163,7 +5214,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             alert("Error placing monthly order: " + err.message);
             if (btn) {
                 btn.disabled = false;
-                btn.innerHTML = '📦 Confirm Monthly Subscription Order';
+                btn.innerHTML = '🛒 Place Order';
             }
         }
     }
