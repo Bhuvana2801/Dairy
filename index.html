@@ -351,6 +351,15 @@
                     <div class="dash-card-desc">Approve pending new customer membership IDs</div>
                     <div class="dash-card-arrow">→</div>
                 </div>
+                <!-- Membership Details Card -->
+                <div class="dash-card dash-card-premium" onclick="openSection('membership-details')" style="animation-delay: 0.45s;">
+                    <div class="dash-card-icon" style="background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    </div>
+                    <div class="dash-card-title">Membership Details</div>
+                    <div class="dash-card-desc">View registered customers and their order history</div>
+                    <div class="dash-card-arrow">→</div>
+                </div>
             </div>
 
             <!-- Membership Approvals Section -->
@@ -380,6 +389,64 @@
                         <tbody id="adminMembershipTableBody">
                             <tr>
                                 <td colspan="9" style="text-align: center; padding: 20px; color: #888;">Loading membership approval requests...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Membership ID Details Section -->
+            <div id="membership-details-section" class="dash-section" style="display:none; padding: 1.5rem;">
+                <div style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h3 style="color: var(--primary-color); margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent-color); display: inline-block;">👥 Membership ID Details</h3>
+                        <p style="font-size:0.9rem; color:#666; margin-bottom: 0;">View each registered customer details, their total orders, and last order summary.</p>
+                    </div>
+                    <button class="btn btn-primary" onclick="renderMembershipDetails()" style="padding: 0.6rem 1.2rem; font-size: 0.85rem;">🔄 Refresh List</button>
+                </div>
+                
+                <!-- Quick Edit Hidden form for Customer -->
+                <div id="quickEditCustomerModal" style="display: none; background: #f0fdf4; padding: 1.5rem; border-radius: 12px; border: 1px solid #bbf7d0; margin-bottom: 1.5rem;">
+                    <div style="display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap;">
+                        <input type="hidden" id="editCustDocId" />
+                        <div style="flex: 1; min-width: 150px;">
+                            <label style="font-size: 0.8rem; color: #166534; font-weight: 700;">Name:</label>
+                            <input type="text" id="editCustName" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label style="font-size: 0.8rem; color: #166534; font-weight: 700;">Phone:</label>
+                            <input type="text" id="editCustPhone" readonly style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px; background: #e2e8f0; cursor: not-allowed;">
+                        </div>
+                        <div style="flex: 1; min-width: 150px;">
+                            <label style="font-size: 0.8rem; color: #166534; font-weight: 700;">Membership ID:</label>
+                            <input type="text" id="editCustMemId" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
+                        </div>
+                        <div style="flex: 2; min-width: 250px;">
+                            <label style="font-size: 0.8rem; color: #166534; font-weight: 700;">Address:</label>
+                            <input type="text" id="editCustAddress" style="width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 6px;">
+                        </div>
+                        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                            <button onclick="saveMembershipUpdate()" style="background: linear-gradient(135deg, #166534, #2e7d32); color: white; padding: 8px 16px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer;">💾 Update</button>
+                            <button onclick="cancelMembershipUpdate()" style="background: white; color: #ef4444; border: 1px solid #ef4444; padding: 8px 16px; border-radius: 6px; font-weight: 700; cursor: pointer;">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container custom-scrollbar" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow-x: auto; max-height: 60vh; overflow-y: auto;">
+                    <table class="admin-table" style="width: 100%; border-collapse: collapse; min-width: 1100px;">
+                        <thead style="background: var(--primary-color); color: white; position: sticky; top: 0; z-index: 10;">
+                            <tr>
+                                <th style="padding: 12px; text-align: left;">Customer Details</th>
+                                <th style="padding: 12px; text-align: left;">Contact & Location</th>
+                                <th style="padding: 12px; text-align: left;">Membership details</th>
+                                <th style="padding: 12px; text-align: center;">Total Orders</th>
+                                <th style="padding: 12px; text-align: left;">Last Order Info</th>
+                                <th style="padding: 12px; text-align: center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="membershipDetailsTableBody">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 20px; color: #888;">Loading verified customers...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -2946,7 +3013,7 @@
         console.log("Showing Admin Grid");
         
         // Hide ALL detail/custom sections
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
@@ -2964,7 +3031,7 @@
         
         // 1. Hide everything first for a clean slate
         document.getElementById('dashGrid').style.display = 'none';
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
@@ -2978,6 +3045,16 @@
             document.getElementById('backBtn').style.display = 'inline-block';
             document.getElementById('exportBtn').style.display = 'none';
             renderCouponsSection();
+            return;
+        }
+
+        if (section === 'membership-details') {
+            const memDetailsSec = document.getElementById('membership-details-section');
+            if (memDetailsSec) memDetailsSec.style.display = 'block';
+            document.getElementById('dashHeading').textContent = 'Membership ID Details';
+            document.getElementById('backBtn').style.display = 'inline-block';
+            document.getElementById('exportBtn').style.display = 'none';
+            renderMembershipDetails();
             return;
         }
 
@@ -5972,6 +6049,137 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         }
     });
 
+    // ============================================================
+    // MEMBERSHIP ID DETAILS SECTION
+    // ============================================================
+    let membershipDetailsData = [];
+
+    async function renderMembershipDetails() {
+        const tbody = document.getElementById('membershipDetailsTableBody');
+        if (!tbody) return;
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #888;">Loading verified customers...</td></tr>';
+
+        try {
+            const [approvalsSnap, ordersSnap] = await Promise.all([
+                db.collection('membership_approvals').orderBy('timestamp', 'desc').get(),
+                db.collection('orders').orderBy('createdAt', 'desc').get()
+            ]);
+
+            const allRegistrations = approvalsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            membershipDetailsData = allRegistrations;
+            
+            const orders = ordersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            if (allRegistrations.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px; color: #888;">No registered customers found.</td></tr>';
+                return;
+            }
+
+            let html = '';
+            allRegistrations.forEach(req => {
+                // Find all their orders
+                const customerOrders = orders.filter(o => 
+                    (o.phone && req.phone && o.phone === req.phone) || 
+                    (o.membershipId && req.membershipId && o.membershipId === req.membershipId)
+                );
+                const totalOrders = customerOrders.length;
+                const lastOrder = totalOrders > 0 ? customerOrders[0] : null;
+
+                let regDate = 'N/A';
+                if (req.timestamp) {
+                    if (typeof req.timestamp.toDate === 'function') {
+                        regDate = req.timestamp.toDate().toLocaleDateString('en-IN');
+                    } else {
+                        regDate = String(req.timestamp);
+                    }
+                }
+
+                const nameWrap = `<div style="font-weight: 800; color: var(--primary-color);">${req.name || 'Unknown'}</div><div style="font-size: 0.8rem; color: #64748b;">Reg: ${regDate}</div>`;
+                const contactWrap = `<div style="font-weight: 700; color: #334155;">📞 ${req.phone || 'N/A'}</div><div style="font-size: 0.8rem; color: #64748b;">📍 ${req.area || 'N/A'}</div>`;
+                const memDetails = `<div style="font-weight: 800; color: ${req.status === 'Approved' ? '#16a34a' : '#d97706'};">${req.status || 'Pending'}</div><div style="font-size: 0.85rem; font-weight: 700; color: #0f172a;">ID: ${req.membershipId || 'Not Assigned'}</div>`;
+                
+                let lastOrderHtml = '<span style="color: #94a3b8; font-size: 0.85rem;">No orders placed yet</span>';
+                if (lastOrder) {
+                    const lDate = lastOrder.placedAt || lastOrder.deliveryDate || lastOrder.date || 'N/A';
+                    const lProduct = lastOrder.product || lastOrder.planName || (lastOrder.paymentType ? lastOrder.paymentType + ' Sub' : 'N/A');
+                    lastOrderHtml = `<div style="font-weight: 700; font-size: 0.85rem; color: #334155;">${lProduct}</div><div style="font-size: 0.75rem; color: #64748b;">${lDate}</div>`;
+                }
+
+                html += `
+                    <tr style="border-bottom: 1px solid #e2e8f0; transition: background 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='white'">
+                        <td style="padding: 12px;">${nameWrap}</td>
+                        <td style="padding: 12px;">${contactWrap}</td>
+                        <td style="padding: 12px;">${memDetails}</td>
+                        <td style="padding: 12px; text-align: center;"><span style="background: #e0f2fe; color: #0284c7; padding: 4px 10px; border-radius: 20px; font-weight: 800; font-size: 0.85rem;">${totalOrders}</span></td>
+                        <td style="padding: 12px;">${lastOrderHtml}</td>
+                        <td style="padding: 12px; text-align: center;">
+                            <button onclick="editMembershipRecord('${req.id}')" style="background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; margin-right: 4px;" title="Edit Details">✏️</button>
+                            <button onclick="deleteMembershipRecord('${req.id}')" style="background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; padding: 6px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;" title="Delete Customer">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        } catch (error) {
+            console.error("Error fetching membership details:", error);
+            tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 20px; color: red;">Error: ${error.message}</td></tr>`;
+        }
+    }
+
+    function editMembershipRecord(docId) {
+        const req = membershipDetailsData.find(d => d.id === docId);
+        if(!req) return;
+        
+        document.getElementById('editCustDocId').value = docId;
+        document.getElementById('editCustName').value = req.name || '';
+        document.getElementById('editCustPhone').value = req.phone || '';
+        document.getElementById('editCustMemId').value = req.membershipId || '';
+        document.getElementById('editCustAddress').value = req.address || '';
+        
+        document.getElementById('quickEditCustomerModal').style.display = 'block';
+    }
+
+    function cancelMembershipUpdate() {
+        document.getElementById('quickEditCustomerModal').style.display = 'none';
+        document.getElementById('editCustDocId').value = '';
+    }
+
+    async function saveMembershipUpdate() {
+        const docId = document.getElementById('editCustDocId').value;
+        if(!docId) return;
+        
+        const newName = document.getElementById('editCustName').value.trim();
+        const newMemId = document.getElementById('editCustMemId').value.trim();
+        const newAddress = document.getElementById('editCustAddress').value.trim();
+
+        if(!newName) return alert('Name is required.');
+
+        try {
+            await db.collection('membership_approvals').doc(docId).update({
+                name: newName,
+                membershipId: newMemId,
+                address: newAddress
+            });
+            alert('Customer details updated successfully!');
+            cancelMembershipUpdate();
+            renderMembershipDetails();
+        } catch(error) {
+            console.error(error);
+            alert('Error updating customer details: ' + error.message);
+        }
+    }
+
+    async function deleteMembershipRecord(docId) {
+        if(!confirm("Are you sure you want to completely remove this customer registration? This action cannot be undone.")) return;
+        try {
+            await db.collection('membership_approvals').doc(docId).delete();
+            alert('Customer record deleted permanently.');
+            renderMembershipDetails();
+        } catch(error) {
+            console.error(error);
+            alert('Error deleting record: ' + error.message);
+        }
+    }
     </script>
 
     <!-- Digital Bill / Invoice Modal -->
