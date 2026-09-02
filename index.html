@@ -474,6 +474,127 @@
                 </div>
             </div>
 
+            <!-- Active Coupons Section -->
+            <div id="coupons-section" class="dash-section" style="display:none; padding: 1.5rem;">
+                <!-- Header Banner Card -->
+                <div class="coupons-header-card">
+                    <div>
+                        <h3 class="coupons-header-title">🎟️ Active Coupons & Offers</h3>
+                        <p class="coupons-header-subtitle">Create, edit, manage, and track promotional coupons for daily & monthly subscription plans.</p>
+                    </div>
+                    <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
+                        <button class="coupons-btn-secondary" onclick="renderCouponsSection()">
+                            <span>🔄 Refresh</span>
+                        </button>
+                        <button class="coupons-btn-primary" onclick="downloadCouponsCSV()">
+                            <span>📥 Download CSV</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Summary Cards Grid -->
+                <div id="couponsStatsSummary" class="coupons-stat-grid">
+                    <!-- JS dynamically populates stat cards here -->
+                </div>
+
+                <!-- Create/Edit Coupon Form Card -->
+                <div class="coupons-form-card">
+                    <div class="coupons-form-header">
+                        <h4 id="couponFormHeading" class="coupons-form-title">
+                            <span>➕ Add New Coupon Offer</span>
+                        </h4>
+                        <button id="cancelEditCouponBtn" onclick="resetCouponForm()" style="display: none; background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 5px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.2s;">
+                            ✖ Cancel Edit
+                        </button>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; align-items: end;">
+                        <div class="coupon-input-group">
+                            <label class="coupon-label">Coupon Code / Name *</label>
+                            <input type="text" id="coupon_name_inp" placeholder="e.g. ADFM2001 or WELCOME100" class="coupon-input-field" style="font-weight: 800; font-family: monospace; letter-spacing: 0.5px;" oninput="this.value = this.value.toUpperCase()">
+                        </div>
+
+                        <div class="coupon-input-group">
+                            <label class="coupon-label">Coupon Type *</label>
+                            <select id="coupon_type_inp" class="coupon-input-field">
+                                <option value="">-- Select Coupon Type --</option>
+                                <option value="Monthly Subscription">Monthly Subscription</option>
+                                <option value="Daily Subscription">Daily Subscription</option>
+                                <option value="New customer bonus">New customer bonus</option>
+                                <option value="Special Festival Offer">Special Festival Offer</option>
+                            </select>
+                        </div>
+
+                        <div class="coupon-input-group">
+                            <label class="coupon-label">Issued By *</label>
+                            <input type="text" id="coupon_issuedBy_inp" value="VANGA BHUVANA CHANDRA" placeholder="Issued By" class="coupon-input-field">
+                        </div>
+
+                        <div class="coupon-input-group">
+                            <label class="coupon-label">Status *</label>
+                            <select id="coupon_status_inp" class="coupon-input-field">
+                                <option value="Active">🟢 Active</option>
+                                <option value="Not active">🔴 Not active</option>
+                            </select>
+                        </div>
+
+                        <div class="coupon-input-group">
+                            <button id="couponSubmitBtn" onclick="saveCouponRecord()" style="width: 100%; background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color: white; border: none; padding: 0.72rem 1.2rem; border-radius: 12px; font-weight: 800; font-size: 0.92rem; cursor: pointer; box-shadow: 0 4px 12px rgba(27,94,32,0.3); transition: all 0.2s ease; display: flex; justify-content: center; align-items: center; gap: 0.5rem;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                                ➕ Save Coupon
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Table Controls Toolbar -->
+                <div class="coupons-toolbar">
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <span style="font-weight: 800; color: #0f172a; font-size: 1.05rem;">📋 Active Coupons List</span>
+                        <span id="couponCountBadge" style="background: #e2e8f0; color: #475569; font-size: 0.78rem; font-weight: 800; padding: 2px 10px; border-radius: 20px;">0 Items</span>
+                    </div>
+
+                    <div style="display: flex; gap: 0.8rem; align-items: center; flex-wrap: wrap;">
+                        <div class="coupon-search-box">
+                            <span class="coupon-search-icon">🔍</span>
+                            <input type="text" id="couponSearchInp" placeholder="Search coupon code or issuer..." onkeyup="renderCouponsSection()">
+                        </div>
+
+                        <select id="couponTypeFilter" onchange="renderCouponsSection()" class="coupon-input-field" style="padding: 0.6rem 0.9rem; border-radius: 10px; font-size: 0.85rem; width: auto; min-width: 160px; background: white;">
+                            <option value="ALL">All Types</option>
+                            <option value="Monthly Subscription">Monthly Subscription</option>
+                            <option value="Daily Subscription">Daily Subscription</option>
+                            <option value="New customer bonus">New customer bonus</option>
+                            <option value="Special Festival Offer">Festival Offer</option>
+                        </select>
+
+                        <select id="couponStatusFilter" onchange="renderCouponsSection()" class="coupon-input-field" style="padding: 0.6rem 0.9rem; border-radius: 10px; font-size: 0.85rem; width: auto; min-width: 140px; background: white;">
+                            <option value="ALL">All Statuses</option>
+                            <option value="Active">Active Only</option>
+                            <option value="Not active">Inactive Only</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Coupons Table Card -->
+                <div class="coupons-table-card custom-scrollbar" style="max-height: 55vh; overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Coupon Code</th>
+                                <th>Coupon Type</th>
+                                <th>Issued By</th>
+                                <th style="text-align: center;">Status</th>
+                                <th style="text-align: center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="couponsTableBody">
+                            <tr><td colspan="5" style="text-align:center; padding: 2.5rem; color: #999;">Loading coupons data...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
             </div><!-- end dash-body -->
         </div>
     </div>
@@ -2428,12 +2549,18 @@
                 isInitialLoad[section] = false;
 
                 data[section] = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                if (currentSection === section) renderTable(section);
+                if (currentSection === section) {
+                    if (section === 'coupons') renderCouponsSection();
+                    else renderTable(section);
+                }
             }, error => {
                 console.warn(`Sync Error [${section}]:`, error);
                 if (!data[section] || data[section].length === 0) {
                     data[section] = DEFAULT_DATA[section] || [];
-                    if (currentSection === section) renderTable(section);
+                    if (currentSection === section) {
+                        if (section === 'coupons') renderCouponsSection();
+                        else renderTable(section);
+                    }
                 }
             });
         });
@@ -2535,7 +2662,7 @@
         console.log("Showing Admin Grid");
         
         // Hide ALL detail/custom sections
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
@@ -2553,13 +2680,23 @@
         
         // 1. Hide everything first for a clean slate
         document.getElementById('dashGrid').style.display = 'none';
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
         });
 
         // 2. Handle Special Sections
+        if (section === 'coupons') {
+            const couponsSec = document.getElementById('coupons-section');
+            if (couponsSec) couponsSec.style.display = 'block';
+            document.getElementById('dashHeading').textContent = '🎟️ Active Coupons Offers';
+            document.getElementById('backBtn').style.display = 'inline-block';
+            document.getElementById('exportBtn').style.display = 'none';
+            renderCouponsSection();
+            return;
+        }
+
         if (section === 'membership-approvals') {
             const approvalsSec = document.getElementById('membership-approvals-section');
             if (approvalsSec) approvalsSec.style.display = 'block';
@@ -2714,6 +2851,279 @@
         link.href = url;
         const filterVal = document.getElementById('monthlyReportFilter').value || 'all';
         link.download = `Monthly_Report_${filterVal}.csv`;
+        link.click();
+    }
+
+    // ── Active Coupons Section Management ──────────────────────────────
+    let editingCouponId = null;
+
+    function renderCouponsSection() {
+        const tbody = document.getElementById('couponsTableBody');
+        const summaryDiv = document.getElementById('couponsStatsSummary');
+        const countBadge = document.getElementById('couponCountBadge');
+        if (!tbody || !summaryDiv) return;
+
+        const searchVal = (document.getElementById('couponSearchInp')?.value || '').trim().toLowerCase();
+        const statusFilter = document.getElementById('couponStatusFilter')?.value || 'ALL';
+        const typeFilter = document.getElementById('couponTypeFilter')?.value || 'ALL';
+
+        let coupons = (data['coupons'] || []);
+
+        // Stats calculation
+        const totalCount = coupons.length;
+        const activeCount = coupons.filter(c => (c.status || '').toLowerCase() === 'active').length;
+        const monthlyCount = coupons.filter(c => (c.type || '').toLowerCase().includes('monthly')).length;
+        const inactiveCount = totalCount - activeCount;
+
+        summaryDiv.innerHTML = `
+            <div class="coupons-stat-card">
+                <div class="coupons-stat-bar" style="background: linear-gradient(90deg, #1b5e20, #2e7d32);"></div>
+                <div class="coupons-stat-val" style="color: #1b5e20;">${totalCount}</div>
+                <div class="coupons-stat-lbl">Total Coupons</div>
+            </div>
+            <div class="coupons-stat-card">
+                <div class="coupons-stat-bar" style="background: linear-gradient(90deg, #2e7d32, #4caf50);"></div>
+                <div class="coupons-stat-val" style="color: #2e7d32;">🟢 ${activeCount}</div>
+                <div class="coupons-stat-lbl">Active Coupons</div>
+            </div>
+            <div class="coupons-stat-card">
+                <div class="coupons-stat-bar" style="background: linear-gradient(90deg, #1565c0, #42a5f5);"></div>
+                <div class="coupons-stat-val" style="color: #1565c0;">📅 ${monthlyCount}</div>
+                <div class="coupons-stat-lbl">Monthly Subscriptions</div>
+            </div>
+            <div class="coupons-stat-card">
+                <div class="coupons-stat-bar" style="background: linear-gradient(90deg, #c62828, #ef5350);"></div>
+                <div class="coupons-stat-val" style="color: #c62828;">🔴 ${inactiveCount}</div>
+                <div class="coupons-stat-lbl">Inactive / Paused</div>
+            </div>
+        `;
+
+        // Apply filters
+        let filtered = coupons.filter(c => {
+            const matchesSearch = !searchVal || 
+                (c.name || '').toLowerCase().includes(searchVal) || 
+                (c.issuedBy || '').toLowerCase().includes(searchVal) || 
+                (c.type || '').toLowerCase().includes(searchVal);
+            
+            const statusMatch = statusFilter === 'ALL' || 
+                (statusFilter === 'Active' && (c.status || '').toLowerCase() === 'active') || 
+                (statusFilter === 'Not active' && (c.status || '').toLowerCase() !== 'active');
+            
+            const typeMatch = typeFilter === 'ALL' || (c.type || '').toLowerCase().includes(typeFilter.toLowerCase());
+
+            return matchesSearch && statusMatch && typeMatch;
+        });
+
+        if (countBadge) {
+            countBadge.textContent = `${filtered.length} ${filtered.length === 1 ? 'Item' : 'Items'}`;
+        }
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align:center; padding: 3rem 1.5rem; color: #64748b;">
+                        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">🎟️</div>
+                        <div style="font-weight: 800; font-size: 1.05rem; color: #334155; margin-bottom: 0.3rem;">No Matching Coupons Found</div>
+                        <div style="font-size: 0.85rem; color: #94a3b8;">Try adjusting your search keywords or filter settings above.</div>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        tbody.innerHTML = filtered.map(c => {
+            const isActive = (c.status || 'Active').toLowerCase() === 'active';
+            const couponType = c.type || 'General Offer';
+            
+            let typeBg = '#e0f2fe';
+            let typeColor = '#0369a1';
+            let typeBorder = '#bae6fd';
+
+            if (couponType.toLowerCase().includes('monthly')) {
+                typeBg = '#e0f2fe'; typeColor = '#0369a1'; typeBorder = '#bae6fd';
+            } else if (couponType.toLowerCase().includes('daily')) {
+                typeBg = '#dcfce7'; typeColor = '#15803d'; typeBorder = '#86efac';
+            } else if (couponType.toLowerCase().includes('bonus') || couponType.toLowerCase().includes('new')) {
+                typeBg = '#f3e8ff'; typeColor = '#6b21a8'; typeBorder = '#d8b4fe';
+            } else {
+                typeBg = '#ffedd5'; typeColor = '#c2410c'; typeBorder = '#fed7aa';
+            }
+
+            return `
+                <tr>
+                    <td>
+                        <span class="coupon-code-pill">🎟️ ${c.name || 'N/A'}</span>
+                    </td>
+                    <td>
+                        <span class="coupon-type-pill" style="background: ${typeBg}; color: ${typeColor}; border: 1px solid ${typeBorder};">
+                            ${couponType}
+                        </span>
+                    </td>
+                    <td style="font-weight: 700; color: #1e293b;">
+                        <div style="display: flex; align-items: center; gap: 0.4rem;">
+                            <span style="font-size: 1rem;">👤</span>
+                            <span>${c.issuedBy || 'VANGA BHUVANA CHANDRA'}</span>
+                        </div>
+                    </td>
+                    <td style="text-align: center;">
+                        <span style="background: ${isActive ? '#f0fdf4' : '#fef2f2'}; color: ${isActive ? '#15803d' : '#b91c1c'}; border: 1px solid ${isActive ? '#bbf7d0' : '#fecaca'}; padding: 4px 12px; border-radius: 20px; font-size: 0.78rem; font-weight: 800; display: inline-flex; align-items: center; gap: 0.3rem;">
+                            <span>${isActive ? '🟢' : '🔴'}</span>
+                            <span>${isActive ? 'Active' : 'Not active'}</span>
+                        </span>
+                    </td>
+                    <td style="text-align: center;">
+                        <div style="display: flex; gap: 0.4rem; justify-content: center;">
+                            <button onclick="editCouponRecord('${c.id}')" class="coupon-btn-edit" title="Edit Coupon">
+                                <span>✏️</span>
+                                <span>Edit</span>
+                            </button>
+                            <button onclick="deleteCouponRecord('${c.id}', '${c.name || ''}')" class="coupon-btn-delete" title="Delete Coupon">
+                                <span>🗑️</span>
+                                <span>Delete</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    async function saveCouponRecord() {
+        const nameInp = document.getElementById('coupon_name_inp');
+        const typeInp = document.getElementById('coupon_type_inp');
+        const issuedByInp = document.getElementById('coupon_issuedBy_inp');
+        const statusInp = document.getElementById('coupon_status_inp');
+
+        const name = (nameInp ? nameInp.value : '').trim().toUpperCase();
+        const type = (typeInp ? typeInp.value : '').trim();
+        const issuedBy = (issuedByInp ? issuedByInp.value : '').trim() || 'VANGA BHUVANA CHANDRA';
+        const status = (statusInp ? statusInp.value : '').trim() || 'Active';
+
+        if (!name) {
+            alert("⚠️ Please enter a Coupon Code / Name.");
+            if (nameInp) nameInp.focus();
+            return;
+        }
+
+        if (!type) {
+            alert("⚠️ Please select a Coupon Type.");
+            if (typeInp) typeInp.focus();
+            return;
+        }
+
+        const couponData = {
+            name: name,
+            type: type,
+            issuedBy: issuedBy,
+            status: status,
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        try {
+            if (editingCouponId) {
+                await db.collection('coupons').doc(editingCouponId).update(couponData);
+                alert(`✅ Coupon "${name}" updated successfully!`);
+            } else {
+                couponData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                await db.collection('coupons').add(couponData);
+                alert(`🎉 Coupon "${name}" created successfully!`);
+            }
+            resetCouponForm();
+        } catch (err) {
+            console.error("Save Coupon Error:", err);
+            alert("Error saving coupon: " + err.message);
+        }
+    }
+
+    function editCouponRecord(docId) {
+        if (!data['coupons']) return;
+        const coupon = data['coupons'].find(c => c.id === docId);
+        if (!coupon) return;
+
+        editingCouponId = docId;
+
+        const nameInp = document.getElementById('coupon_name_inp');
+        const typeInp = document.getElementById('coupon_type_inp');
+        const issuedByInp = document.getElementById('coupon_issuedBy_inp');
+        const statusInp = document.getElementById('coupon_status_inp');
+        const heading = document.getElementById('couponFormHeading');
+        const submitBtn = document.getElementById('couponSubmitBtn');
+        const cancelBtn = document.getElementById('cancelEditCouponBtn');
+
+        if (nameInp) nameInp.value = coupon.name || '';
+        if (typeInp) typeInp.value = coupon.type || '';
+        if (issuedByInp) issuedByInp.value = coupon.issuedBy || 'VANGA BHUVANA CHANDRA';
+        if (statusInp) statusInp.value = coupon.status || 'Active';
+
+        if (heading) heading.innerHTML = `<span>✏️ Editing Coupon: <strong style="color: #0284c7;">${coupon.name || ''}</strong></span>`;
+        if (submitBtn) {
+            submitBtn.innerHTML = '<span>💾 Update Coupon</span>';
+            submitBtn.style.background = 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)';
+        }
+        if (cancelBtn) cancelBtn.style.display = 'inline-block';
+
+        const formCard = document.querySelector('.coupons-form-card');
+        if (formCard) formCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function resetCouponForm() {
+        editingCouponId = null;
+        const nameInp = document.getElementById('coupon_name_inp');
+        const typeInp = document.getElementById('coupon_type_inp');
+        const issuedByInp = document.getElementById('coupon_issuedBy_inp');
+        const statusInp = document.getElementById('coupon_status_inp');
+        const heading = document.getElementById('couponFormHeading');
+        const submitBtn = document.getElementById('couponSubmitBtn');
+        const cancelBtn = document.getElementById('cancelEditCouponBtn');
+
+        if (nameInp) nameInp.value = '';
+        if (typeInp) typeInp.value = '';
+        if (issuedByInp) issuedByInp.value = 'VANGA BHUVANA CHANDRA';
+        if (statusInp) statusInp.value = 'Active';
+
+        if (heading) heading.innerHTML = `<span>➕ Add New Coupon Offer</span>`;
+        if (submitBtn) {
+            submitBtn.innerHTML = '<span>➕ Save Coupon</span>';
+            submitBtn.style.background = 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%)';
+        }
+        if (cancelBtn) cancelBtn.style.display = 'none';
+    }
+
+    async function deleteCouponRecord(docId, couponName) {
+        if (!confirm(` Are you sure you want to delete coupon "${couponName || 'this coupon'}"?\n\nThis action cannot be undone.`)) return;
+
+        try {
+            await db.collection('coupons').doc(docId).delete();
+            alert(`🗑️ Coupon "${couponName}" deleted successfully!`);
+            if (editingCouponId === docId) resetCouponForm();
+        } catch (err) {
+            console.error("Delete Coupon Error:", err);
+            alert("Error deleting coupon: " + err.message);
+        }
+    }
+
+    function downloadCouponsCSV() {
+        const coupons = (data['coupons'] || []);
+
+        if (coupons.length === 0) {
+            alert("No coupon data available to download.");
+            return;
+        }
+
+        let csv = "Coupon Code,Coupon Type,Issued By,Status\n";
+        coupons.forEach(c => {
+            const name = (c.name || '').replace(/"/g, '""');
+            const type = (c.type || '').replace(/"/g, '""');
+            const issuedBy = (c.issuedBy || 'VANGA BHUVANA CHANDRA').replace(/"/g, '""');
+            const status = (c.status || 'Active').replace(/"/g, '""');
+            csv += `"${name}","${type}","${issuedBy}","${status}"\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `active_coupons_report_${new Date().toISOString().split('T')[0]}.csv`);
         link.click();
     }
 
