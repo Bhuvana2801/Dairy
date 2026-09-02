@@ -525,7 +525,7 @@
                     <div style="background: linear-gradient(135deg, #0d3320 0%, #164a27 100%); color: white; padding: 1.6rem; border-radius: 20px; box-shadow: 0 10px 25px rgba(13,51,32,0.2); margin-bottom: 1.5rem;">
                         <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #25D366; font-weight: 800; margin-bottom: 0.3rem;">Welcome Back</div>
                         <h2 id="cdash-welcome-name" style="font-size: 1.8rem; font-weight: 800; margin: 0 0 0.4rem 0;">Customer</h2>
-                        <p style="margin: 0; opacity: 0.9; font-size: 0.95rem;">Membership ID: <strong id="cdash-welcome-memid" style="color: #FFD700;">AYY-M-1001</strong> | Account Status: <span style="background: #25D366; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 800;">ACTIVE</span></p>
+                        <p style="margin: 0; opacity: 0.9; font-size: 0.95rem;">Membership ID: <strong id="cdash-welcome-memid" style="color: #FFD700;">AYY-M-1001</strong> | Subscription: <strong id="cdash-welcome-subtype" style="color: #64b5f6;">Daily Subscription</strong> | Account Status: <span style="background: #25D366; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.75rem; font-weight: 800;">ACTIVE</span></p>
                     </div>
 
                     <!-- 30-Day Plan Days Banner -->
@@ -623,6 +623,7 @@
                                 <div style="text-align: right;">
                                     <div style="font-size: 0.75rem; color: #666; text-transform: uppercase; font-weight: 700;">Membership ID</div>
                                     <div id="portalOrderCustMembershipId" style="font-size: 1.2rem; font-weight: 800; color: var(--primary-color);">AYY-M-1001</div>
+                                    <div id="portalOrderCustSubTypeDisplay" style="font-size: 0.82rem; color: #1565c0; font-weight: 800; margin-top: 2px;">Monthly Subscription</div>
                                 </div>
                             </div>
                         </div>
@@ -883,7 +884,7 @@
                     <!-- Welcome Back Box for Logged In Customer -->
                     <div id="homeLoggedInBox" class="home-access-box" style="display: none; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 1.8rem; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); max-width: 440px; margin: 0 auto; text-align: center; border: 1px solid rgba(255,255,255,0.4);">
                         <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 0.4rem;">👋 Welcome Back, <span id="homeCustName">Customer</span>!</h3>
-                        <p style="color: #555; font-size: 0.95rem; margin-bottom: 1.2rem;">Membership ID: <strong id="homeCustMembershipId" style="color: var(--primary-color);">AYY-M-1001</strong></p>
+                        <p style="color: #555; font-size: 0.95rem; margin-bottom: 1.2rem;">Membership ID: <strong id="homeCustMembershipId" style="color: var(--primary-color);">AYY-M-1001</strong> | Subscription: <strong id="homeCustSubType" style="color: #1565c0;">Daily Subscription</strong></p>
                         <div style="display: flex; gap: 0.8rem;">
                             <button class="btn btn-primary" onclick="showPage('order')" style="flex: 1; padding: 0.8rem; font-size: 1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 12px rgba(26,92,42,0.3);">
                                 🛒 Place Order
@@ -2014,6 +2015,23 @@
         }
     }
 
+    function getSubscriptionType(customer) {
+        if (!customer) return 'Daily Subscription';
+        let sub = customer.subType || customer.subscriptionType || customer.planType;
+        if (sub && sub !== 'N/A') {
+            if (sub === 'Monthly') return 'Monthly Subscription';
+            if (sub === 'Daily') return 'Daily Subscription';
+            return sub;
+        }
+        const memId = (customer.membershipId || customer.id || '').toUpperCase();
+        if (memId.startsWith('ADFM')) {
+            return 'Monthly Subscription';
+        } else if (memId.startsWith('ADFD')) {
+            return 'Daily Subscription';
+        }
+        return 'Daily Subscription';
+    }
+
     function loadProfileInfo() {
         const customer = getSignedInCustomer() || JSON.parse(localStorage.getItem('ayyappa_profile') || '{}');
         
@@ -2028,23 +2046,57 @@
 
         const cdashWelcomeName = document.getElementById('cdash-welcome-name');
         const cdashWelcomeMemId = document.getElementById('cdash-welcome-memid');
+        const cdashWelcomeSub = document.getElementById('cdash-welcome-subtype');
+
         const portalOrderCustName = document.getElementById('portalOrderCustName');
         const portalOrderCustPhone = document.getElementById('portalOrderCustPhone');
         const portalOrderCustMembershipId = document.getElementById('portalOrderCustMembershipId');
+        const portalOrderCustSubTypeDisplay = document.getElementById('portalOrderCustSubTypeDisplay');
+
+        const homeCustName = document.getElementById('homeCustName');
+        const homeCustMembershipId = document.getElementById('homeCustMembershipId');
+        const homeCustSubType = document.getElementById('homeCustSubType');
+
+        const orderCustName = document.getElementById('orderCustName');
+        const orderCustPhone = document.getElementById('orderCustPhone');
+        const orderCustMembershipId = document.getElementById('orderCustMembershipId');
+        const orderCustSubTypeDisplay = document.getElementById('orderCustSubTypeDisplay');
+
+        const membershipId = customer.membershipId || customer.id || 'AYY-M-1001';
+        const subType = getSubscriptionType(customer);
 
         if (readName) readName.textContent = customer.name || 'Customer';
         if (readPhone) readPhone.textContent = customer.phone || 'N/A';
         if (readWhatsapp) readWhatsapp.textContent = customer.whatsapp || customer.phone || 'N/A';
-        if (memId) memId.textContent = customer.membershipId || customer.id || 'AYY-M-1001';
-        if (readSubType) readSubType.textContent = customer.subType || customer.subscriptionType || 'Daily Subscription';
+        if (memId) memId.textContent = membershipId;
+        if (readSubType) readSubType.textContent = subType;
         if (dispName) dispName.textContent = customer.name || 'My Profile';
         if (dispPhone) dispPhone.textContent = customer.phone ? '📞 ' + customer.phone : '';
 
         if (cdashWelcomeName) cdashWelcomeName.textContent = customer.name || 'Customer';
-        if (cdashWelcomeMemId) cdashWelcomeMemId.textContent = customer.membershipId || customer.id || 'AYY-M-1001';
+        if (cdashWelcomeMemId) cdashWelcomeMemId.textContent = membershipId;
+        if (cdashWelcomeSub) cdashWelcomeSub.textContent = subType;
+
         if (portalOrderCustName) portalOrderCustName.textContent = customer.name || 'Customer';
         if (portalOrderCustPhone) portalOrderCustPhone.textContent = customer.phone || 'N/A';
-        if (portalOrderCustMembershipId) portalOrderCustMembershipId.textContent = customer.membershipId || customer.id || 'AYY-M-1001';
+        if (portalOrderCustMembershipId) portalOrderCustMembershipId.textContent = membershipId;
+        if (portalOrderCustSubTypeDisplay) portalOrderCustSubTypeDisplay.textContent = subType;
+
+        if (homeCustName) homeCustName.textContent = customer.name || 'Customer';
+        if (homeCustMembershipId) homeCustMembershipId.textContent = membershipId;
+        if (homeCustSubType) homeCustSubType.textContent = subType;
+
+        if (orderCustName) orderCustName.textContent = customer.name || 'Customer';
+        if (orderCustPhone) orderCustPhone.textContent = customer.phone || 'N/A';
+        if (orderCustMembershipId) orderCustMembershipId.textContent = membershipId;
+        if (orderCustSubTypeDisplay) orderCustSubTypeDisplay.textContent = subType;
+
+        // Auto select order tab according to subscription type
+        if (subType.toLowerCase().includes('monthly')) {
+            selectPortalOrderTab('Monthly');
+        } else if (subType.toLowerCase().includes('daily')) {
+            selectPortalOrderTab('Daily');
+        }
 
         // Form inputs
         const cityEl = document.getElementById('profile-city');
@@ -4535,9 +4587,20 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             if (publicBox) publicBox.style.display = 'none';
             if (welcomeBox) welcomeBox.style.display = 'block';
 
+            const subType = getSubscriptionType(customer);
+
             if (welcomeCustName) welcomeCustName.textContent = customer.name || 'Valued Customer';
             if (welcomeCustId) welcomeCustId.textContent = customer.membershipId || customer.id || 'AYY-M-1001';
-            if (welcomeCustSub) welcomeCustSub.textContent = customer.subType || 'Daily Subscription';
+            if (welcomeCustSub) welcomeCustSub.textContent = subType;
+
+            const cdashWelcomeSub = document.getElementById('cdash-welcome-subtype');
+            if (cdashWelcomeSub) cdashWelcomeSub.textContent = subType;
+
+            const homeCustSubType = document.getElementById('homeCustSubType');
+            if (homeCustSubType) homeCustSubType.textContent = subType;
+
+            const portalOrderCustSubTypeDisplay = document.getElementById('portalOrderCustSubTypeDisplay');
+            if (portalOrderCustSubTypeDisplay) portalOrderCustSubTypeDisplay.textContent = subType;
 
             // Populate Order page header details
             const orderCustName = document.getElementById('orderCustName');
@@ -4548,10 +4611,10 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             if (orderCustName) orderCustName.textContent = customer.name || 'Customer';
             if (orderCustPhone) orderCustPhone.textContent = customer.phone || 'N/A';
             if (orderCustMembershipId) orderCustMembershipId.textContent = customer.membershipId || customer.id || 'AYY-M-1001';
-            if (orderCustSubTypeDisplay) orderCustSubTypeDisplay.textContent = customer.subType || 'Daily Subscription';
+            if (orderCustSubTypeDisplay) orderCustSubTypeDisplay.textContent = subType;
 
             // Setup Order Page subscription forms tab visibility based on customer subType
-            setupOrderSubscriptionViews(customer.subType || 'Daily Subscription');
+            setupOrderSubscriptionViews(subType);
         } else {
             // Hide My Dashboard from navbar
             if (navDashboardLi) navDashboardLi.style.display = 'none';
