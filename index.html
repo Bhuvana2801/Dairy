@@ -4728,7 +4728,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             checkAuthStateOnLoad();
 
             alert(`🎉 Welcome back, ${custSession.name}!\n\nYou have successfully signed in (ID: ${custSession.id}).`);
-            showPage('order');
+            openCustomerOrdersModal('home');
 
         } catch (err) {
             console.error("Sign in error:", err);
