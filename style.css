@@ -177,7 +177,7 @@ p { font-size: 1.1rem; color: #556B55; margin-bottom: 1rem; }
 /* Hero Section */
 .hero {
     height: 100vh;
-    background: linear-gradient(135deg, rgba(26,92,42,0.55) 0%, rgba(26,40,26,0.72) 100%), url('images/hero.png') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(26,92,42,0.55) 0%, rgba(26,40,26,0.72) 100%), url('images/dairy_farm_ad.png') center/cover no-repeat;
     display: flex;
     align-items: center;
     justify-content: center;
