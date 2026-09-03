@@ -1125,25 +1125,25 @@
                     <h2 style="text-align: center; margin: 0 auto 2.2rem; font-size: 1.8rem; letter-spacing: 2.5px; color: var(--accent-color, #FFD700); font-weight: 800; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.6);">FRESH MILK, PURE LIFE</h2>
 
                     <!-- Customer Access Box -->
-                    <div id="homeAccessBox" class="home-access-box" style="background: #f8f9fa; padding: 2.5rem 2rem; border-radius: 36px; box-shadow: 0 15px 45px rgba(0,0,0,0.2); max-width: 440px; margin: 0 auto; border: none;">
+                    <div id="homeAccessBox" class="home-access-box" style="background: transparent; padding: 2.5rem 2rem; max-width: 440px; margin: 0 auto; border: none; box-shadow: none;">
                         <div style="margin-bottom: 1.8rem; text-align: center;">
-                            <p style="font-size: 1.15rem; color: #334155; font-weight: 800; margin-bottom: 0.8rem;">Already Registered?</p>
-                            <button class="btn btn-primary" onclick="openCustomerSigninModal()" style="width: 100%; padding: 0.9rem 1.5rem; font-size: 1.1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: #166534; color: white; border: none; box-shadow: 0 4px 14px rgba(22,101,52,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <p style="font-size: 1.15rem; color: #ffffff; font-weight: 800; margin-bottom: 0.8rem; text-shadow: 0 2px 8px rgba(0,0,0,0.7);">Already Registered?</p>
+                            <button class="btn btn-primary" onclick="openCustomerSigninModal()" style="width: 100%; padding: 0.9rem 1.5rem; font-size: 1.1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: #166534; color: white; border: none; box-shadow: 0 4px 14px rgba(0,0,0,0.4); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                                 🔑 Sign In
                             </button>
                         </div>
                         <div style="text-align: center;">
-                            <p style="font-size: 1.15rem; color: #334155; font-weight: 800; margin-bottom: 0.8rem;">New Customer?</p>
-                            <button class="btn btn-secondary" onclick="openCustomerRegisterModal()" style="width: 100%; padding: 0.9rem 1.5rem; font-size: 1.1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: #22c55e; color: white; border: none; box-shadow: 0 4px 14px rgba(34,197,94,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                            <p style="font-size: 1.15rem; color: #ffffff; font-weight: 800; margin-bottom: 0.8rem; text-shadow: 0 2px 8px rgba(0,0,0,0.7);">New Customer?</p>
+                            <button class="btn btn-secondary" onclick="openCustomerRegisterModal()" style="width: 100%; padding: 0.9rem 1.5rem; font-size: 1.1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: #22c55e; color: white; border: none; box-shadow: 0 4px 14px rgba(0,0,0,0.4); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                                 📋 Register
                             </button>
                         </div>
                     </div>
 
                     <!-- Welcome Back Box for Logged In Customer -->
-                    <div id="homeLoggedInBox" class="home-access-box" style="display: none; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 1.8rem; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.25); max-width: 440px; margin: 0 auto; text-align: center; border: 1px solid rgba(255,255,255,0.4);">
-                        <h3 style="color: var(--primary-color); font-size: 1.3rem; margin-bottom: 0.4rem;">👋 Welcome Back, <span id="homeCustName">Customer</span>!</h3>
-                        <p style="color: #555; font-size: 0.95rem; margin-bottom: 1.2rem;">Membership ID: <strong id="homeCustMembershipId" style="color: var(--primary-color);">AYY-M-1001</strong> | Subscription: <strong id="homeCustSubType" style="color: #1565c0;">Daily Subscription</strong></p>
+                    <div id="homeLoggedInBox" class="home-access-box" style="display: none; background: transparent; padding: 1.8rem; max-width: 440px; margin: 0 auto; text-align: center; border: none; box-shadow: none;">
+                        <h3 style="color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.7); font-size: 1.3rem; margin-bottom: 0.4rem;">👋 Welcome Back, <span id="homeCustName">Customer</span>!</h3>
+                        <p style="color: #f1f5f9; text-shadow: 0 2px 8px rgba(0,0,0,0.7); font-size: 0.95rem; margin-bottom: 1.2rem;">Membership ID: <strong id="homeCustMembershipId" style="color: #FFD700;">AYY-M-1001</strong> | Subscription: <strong id="homeCustSubType" style="color: #FFD700;">Daily Subscription</strong></p>
                         <div style="display: flex; gap: 0.8rem;">
                             <button class="btn btn-primary" onclick="showPage('order')" style="flex: 1; padding: 0.8rem; font-size: 1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 12px rgba(26,92,42,0.3);">
                                 🛒 Place Order
