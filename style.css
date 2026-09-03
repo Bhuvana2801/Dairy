@@ -438,13 +438,14 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 .nav-actions { display: flex; align-items: center; }
 
 .btn-admin {
-    background-color: var(--accent-color);
-    color: var(--text-dark);
-    padding: 0.6rem 1.5rem;
-    font-size: 0.95rem;
+    background-color: #d99f22;
+    color: #1e293b;
+    padding: 0.6rem 1.6rem;
+    font-size: 1rem;
     border-radius: 50px;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: 0.5px;
+    border: none;
     transition: var(--transition);
 }
 .btn-admin:hover {
