@@ -1111,10 +1111,13 @@
         <!-- HOME PAGE -->
         <div id="page-home" class="page-view active">
             <section class="hero section-padding">
-                <video autoplay muted loop playsinline class="hero-video-bg" poster="images/dairy_farm_ad.png">
-                    <source src="images/farm_bg.mp4" type="video/mp4">
-                    Your browser does not support HTML5 video.
-                </video>
+                <!-- Background Slideshow -->
+                <div class="hero-slideshow">
+                    <div class="hero-slide active" style="background-image: url('images/slide1_farm.png');"></div>
+                    <div class="hero-slide" style="background-image: url('images/slide2_milking.png');"></div>
+                    <div class="hero-slide" style="background-image: url('images/slide3_delivery.png');"></div>
+                    <div class="hero-slide" style="background-image: url('images/slide4_brand.png');"></div>
+                </div>
                 <div class="hero-overlay"></div>
                 
                 <div class="hero-content fade-in" style="text-align: center; width: 100%; max-width: 800px; margin: 0 auto; z-index: 1;">
@@ -6323,6 +6326,21 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             </div>
         </div>
     </div>
+
+    <!-- Background Slideshow Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.hero-slide');
+            if (slides.length > 0) {
+                let currentSlide = 0;
+                setInterval(() => {
+                    slides[currentSlide].classList.remove('active');
+                    currentSlide = (currentSlide + 1) % slides.length;
+                    slides[currentSlide].classList.add('active');
+                }, 4000); // Change image every 4 seconds
+            }
+        });
+    </script>
 
 </body>
 </html>
