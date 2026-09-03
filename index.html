@@ -103,95 +103,97 @@
 
     <!-- Customer Registration Modal -->
     <div id="customerRegisterModal" class="modal-overlay" onclick="closeCustomerRegisterModal(event)">
-        <div class="modal-box modal-wide fade-in-up" style="max-width: 580px; max-height: 90vh; overflow-y: auto;">
-            <button class="modal-close" onclick="closeCustomerRegisterModal(null, true)">&times;</button>
-            <h2 style="color: var(--primary-color); margin-bottom: 0.2rem; font-family: var(--font-heading); text-align: center;">Customer Registration</h2>
-            <p style="text-align: center; color: #666; font-size: 0.95rem; margin-bottom: 1.2rem;">Fill in your details below to request account registration & subscription access.</p>
+        <div class="modal-box modal-wide fade-in-up" style="background: linear-gradient(145deg, #0d3320 0%, #164a27 100%); border-radius: 24px; padding: 2rem; max-width: 580px; max-height: 90vh; overflow-y: auto; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 35px rgba(37,211,102,0.15); position: relative; color: white;">
+            <button class="modal-close" onclick="closeCustomerRegisterModal(null, true)" style="color: rgba(255,255,255,0.7); font-size: 1.8rem; top: 15px; right: 20px;">&times;</button>
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-bottom: 0.4rem; letter-spacing: -0.5px;">Customer Registration</h2>
+                <p style="color: rgba(255, 255, 255, 0.75); font-size: 0.92rem; margin: 0; line-height: 1.4;">Fill in your details below to request account registration & subscription access.</p>
+            </div>
             
             <form id="customerRegisterForm" onsubmit="handleCustomerRegistration(event)" novalidate>
                 <!-- Customer Details -->
-                <div style="background: #f8faf8; padding: 1rem; border-radius: 12px; border: 1px solid #e0eee0; margin-bottom: 1rem;">
-                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">👤 Customer Details</h4>
-                    <div class="modal-input-group">
-                        <label for="regName">Full Name <span style="color:red;">*</span></label>
-                        <input type="text" id="regName" placeholder="Enter your full name" required>
-                        <small class="field-error" id="err-regName" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                <div style="background: rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.2rem;">
+                    <h4 style="color: #25D366; margin-bottom: 1rem; font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">👤 Customer Details</h4>
+                    <div class="modal-input-group" style="margin-bottom: 1rem;">
+                        <label for="regName" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.85rem; text-transform: uppercase;">Full Name <span style="color:#fca5a5;">*</span></label>
+                        <input type="text" id="regName" placeholder="Enter your full name" required style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.95rem; outline: none; transition: 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor='#25D366'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'">
+                        <small class="field-error" id="err-regName" style="color: #fca5a5; font-weight: 600; display: none; margin-top: 4px;"></small>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                        <div class="modal-input-group">
-                            <label for="regPhone">Phone Number <span style="color:red;">*</span></label>
-                            <input type="tel" id="regPhone" placeholder="10-digit Mobile No" maxlength="10" required>
-                            <small class="field-error" id="err-regPhone" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                        <div class="modal-input-group" style="margin-bottom: 0;">
+                            <label for="regPhone" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.85rem; text-transform: uppercase;">Phone Number <span style="color:#fca5a5;">*</span></label>
+                            <input type="tel" id="regPhone" placeholder="10-digit Mobile No" maxlength="10" required style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.95rem; outline: none; transition: 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor='#25D366'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'">
+                            <small class="field-error" id="err-regPhone" style="color: #fca5a5; font-weight: 600; display: none; margin-top: 4px;"></small>
                         </div>
-                        <div class="modal-input-group">
-                            <label for="regWhatsapp">WhatsApp Number <span style="color:red;">*</span></label>
-                            <input type="tel" id="regWhatsapp" placeholder="10-digit WhatsApp No" maxlength="10" required>
-                            <small class="field-error" id="err-regWhatsapp" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                        <div class="modal-input-group" style="margin-bottom: 0;">
+                            <label for="regWhatsapp" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.85rem; text-transform: uppercase;">WhatsApp Number <span style="color:#fca5a5;">*</span></label>
+                            <input type="tel" id="regWhatsapp" placeholder="10-digit WhatsApp No" maxlength="10" required style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.95rem; outline: none; transition: 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor='#25D366'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'">
+                            <small class="field-error" id="err-regWhatsapp" style="color: #fca5a5; font-weight: 600; display: none; margin-top: 4px;"></small>
                         </div>
                     </div>
                 </div>
 
                 <!-- Delivery Address -->
-                <div style="background: #f8faf8; padding: 1rem; border-radius: 12px; border: 1px solid #e0eee0; margin-bottom: 1rem;">
-                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">📍 Delivery Address</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 0.8rem;">
+                <div style="background: rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.2rem;">
+                    <h4 style="color: #25D366; margin-bottom: 1rem; font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">📍 Delivery Address</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
                         <div class="modal-input-group" style="margin-bottom:0;">
-                            <label for="regLocation">Location / City / Town <span style="color:red;">*</span></label>
-                            <select id="regLocation" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;" required>
-                                <option value="">-- Select Location --</option>
-                                <option value="Narasaraopet">Narasaraopet</option>
+                            <label for="regLocation" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.85rem; text-transform: uppercase;">Location <span style="color:#fca5a5;">*</span></label>
+                            <select id="regLocation" style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.95rem; outline: none; transition: 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor='#25D366'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'" required>
+                                <option value="" style="color: #000;">-- Select Location --</option>
+                                <option value="Narasaraopet" style="color: #000;">Narasaraopet</option>
                             </select>
                         </div>
                         <div class="modal-input-group" style="margin-bottom:0;">
-                            <label for="regArea">Choose Area <span style="color:red;">*</span></label>
-                            <select id="regArea" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;" required>
-                                <option value="">-- Select Area --</option>
-                                <option value="Clock Tower Area">Clock Tower Area</option>
-                                <option value="Kota Centre">Kota Centre</option>
-                                <option value="Mallamma Centre">Mallamma Centre</option>
-                                <option value="Prakash Nagar">Prakash Nagar</option>
-                                <option value="Rikshaw Centre">Rikshaw Centre</option>
-                                <option value="Ramireddypeta">Ramireddypeta</option>
-                                <option value="Barampet">Barampet</option>
-                                <option value="Srirampuram">Srirampuram</option>
-                                <option value="Reddy Nagar">Reddy Nagar</option>
+                            <label for="regArea" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.85rem; text-transform: uppercase;">Choose Area <span style="color:#fca5a5;">*</span></label>
+                            <select id="regArea" style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.95rem; outline: none; transition: 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor='#25D366'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'" required>
+                                <option value="" style="color: #000;">-- Select Area --</option>
+                                <option value="Clock Tower Area" style="color: #000;">Clock Tower Area</option>
+                                <option value="Kota Centre" style="color: #000;">Kota Centre</option>
+                                <option value="Mallamma Centre" style="color: #000;">Mallamma Centre</option>
+                                <option value="Prakash Nagar" style="color: #000;">Prakash Nagar</option>
+                                <option value="Rikshaw Centre" style="color: #000;">Rikshaw Centre</option>
+                                <option value="Ramireddypeta" style="color: #000;">Ramireddypeta</option>
+                                <option value="Barampet" style="color: #000;">Barampet</option>
+                                <option value="Srirampuram" style="color: #000;">Srirampuram</option>
+                                <option value="Reddy Nagar" style="color: #000;">Reddy Nagar</option>
                             </select>
-                            <small class="field-error" id="err-regArea" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                            <small class="field-error" id="err-regArea" style="color: #fca5a5; font-weight: 600; display: none; margin-top: 4px;"></small>
                         </div>
                     </div>
-                    <div class="modal-input-group">
-                        <label for="regAddress">House No / Street Address <span style="color:red;">*</span></label>
-                        <textarea id="regAddress" rows="2" placeholder="Door No, Street Name, Landmark" style="width:100%; padding:0.75rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem; font-family:inherit;" required></textarea>
-                        <small class="field-error" id="err-regAddress" style="color: #d32f2f; font-weight: 600; display: none; margin-top: 4px;"></small>
+                    <div class="modal-input-group" style="margin-bottom: 0;">
+                        <label for="regAddress" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.85rem; text-transform: uppercase;">House No / Street Address <span style="color:#fca5a5;">*</span></label>
+                        <textarea id="regAddress" rows="2" placeholder="Door No, Street Name, Landmark" required style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.95rem; outline: none; transition: 0.3s; box-sizing: border-box; font-family: inherit; resize: vertical;" onfocus="this.style.borderColor='#25D366'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'"></textarea>
+                        <small class="field-error" id="err-regAddress" style="color: #fca5a5; font-weight: 600; display: none; margin-top: 4px;"></small>
                     </div>
                 </div>
 
                 <!-- Delivery Slot & Subscription Preference -->
-                <div style="background: #f8faf8; padding: 1rem; border-radius: 12px; border: 1px solid #e0eee0; margin-bottom: 1.2rem;">
-                    <h4 style="color: var(--primary-color); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 2px solid var(--accent-color); padding-bottom: 0.3rem;">🚚 Subscription Preference</h4>
+                <div style="background: rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem;">
+                    <h4 style="color: #25D366; margin-bottom: 1rem; font-size: 1.05rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.5px;">🚚 Subscription Preference</h4>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
                         <div class="modal-input-group" style="margin-bottom:0;">
-                            <label for="regSlot">Delivery Slot <span style="color:red;">*</span></label>
-                            <select id="regSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;" required>
-                                <option value="">-- Select Delivery Slot --</option>
-                                <option value="Morning (7:00 AM – 9:00 AM)">Morning (7:00 AM – 9:00 AM)</option>
-                                <option value="Evening (7:00 PM – 9:00 PM)">Evening (7:00 PM – 9:00 PM)</option>
-                                <option value="Morning & Evening (7:00 AM – 9:00 AM & 7:00 PM – 9:00 PM)">Morning & Evening (7:00 AM – 9:00 AM & 7:00 PM – 9:00 PM)</option>
+                            <label for="regSlot" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.85rem; text-transform: uppercase;">Delivery Slot <span style="color:#fca5a5;">*</span></label>
+                            <select id="regSlot" required style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.95rem; outline: none; transition: 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor='#25D366'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'">
+                                <option value="" style="color: #000;">-- Select Delivery Slot --</option>
+                                <option value="Morning (7:00 AM – 9:00 AM)" style="color: #000;">Morning (7:00 AM – 9:00 AM)</option>
+                                <option value="Evening (7:00 PM – 9:00 PM)" style="color: #000;">Evening (7:00 PM – 9:00 PM)</option>
+                                <option value="Morning & Evening (7:00 AM – 9:00 AM & 7:00 PM – 9:00 PM)" style="color: #000;">Morning & Evening (7:00 – 9:00)</option>
                             </select>
                         </div>
                         <div class="modal-input-group" style="margin-bottom:0;">
-                            <label for="regSubType">Subscription Type <span style="color:red;">*</span></label>
-                            <select id="regSubType" style="width:100%; padding:0.85rem; border:1.5px solid #ddd; border-radius:10px; font-size:0.95rem;" required>
-                                <option value="">-- Select Subscription Type --</option>
-                                <option value="Daily Subscription">Daily Subscription</option>
-                                <option value="Monthly Subscription">Monthly Subscription</option>
+                            <label for="regSubType" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.85rem; text-transform: uppercase;">Type <span style="color:#fca5a5;">*</span></label>
+                            <select id="regSubType" required style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.95rem; outline: none; transition: 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor='#25D366'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'">
+                                <option value="" style="color: #000;">-- Subscription Type --</option>
+                                <option value="Daily Subscription" style="color: #000;">Daily Subscription</option>
+                                <option value="Monthly Subscription" style="color: #000;">Monthly Subscription</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <button type="submit" id="regSubmitBtn" class="btn btn-secondary" style="width: 100%; padding: 0.9rem; font-size: 1.1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 15px rgba(26,92,42,0.3);">
-                    📋 REGISTER
+                <button type="submit" id="regSubmitBtn" class="btn" style="width: 100%; padding: 1rem; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; border: none; border-radius: 50px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 25px rgba(37,211,102,0.35); display: flex; align-items: center; justify-content: center; gap: 0.5rem;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    📋 REGISTER NOW
                 </button>
             </form>
         </div>
@@ -213,22 +215,27 @@
 
     <!-- Customer Sign In Modal -->
     <div id="customerSigninModal" class="modal-overlay" onclick="closeCustomerSigninModal(event)">
-        <div class="modal-box fade-in-up" style="max-width: 420px; padding: 2.2rem 1.8rem;">
-            <button class="modal-close" onclick="closeCustomerSigninModal(null, true)">&times;</button>
-            <h2 style="color: var(--primary-color); margin-bottom: 0.3rem; text-align: center; font-family: var(--font-heading);">Customer Sign In</h2>
-            <p style="text-align: center; color: #666; font-size: 0.95rem; margin-bottom: 1.5rem;">Enter your Customer ID or Phone Number and Password.</p>
+        <div class="modal-box fade-in-up" style="background: linear-gradient(145deg, #0d3320 0%, #164a27 100%); border-radius: 24px; padding: 2.5rem; max-width: 440px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 35px rgba(37,211,102,0.15); position: relative; color: white;">
+            <button class="modal-close" onclick="closeCustomerSigninModal(null, true)" style="color: rgba(255,255,255,0.7); font-size: 1.8rem; top: 18px; right: 22px;">&times;</button>
+            <div style="text-align: center; margin-bottom: 1.8rem;">
+                <div style="width: 65px; height: 65px; background: rgba(37, 211, 102, 0.15); border: 2px solid rgba(37, 211, 102, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; box-shadow: 0 0 20px rgba(37, 211, 102, 0.2);">
+                    <span style="font-size: 2rem;">👤</span>
+                </div>
+                <h2 style="font-size: 1.8rem; font-weight: 800; color: #ffffff; margin-bottom: 0.4rem; letter-spacing: -0.5px;">Customer Sign In</h2>
+                <p style="color: rgba(255, 255, 255, 0.75); font-size: 0.92rem; margin: 0; line-height: 1.4;">Enter your Customer ID or Phone Number and Password.</p>
+            </div>
             
             <form id="customerSigninForm" onsubmit="handleCustomerSignin(event)">
-                <div class="modal-input-group">
-                    <label for="signinLoginId">Customer ID / Phone Number</label>
-                    <input type="text" id="signinLoginId" placeholder="e.g. CUST-1001 or 9392603808" required>
+                <div class="modal-input-group" style="margin-bottom: 1.2rem;">
+                    <label for="signinLoginId" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; display: block;">Customer ID / Phone Number</label>
+                    <input type="text" id="signinLoginId" placeholder="e.g. CUST-1001 or 9392603808" required style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.98rem; outline: none; transition: 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor='#25D366'; this.style.background='rgba(255,255,255,0.14)'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'; this.style.background='rgba(255,255,255,0.08)'">
                 </div>
-                <div class="modal-input-group">
-                    <label for="signinPassword">Password</label>
-                    <input type="password" id="signinPassword" placeholder="Enter your password" required>
+                <div class="modal-input-group" style="margin-bottom: 1.2rem;">
+                    <label for="signinPassword" style="font-weight: 700; color: rgba(255,255,255,0.9); font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem; display: block;">Password</label>
+                    <input type="password" id="signinPassword" placeholder="Enter your password" required style="width: 100%; padding: 0.85rem 1rem; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-weight: 700; font-size: 0.98rem; outline: none; transition: 0.3s; box-sizing: border-box;" onfocus="this.style.borderColor='#25D366'; this.style.background='rgba(255,255,255,0.14)'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'; this.style.background='rgba(255,255,255,0.08)'">
                 </div>
-                <p id="signinErrorMsg" style="color: #c62828; font-weight: 700; font-size: 0.9rem; text-align: center; min-height: 1.2rem; margin-bottom: 1rem; display: none;"></p>
-                <button type="submit" id="signinSubmitBtn" class="btn btn-primary" style="width: 100%; padding: 0.85rem; font-size: 1.05rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 12px rgba(26,92,42,0.3);">
+                <p id="signinErrorMsg" style="color: #fca5a5; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); padding: 0.75rem 1rem; border-radius: 10px; font-weight: 700; font-size: 0.85rem; text-align: center; margin-bottom: 1.2rem; display: none;"></p>
+                <button type="submit" id="signinSubmitBtn" class="btn" style="width: 100%; padding: 0.95rem; background: linear-gradient(135deg, #25D366 0%, #128C7E 100%); color: white; border: none; border-radius: 50px; font-weight: 800; font-size: 1.05rem; cursor: pointer; transition: 0.3s; box-shadow: 0 8px 25px rgba(37,211,102,0.35); display: flex; align-items: center; justify-content: center; gap: 0.5rem;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
                     🔑 Sign In
                 </button>
             </form>
