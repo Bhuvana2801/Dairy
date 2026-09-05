@@ -4877,6 +4877,22 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             return;
         }
 
+        try {
+            await db.collection('membership_approvals').doc(docId).delete();
+            alert(`🗑️ Membership approval request for "${name}" has been deleted.`);
+            renderMembershipApprovals();
+        } catch(err) {
+            console.error("Error deleting request:", err);
+            alert("Failed to delete request: " + err.message);
+        }
+    }
+
+    let receiptsListener = null;
+
+    function renderOrderReceipts() {
+        const tbody = document.getElementById('receiptsTableBody');
+        if (!tbody) return;
+
         tbody.innerHTML = '<tr><td colspan="11" style="text-align:center; padding: 2rem;">Listening for today\'s orders...</td></tr>';
 
         // Get today's date boundaries in IST (UTC+5:30)
