@@ -1302,169 +1302,214 @@
                     <div class="booking-layout" style="max-width: 650px; margin: 0 auto;">
                         <div class="booking-form-card" style="background: white; border-radius: 24px; padding: 2rem; box-shadow: 0 15px 35px rgba(0,0,0,0.25);">
                             
-                            <!-- Logged In Customer Summary Header -->
-                            <div style="background: #f0f7f0; padding: 1.2rem; border-radius: 16px; margin-bottom: 1.5rem; border: 1px solid #c8e6c9;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-                                    <div>
-                                        <div style="font-size: 0.78rem; color: #666; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Customer Name</div>
-                                        <div id="orderCustName" style="font-size: 1.25rem; font-weight: 800; color: var(--primary-color);">Customer</div>
-                                        <div style="font-size: 0.88rem; color: #444; margin-top: 2px;">Phone: <strong id="orderCustPhone">N/A</strong></div>
+                            
+                            <!-- Subscription Type Setup (Hidden input defaulting to Daily) -->
+                            <form id="masterOrderForm" onsubmit="handleMasterOrderSubmit(event)">
+                                <!-- 1. Customer Details -->
+                                <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">👤 1. Customer Details</h3>
+                                    
+                                    <div class="modal-input-group" style="margin-bottom: 1rem;">
+                                        <label for="orderName" style="font-weight: 700; color: #333;">Full Name <span style="color:red;">*</span></label>
+                                        <input type="text" id="orderName" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="Enter your full name" required>
                                     </div>
-                                    <div style="text-align: right;">
-                                        <div style="font-size: 0.78rem; color: #666; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Membership ID</div>
-                                        <div id="orderCustMembershipId" style="font-size: 1.3rem; font-weight: 800; color: var(--primary-color);">AYY-M-1001</div>
-                                        <div style="font-size: 0.8rem; color: #1565c0; font-weight: 700; margin-top: 2px;" id="orderCustSubTypeDisplay">Daily Subscription</div>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                                        <div class="modal-input-group" style="margin-bottom:0;">
+                                            <label for="orderPhone" style="font-weight: 700; color: #333;">Phone Number <span style="color:red;">*</span></label>
+                                            <input type="tel" id="orderPhone" oninput="syncWhatsAppPhone()" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="10-digit number" pattern="[0-9]{10}" required>
+                                        </div>
+                                        <div class="modal-input-group" style="margin-bottom:0;">
+                                            <label for="orderWhatsapp" style="font-weight: 700; color: #333;">WhatsApp Number <span style="color:red;">*</span></label>
+                                            <input type="tel" id="orderWhatsapp" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="10-digit number" pattern="[0-9]{10}" required>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Subscription Selector Tabs (Only shown if user has BOTH subscriptions) -->
-                            <div id="orderSubscriptionTabs" style="display: none; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1.5rem;">
-                                <button type="button" id="tabDailyBtn" onclick="selectOrderSubTab('Daily')" style="padding: 0.85rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; border: 2px solid var(--primary-color); background: var(--primary-color); color: white;">
-                                    🟢 Daily Subscription
-                                </button>
-                                <button type="button" id="tabMonthlyBtn" onclick="selectOrderSubTab('Monthly')" style="padding: 0.85rem; border-radius: 12px; font-weight: 800; font-size: 0.95rem; cursor: pointer; border: 2px solid #1565c0; background: white; color: #1565c0;">
-                                    🔵 Monthly Subscription
-                                </button>
-                            </div>
-
-                            <!-- Daily Subscription Form Section -->
-                            <form id="dailyOrderForm" onsubmit="handleDailyOrderSubmit(event)" style="display: block;">
-                                <div style="background: linear-gradient(135deg, #0d3320 0%, #164a27 100%); color: white; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
-                                    <h3 style="color: #FFD700; font-size: 1.2rem; margin-bottom: 0.3rem; font-weight: 800;">🥛 Daily Milk Subscription</h3>
-                                    <p style="font-size: 0.88rem; color: rgba(255,255,255,0.85); margin: 0;">100% Upfront Online Payment • Free Daily Home Delivery • Base Rate: ₹100 / Litre</p>
-                                </div>
-
-                                <!-- 1. Milk Quantity Selection -->
-                                <div class="modal-input-group">
-                                    <label for="dailyOrderQty" style="font-weight: 700; color: #333;">1. Select Milk Quantity / Day <span style="color:red;">*</span></label>
-                                    <select id="dailyOrderQty" onchange="updateDailySubPriceCalc('page')" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:1rem; font-weight:700;" required>
-                                        <option value="0.5">0.5 L (500 ml)</option>
-                                        <option value="1">1 L (1 Litre)</option>
-                                        <option value="2" selected>2 L (2 Litres)</option>
-                                        <option value="3">3 L (3 Litres)</option>
-                                        <option value="4">4 L (4 Litres)</option>
-                                        <option value="5">5 L (5 Litres)</option>
-                                        <option value="6">6 L (6 Litres)</option>
-                                        <option value="7">7 L (7 Litres)</option>
-                                        <option value="8">8 L (8 Litres)</option>
-                                        <option value="9">9 L (9 Litres)</option>
-                                        <option value="10">10 L (10 Litres)</option>
-                                    </select>
-                                </div>
-
-                                <!-- 2. Daily Subscription Plan -->
-                                <div class="modal-input-group" style="margin-bottom: 1rem;">
-                                    <label for="dailyOrderPlan" style="font-weight: 700; color: #333;">2. Choose Daily Subscription Plan <span style="color:red;">*</span></label>
-                                    <select id="dailyOrderPlan" onchange="updateDailySubPriceCalc('page')" style="width:100%; padding:0.85rem; border:1.5px solid #2e7d32; border-radius:10px; font-size:1rem; font-weight:700; background: #f0fdf4;" required>
-                                        <option value="7">🥛 Daily Starter (7 Days) — ₹20 OFF</option>
-                                        <option value="15" selected>⭐ Daily Saver (15 Days) — ₹50 OFF</option>
-                                        <option value="30">🎁 Daily Premium (30 Days) — ₹100 OFF</option>
-                                    </select>
-                                </div>
-
-                                <!-- 3. Delivery Slot & Start Date -->
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
-                                    <div class="modal-input-group" style="margin-bottom:0;">
-                                        <label for="dailyOrderSlot" style="font-weight: 700; color: #333;">Delivery Slot (Optional)</label>
-                                        <select id="dailyOrderSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;">
-                                            <option value="No Preference (Any Time)" selected>⚪ Optional / Any Time</option>
-                                            <option value="Morning (7:00 AM – 9:00 AM)">🌅 Morning (7:00 AM – 9:00 AM)</option>
-                                            <option value="Evening (7:00 PM – 9:00 PM)">🌆 Evening (7:00 PM – 9:00 PM)</option>
+                                <!-- 2. Subscription Type -->
+                                <div style="margin-bottom: 1.5rem;">
+                                    <div class="modal-input-group">
+                                        <label for="orderSubscriptionType" style="font-weight: 700; color: #333;">2. Subscription Type <span style="color:red;">*</span></label>
+                                        <select id="orderSubscriptionType" style="width:100%; padding:0.85rem; border:1.5px solid #2e7d32; border-radius:10px; font-size:1rem; font-weight:800; background: #e8f5e9; color: #1b5e20;" required>
+                                            <option value="Daily" selected>📅 Daily (One Order Per Calendar Day)</option>
+                                            <option value="One-Time">🛍️ One-Time Order</option>
                                         </select>
                                     </div>
-                                    <div class="modal-input-group" style="margin-bottom:0;">
-                                        <label for="dailyOrderDate" style="font-weight: 700; color: #333;">Subscription Start Date <span style="color:red;">*</span></label>
-                                        <input type="date" id="dailyOrderDate" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                </div>
+
+                                <!-- 3. Products -->
+                                <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">🛒 3. Select Products</h3>
+                                    
+                                    <div style="display: grid; gap: 1rem;">
+                                        <!-- Buffalo Milk -->
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                                            <div>
+                                                <div style="font-weight: 800; color: #333;">🥛 Buffalo Milk</div>
+                                                <div style="font-size: 0.85rem; color: #666;">₹100 / Litre</div>
+                                            </div>
+                                            <select id="orderQtyMilk" onchange="updateOrderTotalPricing()" style="padding:0.6rem; border:1.5px solid #ccc; border-radius:8px; font-size:0.9rem; font-weight:700; width: 120px;">
+                                                <option value="0">None</option>
+                                                <option value="0.5">500 ml</option>
+                                                <option value="1">1 Litre</option>
+                                                <option value="2">2 Litres</option>
+                                                <option value="3">3 Litres</option>
+                                                <option value="4">4 Litres</option>
+                                                <option value="5">5 Litres</option>
+                                                <option value="6">6 Litres</option>
+                                                <option value="7">7 Litres</option>
+                                                <option value="8">8 Litres</option>
+                                                <option value="9">9 Litres</option>
+                                                <option value="10">10 Litres</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Fresh Curd -->
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                                            <div>
+                                                <div style="font-weight: 800; color: #333;">🥣 Fresh Curd</div>
+                                                <div style="font-size: 0.85rem; color: #666;">₹60 / Kg</div>
+                                            </div>
+                                            <select id="orderQtyCurd" onchange="updateOrderTotalPricing()" style="padding:0.6rem; border:1.5px solid #ccc; border-radius:8px; font-size:0.9rem; font-weight:700; width: 120px;">
+                                                <option value="0">None</option>
+                                                <option value="0.5">500 g</option>
+                                                <option value="1">1 Kg</option>
+                                                <option value="2">2 Kg</option>
+                                                <option value="3">3 Kg</option>
+                                                <option value="4">4 Kg</option>
+                                                <option value="5">5 Kg</option>
+                                                <option value="6">6 Kg</option>
+                                                <option value="7">7 Kg</option>
+                                                <option value="8">8 Kg</option>
+                                                <option value="9">9 Kg</option>
+                                                <option value="10">10 Kg</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Buffalo Ghee -->
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <div style="font-weight: 800; color: #333;">🏺 Buffalo Ghee (Original)</div>
+                                                <div style="font-size: 0.85rem; color: #666;">₹600 / Litre</div>
+                                            </div>
+                                            <select id="orderQtyGhee" onchange="updateOrderTotalPricing()" style="padding:0.6rem; border:1.5px solid #ccc; border-radius:8px; font-size:0.9rem; font-weight:700; width: 120px;">
+                                                <option value="0">None</option>
+                                                <option value="0.5">500 ml</option>
+                                                <option value="1">1 Litre</option>
+                                                <option value="2">2 Litres</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div id="productSelectError" style="color: #e53e3e; font-size: 0.85rem; font-weight: 700; display: none; margin-top: 0.8rem;">⚠️ Please select at least one product.</div>
+                                </div>
+
+                                <!-- 4. Delivery Location -->
+                                <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">📍 4. Delivery Location</h3>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
+                                        <div class="modal-input-group" style="margin-bottom:0;">
+                                            <label for="orderCity" style="font-weight: 700; color: #333;">City</label>
+                                            <input type="text" id="orderCity" value="Narasaraopet" readonly style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem; background:#f0f0f0; color:#555;">
+                                        </div>
+                                        <div class="modal-input-group" style="margin-bottom:0;">
+                                            <label for="orderArea" style="font-weight: 700; color: #333;">Area <span style="color:red;">*</span></label>
+                                            <select id="orderArea" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                                <option value="" disabled selected>Select Area</option>
+                                                <option value="Arundelpet">Arundelpet</option>
+                                                <option value="Kothapeta">Kothapeta</option>
+                                                <option value="Prakash Nagar">Prakash Nagar</option>
+                                                <option value="DSC Colony">DSC Colony</option>
+                                                <option value="Ramireddy Peta">Ramireddy Peta</option>
+                                                <option value="Buram Peta">Buram Peta</option>
+                                                <option value="NGO Colony">NGO Colony</option>
+                                                <option value="Vinukonda Road">Vinukonda Road</option>
+                                                <option value="RTO Centre">RTO Centre</option>
+                                                <option value="Stadium">Stadium</option>
+                                                <option value="Clock Centre">Clock Centre</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="modal-input-group" style="margin-bottom: 0.8rem;">
+                                        <label for="orderAddressHouse" style="font-weight: 700; color: #333;">House / Door Number <span style="color:red;">*</span></label>
+                                        <input type="text" id="orderAddressHouse" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                    </div>
+                                    
+                                    <div class="modal-input-group" style="margin-bottom: 0.8rem;">
+                                        <label for="orderAddressStreet" style="font-weight: 700; color: #333;">Street / Road <span style="color:red;">*</span></label>
+                                        <input type="text" id="orderAddressStreet" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                    </div>
+                                    
+                                    <div class="modal-input-group" style="margin-bottom: 0;">
+                                        <label for="orderAddressLandmark" style="font-weight: 700; color: #333;">Landmark (Optional)</label>
+                                        <input type="text" id="orderAddressLandmark" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;">
+                                    </div>
+                                </div>
+
+                                <!-- 5. Delivery Date & Time -->
+                                <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">🗓️ 5. Delivery Schedule</h3>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                                        <div class="modal-input-group" style="margin-bottom:0;">
+                                            <label for="orderDate" style="font-weight: 700; color: #333;">Start Date <span style="color:red;">*</span></label>
+                                            <input type="date" id="orderDate" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                        </div>
+                                        <div class="modal-input-group" style="margin-bottom:0;">
+                                            <label for="orderSlot" style="font-weight: 700; color: #333;">Delivery Time <span style="color:red;">*</span></label>
+                                            <select id="orderSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
+                                                <option value="Morning (7:00 AM – 9:00 AM)" selected>🌅 Morning (7:00 AM – 9:00 AM)</option>
+                                                <option value="Evening (7:00 PM – 9:00 PM)">🌆 Evening (7:00 PM – 9:00 PM)</option>
+                                                <option value="Morning & Evening">🌅🌆 Morning & Evening</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- 6. Payment -->
+                                <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">💳 6. Payment System</h3>
+                                    <div class="modal-input-group" style="margin-bottom: 0;">
+                                        <label for="orderPayment" style="font-weight: 700; color: #333;">Payment Method <span style="color:red;">*</span></label>
+                                        <select id="orderPayment" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem; font-weight:700;" required>
+                                            <option value="UPI" selected>📱 Online Payment (UPI) - Preferred</option>
+                                            <option value="COD">💵 Cash on Delivery</option>
+                                        </select>
                                     </div>
                                 </div>
 
                                 <!-- Dynamic Live Price Summary Box -->
-                                <div id="pageDailyPriceSummaryBox" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1.2rem; margin-bottom: 1.2rem;">
+                                <div id="masterPriceSummaryBox" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1.2rem; margin-bottom: 1.5rem;">
                                     <div style="font-size: 0.85rem; font-weight: 800; color: #1b5e20; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; display: flex; justify-content: space-between;">
-                                        <span>💰 Subscription Price Breakdown</span>
-                                        <span style="color: #64748b; font-weight: 600;">Rate: ₹100/L</span>
+                                        <span>💰 Order Summary</span>
                                     </div>
                                     <div style="font-size: 0.9rem; line-height: 1.6; color: #334155;">
                                         <div style="display: flex; justify-content: space-between;">
-                                            <span>Daily Quantity × Days:</span>
-                                            <span id="pageSummaryQtyDays">2 L × 15 Days = 30 Litres</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between;">
-                                            <span>Normal Amount (30 L × ₹100):</span>
-                                            <span id="pageSummaryNormalAmt" style="font-weight: 700;">₹3,000</span>
-                                        </div>
-                                        <div style="display: flex; justify-content: space-between; color: #16a34a;">
-                                            <span>Plan Special Discount:</span>
-                                            <span id="pageSummaryDiscount" style="font-weight: 700;">-₹50</span>
+                                            <span>Subtotal (Products):</span>
+                                            <span id="masterSummarySubtotal" style="font-weight: 700;">₹0</span>
                                         </div>
                                         <div style="display: flex; justify-content: space-between; color: #16a34a;">
                                             <span>Delivery Charge:</span>
                                             <span style="font-weight: 700;">FREE (₹0)</span>
                                         </div>
-                                        <div style="border-top: 1.5px dashed #cbd5e1; margin-top: 0.5rem; padding-top: 0.5rem; display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 800; color: #1b5e20;">
-                                            <span>Final Upfront Amount:</span>
-                                            <span id="pageSummaryFinalAmt">₹2,950</span>
+                                        <div style="border-top: 1.5px dashed #cbd5e1; margin-top: 0.5rem; padding-top: 0.5rem; display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800; color: #1b5e20;">
+                                            <span>Grand Total:</span>
+                                            <span id="masterSummaryFinalAmt">₹0</span>
                                         </div>
+                                        <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.4rem; text-align: right;" id="masterSummaryFrequency">Per Order</div>
                                     </div>
                                 </div>
 
-                                <!-- Payment System -->
-                                <div class="modal-input-group" style="margin-bottom: 1.2rem;">
-                                    <label for="dailyOrderPayment" style="font-weight: 700; color: #333;">Payment System <span style="color:red;">*</span></label>
-                                    <select id="dailyOrderPayment" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem; font-weight:700;" required>
-                                        <option value="Online Upfront Payment (UPI/Card)" selected>💳 100% Upfront Online Payment (UPI / GPay / PhonePe / Card)</option>
-                                    </select>
-                                </div>
-
-                                <button type="submit" id="dailySubmitBtn" class="btn btn-primary" style="width:100%; padding:1rem; font-size:1.1rem; font-weight:800; border-radius:50px; cursor:pointer; background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color:white; border:none; margin-top:0.8rem; box-shadow:0 4px 15px rgba(26,92,42,0.35);">
-                                    💳 Pay Upfront & Activate Subscription
+                                <button type="submit" id="masterSubmitBtn" class="btn btn-primary" style="width:100%; padding:1rem; font-size:1.15rem; font-weight:800; border-radius:50px; cursor:pointer; background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color:white; border:none; box-shadow:0 6px 20px rgba(26,92,42,0.35); transition: 0.3s;">
+                                    💳 Confirm Order
                                 </button>
+                                
+                                <div id="orderErrorMsg" style="color: #e53e3e; font-size: 0.9rem; font-weight: 700; text-align: center; margin-top: 1rem; display: none;">
+                                    Unable to place your order. Please try again.
+                                </div>
                             </form>
-
-                            <!-- Monthly Subscription Form Section -->
-                            <form id="monthlyOrderForm" onsubmit="handleMonthlyOrderSubmit(event)" style="display: none;">
-                                <div style="background: #eef6fc; border: 1.5px solid #b3d7f5; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
-                                    <h3 style="color: #1565c0; font-size: 1.2rem; margin-bottom: 0.3rem; font-weight: 800;">🔵 Monthly Subscription Order</h3>
-                                    <p style="font-size: 0.88rem; color: #444; margin: 0;">Set up your recurring monthly milk subscription.</p>
-                                </div>
-
-                                <div class="modal-input-group">
-                                    <label for="monthlyOrderQty" style="font-weight: 700; color: #333;">Daily Quantity <span style="color:red;">*</span></label>
-                                    <select id="monthlyOrderQty" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:1rem; font-weight:700;" required>
-                                        <option value="0.5">500 ml</option>
-                                        <option value="1">1 Litre</option>
-                                        <option value="2">2 Litres</option>
-                                        <option value="3">3 Litres</option>
-                                        <option value="4">4 Litres</option>
-                                        <option value="5">5 Litres</option>
-                                        <option value="6">6 Litres</option>
-                                        <option value="7">7 Litres</option>
-                                        <option value="8">8 Litres</option>
-                                        <option value="9">9 Litres</option>
-                                        <option value="10">10 Litres</option>
-                                    </select>
-                                </div>
-
-                                <div class="modal-input-group" style="margin-bottom: 1rem;">
-                                    <label for="monthlyOrderSlot" style="font-weight: 700; color: #333;">Preferred Delivery Slot <span style="color:red;">*</span></label>
-                                    <select id="monthlyOrderSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
-                                        <option value="Morning (7:00 AM – 9:00 AM)">Morning (7:00 AM – 9:00 AM)</option>
-                                        <option value="Evening (7:00 PM – 9:00 PM)">Evening (7:00 PM – 9:00 PM)</option>
-                                    </select>
-                                </div>
-
-                                <div class="modal-input-group" style="margin-bottom: 1rem;">
-                                    <label for="monthlyOrderDate" style="font-weight: 700; color: #333;">Delivery Date <span style="color:red;">*</span></label>
-                                    <input type="date" id="monthlyOrderDate" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
-                                </div>
-
-                                <button type="submit" id="monthlySubmitBtn" class="btn btn-secondary" style="width:100%; padding:0.95rem; font-size:1.1rem; font-weight:800; border-radius:50px; cursor:pointer; background:#1565c0; color:white; border:none; margin-top:0.8rem; box-shadow:0 4px 15px rgba(21,101,192,0.35);">
-                                    🛒 Place Order
-                                </button>
-                            </form>
-
-                            <!-- Order Confirmation Message Box -->
+<!-- Order Confirmation Message Box -->
                             <div id="orderSuccessBox" style="display: none; text-align: center; padding: 2rem 1rem;">
                                 <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉</div>
                                 <h3 style="color: var(--primary-color); font-size: 1.6rem; margin-bottom: 0.6rem; font-weight: 800;">Thank You! Your Order has been placed successfully.</h3>
@@ -5865,202 +5910,157 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         }
     }
 
-    async function handleDailyOrderSubmit(e) {
-        if (e) e.preventDefault();
 
-        const customer = getSignedInCustomer();
-        if (!customer) {
-            alert('Please sign in to place an order.');
-            openCustomerSigninModal();
-            return;
-        }
-
-        const qty = document.getElementById('dailyOrderQty')?.value || '1';
-        const plan = document.getElementById('dailyOrderPlan')?.value || '15';
-        const slot = document.getElementById('dailyOrderSlot')?.value || 'No Preference (Any Time)';
-        const pay = document.getElementById('dailyOrderPayment')?.value || 'Online Upfront Payment (UPI/Card)';
-        const startDateInput = document.getElementById('dailyOrderDate')?.value;
-
-        const btn = document.getElementById('dailySubmitBtn');
-        if (btn) {
-            btn.disabled = true;
-            btn.innerHTML = '⏳ Processing Subscription...';
-        }
-
-        const qtyVal = parseFloat(qty);
-        const numDays = parseInt(plan);
-        const pricePerLitre = 100;
-        const discount = getDailySubDiscount(numDays);
-        const totalLitres = qtyVal * numDays;
-        const normalAmt = totalLitres * pricePerLitre;
-        const finalAmt = normalAmt - discount;
-        const planName = getDailySubPlanName(numDays);
-
-        let qtyStr = `${qtyVal} Litre${qtyVal > 1 ? 's' : ''} / Day`;
-        if (qtyVal === 0.5) qtyStr = '500 ml / Day';
-
-        const now = new Date();
-        let startDate = startDateInput ? new Date(startDateInput) : now;
-        if (isNaN(startDate.getTime())) startDate = now;
-        const endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + numDays - 1);
-
-        const formatDate = (d) => d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-        const startDateStr = formatDate(startDate);
-        const endDateStr = formatDate(endDate);
-
-        const yyyy = now.getFullYear();
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const dd = String(now.getDate()).padStart(2, '0');
-        const randomNum = Math.floor(1000 + Math.random() * 9000);
-        const subscriptionID = `AYY-SUB-D-${yyyy}${mm}${dd}-${randomNum}`;
-
-        const orderDoc = {
-            orderID: subscriptionID,
-            subscriptionId: subscriptionID,
-            name: customer.name || 'Customer',
-            phone: customer.phone || 'N/A',
-            membershipId: customer.membershipId || customer.id || 'AYY-M-1001',
-            qty: qtyStr,
-            qtyPerDay: qtyVal,
-            amount: finalAmt.toString(),
-            normalAmount: normalAmt.toString(),
-            discount: discount.toString(),
-            totalLitres: totalLitres,
-            deliverySlot: slot,
-            planName: planName,
-            planDays: numDays,
-            totalDeliveries: numDays,
-            remainingDeliveries: numDays,
-            deliveredCount: 0,
-            startDate: startDateStr,
-            endDate: endDateStr,
-            startDateRaw: startDate.toISOString(),
-            endDateRaw: endDate.toISOString(),
-            paymentType: 'Daily Subscription',
-            paymentOption: pay,
-            orderStatus: 'Active',
-            paymentStatus: 'PAID (100% Upfront)',
-            subscriptionStatus: 'ACTIVE',
-            deliveryCharge: 'FREE',
-            address: customer.address || '',
-            area: customer.area || '',
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            placedAt: now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-        };
-
-        try {
-            await db.collection('orders').add(orderDoc);
-
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = '💳 Pay Upfront & Activate Subscription';
-            }
-
-            // Show invoice modal
-            showDailyInvoice({
-                subscriptionID, customerName: customer.name, phone: customer.phone,
-                address: (customer.address || '') + (customer.area ? ', ' + customer.area : ''),
-                planName, qtyStr, numDays, totalLitres, startDateStr, endDateStr, slot,
-                normalAmt, discount, finalAmt
-            });
-
-            document.getElementById('dailyOrderForm').style.display = 'none';
-            const successBox = document.getElementById('orderSuccessBox');
-            const successId = document.getElementById('orderSuccessId');
-            if (successId) successId.textContent = subscriptionID;
-            if (successBox) successBox.style.display = 'block';
-
-        } catch (err) {
-            console.error("Daily subscription error:", err);
-            alert("Error activating subscription: " + err.message);
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = '💳 Pay Upfront & Activate Subscription';
-            }
+    function syncWhatsAppPhone() {
+        const phone = document.getElementById('orderPhone').value;
+        const wa = document.getElementById('orderWhatsapp');
+        if (wa && document.activeElement !== wa) {
+            wa.value = phone;
         }
     }
 
-    async function handleMonthlyOrderSubmit(e) {
+    function updateOrderTotalPricing() {
+        const qtys = {
+            milk: parseFloat(document.getElementById('orderQtyMilk').value) || 0,
+            curd: parseFloat(document.getElementById('orderQtyCurd').value) || 0,
+            ghee: parseFloat(document.getElementById('orderQtyGhee').value) || 0
+        };
+        const prices = { milk: 100, curd: 60, ghee: 600 };
+        const subtotal = (qtys.milk * prices.milk) + (qtys.curd * prices.curd) + (qtys.ghee * prices.ghee);
+        document.getElementById('masterSummarySubtotal').textContent = '₹' + subtotal;
+        document.getElementById('masterSummaryFinalAmt').textContent = '₹' + subtotal;
+        document.getElementById('masterSummaryFrequency').textContent = 
+            document.getElementById('orderSubscriptionType').value === 'Daily' ? 'Per Order / Per Day' : 'One-Time';
+    }
+
+    async function handleMasterOrderSubmit(e) {
         if (e) e.preventDefault();
 
-        const customer = getSignedInCustomer();
-        if (!customer) {
-            alert('Please sign in to place an order.');
-            openCustomerSigninModal();
-            return;
-        }
-
-        const qty = document.getElementById('monthlyOrderQty')?.value || '1';
-        const slot = document.getElementById('monthlyOrderSlot')?.value || 'Morning (7:00 AM – 9:00 AM)';
-
-        const btn = document.getElementById('monthlySubmitBtn');
-        if (btn) {
-            btn.disabled = true;
-            btn.innerHTML = '⏳ Submitting Monthly Subscription Order...';
-        }
-
-        // Generate Order ID: AYY-M-YYYYMMDD-XXXX
-        const now = new Date();
-        const yyyy = now.getFullYear();
-        const mm = String(now.getMonth() + 1).padStart(2, '0');
-        const dd = String(now.getDate()).padStart(2, '0');
-        const randomNum = Math.floor(1000 + Math.random() * 9000);
-        const orderID = `AYY-M-${yyyy}${mm}${dd}-${randomNum}`;
-
-        const qtyVal = parseFloat(qty);
-        let qtyStr = `${qtyVal} Litre${qtyVal > 1 ? 's' : ''} / Day`;
-        if (qtyVal === 0.5) qtyStr = '500 ml / Day';
-        const amountStr = Math.round(qtyVal * 2400).toString();
-
-        const deliveryDateStr = getFormattedDeliveryDate('monthlyOrderDate');
-
-        const orderDoc = {
-            orderID: orderID,
-            name: customer.name || 'Customer',
-            phone: customer.phone || 'N/A',
-            membershipId: customer.membershipId || customer.id || 'AYY-M-1001',
-            qty: qtyStr,
-            amount: amountStr,
-            deliverySlot: slot,
-            deliveryDate: deliveryDateStr,
-            paymentType: 'Monthly',
-            paymentOption: 'Prepaid Monthly',
-            orderStatus: 'Pending',
-            paymentStatus: 'Payment Completed',
-            subscriptionStatus: 'Active',
-            address: customer.address || '',
-            area: customer.area || '',
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            placedAt: now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
+        // 1. Gather Data
+        const name = document.getElementById('orderName').value;
+        const phone = document.getElementById('orderPhone').value;
+        const wa = document.getElementById('orderWhatsapp').value;
+        const subType = document.getElementById('orderSubscriptionType').value;
+        
+        const qtys = {
+            milk: parseFloat(document.getElementById('orderQtyMilk').value) || 0,
+            curd: parseFloat(document.getElementById('orderQtyCurd').value) || 0,
+            ghee: parseFloat(document.getElementById('orderQtyGhee').value) || 0
         };
 
+        if (qtys.milk === 0 && qtys.curd === 0 && qtys.ghee === 0) {
+            document.getElementById('productSelectError').style.display = 'block';
+            return;
+        }
+        document.getElementById('productSelectError').style.display = 'none';
+
+        const area = document.getElementById('orderArea').value;
+        if (!area) { alert("Please select a delivery area."); return; }
+        const address = `House ${document.getElementById('orderAddressHouse').value}, ${document.getElementById('orderAddressStreet').value}` 
+                        + (document.getElementById('orderAddressLandmark').value ? `, ${document.getElementById('orderAddressLandmark').value}` : '');
+        
+        const startDate = document.getElementById('orderDate').value;
+        const slot = document.getElementById('orderSlot').value;
+        const payment = document.getElementById('orderPayment').value;
+
+        const prices = { milk: 100, curd: 60, ghee: 600 };
+        const subtotal = (qtys.milk * prices.milk) + (qtys.curd * prices.curd) + (qtys.ghee * prices.ghee);
+
+        const btn = document.getElementById('masterSubmitBtn');
+        const errBox = document.getElementById('orderErrorMsg');
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Confirming Order...';
+        errBox.style.display = 'none';
+
         try {
+            // GENERATE GLOBAL ORDER ID ATOMICALLY 
+            const seqRef = db.collection('metadata').doc('orderSequence');
+            const orderNum = await db.runTransaction(async (t) => {
+                const doc = await t.get(seqRef);
+                let nextId = 2800; // Specification Start
+                if (doc.exists && doc.data().lastId) {
+                    nextId = doc.data().lastId + 1;
+                }
+                t.set(seqRef, { lastId: nextId }, { merge: true });
+                return nextId;
+            });
+            const globalOrderId = `ADFD${orderNum}`;
+
+            // CREATE SUBSCRIPTION RECORD IF DAILY
+            let subscriptionId = '';
+            let productListStr = [];
+            let itemsSnapshot = [];
+            
+            if (qtys.milk > 0) { productListStr.push(`Buffalo Milk (${qtys.milk})`); itemsSnapshot.push({product: 'Buffalo Milk', qty: qtys.milk, price: prices.milk}); }
+            if (qtys.curd > 0) { productListStr.push(`Fresh Curd (${qtys.curd})`); itemsSnapshot.push({product: 'Fresh Curd', qty: qtys.curd, price: prices.curd}); }
+            if (qtys.ghee > 0) { productListStr.push(`Buffalo Ghee (${qtys.ghee})`); itemsSnapshot.push({product: 'Buffalo Ghee', qty: qtys.ghee, price: prices.ghee}); }
+
+            if (subType === 'Daily') {
+                const subRef = db.collection('subscriptions').doc();
+                subscriptionId = subRef.id;
+                await subRef.set({
+                    subscriptionId: subscriptionId,
+                    name, phone, wa, area, address, slot,
+                    status: 'ACTIVE',
+                    items: itemsSnapshot,
+                    startDate: startDate,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            }
+
+            // CREATE THE FIRST ORDER
+            const orderDoc = {
+                orderID: globalOrderId,
+                subscriptionId: subscriptionId,
+                orderType: subType,
+                name: name,
+                phone: phone,
+                wa: wa,
+                products: productListStr.join(', '),
+                items: itemsSnapshot,
+                subtotal: subtotal.toString(),
+                total: subtotal.toString(),
+                deliveryDate: startDate,
+                deliverySlot: slot,
+                city: 'Narasaraopet',
+                area: area,
+                address: address,
+                paymentMethod: payment,
+                paymentStatus: payment === 'UPI' ? 'Paid' : 'Pending',
+                orderStatus: 'Confirmed',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
             await db.collection('orders').add(orderDoc);
 
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = '🛒 Place Order';
-            }
-
-            document.getElementById('monthlyOrderForm').style.display = 'none';
+            // SUCCESS SHOW
+            document.getElementById('masterOrderForm').style.display = 'none';
             const successBox = document.getElementById('orderSuccessBox');
             const successId = document.getElementById('orderSuccessId');
-            if (successId) successId.textContent = orderID;
+            if (successId) successId.textContent = globalOrderId;
             if (successBox) successBox.style.display = 'block';
 
-            // Redirect to customer dashboard home page
-            setTimeout(() => {
-                openCustomerOrdersModal('home');
-            }, 1000);
+            // TRIGGER WHATSAPP AUTOMATION MESSAGE
+            const waMsg = 
+                `NEW DAIRY ORDER\n\n` +
+                `Order ID: ${globalOrderId}\n\n` +
+                `Customer:\nName: ${name}\nPhone: ${phone}\nWhatsApp: ${wa}\n\n` +
+                `Subscription:\n${subType}\n\n` +
+                `Products:\n${itemsSnapshot.map(i => `${i.product} - ${i.qty} - ₹${i.qty * i.price}`).join('\n')}\n\n` +
+                `Grand Total: ₹${subtotal}\n\n` +
+                `Delivery Date: ${startDate}\nDelivery Time: ${slot}\n\n` +
+                `City: Narasaraopet\nArea: ${area}\nDelivery Address: ${address}\n\n` +
+                `Payment Method: ${payment}`;
+            
+            const waUrl = `https://wa.me/9493207380?text=${encodeURIComponent(waMsg)}`;
+            window.open(waUrl, '_blank');
 
         } catch (err) {
-            console.error("Monthly order error:", err);
-            alert("Error placing monthly order: " + err.message);
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = '🛒 Place Order';
-            }
+            console.error("Order submission error:", err);
+            errBox.style.display = 'block';
+            errBox.textContent = "Unable to place your order. Please try again.";
+            btn.disabled = false;
+            btn.innerHTML = '💳 Confirm Order';
         }
     }
 
