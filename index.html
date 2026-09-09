@@ -1883,12 +1883,9 @@
     }
 
     function quickOrder(product) {
-        showPage('order');
-        document.getElementById('bookProduct').value = product;
-        // Focus quantity to help user
-        setTimeout(() => {
-            document.getElementById('bookQty').focus();
-        }, 600);
+        const msg = `Hello Ayyappa Dairy Farm! I am interested in ordering: *${product}*. Please provide more details.`;
+        const waUrl = `https://wa.me/919392603808?text=${encodeURIComponent(msg)}`;
+        window.open(waUrl, '_blank');
     }
 
     function orderAgain(orderID) {
