@@ -1792,12 +1792,7 @@
 
     // ΓöÇΓöÇ Page Switcher ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
     function showPage(pageId) {
-        // Enforce customer authentication restriction for sensitive pages
-        if ((pageId === 'order' || pageId === 'orders' || pageId === 'profile') && typeof isCustomerSignedIn === 'function' && !isCustomerSignedIn()) {
-            alert('🔒 Access Restricted!\n\nPlease Sign In to access your Order Page, Profile, and Customer Dashboard.');
-            if (typeof openCustomerSigninModal === 'function') openCustomerSigninModal();
-            return false;
-        }
+
 
         // Handle Navbar background
         const navbar = document.querySelector('.navbar');
