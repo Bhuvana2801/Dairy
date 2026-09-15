@@ -1328,20 +1328,12 @@
                                     </div>
                                 </div>
 
-                                <!-- 2. Subscription Type -->
-                                <div style="margin-bottom: 1.5rem;">
-                                    <div class="modal-input-group">
-                                        <label for="orderSubscriptionType" style="font-weight: 700; color: #333;">2. Subscription Type <span style="color:red;">*</span></label>
-                                        <select id="orderSubscriptionType" style="width:100%; padding:0.85rem; border:1.5px solid #2e7d32; border-radius:10px; font-size:1rem; font-weight:800; background: #e8f5e9; color: #1b5e20;" required>
-                                            <option value="Daily" selected>📅 Daily (One Order Per Calendar Day)</option>
-                                            <option value="One-Time">🛍️ One-Time Order</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                <!-- 2. Subscription Type (Hidden) -->
+                                <input type="hidden" id="orderSubscriptionType" value="Daily">
 
                                 <!-- 3. Products -->
                                 <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
-                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">🛒 3. Select Products</h3>
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">🛒 2. Select Products</h3>
                                     
                                     <div style="display: grid; gap: 1rem;">
                                         <!-- Buffalo Milk -->
@@ -1407,7 +1399,7 @@
 
                                 <!-- 4. Delivery Location -->
                                 <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
-                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">📍 4. Delivery Location</h3>
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">📍 3. Delivery Location</h3>
                                     
                                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
                                         <div class="modal-input-group" style="margin-bottom:0;">
@@ -1451,7 +1443,7 @@
 
                                 <!-- 5. Delivery Date & Time -->
                                 <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
-                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">🗓️ 5. Delivery Schedule</h3>
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">🗓️ 4. Delivery Schedule</h3>
                                     
                                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
                                         <div class="modal-input-group" style="margin-bottom:0;">
@@ -1471,7 +1463,7 @@
                                 
                                 <!-- 6. Payment -->
                                 <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
-                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">💳 6. Payment System</h3>
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">💳 5. Payment System</h3>
                                     <div class="modal-input-group" style="margin-bottom: 0;">
                                         <label for="orderPayment" style="font-weight: 700; color: #333;">Payment Method <span style="color:red;">*</span></label>
                                         <select id="orderPayment" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem; font-weight:700;" required>
