@@ -25,6 +25,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
 <body>
     <header class="navbar">
@@ -2023,9 +2025,22 @@
 
         ['portalMonthlyOrderDate', 'portalDailyOrderDate', 'monthlyOrderDate', 'dailyOrderDate', 'orderDate'].forEach(id => {
             const el = document.getElementById(id);
-            if (el && !el.value) {
-                el.value = defaultDateStr;
-                el.min = defaultDateStr;
+            if (el) {
+                if (typeof flatpickr !== 'undefined') {
+                    flatpickr(el, {
+                        altInput: true,
+                        altFormat: "d/m/Y",
+                        dateFormat: "Y-m-d",
+                        defaultDate: tomorrow,
+                        minDate: tomorrow,
+                        maxDate: tomorrow,
+                        disableMobile: "true"
+                    });
+                } else if (!el.value) {
+                    el.value = defaultDateStr;
+                    el.min = defaultDateStr;
+                    el.max = defaultDateStr;
+                }
             }
         });
     }
