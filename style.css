@@ -2524,3 +2524,33 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
         opacity: 0;
     }
 }
+
+/* WhatsApp Floating Action Button (Mobile Only) */
+.whatsapp-fab {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .whatsapp-fab {
+        display: flex;
+        position: fixed;
+        bottom: 85px; /* Above the mobile bottom nav */
+        right: 20px;
+        background-color: #25D366;
+        color: white;
+        width: 55px;
+        height: 55px;
+        border-radius: 50%;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+        z-index: 9999;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .whatsapp-fab:hover, .whatsapp-fab:active {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+    }
+}
