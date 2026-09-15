@@ -474,6 +474,7 @@
                                 <th style="padding: 12px; text-align: left;">Products</th>
                                 <th style="padding: 12px; text-align: left;">Time Slot</th>
                                 <th style="padding: 12px; text-align: left;">Total Amt</th>
+                                <th style="padding: 12px; text-align: center;">Approval & Settings</th>
                                 <th style="padding: 12px; text-align: center;">Action</th>
                             </tr>
                         </thead>
@@ -4946,6 +4947,27 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 if (order.createdAt && order.createdAt.toDate) {
                     orderDate = order.createdAt.toDate().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
                 }
+                
+                const isApproved = order.approvalStatus === 'APPROVED';
+                
+                let approvalContent = '';
+                if (isApproved) {
+                    approvalContent = `
+                        <div style="font-size: 0.85rem;">
+                            <span style="background: #2e7d32; color: white; padding: 3px 8px; border-radius: 12px; font-weight: 800; font-size: 0.75rem;">✅ APPROVED</span>
+                            <div style="margin-top: 4px; font-weight: 700; color: #1565c0;">ID: ${order.assignedId || 'N/A'}</div>
+                            <div style="margin-top: 2px; font-weight: 600; color: #555;">Valid For: ${order.validDays || 0} Days</div>
+                        </div>
+                    `;
+                } else {
+                    approvalContent = `
+                        <div style="display: flex; flex-direction: column; gap: 0.3rem; align-items: center; justify-content: center;">
+                            <input type="text" id="regId_${doc.id}" placeholder="Assign ID (e.g. AD01)" style="width: 130px; padding: 4px 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.8rem; text-align: center;">
+                            <input type="number" id="regDays_${doc.id}" placeholder="Valid Days (e.g. 30)" style="width: 130px; padding: 4px 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.8rem; text-align: center;">
+                            <button onclick="approveRegistration('${doc.id}')" style="background: #1b5e20; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-weight: 800; font-size: 0.75rem; cursor: pointer; box-shadow: 0 2px 4px rgba(27,94,32,0.3); width: 100%; max-width: 130px;">✅ Approve</button>
+                        </div>
+                    `;
+                }
 
                 tr.innerHTML = `
                     <td style="padding: 10px 12px; font-weight: 600;">${name}</td>
@@ -4955,7 +4977,8 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                     <td style="padding: 10px 12px; font-weight: 600; color: #333; font-size: 0.85rem;">${prods}</td>
                     <td style="padding: 10px 12px; color: #1976d2; font-weight: 600;">🕒 ${slot}</td>
                     <td style="padding: 10px 12px; font-weight: 800; color: var(--primary-color);">₹${order.total || 0}</td>
-                    <td style="padding: 10px 12px; text-align: center;">
+                    <td style="padding: 10px 12px; text-align: center; vertical-align: middle;">${approvalContent}</td>
+                    <td style="padding: 10px 12px; text-align: center; vertical-align: middle;">
                         <button onclick="deleteOrder('${doc.id}')" style="background: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 8px; font-weight: 800; font-size: 0.78rem; cursor: pointer; box-shadow: 0 2px 6px rgba(220,53,69,0.3); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">🗑️ Delete</button>
                     </td>
                 `;
@@ -4963,10 +4986,46 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             });
         }, err => {
             console.error("Registrations Listener Error:", err);
-            tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 2rem; color: #d32f2f;">
+            tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding: 2rem; color: #d32f2f;">
                 Error loading registrations.<br><small style="color:#888; font-weight:400;">(${err.code || 'unknown'})</small>
             </td></tr>`;
         });
+    }
+
+    async function approveRegistration(docId) {
+        const idInput = document.getElementById(`regId_${docId}`);
+        const daysInput = document.getElementById(`regDays_${docId}`);
+        
+        if (!idInput || !daysInput) return;
+        
+        const assignedId = idInput.value.trim();
+        const validDays = parseInt(daysInput.value, 10);
+        
+        if (!assignedId) {
+            alert("Please assign a Membership ID for this registration.");
+            return;
+        }
+        if (isNaN(validDays) || validDays <= 0) {
+            alert("Please enter a valid number of days (> 0).");
+            return;
+        }
+        
+        if (!confirm(`Are you sure you want to approve this registration?\n\nAssigned ID: ${assignedId}\nValid For: ${validDays} Days`)) {
+            return;
+        }
+        
+        try {
+            await db.collection('orders').doc(docId).update({
+                assignedId: assignedId,
+                validDays: validDays,
+                approvalStatus: 'APPROVED',
+                approvedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('Registration approved successfully!');
+        } catch (err) {
+            console.error('Error approving registration:', err);
+            alert('Failed to approve: ' + err.message);
+        }
     }
 
     async function updateDeliveryStatusFromSelect(docId) {
