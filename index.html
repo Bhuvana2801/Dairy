@@ -6081,6 +6081,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
     // Initialize Order Page Menu, Auth State & ID Banner
     window.addEventListener('DOMContentLoaded', () => {
         checkAuthStateOnLoad();
+        setDefaultOrderDates();
 
         const savedPhone = localStorage.getItem('ayyappa_signed_in_phone');
         if (savedPhone && typeof listenForAdminApproval === 'function') {
