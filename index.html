@@ -1312,47 +1312,50 @@
                             
                             <!-- Subscription Type Setup (Hidden input defaulting to Daily) -->
                             <form id="masterOrderForm" onsubmit="handleMasterOrderSubmit(event)">
-                                <!-- 1, 2, 3 & 4. Customer & Subscription -->
+                                <!-- 1. Contact Details -->
                                 <div style="background: #f8fafc; border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">👤 1. Contact Details</h3>
                                     <div class="modal-input-group" style="margin-bottom: 1rem;">
-                                        <label for="orderName" style="font-weight: 700; color: #333;">1. Name <span style="color:red;">*</span></label>
+                                        <label for="orderName" style="font-weight: 700; color: #333;">Name <span style="color:red;">*</span></label>
                                         <input type="text" id="orderName" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="Enter your full name" required>
                                     </div>
                                     
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
                                         <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label for="orderPhone" style="font-weight: 700; color: #333;">2. Phone Number <span style="color:red;">*</span></label>
+                                            <label for="orderPhone" style="font-weight: 700; color: #333;">Phone Number <span style="color:red;">*</span></label>
                                             <input type="tel" id="orderPhone" oninput="syncWhatsAppPhone()" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="10-digit number" pattern="[0-9]{10}" required>
                                         </div>
                                         <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label for="orderWhatsapp" style="font-weight: 700; color: #333;">3. WhatsApp Number <span style="color:red;">*</span></label>
+                                            <label for="orderWhatsapp" style="font-weight: 700; color: #333;">WhatsApp Number <span style="color:red;">*</span></label>
                                             <input type="tel" id="orderWhatsapp" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="Auto-fills if same" pattern="[0-9]{10}" required>
                                         </div>
                                     </div>
-                                    
+                                </div>
+
+                                <!-- 2. Subscription Details -->
+                                <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">📅 2. Subscription Details</h3>
                                     <div class="modal-input-group" style="margin-bottom: 0;">
-                                        <label for="orderSubscriptionType" style="font-weight: 700; color: #333;">4. Subscription <span style="color:red;">*</span></label>
                                         <select id="orderSubscriptionType" onchange="updateOrderTotalPricing()" style="width:100%; padding:0.85rem; border:1.5px solid #2e7d32; border-radius:10px; font-size:1rem; font-weight:800; background: #e8f5e9; color: #1b5e20;" required>
-                                            <option value="Daily" selected>📅 Daily (Default)</option>
-                                            <option value="15 Days">📅 15 Days Saver Plan</option>
-                                            <option value="Monthly">📅 Monthly Premium Plan</option>
+                                            <option value="" disabled selected>-- Select Subscription --</option>
+                                            <option value="15 Days">15 Days</option>
+                                            <option value="Monthly">Monthly</option>
                                         </select>
                                     </div>
                                 </div>
 
-                                <!-- 5 & 6. Products & Quantity -->
+                                <!-- 3. Products -->
                                 <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
                                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                                        <h3 style="color: var(--primary-color); font-size: 1.1rem; margin: 0; font-weight: 800;">🛒 5. Products</h3>
-                                        <h3 style="color: #475569; font-size: 1rem; margin: 0; font-weight: 800;">6. Quantity</h3>
+                                        <h3 style="color: var(--primary-color); font-size: 1.1rem; margin: 0; font-weight: 800;">🛒 3. Products</h3>
                                     </div>
                                     
                                     <div style="display: grid; gap: 1rem;">
                                         <!-- Buffalo Milk -->
                                         <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
                                             <div>
-                                                <div style="font-weight: 800; color: #333;">🥛 Buffalo Milk</div>
-                                                <div style="font-size: 0.85rem; color: #666;">₹100 / Litre</div>
+                                                <div style="font-weight: 800; color: #333;">🥛 Buffallo milk</div>
+                                                <div style="font-size: 0.85rem; color: #666;">rate &rarr; ₹100</div>
                                             </div>
                                             <select id="orderQtyMilk" onchange="updateOrderTotalPricing()" style="padding:0.6rem; border:1.5px solid #ccc; border-radius:8px; font-size:0.9rem; font-weight:700; width: 140px;">
                                                 <option value="0">None</option>
@@ -1393,125 +1396,90 @@
                                         </div>
                                         
                                         <!-- Buffalo Ghee -->
-                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
                                             <div>
-                                                <div style="font-weight: 800; color: #333;">🏺 Buffalo Ghee (Original)</div>
+                                                <div style="font-weight: 800; color: #333;">🏺 Buffallo Ghee (Original)</div>
                                                 <div style="font-size: 0.85rem; color: #666;">₹600 / Litre</div>
                                             </div>
                                             <select id="orderQtyGhee" onchange="updateOrderTotalPricing()" style="padding:0.6rem; border:1.5px solid #ccc; border-radius:8px; font-size:0.9rem; font-weight:700; width: 140px;">
                                                 <option value="0">None</option>
                                                 <option value="0.5">500 grms</option>
                                                 <option value="1">1 Litre</option>
+                                                <option value="2">2 Litres</option>
+                                                <option value="3">3 Litres</option>
+                                                <option value="4">4 Litres</option>
+                                                <option value="5">5 Litres</option>
+                                                <option value="6">6 Litres</option>
+                                                <option value="7">7 Litres</option>
+                                                <option value="8">8 Litres</option>
+                                                <option value="9">9 Litres</option>
+                                                <option value="10">10 Litres</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div id="productSelectError" style="color: #e53e3e; font-size: 0.85rem; font-weight: 700; display: none; margin-top: 0.8rem;">⚠️ Please select at least one product.</div>
+                                    
+                                    <!-- Dynamic Live Price Summary Box (Embedded within section 3) -->
+                                    <div id="masterPriceSummaryBox" style="background: #f8fafc; border-top: 1.5px dashed #cbd5e1; margin-top: 1rem; padding-top: 1rem;">
+                                        <div style="font-size: 0.9rem; line-height: 1.6; color: #334155;">
+                                            <div style="display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800; color: #1b5e20;">
+                                                <span>Amount:</span>
+                                                <span id="masterSummaryFinalAmt">₹0</span>
+                                            </div>
+                                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.4rem; text-align: right;" id="masterSummaryFrequency">Calculated automatically as per quantity</div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <!-- 7, 8, 9 Location -->
+                                <!-- 4. Delivery Address / Details -->
                                 <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
-                                    
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">📍 4. Delivery Address / Details</h3>
                                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
                                         <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label for="orderCity" style="font-weight: 700; color: #333;">7. City / Town</label>
+                                            <label for="orderCity" style="font-weight: 700; color: #333;">City / Town</label>
                                             <input type="text" id="orderCity" value="Narasaraopet" readonly style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem; background:#f0f0f0; color:#555;">
                                         </div>
                                         <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label for="orderArea" style="font-weight: 700; color: #333;">8. Area <span style="color:red;">*</span></label>
+                                            <label for="orderArea" style="font-weight: 700; color: #333;">Area <span style="color:red;">*</span></label>
                                             <select id="orderArea" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
                                                 <option value="" disabled selected>Select Area</option>
                                                 <option value="Arundalpet">Arundalpet</option>
                                                 <option value="Kota Centre">Kota Centre</option>
                                                 <option value="Prakash Nagar">Prakash Nagar</option>
                                                 <option value="NSC-Colony">NSC-Colony</option>
-                                                <option value="Ramireddy Peta">Ramireddy Peta</option>
-                                                <option value="Burem Peta">Burem Peta</option>
+                                                <option value="Clock Centre">Clock Centre</option>
+                                                <option value="Rami Reddy Peta">Rami Reddy Peta</option>
+                                                <option value="BoremPeta">BoremPeta</option>
                                                 <option value="NGO Colony">NGO Colony</option>
                                                 <option value="Vinukonda Road">Vinukonda Road</option>
                                                 <option value="Rikshaw Centre">Rikshaw Centre</option>
                                                 <option value="Stadium">Stadium</option>
-                                                <option value="Clock Centre">Clock Centre</option>
                                             </select>
                                         </div>
                                     </div>
-                                    
                                     <div class="modal-input-group" style="margin-bottom: 0;">
-                                        <label for="orderAddress" style="font-weight: 700; color: #333;">9. Delivery Address <span style="color:red;">*</span></label>
-                                        <textarea id="orderAddress" rows="2" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem; font-family:inherit; resize:vertical;" placeholder="Full House/Door No, Street Name, Landmark" required></textarea>
+                                        <label for="orderAddress" style="font-weight: 700; color: #333;">Door No / Street <span style="color:red;">*</span></label>
+                                        <textarea id="orderAddress" rows="2" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem; font-family:inherit; resize:vertical;" placeholder="Full House/Door No, Street Name" required></textarea>
                                     </div>
                                 </div>
 
-                                <!-- 10, 11, 12 Service & Schedule -->
+                                <!-- 5. Delivery Time -->
                                 <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
-                                    <div class="modal-input-group" style="margin-bottom: 1rem; border-bottom: 1px solid #eee; padding-bottom: 1rem;">
-                                        <label style="font-weight: 700; color: #333; margin-bottom: 0.5rem; display: block;">10. Rate Our Service</label>
-                                        <div style="display: flex; gap: 0.5rem; font-size: 2rem; cursor: pointer; color: #fbbf24;" id="starRatingContainer">
-                                            <span onclick="setRating(1)">★</span>
-                                            <span onclick="setRating(2)">★</span>
-                                            <span onclick="setRating(3)">★</span>
-                                            <span onclick="setRating(4)">★</span>
-                                            <span onclick="setRating(5)">★</span>
-                                        </div>
-                                        <input type="hidden" id="orderRating" value="5">
-                                    </div>
+                                    <h3 style="color: var(--primary-color); font-size: 1.1rem; margin-bottom: 1rem; font-weight: 800;">🕔 5. Delivery Time</h3>
                                     
-                                    <script>
-                                        function setRating(val) {
-                                            document.getElementById('orderRating').value = val;
-                                            const stars = document.getElementById('starRatingContainer').children;
-                                            for(let i=0; i<5; i++) {
-                                                stars[i].style.color = i < val ? '#fbbf24' : '#e2e8f0';
-                                            }
-                                        }
-                                    </script>
-
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                                    <div style="display: grid; grid-template-columns: 1fr; gap: 0.8rem;">
                                         <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label for="orderDate" style="font-weight: 700; color: #333;">11. Delivery Date <span style="color:red;">*</span></label>
-                                            <input type="date" id="orderDate" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
-                                        </div>
-                                        <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label for="orderSlot" style="font-weight: 700; color: #333;">12. Delivery Time <span style="color:red;">*</span></label>
                                             <select id="orderSlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" required>
-                                                <option value="morning - 7:00 AM-9:00 AM" selected>🌅 morning - 7:00 AM-9:00 AM</option>
-                                                <option value="Evening - 7:00 PM-9:00 PM">🌆 Evening - 7:00 PM-9:00 PM</option>
-                                                <option value="morning & Evening">🌅🌆 morning & Evening</option>
+                                                <option value="Morning (7:00 AM - 9:00 AM)" selected>🌅 Morning (7:00 AM - 9:00 AM)</option>
+                                                <option value="Evening (7:00 PM - 9:00 PM)">🌆 Evening (7:00 PM - 9:00 PM)</option>
+                                                <option value="Both (Morning & Evening)">🌅🌆 Both (Morning & Evening)</option>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <!-- 13. Payment -->
-                                <div style="border: 1.5px solid #e2e8f0; padding: 1.2rem; border-radius: 14px; margin-bottom: 1.5rem;">
-                                    <div class="modal-input-group" style="margin-bottom: 0;">
-                                        <label for="orderPayment" style="font-weight: 700; color: #333;">13. Payment Method <span style="color:red;">*</span></label>
-                                        <select id="orderPayment" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem; font-weight:700;" required>
-                                            <option value="Online (UPI)" selected>📱 Online (UPI)</option>
-                                            <option value="Cash On Delivery">💵 Cash On Delivery</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <!-- Dynamic Live Price Summary Box (Restored) -->
-                                <div id="masterPriceSummaryBox" style="background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 1.2rem; margin-bottom: 1.5rem;">
-                                    <div style="font-size: 0.85rem; font-weight: 800; color: #1b5e20; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.6rem; display: flex; justify-content: space-between;">
-                                        <span>💰 Automatic Calculation</span>
-                                    </div>
-                                    <div style="font-size: 0.9rem; line-height: 1.6; color: #334155;">
-                                        <div style="display: flex; justify-content: space-between;">
-                                            <span>Subtotal (Products):</span>
-                                            <span id="masterSummarySubtotal" style="font-weight: 700;">₹0</span>
-                                        </div>
-                                        <div style="border-top: 1.5px dashed #cbd5e1; margin-top: 0.5rem; padding-top: 0.5rem; display: flex; justify-content: space-between; font-size: 1.25rem; font-weight: 800; color: #1b5e20;">
-                                            <span>Amount:</span>
-                                            <span id="masterSummaryFinalAmt">₹0</span>
-                                        </div>
-                                        <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.4rem; text-align: right;" id="masterSummaryFrequency">Calculated automatically as per quantity</div>
-                                    </div>
-                                </div>
-
                                 <button type="submit" id="masterSubmitBtn" class="btn btn-primary" style="width:100%; padding:1rem; font-size:1.15rem; font-weight:800; border-radius:50px; cursor:pointer; background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color:white; border:none; box-shadow:0 6px 20px rgba(26,92,42,0.35); transition: 0.3s;">
-                                    💳 Place Confirm
+                                    Confirm
 
                                 </button>
                                 
@@ -5982,10 +5950,12 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         if (!area) { alert("Please select a delivery area."); return; }
         const address = document.getElementById('orderAddress').value;
         
-        const rating = document.getElementById('orderRating').value;
-        const startDate = document.getElementById('orderDate').value;
+        // Handle fields removed from the new 5-section UI
+        const rating = 5;
+        let tmrw = new Date(); tmrw.setDate(tmrw.getDate() + 1);
+        const startDate = tmrw.toISOString().split('T')[0];
         const slot = document.getElementById('orderSlot').value;
-        const payment = document.getElementById('orderPayment').value;
+        const payment = 'Cash On Delivery';
 
         const prices = { milk: 100, curd: 60, ghee: 600 };
         const subtotal = (qtys.milk * prices.milk) + (qtys.curd * prices.curd) + (qtys.ghee * prices.ghee);
@@ -6060,7 +6030,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             await db.collection('orders').add(orderDoc);
 
             // SUCCESS SHOW
-            alert('Your order has been confirmed.');
+            alert('Thank You For Registering');
             document.getElementById('masterOrderForm').style.display = 'none';
             const successBox = document.getElementById('orderSuccessBox');
             const successId = document.getElementById('orderSuccessId');
