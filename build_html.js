@@ -19,15 +19,9 @@ const newFormHtml = `
                                         <input type="text" id="orderName" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="Enter your full name" required>
                                     </div>
                                     
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                                        <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label for="orderPhone" style="font-weight: 700; color: #333;">Phone Number <span style="color:red;">*</span></label>
-                                            <input type="tel" id="orderPhone" oninput="syncWhatsAppPhone()" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="10-digit number" pattern="[0-9]{10}" required>
-                                        </div>
-                                        <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label for="orderWhatsapp" style="font-weight: 700; color: #333;">WhatsApp Number <span style="color:red;">*</span></label>
-                                            <input type="tel" id="orderWhatsapp" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="10-digit number" pattern="[0-9]{10}" required>
-                                        </div>
+                                    <div class="modal-input-group" style="margin-bottom: 0;">
+                                        <label for="orderPhone" style="font-weight: 700; color: #333;">Phone Number <span style="color:red;">*</span></label>
+                                        <input type="tel" id="orderPhone" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.95rem;" placeholder="10-digit number" pattern="[0-9]{10}" required>
                                     </div>
                                 </div>
 

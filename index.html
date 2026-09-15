@@ -39,7 +39,6 @@
                 <li><a href="#" onclick="showPage('home')" id="nav-home" class="nav-active" style="font-weight: 700;">Home</a></li>
                 <li><a href="#" onclick="showPage('products')" id="nav-products" style="font-weight: 700;">Products</a></li>
                 <li><a href="#" onclick="showPage('offers')" id="nav-offers" style="font-weight: 700;">Grab Offers</a></li>
-                <li><a href="#" onclick="showPage('order')" id="nav-order" style="font-weight: 700;">Registration Form</a></li>
                 <li><a href="#" onclick="showPage('contact')" id="nav-contact" style="font-weight: 700;">Contact</a></li>
                 <li><a href="#" onclick="showPage('install')" id="nav-install" style="font-weight: 700;">Install</a></li>
                 <li id="nav-dashboard-li" style="display: none;"><a href="#" onclick="openCustomerOrdersModal()" id="nav-dashboard" style="font-weight: 700; line-height: 1.1; display: inline-block; text-align: center;">My<br>Dashboard</a></li>
@@ -56,7 +55,6 @@
                     <span>Sign<br>Out</span>
                 </button>
             </div>
-            <a href="https://wa.me/919493207380?text=Hi,%20AYYAPPA%20DAIRY%20FARM%20i%20want%20order!!!" target="_blank" class="btn" style="background: #25D366; color: white; border: none; padding: 0.45rem 1.1rem; border-radius: 50px; font-weight: 800; font-size: 0.85rem; cursor: pointer; transition: 0.3s; text-decoration: none; display: flex; align-items: center; gap: 0.3rem;"><span style="font-size: 1.1rem;">💬</span> WhatsApp</a>
             <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
         </div>
         <div style="display: flex; gap: 0.5rem; align-items: center;">
@@ -1123,7 +1121,7 @@
                         <h3 style="color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.7); font-size: 1.3rem; margin-bottom: 0.4rem;">👋 Welcome Back, <span id="homeCustName">Customer</span>!</h3>
                         <p style="color: #f1f5f9; text-shadow: 0 2px 8px rgba(0,0,0,0.7); font-size: 0.95rem; margin-bottom: 1.2rem;">Membership ID: <strong id="homeCustMembershipId" style="color: #FFD700;">AYY-M-1001</strong> | Subscription: <strong id="homeCustSubType" style="color: #FFD700;">Daily Subscription</strong></p>
                         <div style="display: flex; gap: 0.8rem;">
-                            <button class="btn btn-primary" onclick="showPage('order')" style="flex: 1; padding: 0.8rem; font-size: 1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 12px rgba(26,92,42,0.3);">
+                            <button class="btn btn-primary" onclick="openCustomerOrdersModal()" style="flex: 1; padding: 0.8rem; font-size: 1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: var(--primary-color); color: white; border: none; box-shadow: 0 4px 12px rgba(26,92,42,0.3);">
                                 🛒 Place Order
                             </button>
                             <button class="btn btn-secondary" onclick="openCustomerOrdersModal()" style="flex: 1; padding: 0.8rem; font-size: 1rem; font-weight: 800; border-radius: 50px; cursor: pointer; background: #25D366; color: white; border: none; box-shadow: 0 4px 12px rgba(37,211,102,0.3);">
@@ -1174,9 +1172,8 @@
                             <h3>Buffalo Milk</h3>
                             <p>Thick, creamy buffalo milk — ideal for making ghee, curd, and sweets. Higher fat content for extra richness.</p>
                             <div class="product-badge">Available Daily</div>
-                            <button onclick="quickOrder('Buffalo Milk')" class="product-order-btn" style="width: 100%; cursor: pointer; margin-top: 1rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                Order on WhatsApp
+                            <button onclick="openCustomerOrdersModal()" class="product-order-btn" style="width: 100%; cursor: pointer; margin-top: 1rem; background: var(--primary-color); justify-content: center;">
+                                🛒 Order Now
                             </button>
                         </div>
 
@@ -1188,9 +1185,8 @@
                             <h3>Fresh Curd</h3>
                             <p>Thick, home-style curd made daily from our farm's fresh milk. Creamy, probiotic-rich, and delicious.</p>
                             <div class="product-badge">Made Fresh Daily</div>
-                            <button onclick="quickOrder('Fresh Curd')" class="product-order-btn" style="width: 100%; cursor: pointer; margin-top: 1rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                Order on WhatsApp
+                            <button onclick="openCustomerOrdersModal()" class="product-order-btn" style="width: 100%; cursor: pointer; margin-top: 1rem; background: var(--primary-color); justify-content: center;">
+                                🛒 Order Now
                             </button>
                         </div>
 
@@ -1202,9 +1198,8 @@
                             <h3>Pure Desi Ghee</h3>
                             <p>Traditional bilona-method ghee made from curd. A golden, aromatic treasure for your kitchen.</p>
                             <div class="product-badge">Premium Quality</div>
-                            <button onclick="quickOrder('Pure Desi Ghee')" class="product-order-btn" style="width: 100%; cursor: pointer; margin-top: 1rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                Order on WhatsApp
+                            <button onclick="openCustomerOrdersModal()" class="product-order-btn" style="width: 100%; cursor: pointer; margin-top: 1rem; background: var(--primary-color); justify-content: center;">
+                                🛒 Order Now
                             </button>
                         </div>
 
@@ -1276,264 +1271,7 @@
             </section>
         </div>
 
-        <!-- ORDER PAGE -->
-        <div id="page-order" class="page-view">
-            <section class="contact section-padding" style="background: var(--primary-color); position: relative; overflow: hidden; padding-top: 140px; min-height: 85vh;">
-                <!-- Background ambient lights -->
-                <div style="position: absolute; top: -10%; right: -5%; width: 300px; height: 300px; background: rgba(255,255,255,0.03); border-radius: 50%;"></div>
-                <div style="position: absolute; bottom: -10%; left: -5%; width: 200px; height: 200px; background: rgba(255,255,255,0.03); border-radius: 50%;"></div>
-                
-                <div class="container fade-in-up">
-                    <div style="text-align:center; margin-bottom:2.2rem;">
-                        <div style="display:inline-block; background: linear-gradient(135deg, #d4af37 0%, #ffdf73 50%, #d4af37 100%); color: #111; font-size: 0.75rem; font-weight: 800; padding: 4px 14px; border-radius: 50px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.8rem; box-shadow: 0 4px 15px rgba(212,175,55,0.4);">Premium Subscription</div>
-                        <h2 style="font-size:2.6rem; margin-bottom:0.6rem; font-weight: 900; background: linear-gradient(to right, #ffffff, #e2e8f0); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px;">✨ Register For Your Plans</h2>
-                        <p style="color: rgba(255, 255, 255, 0.85); font-size:1.05rem; max-width:580px; margin:0 auto; line-height: 1.6; font-weight: 500;">Secure your farm-fresh dairy subscription today and experience daily doorstep delivery of absolute purity.</p>
-                    </div>
 
-                    <div class="booking-layout" style="max-width: 650px; margin: 0 auto;">
-                        <div class="premium-reg-card">
-                            
-                            <form id="masterOrderForm" onsubmit="handleMasterOrderSubmit(event)">
-                                <!-- 1. Contact Details -->
-                                <div class="premium-section">
-                                    <h3 class="premium-section-title"><span>1</span> Contact Details</h3>
-                                    <div style="margin-bottom: 1.2rem;">
-                                        <label for="orderName" class="premium-label">Name <span>*</span></label>
-                                        <input type="text" id="orderName" class="premium-input" placeholder="Enter your full name" required>
-                                    </div>
-                                    
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                                        <div>
-                                            <label for="orderPhone" class="premium-label">Phone Number <span>*</span></label>
-                                            <input type="tel" id="orderPhone" class="premium-input" oninput="syncWhatsAppPhone()" placeholder="10-digit number" pattern="[0-9]{10}" required>
-                                        </div>
-                                        <div>
-                                            <label for="orderWhatsapp" class="premium-label">WhatsApp Number <span>*</span></label>
-                                            <input type="tel" id="orderWhatsapp" class="premium-input" placeholder="Auto-fills if same" pattern="[0-9]{10}" required>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- 2. Subscription Details -->
-                                <div class="premium-section">
-                                    <h3 class="premium-section-title"><span>2</span> Subscription Details</h3>
-                                    <select id="orderSubscriptionType" onchange="updateOrderTotalPricing()" class="premium-input" style="font-weight:800; background: #f0fdf4; border-color: #8ADA93; color: #166534;" required>
-                                        <option value="" disabled selected>-- Select Subscription --</option>
-                                        <option value="15 Days">15 Days</option>
-                                        <option value="Monthly">Monthly</option>
-                                    </select>
-                                </div>
-
-                                <!-- 3. Products -->
-                                <div class="premium-section">
-                                    <h3 class="premium-section-title"><span>3</span> Products</h3>
-                                    
-                                    <div style="display: grid; gap: 0;">
-                                        <!-- Buffalo Milk -->
-                                        <div class="premium-product-row">
-                                            <div>
-                                                <div class="premium-product-title">🥛 Buffalo Milk</div>
-                                                <div class="premium-product-price">₹100 / Litre</div>
-                                            </div>
-                                            <select id="orderQtyMilk" onchange="updateOrderTotalPricing()" class="premium-input" style="width: 150px; padding: 0.8rem 1rem;">
-                                                <option value="0">None</option>
-                                                <option value="0.5">500 ml</option>
-                                                <option value="1">1 Litre</option>
-                                                <option value="2">2 Litres</option>
-                                                <option value="3">3 Litres</option>
-                                                <option value="4">4 Litres</option>
-                                                <option value="5">5 Litres</option>
-                                                <option value="6">6 Litres</option>
-                                                <option value="7">7 Litres</option>
-                                                <option value="8">8 Litres</option>
-                                                <option value="9">9 Litres</option>
-                                                <option value="10">10 Litres</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <!-- Fresh Curd -->
-                                        <div class="premium-product-row">
-                                            <div>
-                                                <div class="premium-product-title">🥣 Fresh Curd</div>
-                                                <div class="premium-product-price">₹60 / kg</div>
-                                            </div>
-                                            <select id="orderQtyCurd" onchange="updateOrderTotalPricing()" class="premium-input" style="width: 150px; padding: 0.8rem 1rem;">
-                                                <option value="0">None</option>
-                                                <option value="0.5">500 grms</option>
-                                                <option value="1">1 kg</option>
-                                                <option value="2">2 kg</option>
-                                                <option value="3">3 kg</option>
-                                                <option value="4">4 kg</option>
-                                                <option value="5">5 kg</option>
-                                                <option value="6">6 kg</option>
-                                                <option value="7">7 kg</option>
-                                                <option value="8">8 kg</option>
-                                                <option value="9">9 kg</option>
-                                                <option value="10">10 kg</option>
-                                            </select>
-                                        </div>
-                                        
-                                        <!-- Buffalo Ghee -->
-                                        <div class="premium-product-row">
-                                            <div>
-                                                <div class="premium-product-title">🏺 Buffalo Ghee (Original)</div>
-                                                <div class="premium-product-price">₹600 / Litre</div>
-                                            </div>
-                                            <select id="orderQtyGhee" onchange="updateOrderTotalPricing()" class="premium-input" style="width: 150px; padding: 0.8rem 1rem;">
-                                                <option value="0">None</option>
-                                                <option value="0.5">500 grms</option>
-                                                <option value="1">1 Litre</option>
-                                                <option value="2">2 Litres</option>
-                                                <option value="3">3 Litres</option>
-                                                <option value="4">4 Litres</option>
-                                                <option value="5">5 Litres</option>
-                                                <option value="6">6 Litres</option>
-                                                <option value="7">7 Litres</option>
-                                                <option value="8">8 Litres</option>
-                                                <option value="9">9 Litres</option>
-                                                <option value="10">10 Litres</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div id="productSelectError" style="color: #e11d48; font-size: 0.95rem; font-weight: 700; display: none; margin-top: 0.8rem; background: #fff1f2; padding: 10px; border-radius: 8px; border: 1px solid #fecdd3;">⚠️ Please select at least one product.</div>
-                                </div>
-
-                                <!-- 4. Delivery Address / Details -->
-                                <div class="premium-section">
-                                    <h3 class="premium-section-title"><span>4</span> Delivery Address</h3>
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem;">
-                                        <div>
-                                            <label for="orderCity" class="premium-label">City / Town</label>
-                                            <input type="text" id="orderCity" class="premium-input" value="Narasaraopet" readonly style="background:#e4e4e7; color:#52525b; border-color:#d4d4d8;">
-                                        </div>
-                                        <div>
-                                            <label for="orderArea" class="premium-label">Area <span>*</span></label>
-                                            <select id="orderArea" class="premium-input" required>
-                                                <option value="" disabled selected>Select Area</option>
-                                                <option value="Arundalpet">Arundalpet</option>
-                                                <option value="Kota Centre">Kota Centre</option>
-                                                <option value="Prakash Nagar">Prakash Nagar</option>
-                                                <option value="NSC-Colony">NSC-Colony</option>
-                                                <option value="Clock Centre">Clock Centre</option>
-                                                <option value="Rami Reddy Peta">Rami Reddy Peta</option>
-                                                <option value="BoremPeta">BoremPeta</option>
-                                                <option value="NGO Colony">NGO Colony</option>
-                                                <option value="Vinukonda Road">Vinukonda Road</option>
-                                                <option value="Rikshaw Centre">Rikshaw Centre</option>
-                                                <option value="Stadium">Stadium</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label for="orderAddress" class="premium-label">Door No / Street <span>*</span></label>
-                                        <textarea id="orderAddress" class="premium-input" rows="3" style="resize:vertical;" placeholder="Full House/Door No, Street Name" required></textarea>
-                                    </div>
-                                </div>
-
-                                <!-- 5. Delivery Time -->
-                                <div class="premium-section">
-                                    <h3 class="premium-section-title"><span>5</span> Delivery Time</h3>
-                                    <select id="orderSlot" class="premium-input" required>
-                                        <option value="Morning (7:00 AM - 9:00 AM)" selected>🌅 Morning (7:00 AM - 9:00 AM)</option>
-                                        <option value="Evening (7:00 PM - 9:00 PM)">🌆 Evening (7:00 PM - 9:00 PM)</option>
-                                        <option value="Both (Morning & Evening)">🌅🌆 Both (Morning & Evening)</option>
-                                    </select>
-                                </div>
-                                
-                                <button type="submit" id="masterSubmitBtn" class="premium-submit-btn">
-                                    CONFIRM SUBSCRIPTION
-                                </button>
-                                
-                                <div id="orderErrorMsg" style="color: #e11d48; font-size: 1rem; font-weight: 800; text-align: center; margin-top: 1.2rem; display: none;">
-                                    Unable to place your order. Please try again.
-                                </div>
-                            </form>
-<!-- Order Confirmation Message Box -->
-                            <div id="orderSuccessBox" style="display: none; text-align: center; padding: 2rem 1rem;">
-                                <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">🎉</div>
-                                <h3 style="color: var(--primary-color); font-size: 1.6rem; margin-bottom: 0.6rem; font-weight: 800;">Thank You! Your Order has been placed successfully.</h3>
-                                <p style="font-size: 1.05rem; color: #333; margin-bottom: 0.8rem;">Your Order ID is: <strong id="orderSuccessId" style="color: var(--primary-color); font-size: 1.25rem;">AYY-D-20260901-0001</strong></p>
-                                <p style="color: #666; font-size: 0.95rem; margin-bottom: 1.5rem;">Our delivery agent will deliver your milk according to your selected slot.</p>
-                                <button onclick="resetAndBackToHome()" class="btn btn-primary" style="padding: 0.85rem 2.2rem; border-radius: 50px; font-weight: 700; cursor: pointer; background: var(--primary-color); color: white; border: none;">
-                                    Back to Home
-                                </button>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </section>
-        <!-- OFFERS PAGE -->
-        <div id="page-offers" class="page-view">
-            <section class="section-padding" style="background: var(--bg-light); min-height: 80vh; padding-top: 120px;">
-                <div class="container fade-in-up">
-                    <div style="text-align:center; margin-bottom:3rem;">
-                        <h2 style="font-size:2.5rem; color:var(--primary-color); margin-bottom:0.8rem;">🎉 LAUNCHING OFFERS 🎉</h2>
-                        <p style="color:var(--text-muted); font-size:1.1rem; max-width:600px; margin:0 auto;">Exclusive deals for our valued customers. Stay fresh, stay healthy!</p>
-                    </div>
-
-                    <div class="offers-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                        <!-- Offer 1 -->
-                        <div class="offer-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); position: relative; transition: 0.3s;">
-                            <div style="background: var(--primary-color); color: white; padding: 2rem; text-align: center;">
-                                <div style="font-size: 3rem; margin-bottom: 1rem;">📅</div>
-                                <h3 style="margin: 0; font-size: 1.5rem;">Monthly Subscription</h3>
-                            </div>
-                            <div style="padding: 2rem; text-align: center;">
-                                <div style="font-size: 1.05rem; font-weight: 700; color: #444; margin-bottom: 0.5rem; line-height: 1.4;">Subscribe for 1 month get 1 day free</div>
-                                <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary-color); margin-bottom: 1.5rem;">GET 1 DAY FREE</div>
-                                <a href="https://wa.me/919493207380?text=I%20want%20a%20coupon%20code%20for%20Monthly%20Subscription" target="_blank" class="btn" style="width: 100%; background: #25D366; color: white; border: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                    For coupon code WhatsApp us
-                                </a>
-                                <button onclick="showPage('order')" class="btn btn-primary" style="width: 100%;">Grab Now</button>
-                            </div>
-                            <div style="position: absolute; top: 15px; right: 15px; background: #FFD700; color: #333; padding: 5px 15px; border-radius: 50px; font-weight: 800; font-size: 0.75rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">BEST VALUE</div>
-                        </div>
-
-                        <!-- Offer 2 -->
-                        <div class="offer-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); transition: 0.3s;">
-                            <div style="background: #1A5C2A; color: white; padding: 2rem; text-align: center;">
-                                <div style="font-size: 3rem; margin-bottom: 1rem;">🍶</div>
-                                <h3 style="margin: 0; font-size: 1.5rem;">New Customer Bonus</h3>
-                            </div>
-                            <div style="padding: 2rem; text-align: center;">
-                                <div style="font-size: 1.05rem; font-weight: 700; color: #444; margin-bottom: 0.5rem; line-height: 1.4;">Get Monthly Subscription & 10% OFF of 1st week on the 1st month subscription</div>
-                                <div style="font-size: 2.2rem; font-weight: 800; color: #1A5C2A; margin-bottom: 1.5rem;">10% OFF</div>
-                                <a href="https://wa.me/919493207380?text=I%20want%20a%20coupon%20code%20for%20New%20Customer%20Bonus" target="_blank" class="btn" style="width: 100%; background: #25D366; color: white; border: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                    For coupon code WhatsApp us
-                                </a>
-                                <button onclick="showPage('order')" class="btn btn-secondary" style="width: 100%; border: 1px solid #1A5C2A; background: transparent; color: #1A5C2A;">Claim Offer</button>
-                            </div>
-                        </div>
-
-                        <!-- Offer 3 -->
-                        <div class="offer-card" style="background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.05); transition: 0.3s;">
-                            <div style="background: #f4f4f4; color: #333; padding: 2rem; text-align: center; border-bottom: 1px solid #eee;">
-                                <div style="font-size: 3rem; margin-bottom: 1rem;">🤝</div>
-                                <h3 style="margin: 0; font-size: 1.5rem;">Refer a Friend</h3>
-                            </div>
-                            <div style="padding: 2rem; text-align: center;">
-                                <div style="font-size: 1.05rem; font-weight: 700; color: #444; margin-bottom: 0.5rem; line-height: 1.4;">For Monthly Subscription</div>
-                                <div style="font-size: 2.2rem; font-weight: 800; color: #333; margin-bottom: 1.5rem;">Get 1 KG of Pure Ghee</div>
-                                <a href="https://wa.me/919493207380?text=I%20want%20a%20coupon%20code%20for%20Refer%20a%20Friend" target="_blank" class="btn" style="width: 100%; background: #25D366; color: white; border: none; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                    For coupon code WhatsApp us
-                                </a>
-                                <button onclick="shareApp()" class="btn btn-primary" style="width: 100%; background: #333; border: none; display: flex; align-items: center; justify-content: center; gap: 0.5rem;"><span>📤</span> Share App</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Grab Offers CTA -->
-                    <div style="margin-top: 4rem; text-align: center;">
-                        <p style="font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 900; color: var(--primary-color); letter-spacing: 2px; text-transform: uppercase; animation: pulse 1.5s infinite;">GRAB OFFERS IMMEDIATELY!!!</p>
-                        <p style="font-size: 1.2rem; font-weight: 700; color: #E53935; margin-top: 0.5rem; letter-spacing: 1px;">LIMITED TIME OFFER</p>
-                    </div>
-                </div>
-            </section>
-        </div>
 
         <!-- CONTACT DETAILS PAGE -->
         <div id="page-contact" class="page-view">
@@ -1579,27 +1317,16 @@
                             <div class="info-item" style="margin-bottom: 2rem;">
                                 <div class="info-icon" style="background: var(--bg-light); width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">📞</div>
                                 <div style="width: 100%;">
-                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Phone / WhatsApp</strong>
+                                    <strong style="color: var(--primary-color); font-size: 1.1rem;">Phone</strong>
                                     <div style="background: #f8fcf8; padding: 0.8rem; border-radius: 12px; border: 1px solid #e0eee0; margin-top: 0.5rem; text-align: center;">
                                         <div style="font-weight: 800; color: #166534; margin-bottom: 0.6rem; font-size: 1.1rem;">+91 9493207380</div>
                                         <div style="display: flex; gap: 0.5rem; justify-content: center;">
-                                            <a href="tel:+919493207380" style="flex: 1; background: var(--primary-color); color: white; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-decoration: none; font-weight: 700;">📞 Call</a>
-                                            <a href="https://wa.me/919493207380" target="_blank" style="flex: 1; background: #25D366; color: white; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-decoration: none; font-weight: 700;">💬 WhatsApp</a>
+                                            <a href="tel:+919493207380" style="flex: 1; background: var(--primary-color); color: white; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-decoration: none; font-weight: 700;">📞 Call Us</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <a href="https://wa.me/919493207380" target="_blank" rel="noopener noreferrer" class="info-whatsapp-btn" style="margin-top: 0; display: flex; justify-content: center;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-                                Chat on WhatsApp
-                            </a>
                         </div>
-                    </div>
-                </div>
-            </section>
-        </div>
-
                     </div>
                 </div>
             </section>
@@ -1659,7 +1386,7 @@
                 <div class="logo logo-img" style="margin-bottom: 1rem;">
                     <img src="images/logo.png" alt="Ayyappa Dairy Farm" style="height: 80px; width: auto;">
                 </div>
-                <p>Ayyappa Dairy Farm ΓÇô Delivering pure, fresh, and natural dairy goodness straight from our farm to your home.</p>
+                <p>Ayyappa Dairy Farm — Delivering pure, fresh, and natural dairy goodness straight from our farm to your home.</p>
                 <p style="margin-top: 0.5rem; font-weight: 600;">Since 2026</p>
                 <div style="margin-top: 1.5rem; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.2); border: 2px solid rgba(255,255,255,0.1);">
                     <img src="images/banner.png" alt="Ayyappa Dairy Farm Banner" style="width: 100%; height: auto; display: block;">
@@ -1671,7 +1398,6 @@
                     <li><a href="#home">Home</a></li>
                     <li><a href="#about">Our Story</a></li>
                     <li><a href="#" onclick="showPage('products')">Products</a></li>
-                    <li><a href="#" onclick="showPage('order')">Registration Form</a></li>
                     <li><a href="#" onclick="showPage('contact')">Contact details</a></li>
                 </ul>
             </div>
@@ -1688,10 +1414,9 @@
                         <strong style="color:var(--primary-color); font-size: 0.95rem;">Mail Us:</strong><br><a href="mailto:ayyappadairyfarm01@gmail.com" style="color:#A0B2A3; text-decoration:none; display: inline-block; margin-top: 2px;">ayyappadairyfarm01@gmail.com</a>
                     </li>
                     <li style="display: flex; flex-direction: column; gap: 0.6rem; background: rgba(255,255,255,0.05); padding: 1.2rem; border-radius: 12px; margin-top: 0.5rem;">
-                        <div style="font-weight: 700; font-size: 1rem; line-height: 1.4; color: white;"><strong style="color:var(--primary-color);">Phone / WhatsApp:</strong><br>+91 93926 03808</div>
+                        <div style="font-weight: 700; font-size: 1rem; line-height: 1.4; color: white;"><strong style="color:var(--primary-color);">Phone:</strong><br>+91 93926 03808</div>
                         <div style="display: flex; gap: 0.6rem; margin-top: 0.4rem;">
                             <a href="tel:+919493207380" style="flex: 1; text-align: center; background: white; color: var(--primary-color); padding: 8px; border-radius: 8px; font-size: 0.9rem; text-decoration: none; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">📞 Call</a>
-                            <a href="https://wa.me/919493207380" target="_blank" style="flex: 1; text-align: center; background: #25D366; color: white; padding: 8px; border-radius: 8px; font-size: 0.9rem; text-decoration: none; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">💬 WhatsApp</a>
                         </div>
                     </li>
                 </ul>
@@ -1716,9 +1441,13 @@
             <span class="m-icon">🎁</span>
             <span class="m-label">Grab Offers</span>
         </a>
-        <a href="#" onclick="showPage('order')" class="mobile-nav-item" id="m-nav-order">
-            <span class="m-icon">📝</span>
-            <span class="m-label">Register</span>
+        <a href="#" onclick="openCustomerOrdersModal()" class="mobile-nav-item" id="m-nav-profile" style="display: none;">
+            <span class="m-icon">👤</span>
+            <span class="m-label">My Profile</span>
+        </a>
+        <a href="#" onclick="showPage('contact')" class="mobile-nav-item" id="m-nav-contact">
+            <span class="m-icon">📞</span>
+            <span class="m-label">Contact</span>
         </a>
         <a href="#" onclick="openCustomerOrdersModal()" class="mobile-nav-item" id="m-nav-profile" style="display: none;">
             <span class="m-icon">👤</span>
@@ -6271,20 +6000,8 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 <button onclick="printDailyInvoice()" style="flex: 1; padding: 0.75rem; background: #1565c0; color: white; border: none; border-radius: 50px; font-weight: 800; font-size: 0.88rem; cursor: pointer;">
                     🖨️ Print / Save PDF
                 </button>
-                <button onclick="shareDailyInvoiceWhatsApp()" style="flex: 1; padding: 0.75rem; background: #25D366; color: white; border: none; border-radius: 50px; font-weight: 800; font-size: 0.88rem; cursor: pointer;">
-                    💬 WhatsApp Receipt
-                </button>
             </div>
         </div>
     </div>
-
-
-
-
-    <!-- Mobile Floating WhatsApp Button -->
-    <a href="https://wa.me/919493207380?text=Hi,%20AYYAPPA%20DAIRY%20FARM%20i%20want%20order!!!" target="_blank" class="whatsapp-fab" title="Order on WhatsApp">
-        <span class="whatsapp-fab-label">For Order</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.268 2 2 8.268 2 16c0 2.493.678 4.831 1.857 6.84L2 30l7.35-1.825A13.94 13.94 0 0 0 16 30c7.732 0 14-6.268 14-14S23.732 2 16 2zm0 25.5a11.47 11.47 0 0 1-5.88-1.617l-.42-.25-4.36 1.082 1.102-4.25-.275-.437A11.47 11.47 0 0 1 4.5 16C4.5 9.648 9.648 4.5 16 4.5S27.5 9.648 27.5 16 22.352 27.5 16 27.5zm6.29-8.57c-.344-.172-2.035-1.005-2.35-1.12-.316-.113-.547-.172-.778.172-.23.344-.893 1.12-1.094 1.35-.2.23-.402.258-.746.086-.344-.172-1.453-.536-2.767-1.707-1.023-.912-1.713-2.037-1.914-2.38-.2-.344-.022-.53.15-.702.155-.154.344-.402.516-.603.172-.2.23-.344.344-.574.115-.23.058-.43-.028-.603-.086-.172-.778-1.875-1.066-2.565-.28-.672-.566-.58-.778-.59-.2-.01-.43-.012-.66-.012s-.603.086-.92.43c-.316.344-1.207 1.18-1.207 2.877s1.236 3.337 1.408 3.567c.172.23 2.432 3.713 5.892 5.208.823.355 1.465.567 1.965.726.826.263 1.578.226 2.172.137.662-.099 2.035-.832 2.322-1.636.287-.804.287-1.493.2-1.637-.086-.143-.316-.23-.66-.402z"/></svg>
-    </a>
 </body>
 </html>
