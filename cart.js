@@ -190,14 +190,31 @@ function renderCart() {
     cartFinalAmtEl.textContent = '₹' + subtotal.toLocaleString('en-IN');
 }
 
+let isPaymentConfirmed = false;
+
+function confirmUpiPayment() {
+    isPaymentConfirmed = true;
+    const btn = document.getElementById('cartSubmitBtn');
+    if (btn) btn.click();
+}
+
+function cancelUpiPayment() {
+    isPaymentConfirmed = false;
+    document.getElementById('cart-checkout-view-inner').style.display = 'block';
+    document.getElementById('cart-upi-confirm-view').style.display = 'none';
+}
+
 function togglePaymentQR() {
     const methodEl = document.getElementById('cartPaymentMethod');
     const qrBox = document.getElementById('paymentQRCodeBox');
-    if (qrBox && methodEl) {
+    const btn = document.getElementById('cartSubmitBtn');
+    if (qrBox && methodEl && btn) {
         if (methodEl.value.includes('Online')) {
             qrBox.style.display = 'block';
+            btn.innerHTML = '📲 Pay via UPI App';
         } else {
             qrBox.style.display = 'none';
+            btn.innerHTML = '🛒 Confirm Order';
         }
     }
 }
@@ -205,6 +222,13 @@ function togglePaymentQR() {
 function showCartProducts() {
     document.getElementById('cart-main-view').style.display = 'block';
     document.getElementById('cart-checkout-view').style.display = 'none';
+    isPaymentConfirmed = false;
+    const inner = document.getElementById('cart-checkout-view-inner');
+    const upiView = document.getElementById('cart-upi-confirm-view');
+    if (inner && upiView) {
+        inner.style.display = 'block';
+        upiView.style.display = 'none';
+    }
 }
 
 function proceedToCheckout() {
@@ -216,6 +240,13 @@ function proceedToCheckout() {
     // Switch view
     document.getElementById('cart-main-view').style.display = 'none';
     document.getElementById('cart-checkout-view').style.display = 'block';
+    isPaymentConfirmed = false;
+    const inner = document.getElementById('cart-checkout-view-inner');
+    const upiView = document.getElementById('cart-upi-confirm-view');
+    if (inner && upiView) {
+        inner.style.display = 'block';
+        upiView.style.display = 'none';
+    }
     
     // Set default delivery date to tomorrow natively without any popup/calendar
     const dateInputStr = document.getElementById('cartDeliveryDate');
@@ -259,12 +290,6 @@ async function handleDynamicCartSubmit(e) {
     const deliveryDateStr = typeof getFormattedDeliveryDate === 'function' ? getFormattedDeliveryDate('cartDeliveryDate') : document.getElementById('cartDeliveryDate').value;
     const paymentType = document.getElementById('cartPaymentMethod').value;
     
-    const btn = document.getElementById('cartSubmitBtn');
-    if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '⏳ Processing Order...';
-    }
-
     let subtotal = 0;
     let productList = [];
     let itemsSnapshot = [];
@@ -281,6 +306,30 @@ async function handleDynamicCartSubmit(e) {
             total: itemTotal
         });
     });
+
+    // Intercept for UPI Deep Linking
+    if (paymentType.includes('Online') && !isPaymentConfirmed) {
+        const upiId = '9392603808@axl';
+        const upiName = 'Ayyappa Dairy Farm';
+        const amount = subtotal.toFixed(2);
+        
+        // 1. Launch Intent
+        const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(upiName)}&am=${amount}&cu=INR`;
+        window.location.href = upiUrl;
+        
+        // 2. Show Confirmation Dialog
+        document.getElementById('cart-checkout-view-inner').style.display = 'none';
+        document.getElementById('cart-upi-confirm-view').style.display = 'block';
+        return;
+    }
+
+    const btn = document.getElementById('cartSubmitBtn');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Processing Order...';
+    }
+
+
 
     const amountStr = subtotal.toString();
     const qtyStr = productList.join(', ');
