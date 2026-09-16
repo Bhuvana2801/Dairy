@@ -1257,7 +1257,224 @@
 
                     <!-- Regular Offers Section -->
                     <div id="tab-regular-offers" style="display: block; text-align: center; margin-top: 2rem; animation: fadeIn 0.4s;">
-                        <img src="images/offers.png" alt="Ayyappa Dairy Farm Special Offers" style="width: 100%; max-width: 1100px; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); margin: 0 auto; display: block; border: 2px solid var(--primary-color);">
+                        <style>
+.native-offers-banner {
+    width: 100%; max-width: 1250px; margin: 0 auto;
+    background: linear-gradient(to bottom, #e3fdf5, #cbf3e4, #a0d8ad 100%);
+    border-radius: 20px; border: 4px solid #1b5e20; overflow: hidden;
+    position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333;
+}
+.nob-header {
+    display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2rem;
+    flex-wrap: wrap; gap: 15px; border-bottom: 2px dashed rgba(27,94,32,0.2);
+}
+.nob-badge {
+    background: #0056b3; color: #fff; padding: 0.5rem 1rem; border-radius: 8px;
+    font-weight: 800; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: 2px solid #fff; font-size: 0.95rem; min-width: 250px;
+}
+.nob-title-box { text-align: center; flex: 1; min-width: 300px; }
+.nob-title {
+    font-size: 2.8rem; font-weight: 900; color: #1b5e20; margin: 0;
+    line-height: 1.1; text-transform: uppercase; letter-spacing: -1px; text-shadow: 1px 1px 0 #fff;
+}
+.nob-subtitle { font-size: 1.1rem; font-weight: 800; color: #2e7d32; letter-spacing: 2px; text-transform: uppercase; margin-top:5px; }
+.nob-tagline { font-size: 1.8rem; font-weight: 900; color: #1b5e20; font-style: italic; min-width: 200px; text-align:right;}
+
+.nob-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 1.5rem; }
+
+@media(max-width: 1024px) {
+    .nob-grid { grid-template-columns: 1fr 1fr; }
+    .nob-tagline { text-align: center; width: 100%; }
+}
+@media(max-width: 768px) {
+    .nob-grid { grid-template-columns: 1fr; }
+    .nob-header { flex-direction: column; text-align: center; }
+    .nob-tagline { text-align: center; }
+}
+
+.nob-card {
+    background: #fff; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); overflow: hidden;
+    transition: transform 0.2s; border: 1px solid #eee; display: flex; flex-direction: column;
+}
+.nob-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.15); }
+.nob-card-head { text-align: center; padding: 1rem; color: #fff; font-weight: 900; font-size: 1.35rem; text-transform: uppercase; }
+.nob-theme-1 .nob-card-head { background: linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%); }
+.nob-theme-2 .nob-card-head { background: linear-gradient(135deg, #ffd54f 0%, #f57f17 100%); color: #b71c1c; text-shadow: 0 1px 0 rgba(255,255,255,0.4); }
+.nob-theme-3 .nob-card-head { background: linear-gradient(135deg, #1976d2 0%, #0d47a1 100%); }
+
+.nob-card-body { padding: 1.2rem; font-size: 1rem; font-weight: 700; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.nob-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+.nob-table td { padding: 8px 0; border-bottom: 1px dashed #e0e0e0; }
+.nob-table td:last-child { text-align: right; }
+.nob-total-pay { font-size: 1.3rem; color: #b71c1c; font-weight: 900; }
+.nob-benefit { background: #fdf5e6; border: 1px solid #ffd700; border-radius: 8px; padding: 1rem; font-size: 0.9rem; }
+
+.nob-timeline-box { background: #fff; border-radius: 12px; border: 3px solid #1b5e20; display: flex; flex-direction: column; align-items: center; padding: 1.5rem; text-align: center; grid-column: 1 / -1; margin-top: 10px; }
+.nob-timeline-head { background: #1b5e20; color: #fff; padding: 0.6rem 2.5rem; border-radius: 30px; font-weight: 900; font-size: 1.3rem; margin-top: -40px; margin-bottom: 20px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.nob-steps { display: flex; justify-content: center; width: 100%; gap: 15px; flex-wrap: wrap; text-align: center; margin-bottom: 1rem; }
+.nob-step { display: flex; flex-direction: column; align-items: center; width: 75px; }
+.nob-step-circle { width: 60px; height: 60px; background: #f1f8e9; border: 3px solid #2e7d32; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: #146c36; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin-bottom: 8px; }
+.nob-step-label { font-size: 0.75rem; font-weight: 800; color: #1b5e20; line-height: 1.2; text-transform: uppercase; }
+
+.nob-footer { background: #1b5e20; color: #fff; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-top: 4px solid #fff; }
+.nob-badges-row { display: flex; gap: 15px; align-items: center; justify-content:center; flex-wrap: wrap; margin-top: 15px;}
+.nob-badge-pill { background: #2e7d32; border:1px solid #81c784; color:#fff; padding:5px 12px; border-radius:30px; font-size:0.8rem; font-weight:700; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+</style>
+
+<div class="native-offers-banner fade-in-up">
+    <!-- Header Row -->
+    <div class="nob-header">
+        <div class="nob-badge">
+            <div style="font-size:1.15rem; letter-spacing: 1px;">MILK SUBSCRIPTION PLANS</div>
+            <div style="background:#ffeb3b; color:#1b5e20; padding:4px; font-size:0.9rem; margin:8px 0; border-radius: 4px;">FREE HOME DELIVERY For All Plans</div>
+            <div style="background:#fff; color:#0056b3; border-radius:15px; padding:4px 10px; font-weight: 900;">💧 Milk Price: ₹100/Litre</div>
+        </div>
+        <div class="nob-title-box">
+            <h1 class="nob-title">Ayyappa</h1>
+            <h2 class="nob-title" style="font-size:2.2rem; color:#2e7d32;">Dairy Farm</h2>
+            <div class="nob-subtitle">— Take Pure Milk Stay Healthy —</div>
+        </div>
+        <div class="nob-tagline">
+            Pure Milk <span style="font-size: 2.2rem;">🥛</span><br>Healthy Life <span style="color:#2e7d32">🤍</span>
+        </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="nob-grid">
+        <!-- PLAN 1 -->
+        <div class="nob-card nob-theme-1">
+            <div class="nob-card-head">
+                <div style="font-size:0.95rem; opacity:0.9; letter-spacing: 2px;">PLAN 1</div>
+                DAILY PLAN
+                <div style="font-size:0.8rem; background:rgba(0,0,0,0.25); margin:8px -1rem -1rem -1rem; padding:8px;">Regular Milk – No Discount</div>
+            </div>
+            <div class="nob-card-body">
+                <table class="nob-table">
+                    <tr><td>🥛 1 Litre</td><td>₹100</td></tr>
+                    <tr><td>📅 Daily Payment</td><td>₹100</td></tr>
+                    <tr><td>🗓️ 30 Days<br><small style="color:#777; font-size:0.8rem;">₹100 × 30 = ₹3,000</small></td><td></td></tr>
+                    <tr><td style="color:#d32f2f;">❌ Discount<br>❌ No Discount</td><td></td></tr>
+                    <tr><td>🚚 Home Delivery</td><td style="color:#2e7d32;">✅ Free</td></tr>
+                </table>
+                <div class="nob-benefit" style="background:#f1f8e9; border-color:#81c784;">
+                    <strong style="color:#2e7d32; display:block; margin-bottom:5px; font-size:1rem;">👤 Best For</strong>
+                    Customers who want daily milk delivery without a subscription commitment.
+                </div>
+                <div style="background:#1b5e20; color:#fff; text-align:center; padding:12px; font-weight:900; font-size:1.3rem; border-radius:50px; margin-top:15px; box-shadow: 0 4px 10px rgba(27,94,32,0.3);">Total: ₹100/day</div>
+            </div>
+        </div>
+
+        <!-- PLAN 2 -->
+        <div class="nob-card nob-theme-2">
+            <div class="nob-card-head">
+                <div style="font-size:0.95rem; opacity:0.9; letter-spacing: 2px;">PLAN 2</div>
+                15-DAY DISCOUNT PLAN
+                <div style="font-size:0.8rem; font-weight:900; color:#4e342e; background:rgba(255,255,255,0.4); margin:8px -1rem -1rem -1rem; padding:8px;">15 Days Subscription</div>
+            </div>
+            <div class="nob-card-body">
+                <table class="nob-table">
+                    <tr><td>🥛 1 Litre/Day</td><td>₹100</td></tr>
+                    <tr><td>🗓️ 15 Days</td><td><small style="color:#777;">₹100 × 15 =</small> ₹1,500</td></tr>
+                    <tr><td>% Discount</td><td style="color:#fff; background:#d32f2f; border-radius:50px; padding:2px 10px; text-align:center;">₹100 OFF</td></tr>
+                    <tr><td style="font-size:1.2rem; color:#b71c1c;">💰 Total Pay</td><td class="nob-total-pay">₹1,400</td></tr>
+                    <tr><td>🚚 Home Delivery</td><td style="color:#2e7d32;">✅ Free</td></tr>
+                </table>
+                <div class="nob-benefit">
+                    <div style="color:#b71c1c; font-weight:900; margin-bottom:8px; font-size:1rem;">🎁 Customer Benefit</div>
+                    <table style="width:100%; font-size:0.85rem; margin-bottom:5px;">
+                        <tr><td>Regular Amount</td><td>: ₹1,500</td></tr>
+                        <tr><td>Discount</td><td>: ₹100</td></tr>
+                        <tr><td style="padding-top:4px;"><strong>Final Amount</strong></td><td style="padding-top:4px; color:#b71c1c;"><strong>: ₹1,400</strong></td></tr>
+                    </table>
+                </div>
+                <div style="background:linear-gradient(90deg, #ffb300, #ffeb3b); text-align:center; padding:10px; font-weight:900; font-size:1.6rem; color:#b71c1c; border-radius:12px; margin-top:15px; box-shadow:0 6px 12px rgba(255,179,0,0.3);">
+                    <div style="font-size:0.85rem; color:#5d4037; text-transform:uppercase; margin-bottom:2px;">Customer Saves</div>₹100
+                </div>
+            </div>
+        </div>
+
+        <!-- PLAN 3 -->
+        <div class="nob-card nob-theme-3" style="border: 2px solid #1976d2;">
+            <div class="nob-card-head">
+                <div style="font-size:0.95rem; opacity:0.9; letter-spacing: 2px;">PLAN 3</div>
+                30-DAY PREMIUM PLAN
+                <div style="font-size:0.8rem; background:rgba(0,0,0,0.25); margin:8px -1rem -1rem -1rem; padding:8px;">Minimum 2 Litres/Day</div>
+            </div>
+            <div class="nob-card-body">
+                <table class="nob-table">
+                    <tr><td>🥛 2 Litres/Day</td><td>₹200</td></tr>
+                    <tr><td>🗓️ 30 Days</td><td><small style="color:#777;">₹200 × 30 =</small> ₹6,000</td></tr>
+                    <tr><td>% Discount</td><td style="color:#fff; background:#d32f2f; border-radius:50px; padding:2px 10px; text-align:center;">₹150 OFF</td></tr>
+                    <tr><td style="font-size:1.2rem; color:#0d47a1;">💰 Total Pay</td><td class="nob-total-pay">₹5,850</td></tr>
+                    <tr><td>🚚 Home Delivery</td><td style="color:#2e7d32;">✅ Free</td></tr>
+                </table>
+                <div class="nob-benefit" style="background:#e3f2fd; border-color:#90caf9;">
+                    <div style="text-align:center; color:#0d47a1; font-weight:900; font-size:1.05rem; border-bottom:1px solid #bbdefb; padding-bottom:6px; margin-bottom:8px;">
+                        Subscribe for 30 Days<br>Get 1 Day FREE
+                    </div>
+                    <p style="font-size:0.8rem; color:#555; margin:0; line-height:1.3; text-align:center;">After completing the 30-day subscription, receive 1 additional day of milk FREE (2 litres).</p>
+                </div>
+                <div style="background:#0d47a1; color:#fff; display:flex; justify-content:space-between; align-items:center; padding:12px; border-radius:12px; margin-top:15px; box-shadow:0 6px 15px rgba(13,71,161,0.3);">
+                    <table style="font-size:0.75rem; color:#e3f2fd; margin:0; line-height: 1.4;">
+                        <tr><td>Regular Amt</td><td>: ₹6,000</td></tr>
+                        <tr><td>Discount</td><td>: ₹150</td></tr>
+                        <tr><td><strong style="color:#fff;">Final Amt</strong></td><td><strong style="color:#fff; font-size:0.85rem;">: ₹5,850</strong></td></tr>
+                    </table>
+                    <div style="background:#ffca28; color:#b71c1c; padding:6px 12px; border-radius:8px; text-align:center; font-weight:900; font-size:0.85rem; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                        1 Extra Day<br><span style="font-size:1.2rem; display:block; margin-top:2px;">FREE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div class="nob-timeline-box">
+            <div class="nob-timeline-head">HYGIENIC MILK PROCESS</div>
+            <div class="nob-steps">
+                <div class="nob-step"><div class="nob-step-circle">🐃</div><div class="nob-step-label">Healthy Buffaloes</div></div>
+                <div class="nob-step" style="align-self:center; width:20px; color:#2e7d32; font-weight:bold;">➜</div>
+                <div class="nob-step"><div class="nob-step-circle">🛖</div><div class="nob-step-label">Hygienic Shed</div></div>
+                <div class="nob-step" style="align-self:center; width:20px; color:#2e7d32; font-weight:bold;">➜</div>
+                <div class="nob-step"><div class="nob-step-circle">👩‍🌾</div><div class="nob-step-label">Hygienic Milking</div></div>
+                <div class="nob-step" style="align-self:center; width:20px; color:#2e7d32; font-weight:bold;">➜</div>
+                <div class="nob-step"><div class="nob-step-circle">🛢️</div><div class="nob-step-label">Clean Collection</div></div>
+                <div class="nob-step" style="align-self:center; width:20px; color:#2e7d32; font-weight:bold;">➜</div>
+                <div class="nob-step"><div class="nob-step-circle">🔬</div><div class="nob-step-label">Quality Checked</div></div>
+                <div class="nob-step" style="align-self:center; width:20px; color:#2e7d32; font-weight:bold;">➜</div>
+                <div class="nob-step"><div class="nob-step-circle">🌿</div><div class="nob-step-label">Fresh & Natural</div></div>
+                <div class="nob-step" style="align-self:center; width:20px; color:#2e7d32; font-weight:bold;">➜</div>
+                <div class="nob-step"><div class="nob-step-circle">🚚</div><div class="nob-step-label">Direct Delivery</div></div>
+            </div>
+            
+            <div style="background:linear-gradient(90deg, #c62828, #d32f2f, #c62828); color:#fff; width:100%; max-width:800px; border-radius:50px; display:flex; align-items:center; justify-content:center; padding:12px 25px; font-size:1.4rem; font-weight:900; margin-top:15px; box-shadow:0 6px 15px rgba(198,40,40,0.3); text-transform:uppercase; letter-spacing: 1px;">
+                <span style="font-size:1.8rem; margin-right:12px;">🚫</span> No Chemicals or Water Added
+            </div>
+            <div style="font-size:2rem; font-weight:900; color:#1b5e20; margin-top:10px; font-style:italic; border-bottom: 2px dashed #a0d8ad; padding-bottom: 10px;">
+                Fresh Milk Each Delivery
+            </div>
+
+            <div class="nob-badges-row">
+                <div class="nob-badge-pill">✔️ Healthy Buffaloes & Cows</div>
+                <div class="nob-badge-pill">✔️ 100% Natural Milk</div>
+                <div class="nob-badge-pill">✔️ No Hormones</div>
+                <div class="nob-badge-pill">✔️ Fresh & Pure From Our Farm</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Row -->
+    <div class="nob-footer">
+        <div style="font-size:1.2rem; font-weight:900; display:flex; align-items:center; gap: 8px;">
+            <span>📍</span> AYYAPPA DAIRY FARM
+        </div>
+        <div style="font-size:0.95rem; font-weight:600; color: #e8f5e9;">
+            Velamavaripalem, Palnadu Dist, Andhra Pradesh
+        </div>
+    </div>
+</div>
+
                     </div>
 
                     <!-- Festival Offers Section -->
