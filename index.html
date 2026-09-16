@@ -2540,7 +2540,10 @@
                 altFormat: "d/m/Y",
                 dateFormat: "Y-m-d",
                 defaultDate: new Date(),
-                disableMobile: "true"
+                disableMobile: "true",
+                onChange: function(selectedDates, dateStr, instance) {
+                    calculateInvoiceDates();
+                }
             });
         }
     }
@@ -6824,24 +6827,44 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         }
 
         function calculateInvoiceDates() {
-            const type = document.getElementById('invSubType').value;
-            const startVal = document.getElementById('invStartDate').value;
-            if (!type || !startVal) return;
-            
-            const startDate = new Date(startVal);
-            if (isNaN(startDate.getTime())) return;
-            
-            let endDate = new Date(startDate);
-            if (type === '15 Days') {
-                endDate.setDate(endDate.getDate() + 15);
-            } else if (type === 'Monthly') {
-                endDate.setMonth(endDate.getMonth() + 1);
+            try {
+                const type = document.getElementById('invSubType').value;
+                const startEl = document.getElementById('invStartDate');
+                const endEl = document.getElementById('invEndDate');
+                
+                // Get the real value from flatpickr or fallback to input value
+                let startVal = startEl._flatpickr ? startEl._flatpickr.formatDate(startEl._flatpickr.selectedDates[0], "Y-m-d") : startEl.value;
+                if (!startVal && startEl._flatpickr && startEl._flatpickr.selectedDates.length > 0) {
+                    startVal = startEl._flatpickr.formatDate(startEl._flatpickr.selectedDates[0], "Y-m-d");
+                }
+                
+                if (!type || !startVal) {
+                    endEl.value = '';
+                    return;
+                }
+                
+                const startDate = new Date(startVal);
+                if (isNaN(startDate.getTime())) {
+                    endEl.value = '';
+                    return;
+                }
+                
+                let endDate = new Date(startDate);
+                if (type === '15 Days') {
+                    endDate.setDate(endDate.getDate() + 15);
+                } else if (type === 'Monthly') {
+                    endDate.setMonth(endDate.getMonth() + 1);
+                }
+                
+                const d = String(endDate.getDate()).padStart(2, '0');
+                const m = String(endDate.getMonth() + 1).padStart(2, '0');
+                const y = endDate.getFullYear();
+                
+                // Set visible format as DD/MM/YYYY to match the start date visual format
+                endEl.value = `${d}/${m}/${y}`;
+            } catch (err) {
+                console.error("Error calculating dates:", err);
             }
-            
-            const d = String(endDate.getDate()).padStart(2, '0');
-            const m = String(endDate.getMonth() + 1).padStart(2, '0');
-            const y = endDate.getFullYear();
-            document.getElementById('invEndDate').value = `${y}-${m}-${d}`;
         }
 
         function calculateInvoiceAmounts() {
