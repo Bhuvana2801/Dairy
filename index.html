@@ -199,16 +199,16 @@
 
         /* A4 Print Layout Rules */
         .printable-invoice {
-            width: 794px; /* A4 width at 96 DPI */
-            min-height: 1123px; /* A4 height */
+            max-width: 794px; /* A4 width */
+            margin: 0 auto;
             background: white;
             color: #333;
             padding: 40px;
+            border-radius: 10px;
             box-sizing: border-box;
-            position: absolute;
-            left: -9999px; /* Hide offscreen */
+            position: relative;
             font-family: 'Outfit', sans-serif;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
         }
         .print-header { text-align: center; border-bottom: 2px solid #2e7d32; padding-bottom: 15px; margin-bottom: 20px; }
         .print-brand { font-family: 'Yeseva One', serif; font-size: 32px; color: #1b5e20; margin: 0; }
