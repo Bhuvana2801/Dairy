@@ -28,6 +28,205 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <style id="invoiceStyle">
+        /* Invoice Module Premium Styles */
+        .invoice-card {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: #fff;
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            font-family: 'Outfit', sans-serif;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .invoice-header-box {
+            border-bottom: 2px dashed rgba(255, 255, 255, 0.2);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .invoice-brand {
+            font-family: 'Yeseva One', serif;
+            font-size: 2.5rem;
+            color: #ffeb3b;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .invoice-tagline {
+            font-size: 0.95rem;
+            color: #b0bec5;
+            margin: 5px 0 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .invoice-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+        .invoice-meta-badge {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+        }
+        .invoice-section-title {
+            color: #ffb300;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #ffb300;
+            padding-left: 10px;
+        }
+        .invoice-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 1.5rem;
+        }
+        .invoice-input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: #cfd8dc;
+            margin-bottom: 5px;
+        }
+        .invoice-input-group input, 
+        .invoice-input-group select {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: white;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+        }
+        .invoice-input-group input:focus, 
+        .invoice-input-group select:focus {
+            background: rgba(255,255,255,0.1);
+            border-color: #ffb300;
+            outline: none;
+        }
+        .invoice-input-group select option {
+            background: #203a43;
+            color: white;
+        }
+        .invoice-amount-box {
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+        .invoice-calc-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        .invoice-calc-total {
+            font-size: 1.4rem;
+            color: #ffeb3b;
+            font-weight: bold;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+        .invoice-quality {
+            background: linear-gradient(135deg, rgba(27, 94, 32, 0.4), rgba(46, 125, 50, 0.4));
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .invoice-quality ul {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        .invoice-quality ul li::before {
+            content: "✓ ";
+            color: #ffeb3b;
+            font-weight: bold;
+        }
+        .invoice-footer {
+            text-align: center;
+            border-top: 2px dashed rgba(255, 255, 255, 0.2);
+            padding-top: 1.5rem;
+            color: #cfd8dc;
+        }
+        .invoice-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .invoice-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+        .btn-create { background: var(--accent-color); color: var(--primary-color); }
+        .btn-create:hover { background: #ffe000; transform: translateY(-2px); }
+        .btn-save { background: #4caf50; color: white; }
+        .btn-save:hover { background: #43a047; transform: translateY(-2px); }
+        .btn-whatsapp { background: #25D366; color: white; }
+        .btn-whatsapp:hover { background: #128C7E; transform: translateY(-2px); }
+        .btn-pdf { background: #f44336; color: white; }
+        .btn-pdf:hover { background: #d32f2f; transform: translateY(-2px); }
+        .btn-clear { background: #9e9e9e; color: white; }
+        .btn-clear:hover { background: #757575; transform: translateY(-2px); }
+
+        /* A4 Print Layout Rules */
+        .printable-invoice {
+            width: 794px; /* A4 width at 96 DPI */
+            min-height: 1123px; /* A4 height */
+            background: white;
+            color: #333;
+            padding: 40px;
+            box-sizing: border-box;
+            position: absolute;
+            left: -9999px; /* Hide offscreen */
+            font-family: 'Outfit', sans-serif;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .print-header { text-align: center; border-bottom: 2px solid #2e7d32; padding-bottom: 15px; margin-bottom: 20px; }
+        .print-brand { font-family: 'Yeseva One', serif; font-size: 32px; color: #1b5e20; margin: 0; }
+        .print-tagline { font-size: 14px; color: #555; text-transform: uppercase; margin: 5px 0 15px 0; }
+        .print-meta { display: flex; justify-content: space-between; background: #f1f8e9; padding: 10px 15px; border-radius: 8px; border: 1px solid #c5e1a5; font-weight: bold; }
+        .print-section { margin-bottom: 25px; }
+        .print-title { color: #1b5e20; font-size: 18px; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 15px; text-transform: uppercase; }
+        .print-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
+        .print-table th, .print-table td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 14px; }
+        .print-table th { background: #f9f9f9; color: #333; }
+        .print-totals { width: 300px; float: right; }
+        .print-totals-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 15px; }
+        .print-totals-final { font-weight: bold; font-size: 18px; color: #1b5e20; border-top: 2px solid #2e7d32; border-bottom: none; margin-top: 5px; padding-top: 10px; }
+        .print-clear { clear: both; }
+        .print-quality { margin-top: 40px; text-align: center; background: #e8f5e9; padding: 20px; border-radius: 10px; border: 1px dashed #4caf50; }
+        .print-quality h4 { color: #2e7d32; margin: 0 0 10px 0; }
+        .print-footer { margin-top: 50px; text-align: center; color: #666; font-size: 13px; border-top: 1px solid #ddd; padding-top: 15px; }
+    </style>
 </head>
 <body>
     <header class="navbar">
@@ -444,6 +643,20 @@
                     <div class="dash-card-title">15 Days Plan</div>
                     <div class="dash-card-desc">Manage 15-Day Plan Leads</div>
                     <div class="dash-card-arrow">→</div>
+                </div>
+
+                <!-- Bill / Invoice Card -->
+                <div class="dash-card dash-card-premium" onclick="openSection('invoice')" style="animation-delay: 0.10s;">
+                    <div class="dash-card-icon" style="background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%); color: white;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <div class="dash-card-title">Bill / Invoice</div>
+                    <div class="dash-card-desc">Create and print customer bills</div>
+                    <div class="dash-card-arrow">→</div>
+                </div>
+
+                <!-- Coupons Card -->
+                <div class="dash-card dash-card-premium" onclick="openSection('coupons')" style="animation-delay: 0.15s;">
                     <div class="dash-card-icon dash-card-icon--coupons">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
                     </div>
@@ -631,6 +844,250 @@
                         </thead>
                         <tbody id="monthlyReportTableBody">
                             <tr><td colspan="8" style="text-align:center; padding: 2rem; color: #999;">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Bill / Invoice Section -->
+            <div id="invoice-section" class="dash-section" style="display:none; padding: 1.5rem;">
+                <div class="dash-filter-bar" style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
+                    <button class="btn" style="background:#5d4037; color:white; border:none; padding:0.6rem 1.2rem; border-radius:8px; cursor:pointer;" onclick="openSection('invoice-history')">📜 View Invoice History</button>
+                    <button class="btn" style="background:#757575; color:white; border:none; padding:0.6rem 1.2rem; border-radius:8px; cursor:pointer;" onclick="clearInvoiceForm()">🔄 Clear Form</button>
+                </div>
+                
+                <div class="invoice-container printable-invoice invoice-card" id="printableInvoice">
+                    <div class="invoice-header-box print-header">
+                        <h1 class="invoice-brand print-brand">AYYAPPA DAIRY FARM</h1>
+                        <p class="invoice-tagline print-tagline">Pure Milk • Healthy Life<br>TAKE PURE MILK • STAY HEALTHY</p>
+                        <h2 style="margin: 0; color: #ffca28;" class="print-title">MILK SUBSCRIPTION BILL / INVOICE</h2>
+                    </div>
+
+                    <div class="invoice-meta print-meta" style="margin-bottom: 2rem;">
+                        <div>
+                            <span>INVOICE NO: </span>
+                            <span id="invNoDisplay" style="color:#ffb300;">Draft</span>
+                        </div>
+                        <div>
+                            <span>DATE: </span>
+                            <span id="invDateDisplay"></span>
+                        </div>
+                        <div>
+                            <span class="invoice-meta-badge" id="invStatusBadge">PENDING</span>
+                        </div>
+                    </div>
+
+                    <div class="invoice-amount-box print-section">
+                        <h3 class="invoice-section-title print-title">1. PERSONAL DETAILS</h3>
+                        <div class="invoice-grid print-hide-input">
+                            <div class="invoice-input-group">
+                                <label>Search Customer by CID / Phone</label>
+                                <select id="invCustomerSelect" onchange="loadCustomerToInvoice()">
+                                    <option value="">-- Select Customer --</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="invoice-grid">
+                            <div class="invoice-input-group">
+                                <label>Customer Name *</label>
+                                <input type="text" id="invName" required>
+                            </div>
+                            <div class="invoice-input-group">
+                                <label>Phone Number *</label>
+                                <input type="tel" id="invPhone" required>
+                            </div>
+                            <div class="invoice-input-group">
+                                <label>WhatsApp Number</label>
+                                <input type="tel" id="invWhatsApp">
+                            </div>
+                        </div>
+                        <div class="invoice-grid">
+                            <div class="invoice-input-group">
+                                <label>Location</label>
+                                <input type="text" id="invLocation">
+                            </div>
+                            <div class="invoice-input-group">
+                                <label>Area</label>
+                                <input type="text" id="invArea">
+                            </div>
+                            <div class="invoice-input-group">
+                                <label>Complete Address</label>
+                                <input type="text" id="invAddress">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="invoice-amount-box print-section">
+                        <h3 class="invoice-section-title print-title">2. SUBSCRIPTION / CID DETAILS</h3>
+                        <div class="invoice-grid">
+                            <div class="invoice-input-group">
+                                <label>Customer ID (CID)</label>
+                                <input type="text" id="invCid" readonly style="background: rgba(255,255,255,0.15); font-weight: bold;">
+                            </div>
+                            <div class="invoice-input-group">
+                                <label>Product *</label>
+                                <select id="invProduct" required>
+                                    <option value="">-- Select Product --</option>
+                                    <option value="Fresh Buffalo Milk">Fresh Buffalo Milk</option>
+                                    <option value="Fresh Cow Milk">Fresh Cow Milk</option>
+                                    <option value="Curd">Curd</option>
+                                    <option value="Organic Ghee">Organic Ghee</option>
+                                    <option value="Paneer">Paneer</option>
+                                </select>
+                            </div>
+                            <div class="invoice-input-group">
+                                <label>Quantity *</label>
+                                <select id="invQuantity" required>
+                                    <option value="0.5L">0.5L</option>
+                                    <option value="1L" selected>1L</option>
+                                    <option value="1.5L">1.5L</option>
+                                    <option value="2L">2L</option>
+                                    <option value="3L">3L</option>
+                                    <option value="4L">4L</option>
+                                    <option value="5L">5L</option>
+                                    <option value="1 Kg">1 Kg</option>
+                                </select>
+                            </div>
+                            <div class="invoice-input-group">
+                                <label>Subscription Type *</label>
+                                <select id="invSubType" onchange="calculateInvoiceDates()" required>
+                                    <option value="">-- Select Type --</option>
+                                    <option value="15 Days">15 Days</option>
+                                    <option value="Monthly">Monthly</option>
+                                </select>
+                            </div>
+                            <div class="invoice-input-group">
+                                <label>Start Date *</label>
+                                <input type="text" id="invStartDate" placeholder="Select Date" class="flatpickr-input" onchange="calculateInvoiceDates()" required>
+                            </div>
+                            <div class="invoice-input-group">
+                                <label>End Date</label>
+                                <input type="text" id="invEndDate" readonly style="background: rgba(255,255,255,0.15);">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; flex-wrap:wrap; gap: 1.5rem;">
+                        <div class="invoice-amount-box print-section" style="flex: 1; min-width:300px;">
+                            <h3 class="invoice-section-title print-title">3. AMOUNT DETAILS</h3>
+                            <div class="invoice-input-group" style="margin-bottom:10px;">
+                                <label>Total Amount (₹) *</label>
+                                <input type="number" id="invTotalAmt" oninput="calculateInvoiceAmounts()" required>
+                            </div>
+                            <div class="invoice-input-group" style="margin-bottom:10px;">
+                                <label>Discount (₹)</label>
+                                <input type="number" id="invDiscountAmt" value="0" oninput="calculateInvoiceAmounts()">
+                            </div>
+                            <div class="invoice-calc-row">
+                                <span>Total Amount:</span>
+                                <span>₹<span id="txtInvTotal">0</span></span>
+                            </div>
+                            <div class="invoice-calc-row">
+                                <span>Discount:</span>
+                                <span style="color:#f44336;">- ₹<span id="txtInvDiscount">0</span></span>
+                            </div>
+                            <div class="invoice-calc-row invoice-calc-total">
+                                <span>FINAL AMOUNT:</span>
+                                <span>₹<span id="txtInvFinal">0</span></span>
+                            </div>
+                        </div>
+                        
+                        <div class="invoice-amount-box print-section" style="flex: 1; min-width:300px;">
+                            <h3 class="invoice-section-title print-title">4. PAYMENT DETAILS</h3>
+                            <div class="invoice-input-group" style="margin-bottom:10px;">
+                                <label>Payment Method</label>
+                                <select id="invPaymentMethod">
+                                    <option value="Online">Online / UPI</option>
+                                    <option value="Cash">Cash</option>
+                                </select>
+                            </div>
+                            <div class="invoice-input-group" style="margin-bottom:10px;">
+                                <label>Payment Received (₹)</label>
+                                <input type="number" id="invPaymentReceived" value="0" oninput="calculateInvoiceAmounts()">
+                            </div>
+                            <div class="invoice-calc-row" style="margin-top: 15px;">
+                                <span style="color:#b0bec5;">Payment Received:</span>
+                                <span style="color:#4caf50;">₹<span id="txtInvReceived">0</span></span>
+                            </div>
+                            <div class="invoice-calc-row">
+                                <span style="color:#b0bec5;">Balance Due:</span>
+                                <span style="color:#f44336; font-weight:bold;">₹<span id="txtInvBalance">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="display:flex; flex-wrap:wrap; gap: 1.5rem;">
+                        <div class="invoice-amount-box print-section" style="flex: 1;">
+                            <h3 class="invoice-section-title print-title">5. DELIVERY DETAILS</h3>
+                            <p style="margin:5px 0;"><strong>Home Delivery:</strong> FREE</p>
+                            <p style="margin:5px 0;"><strong>Delivery Type:</strong> Direct Farm-to-Home Delivery</p>
+                        </div>
+                    </div>
+
+                    <div class="invoice-quality print-quality">
+                        <h4 style="text-align: center; color: #ffeb3b; font-size: 1.2rem; margin-top:0;">OUR QUALITY PROMISE</h4>
+                        <ul>
+                            <li>Healthy Murrah Buffaloes</li>
+                            <li>Clean & Hygienic Shed</li>
+                            <li>Hygienic Milking</li>
+                            <li>Clean Milk Collection</li>
+                            <li>Quality Checked</li>
+                            <li>Fresh & Natural</li>
+                            <li>Direct Farm-to-Home Delivery</li>
+                            <li style="color:#f44336; font-size:1.1rem; list-style-type: none; font-weight: bold; padding-top: 5px;">🚫 NO CHEMICALS / WATER ADDED</li>
+                        </ul>
+                    </div>
+
+                    <div class="invoice-footer print-footer">
+                        <p style="font-weight:bold; font-size:1.1rem; color:#ffb300; margin-bottom:5px;">THANK YOU!</p>
+                        <p style="font-style:italic; margin-bottom:15px;">“After 30 Days Renew Your Subscription”</p>
+                        <p style="margin:2px;">AYYAPPA DAIRY FARM</p>
+                        <p style="margin:2px; font-size:0.85rem;">Fresh Milk • Trusted Quality • Farm-to-Home Delivery</p>
+                        <p style="margin:2px; font-size:0.8rem; color:#90a4ae;">Location: Velamavaripalem, Palnadu District, Andhra Pradesh</p>
+                    </div>
+                </div>
+
+                <div class="invoice-actions" id="invoiceActionsGroup">
+                    <button class="invoice-btn btn-save" onclick="saveInvoiceData()">💾 Save Bill</button>
+                    <button class="invoice-btn btn-whatsapp" onclick="shareInvoiceWhatsApp()">💬 Share on WhatsApp</button>
+                    <button class="invoice-btn btn-pdf" onclick="generatePdfInvoice()">📄 Download PDF</button>
+                </div>
+            </div>
+
+            <!-- Invoice History Section -->
+            <div id="invoice-history-section" class="dash-section" style="display:none; padding: 1.5rem;">
+                <div class="dash-filter-bar" style="margin-bottom:1rem; display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+                    <span style="font-weight:700; color:var(--primary-color);">Filters:</span>
+                    <input type="text" id="invFilterSearch" placeholder="Search Name, CID, Phone, Inv No." class="coupon-input-field" style="padding:0.6rem 0.9rem; border-radius:10px; width:200px;" oninput="renderInvoiceHistory()">
+                    
+                    <select id="invFilterType" onchange="renderInvoiceHistory()" class="coupon-input-field" style="padding:0.6rem 0.9rem; border-radius:10px;">
+                        <option value="ALL">All Types</option>
+                        <option value="15 Days">15 Days</option>
+                        <option value="Monthly">Monthly</option>
+                    </select>
+
+                    <select id="invFilterStatus" onchange="renderInvoiceHistory()" class="coupon-input-field" style="padding:0.6rem 0.9rem; border-radius:10px;">
+                        <option value="ALL">All Status</option>
+                        <option value="PAID">PAID</option>
+                        <option value="PARTIALLY PAID">PARTIALLY PAID</option>
+                        <option value="PENDING">PENDING</option>
+                    </select>
+                </div>
+
+                <div class="coupons-table-card custom-scrollbar" style="max-height: 65vh; overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Invoice No.</th>
+                                <th>Customer (CID)</th>
+                                <th>Plan / Product</th>
+                                <th>Amount / Status</th>
+                                <th>Dates</th>
+                                <th style="text-align: center;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoiceHistoryTbody">
+                            <!-- Injected Dynamically -->
                         </tbody>
                     </table>
                 </div>
@@ -2075,6 +2532,17 @@
                 }
             }
         });
+
+        const invStartEl = document.getElementById('invStartDate');
+        if (invStartEl && typeof flatpickr !== 'undefined') {
+            flatpickr(invStartEl, {
+                altInput: true,
+                altFormat: "d/m/Y",
+                dateFormat: "Y-m-d",
+                defaultDate: new Date(),
+                disableMobile: "true"
+            });
+        }
     }
 
     function getFormattedDeliveryDate(dateInputId) {
@@ -2999,7 +3467,7 @@
         console.log("Showing Admin Grid");
         
         // Hide ALL detail/custom sections
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section', 'offer-claims-section', 'registrations-section', 'expenses-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section', 'offer-claims-section', 'registrations-section', 'expenses-section', 'invoice-section', 'invoice-history-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
@@ -3017,7 +3485,7 @@
         
         // 1. Hide everything first for a clean slate
         document.getElementById('dashGrid').style.display = 'none';
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section', 'offer-claims-section', 'registrations-section', 'expenses-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section', 'offer-claims-section', 'registrations-section', 'expenses-section', 'invoice-section', 'invoice-history-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
@@ -3031,6 +3499,26 @@
             document.getElementById('backBtn').style.display = 'inline-block';
             document.getElementById('exportBtn').style.display = 'none';
             fetchAdminOfferClaims();
+            return;
+        }
+
+        if (section === 'invoice') {
+            const invSec = document.getElementById('invoice-section');
+            if (invSec) invSec.style.display = 'block';
+            document.getElementById('dashHeading').textContent = 'Create Bill / Invoice';
+            document.getElementById('backBtn').style.display = 'inline-block';
+            document.getElementById('exportBtn').style.display = 'none';
+            fetchInvoiceCustomers();
+            return;
+        }
+
+        if (section === 'invoice-history') {
+            const histSec = document.getElementById('invoice-history-section');
+            if (histSec) histSec.style.display = 'block';
+            document.getElementById('dashHeading').textContent = 'Invoice History';
+            document.getElementById('backBtn').style.display = 'inline-block';
+            document.getElementById('exportBtn').style.display = 'none';
+            renderInvoiceHistory();
             return;
         }
         if (section === 'coupons') {
@@ -6267,6 +6755,395 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             alert('Error deleting record: ' + error.message);
         }
     }
+        // ==========================================
+        // BILL / INVOICE MODULE LOGIC
+        // ==========================================
+        let invoiceCustomersMap = {};
+        
+        async function fetchInvoiceCustomers() {
+            try {
+                const snap = await db.collection('customers').get();
+                const select = document.getElementById('invCustomerSelect');
+                select.innerHTML = '<option value="">-- Select Customer --</option>';
+                invoiceCustomersMap = {};
+                
+                snap.forEach(doc => {
+                    const data = doc.data();
+                    const phone = doc.id;
+                    const cid = data.cid || 'N/A';
+                    const name = data.name || 'Unknown';
+                    
+                    invoiceCustomersMap[phone] = { id: phone, ...data };
+                    const option = document.createElement('option');
+                    option.value = phone;
+                    option.textContent = `${name} (${cid})`;
+                    select.appendChild(option);
+                });
+                
+                // Set default dates
+                if(!document.getElementById('invStartDate').value){
+                    const today = new Date();
+                    document.getElementById('invStartDate')._flatpickr.setDate(today);
+                }
+                
+                // Initialize new invoice ID
+                generateInvoiceNumber();
+            } catch (err) {
+                console.error("Error fetching customers for invoice:", err);
+            }
+        }
+
+        async function generateInvoiceNumber() {
+            const today = new Date();
+            const year = today.getFullYear();
+            try {
+                // Generate a simple random ID for the session draft, formalize on save
+                const draftInvNo = "ADF-" + year + "-" + Math.floor(1000 + Math.random() * 9000);
+                document.getElementById('invNoDisplay').textContent = draftInvNo;
+                
+                const day = String(today.getDate()).padStart(2, '0');
+                const month = String(today.getMonth() + 1).padStart(2, '0');
+                document.getElementById('invDateDisplay').textContent = `${day}/${month}/${year}`;
+            } catch (error) {
+                console.error("Error generating invoice number:", error);
+            }
+        }
+
+        function loadCustomerToInvoice() {
+            const phone = document.getElementById('invCustomerSelect').value;
+            if (!phone || !invoiceCustomersMap[phone]) return;
+            
+            const c = invoiceCustomersMap[phone];
+            document.getElementById('invName').value = c.name || '';
+            document.getElementById('invPhone').value = phone;
+            document.getElementById('invWhatsApp').value = c.whatsapp || phone;
+            document.getElementById('invLocation').value = c.location || '';
+            document.getElementById('invArea').value = c.area || '';
+            document.getElementById('invAddress').value = c.address || '';
+            document.getElementById('invCid').value = c.cid || 'N/A';
+        }
+
+        function calculateInvoiceDates() {
+            const type = document.getElementById('invSubType').value;
+            const startVal = document.getElementById('invStartDate').value;
+            if (!type || !startVal) return;
+            
+            const startDate = new Date(startVal);
+            if (isNaN(startDate.getTime())) return;
+            
+            let endDate = new Date(startDate);
+            if (type === '15 Days') {
+                endDate.setDate(endDate.getDate() + 15);
+            } else if (type === 'Monthly') {
+                endDate.setMonth(endDate.getMonth() + 1);
+            }
+            
+            const d = String(endDate.getDate()).padStart(2, '0');
+            const m = String(endDate.getMonth() + 1).padStart(2, '0');
+            const y = endDate.getFullYear();
+            document.getElementById('invEndDate').value = `${y}-${m}-${d}`;
+        }
+
+        function calculateInvoiceAmounts() {
+            const total = parseFloat(document.getElementById('invTotalAmt').value) || 0;
+            const discount = parseFloat(document.getElementById('invDiscountAmt').value) || 0;
+            const received = parseFloat(document.getElementById('invPaymentReceived').value) || 0;
+            
+            let finalAmt = total - discount;
+            if (finalAmt < 0) finalAmt = 0;
+            
+            let balance = finalAmt - received;
+            if (balance < 0) balance = 0;
+            
+            document.getElementById('txtInvTotal').textContent = total.toFixed(2);
+            document.getElementById('txtInvDiscount').textContent = discount.toFixed(2);
+            document.getElementById('txtInvFinal').textContent = finalAmt.toFixed(2);
+            document.getElementById('txtInvReceived').textContent = received.toFixed(2);
+            document.getElementById('txtInvBalance').textContent = balance.toFixed(2);
+            
+            const badge = document.getElementById('invStatusBadge');
+            if (finalAmt === 0 && total === 0) {
+                badge.textContent = 'PENDING';
+                badge.style.background = '#ff9800';
+            } else if (balance <= 0) {
+                badge.textContent = 'PAID';
+                badge.style.background = '#4caf50';
+            } else if (received > 0 && balance > 0) {
+                badge.textContent = 'PARTIALLY PAID';
+                badge.style.background = '#2196f3';
+            } else {
+                badge.textContent = 'PENDING';
+                badge.style.background = '#f44336';
+            }
+        }
+
+        function clearInvoiceForm() {
+            document.getElementById('invCustomerSelect').value = '';
+            document.getElementById('invName').value = '';
+            document.getElementById('invPhone').value = '';
+            document.getElementById('invWhatsApp').value = '';
+            document.getElementById('invLocation').value = '';
+            document.getElementById('invArea').value = '';
+            document.getElementById('invAddress').value = '';
+            document.getElementById('invCid').value = '';
+            
+            document.getElementById('invProduct').value = '';
+            document.getElementById('invQuantity').value = '1L';
+            document.getElementById('invSubType').value = '';
+            document.getElementById('invEndDate').value = '';
+            
+            document.getElementById('invTotalAmt').value = '';
+            document.getElementById('invDiscountAmt').value = '0';
+            document.getElementById('invPaymentMethod').value = 'Online';
+            document.getElementById('invPaymentReceived').value = '0';
+            
+            calculateInvoiceAmounts();
+            generateInvoiceNumber();
+        }
+
+        async function saveInvoiceData() {
+            // Validation
+            const name = document.getElementById('invName').value;
+            const phone = document.getElementById('invPhone').value;
+            const product = document.getElementById('invProduct').value;
+            const subType = document.getElementById('invSubType').value;
+            const startDate = document.getElementById('invStartDate').value;
+            const totalStr = document.getElementById('invTotalAmt').value;
+            
+            if(!name || !phone || !product || !subType || !startDate || !totalStr) {
+                alert("Please fill all required (*) fields before saving.");
+                return;
+            }
+            
+            const total = parseFloat(totalStr) || 0;
+            const discount = parseFloat(document.getElementById('invDiscountAmt').value) || 0;
+            const received = parseFloat(document.getElementById('invPaymentReceived').value) || 0;
+            if(discount > total) {
+                alert("Discount cannot be greater than Total Amount.");
+                return;
+            }
+            
+            let finalAmt = total - discount;
+            if(received > finalAmt) {
+                alert("Payment Received cannot be greater than Final Amount.");
+                return;
+            }
+
+            try {
+                // Ensure unique ID
+                const invNo = document.getElementById('invNoDisplay').textContent;
+                
+                const payload = {
+                    invoiceNo: invNo,
+                    date: document.getElementById('invDateDisplay').textContent,
+                    cid: document.getElementById('invCid').value,
+                    customerName: name,
+                    phone: phone,
+                    whatsapp: document.getElementById('invWhatsApp').value,
+                    location: document.getElementById('invLocation').value,
+                    area: document.getElementById('invArea').value,
+                    address: document.getElementById('invAddress').value,
+                    
+                    product: product,
+                    quantity: document.getElementById('invQuantity').value,
+                    subscriptionType: subType,
+                    startDate: startDate,
+                    endDate: document.getElementById('invEndDate').value || '',
+                    
+                    totalAmount: total,
+                    discount: discount,
+                    finalAmount: finalAmt,
+                    paymentMethod: document.getElementById('invPaymentMethod').value,
+                    paymentReceived: received,
+                    balanceDue: finalAmt - received,
+                    paymentStatus: document.getElementById('invStatusBadge').textContent,
+                    
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                await db.collection('invoices').add(payload);
+                alert("Invoice saved successfully!");
+                // Don't clear, keep it open for printing
+            } catch (err) {
+                console.error("Error saving invoice:", err);
+                alert("Failed to save invoice.");
+            }
+        }
+        
+        function shareInvoiceWhatsApp() {
+            const name = document.getElementById('invName').value || '[Customer Name]';
+            const phone = document.getElementById('invWhatsApp').value || document.getElementById('invPhone').value;
+            if(!phone) {
+                alert("Please enter a WhatsApp/Phone number first.");
+                return;
+            }
+            
+            const cid = document.getElementById('invCid').value || 'N/A';
+            const prod = document.getElementById('invProduct').value || '[Product]';
+            const sub = document.getElementById('invSubType').value || '[Type]';
+            const sd = document.getElementById('invStartDate').value || '[Start Date]';
+            const ed = document.getElementById('invEndDate').value || '[End Date]';
+            
+            const final = document.getElementById('txtInvFinal').textContent;
+            const recv = document.getElementById('txtInvReceived').textContent;
+            const bal = document.getElementById('txtInvBalance').textContent;
+            
+            const text = `*AYYAPPA DAIRY FARM*\n\nDear ${name},\n\nThank you for subscribing to Ayyappa Dairy Farm.\n\n*Your subscription invoice details:*\n\nCustomer ID: ${cid}\nProduct: ${prod}\nSubscription: ${sub}\nStart Date: ${sd}\nEnd Date: ${ed}\nFinal Amount: ₹${final}\nPayment Received: ₹${recv}\nBalance Due: ₹${bal}\n\n🚚 *Free Home Delivery*\n\nThank you for choosing Ayyappa Dairy Farm!\n\n_“After 30 Days Renew Your Subscription”_`;
+            
+            const url = `https://wa.me/91${phone}?text=${encodeURIComponent(text)}`;
+            window.open(url, '_blank');
+        }
+
+        function generatePdfInvoice() {
+            // Hide action buttons during print calculation
+            const actions = document.getElementById('invoiceActionsGroup');
+            if(actions) actions.style.display = 'none';
+            // Adjust inputs to display cleanly in canvas
+            const element = document.getElementById('printableInvoice');
+            
+            // html2canvas requires explicit layout dimensions
+            element.style.left = '0';
+            element.style.position = 'relative';
+
+            // Very simple hack for select boxes not rendering values well in html2canvas sometimes
+            const inputs = element.querySelectorAll('input, select');
+            inputs.forEach(el => {
+                if(el.tagName === 'SELECT') {
+                    el.dataset.origVal = el.value;
+                    const opt = el.options[el.selectedIndex];
+                    const dummy = document.createElement('span');
+                    dummy.className = 'temp-print-val';
+                    dummy.textContent = opt ? opt.text : '';
+                    dummy.style.color = '#fff';
+                    el.style.display = 'none';
+                    el.parentNode.appendChild(dummy);
+                } else if (el.tagName === 'INPUT') {
+                    el.dataset.origVal = el.value;
+                    const dummy = document.createElement('span');
+                    dummy.className = 'temp-print-val';
+                    dummy.textContent = el.value;
+                    dummy.style.color = '#fff';
+                    el.style.display = 'none';
+                    el.parentNode.appendChild(dummy);
+                }
+            });
+
+            html2canvas(element, { scale: 2, backgroundColor: '#10252e' }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+                const invNo = document.getElementById('invNoDisplay').textContent;
+                pdf.save(`Ayyappa_Invoice_${invNo}.pdf`);
+                
+                // Restore elements
+                element.style.left = '-9999px';
+                element.style.position = 'absolute';
+                if(actions) actions.style.display = 'flex';
+                
+                // Cleanup dummies
+                document.querySelectorAll('.temp-print-val').forEach(el => el.remove());
+                inputs.forEach(el => { el.style.display = ''; });
+            });
+        }
+
+        // ==========================================
+        // INVOICE HISTORY LOGIC
+        // ==========================================
+        let fullInvoiceList = [];
+        
+        async function renderInvoiceHistory() {
+            const tbody = document.getElementById('invoiceHistoryTbody');
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">Loading invoices...</td></tr>';
+            
+            try {
+                const snap = await db.collection('invoices').orderBy('createdAt', 'desc').get();
+                fullInvoiceList = [];
+                snap.forEach(doc => {
+                    fullInvoiceList.push({ id: doc.id, ...doc.data() });
+                });
+                
+                filterAndDisplayInvoices();
+            } catch (err) {
+                console.error("Error loading invoice history:", err);
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Failed to load data.</td></tr>';
+            }
+        }
+        
+        function filterAndDisplayInvoices() {
+            const search = document.getElementById('invFilterSearch').value.toLowerCase();
+            const typeFilter = document.getElementById('invFilterType').value;
+            const statusFilter = document.getElementById('invFilterStatus').value;
+            
+            const tbody = document.getElementById('invoiceHistoryTbody');
+            tbody.innerHTML = '';
+            
+            const filtered = fullInvoiceList.filter(inv => {
+                const termMatch = search === '' || 
+                    (inv.customerName || '').toLowerCase().includes(search) || 
+                    (inv.phone || '').includes(search) || 
+                    (inv.cid || '').toLowerCase().includes(search) || 
+                    (inv.invoiceNo || '').toLowerCase().includes(search);
+                    
+                const typeMatch = typeFilter === 'ALL' || inv.subscriptionType === typeFilter;
+                const statusMatch = statusFilter === 'ALL' || inv.paymentStatus === statusFilter;
+                
+                return termMatch && typeMatch && statusMatch;
+            });
+            
+            if(filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No invoices found.</td></tr>';
+                return;
+            }
+            
+            filtered.forEach(inv => {
+                const tr = document.createElement('tr');
+                
+                let badgeCol = '#f44336';
+                if(inv.paymentStatus === 'PAID') badgeCol = '#4caf50';
+                else if (inv.paymentStatus === 'PARTIALLY PAID') badgeCol = '#2196f3';
+                else if (inv.paymentStatus === 'PENDING') badgeCol = '#ff9800';
+                
+                tr.innerHTML = `
+                    <td style="font-weight:bold;">${inv.invoiceNo}</td>
+                    <td>
+                        <strong>${inv.customerName}</strong><br>
+                        <small style="color:#2e7d32; font-weight:bold;">${inv.cid}</small><br>
+                        <small>${inv.phone}</small>
+                    </td>
+                    <td>
+                        ${inv.product} (${inv.quantity})<br>
+                        <small style="color:#757575;">${inv.subscriptionType}</small>
+                    </td>
+                    <td>
+                        <strong style="color:var(--primary-color);">₹${inv.finalAmount}</strong><br>
+                        <span style="background:${badgeCol}; color:white; padding:2px 6px; border-radius:4px; font-size:0.75rem; font-weight:bold;">${inv.paymentStatus}</span>
+                    </td>
+                    <td style="font-size:0.85rem;">
+                        <strong>Start:</strong> ${inv.startDate}<br>
+                        <strong>End:</strong> ${inv.endDate}
+                    </td>
+                    <td style="text-align:center;">
+                        <button onclick="deleteInvoice('${inv.id}')" style="background:#f44336; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;" title="Delete">🗑️</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        async function deleteInvoice(id) {
+            if(!confirm("Are you sure you want to delete this invoice?")) return;
+            try {
+                await db.collection('invoices').doc(id).delete();
+                renderInvoiceHistory(); // refresh
+            } catch (err) {
+                console.error("Error deleting invoice:", err);
+                alert("Failed to delete invoice.");
+            }
+        }
+
     </script>
 
     <!-- Digital Bill / Invoice Modal -->
