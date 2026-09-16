@@ -190,6 +190,18 @@ function renderCart() {
     cartFinalAmtEl.textContent = '₹' + subtotal.toLocaleString('en-IN');
 }
 
+function togglePaymentQR() {
+    const methodEl = document.getElementById('cartPaymentMethod');
+    const qrBox = document.getElementById('paymentQRCodeBox');
+    if (qrBox && methodEl) {
+        if (methodEl.value.includes('Online')) {
+            qrBox.style.display = 'block';
+        } else {
+            qrBox.style.display = 'none';
+        }
+    }
+}
+
 function showCartProducts() {
     document.getElementById('cart-main-view').style.display = 'block';
     document.getElementById('cart-checkout-view').style.display = 'none';
