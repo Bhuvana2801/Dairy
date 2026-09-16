@@ -1868,9 +1868,10 @@
             <section class="section-padding bg-light" style="padding-top: 140px; min-height: 85vh;">
                 <div class="container fade-in-up">
 
-                    <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
                         <button id="btn-tab-regular" onclick="switchOfferTab('regular')" style="padding: 0.8rem 2rem; font-size: 1.1rem; font-weight: 700; border-radius: 50px; background: var(--primary-color); color: white; border: none; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">Offers</button>
                         <button id="btn-tab-festival" onclick="switchOfferTab('festival')" style="padding: 0.8rem 2rem; font-size: 1.1rem; font-weight: 700; border-radius: 50px; background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); cursor: pointer; transition: 0.3s;">Festival Offers</button>
+                        <button id="btn-tab-referral" onclick="switchOfferTab('referral')" style="padding: 0.8rem 2rem; font-size: 1.1rem; font-weight: 700; border-radius: 50px; background: transparent; color: var(--primary-color); border: 2px solid var(--primary-color); cursor: pointer; transition: 0.3s;">Refer a Friend</button>
                     </div>
 
                     <!-- Regular Offers Section -->
@@ -2103,40 +2104,33 @@
                         <h3 style="color: #666; font-size: 1.5rem; margin-top: 2rem;">Will be Updated Soon</h3>
                     </div>
 
+                    <!-- Referral Offers Section -->
+                    <div id="tab-referral-offers" style="display: none; text-align: center; margin-top: 2rem; animation: fadeIn 0.4s;">
+                        <h3 style="color: #666; font-size: 1.5rem; margin-top: 2rem;">Refer a Friend - Information Coming Soon!</h3>
+                    </div>
+
                     <script>
                         function switchOfferTab(tab) {
-                            const btnReg = document.getElementById('btn-tab-regular');
-                            const btnFest = document.getElementById('btn-tab-festival');
-                            const tabReg = document.getElementById('tab-regular-offers');
-                            const tabFest = document.getElementById('tab-festival-offers');
-
-                            if (tab === 'regular') {
-                                btnReg.style.background = 'var(--primary-color)';
-                                btnReg.style.color = 'white';
-                                btnReg.style.border = 'none';
-                                btnReg.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
-
-                                btnFest.style.background = 'transparent';
-                                btnFest.style.color = 'var(--primary-color)';
-                                btnFest.style.border = '2px solid var(--primary-color)';
-                                btnFest.style.boxShadow = 'none';
-
-                                tabReg.style.display = 'block';
-                                tabFest.style.display = 'none';
-                            } else {
-                                btnFest.style.background = 'var(--primary-color)';
-                                btnFest.style.color = 'white';
-                                btnFest.style.border = 'none';
-                                btnFest.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
-
-                                btnReg.style.background = 'transparent';
-                                btnReg.style.color = 'var(--primary-color)';
-                                btnReg.style.border = '2px solid var(--primary-color)';
-                                btnReg.style.boxShadow = 'none';
-
-                                tabFest.style.display = 'block';
-                                tabReg.style.display = 'none';
-                            }
+                            const tabs = ['regular', 'festival', 'referral'];
+                            tabs.forEach(t => {
+                                const btn = document.getElementById('btn-tab-' + t);
+                                const panel = document.getElementById('tab-' + t + '-offers');
+                                if (!btn || !panel) return;
+                                
+                                if (t === tab) {
+                                    btn.style.background = 'var(--primary-color)';
+                                    btn.style.color = 'white';
+                                    btn.style.border = 'none';
+                                    btn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.1)';
+                                    panel.style.display = 'block';
+                                } else {
+                                    btn.style.background = 'transparent';
+                                    btn.style.color = 'var(--primary-color)';
+                                    btn.style.border = '2px solid var(--primary-color)';
+                                    btn.style.boxShadow = 'none';
+                                    panel.style.display = 'none';
+                                }
+                            });
                         }
                     </script>
                 </div>
