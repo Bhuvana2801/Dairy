@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Register Service Worker for PWA
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./sw.js?v=9')
+            navigator.serviceWorker.register('./sw.js?v=10')
                 .then(registration => {
                     console.log('ServiceWorker registration successful with scope: ', registration.scope);
                 })

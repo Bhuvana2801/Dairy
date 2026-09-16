@@ -441,7 +441,7 @@
                     <div class="dash-card-icon" style="background: linear-gradient(135deg, #fbc02d 0%, #f57f17 100%); color: white;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     </div>
-                    <div class="dash-card-title">Offer Subscriptions</div>
+                    <div class="dash-card-title">15 Days Plan</div>
                     <div class="dash-card-desc">Manage 15-Day Plan Leads</div>
                     <div class="dash-card-arrow">→</div>
                 </div>
@@ -3012,7 +3012,7 @@
         console.log("Showing Admin Grid");
         
         // Hide ALL detail/custom sections
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section', 'offer-claims-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section', 'offer-claims-section', 'registrations-section', 'expenses-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
@@ -3030,13 +3030,22 @@
         
         // 1. Hide everything first for a clean slate
         document.getElementById('dashGrid').style.display = 'none';
-        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section', 'offer-claims-section'];
+        const sectionsToHide = ['detailView', 'order-receipts-section', 'monthly-report-section', 'membership-approvals-section', 'coupons-section', 'membership-details-section', 'offer-claims-section', 'registrations-section', 'expenses-section'];
         sectionsToHide.forEach(id => {
             const el = document.getElementById(id);
             if (el) el.style.display = 'none';
         });
 
         // 2. Handle Special Sections
+        if (section === 'offer_claims') {
+            const offSec = document.getElementById('offer-claims-section');
+            if (offSec) offSec.style.display = 'block';
+            document.getElementById('dashHeading').textContent = '15 Days Plan';
+            document.getElementById('backBtn').style.display = 'inline-block';
+            document.getElementById('exportBtn').style.display = 'none';
+            fetchAdminOfferClaims();
+            return;
+        }
         if (section === 'coupons') {
             const couponsSec = document.getElementById('coupons-section');
             if (couponsSec) couponsSec.style.display = 'block';
