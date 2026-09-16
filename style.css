@@ -2009,6 +2009,7 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
 }
 
 .cdash-sidebar {
+    display: none !important;
     width: 240px;
     background: linear-gradient(180deg, #0d3320 0%, #164a27 100%);
     color: white;
