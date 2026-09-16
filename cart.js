@@ -205,7 +205,21 @@ function proceedToCheckout() {
     document.getElementById('cart-main-view').style.display = 'none';
     document.getElementById('cart-checkout-view').style.display = 'block';
     
-    // Set default date if needed
+    // Set default delivery date to tomorrow
+    const dateInput = document.getElementById('cartDeliveryDate');
+    if (dateInput && !dateInput.value) {
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const yyyy = tomorrow.getFullYear();
+        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const dd = String(tomorrow.getDate()).padStart(2, '0');
+        const tomorrowStr = `${yyyy}-${mm}-${dd}`;
+        
+        dateInput.value = tomorrowStr;
+        dateInput.min = tomorrowStr;
+    }
+    
+    // Fallback for other dates if needed
     if (typeof setDefaultOrderDates === 'function') setDefaultOrderDates();
 }
 
