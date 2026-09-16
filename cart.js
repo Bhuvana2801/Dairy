@@ -205,18 +205,31 @@ function proceedToCheckout() {
     document.getElementById('cart-main-view').style.display = 'none';
     document.getElementById('cart-checkout-view').style.display = 'block';
     
-    // Set default delivery date to tomorrow
+    // Initialize date picker with Flatpickr for DD/MM/YYYY format and no native icon
     const dateInput = document.getElementById('cartDeliveryDate');
-    if (dateInput && !dateInput.value) {
+    if (dateInput) {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        const yyyy = tomorrow.getFullYear();
-        const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-        const dd = String(tomorrow.getDate()).padStart(2, '0');
-        const tomorrowStr = `${yyyy}-${mm}-${dd}`;
         
-        dateInput.value = tomorrowStr;
-        dateInput.min = tomorrowStr;
+        if (typeof flatpickr !== 'undefined' && !dateInput._flatpickr) {
+            flatpickr(dateInput, {
+                altInput: true,
+                altFormat: "d/m/Y",
+                dateFormat: "Y-m-d",
+                defaultDate: tomorrow,
+                minDate: tomorrow,
+                disableMobile: "true"
+            });
+        } else if (!dateInput._flatpickr && !dateInput.value) {
+            // Native fallback
+            const yyyy = tomorrow.getFullYear();
+            const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const dd = String(tomorrow.getDate()).padStart(2, '0');
+            const tomorrowStr = `${yyyy}-${mm}-${dd}`;
+            
+            dateInput.value = tomorrowStr;
+            dateInput.min = tomorrowStr;
+        }
     }
     
     // Fallback for other dates if needed
