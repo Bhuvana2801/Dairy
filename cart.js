@@ -237,6 +237,17 @@ function proceedToCheckout() {
         return;
     }
     
+    // Ensure customer is signed in before allowing them to access the checkout and payment screen
+    const customer = typeof getSignedInCustomer === 'function' ? getSignedInCustomer() : null;
+    if (!customer) {
+        if (typeof openCustomerSigninModal === 'function') {
+            openCustomerSigninModal();
+        } else {
+            alert('Please sign in to proceed to checkout.');
+        }
+        return;
+    }
+    
     // Switch view
     document.getElementById('cart-main-view').style.display = 'none';
     document.getElementById('cart-checkout-view').style.display = 'block';
@@ -276,7 +287,6 @@ async function handleDynamicCartSubmit(e) {
 
     const customer = typeof getSignedInCustomer === 'function' ? getSignedInCustomer() : null;
     if (!customer) {
-        alert('Please sign in to place an order.');
         if (typeof openCustomerSigninModal === 'function') openCustomerSigninModal();
         return;
     }
