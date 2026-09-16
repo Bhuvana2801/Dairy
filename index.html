@@ -29,144 +29,172 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <style id="invoiceStyle">
-        /* Invoice Module Premium Styles */
-        .invoice-card {
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-            color: #fff;
-            padding: 2.5rem;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            font-family: 'Outfit', sans-serif;
-            margin-bottom: 2rem;
+        /* Invoice Module Redesign */
+        .printable-invoice {
+            max-width: 800px; /* A4-ish width */
+            margin: 0 auto;
+            background: #ffffff;
+            color: #000000;
+            padding: 40px;
+            box-sizing: border-box;
             position: relative;
-            overflow: hidden;
+            font-family: 'Helvetica Neue', Arial, sans-serif; /* Clean professional font */
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
         }
-        .invoice-header-box {
-            border-bottom: 2px dashed rgba(255, 255, 255, 0.2);
-            padding-bottom: 1.5rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
+        
+        .print-header { 
+            text-align: center; 
+            margin-bottom: 20px; 
         }
-        .invoice-brand {
-            font-family: 'Yeseva One', serif;
-            font-size: 2.5rem;
-            color: #ffeb3b;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.5);
-            margin: 0;
+        
+        .print-brand { 
+            font-weight: 800;
+            font-size: 28px; 
+            color: #1b5e20; 
+            margin: 0; 
             letter-spacing: 1px;
-        }
-        .invoice-tagline {
-            font-size: 0.95rem;
-            color: #b0bec5;
-            margin: 5px 0 15px 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
         }
-        .invoice-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(0,0,0,0.2);
-            padding: 10px 20px;
-            border-radius: 10px;
+        
+        .print-tagline { 
+            font-size: 14px; 
+            font-weight: 600;
+            color: #555; 
+            margin: 2px 0; 
+        }
+        
+        .print-title { 
+            color: #000;
+            font-size: 16px; 
             font-weight: bold;
+            margin-top: 15px; 
+            text-transform: uppercase; 
         }
-        .invoice-meta-badge {
-            background: var(--accent-color);
-            color: var(--primary-color);
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.9rem;
-        }
-        .invoice-section-title {
-            color: #ffb300;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-            border-left: 4px solid #ffb300;
-            padding-left: 10px;
-        }
-        .invoice-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 1.5rem;
-        }
-        .invoice-input-group label {
-            display: block;
-            font-size: 0.85rem;
-            color: #cfd8dc;
-            margin-bottom: 5px;
-        }
-        .invoice-input-group input, 
-        .invoice-input-group select {
+        
+        /* Table generic styling for invoice */
+        .invoice-table {
             width: 100%;
-            padding: 10px 15px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: rgba(255,255,255,0.05);
-            color: white;
-            font-family: 'Outfit', sans-serif;
-            transition: all 0.3s ease;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 13px;
         }
-        .invoice-input-group input:focus, 
-        .invoice-input-group select:focus {
-            background: rgba(255,255,255,0.1);
-            border-color: #ffb300;
+        
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ccc;
+            padding: 8px 10px;
+            vertical-align: middle;
+        }
+        
+        .invoice-table th {
+            background-color: #1b5e20;
+            color: white;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-align: left;
+        }
+        
+        .bg-light { background-color: #f9f9f9; }
+        
+        /* Two column custom layouts */
+        .label-col {
+            width: 30%;
+            font-weight: bold;
+            background-color: #f5f5f5;
+        }
+        
+        .val-col {
+            width: 70%;
+        }
+
+        .label-col-half { width: 25%; font-weight: bold; background: #f5f5f5;}
+        .val-col-half { width: 25%; }
+        
+        /* Form inputs seamlessly blended into tables */
+        .invoice-input {
+            width: 100%;
+            padding: 4px;
+            border: 1px solid transparent; 
+            background: transparent;
+            font-size: 13px;
+            font-family: inherit;
+            color: #000;
+            box-sizing: border-box;
             outline: none;
+            transition: 0.2s;
         }
-        .invoice-input-group select option {
-            background: #203a43;
+        .invoice-input:hover, .invoice-input:focus {
+            background: #fffdf0;
+            border: 1px solid #ffca28;
+            border-radius: 4px;
+        }
+        .invoice-input-bold {
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .highlight-accent { background: #fdf5e6 !important; }
+        
+        /* Quality Promise Box */
+        .quality-promise {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        
+        .quality-promise-header {
+            background-color: #1b5e20;
             color: white;
-        }
-        .invoice-amount-box {
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 1.5rem;
-            border-radius: 15px;
-            margin-bottom: 1.5rem;
-        }
-        .invoice-calc-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 1.1rem;
-        }
-        .invoice-calc-total {
-            font-size: 1.4rem;
-            color: #ffeb3b;
+            padding: 8px 10px;
             font-weight: bold;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            padding-top: 10px;
-            margin-top: 10px;
+            text-transform: uppercase;
+            font-size: 13px;
         }
-        .invoice-quality {
-            background: linear-gradient(135deg, rgba(27, 94, 32, 0.4), rgba(46, 125, 50, 0.4));
-            border: 1px solid rgba(76, 175, 80, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        .invoice-quality ul {
-            list-style: none;
-            padding: 0;
+        
+        .quality-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-            font-size: 0.9rem;
+            grid-template-columns: 1fr 1fr;
+            padding: 0;
+            margin: 0;
+            font-size: 13px;
         }
-        .invoice-quality ul li::before {
-            content: "✓ ";
-            color: #ffeb3b;
+        
+        .quality-item {
+            padding: 8px 10px;
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+        }
+        .quality-item:nth-child(even) {
+            border-right: none;
+        }
+        .quality-item:nth-last-child(-n+2) {
+            border-bottom: none;
+        }
+        
+        .quality-item::before {
+            content: "■ ";
+            color: #333;
+            font-size: 10px;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+        
+        /* Footer styling */
+        .invoice-footer { text-align: center; font-size: 12px; margin-top: 15px; }
+        .invoice-footer p { margin: 4px 0; }
+        
+        .final-amt-row td {
             font-weight: bold;
+            font-size: 14px;
         }
-        .invoice-footer {
-            text-align: center;
-            border-top: 2px dashed rgba(255, 255, 255, 0.2);
-            padding-top: 1.5rem;
-            color: #cfd8dc;
+
+        /* Invoice container surrounding it in dashboard */
+        .invoice-wrapper {
+            background: #f4f6f8;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
         }
+        
+        /* Action buttons below invoice */
         .invoice-actions {
             display: flex;
             flex-wrap: wrap;
@@ -186,46 +214,24 @@
             gap: 8px;
             font-family: inherit;
         }
-        .btn-create { background: var(--accent-color); color: var(--primary-color); }
-        .btn-create:hover { background: #ffe000; transform: translateY(-2px); }
         .btn-save { background: #4caf50; color: white; }
         .btn-save:hover { background: #43a047; transform: translateY(-2px); }
         .btn-whatsapp { background: #25D366; color: white; }
         .btn-whatsapp:hover { background: #128C7E; transform: translateY(-2px); }
         .btn-pdf { background: #f44336; color: white; }
         .btn-pdf:hover { background: #d32f2f; transform: translateY(-2px); }
-        .btn-clear { background: #9e9e9e; color: white; }
-        .btn-clear:hover { background: #757575; transform: translateY(-2px); }
 
         /* A4 Print Layout Rules */
-        .printable-invoice {
-            max-width: 794px; /* A4 width */
-            margin: 0 auto;
-            background: white;
-            color: #333;
-            padding: 40px;
-            border-radius: 10px;
-            box-sizing: border-box;
-            position: relative;
-            font-family: 'Outfit', sans-serif;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+        @media print {
+            .printable-invoice { box-shadow: none; padding: 0; max-width: 100%; border: none !important; }
+            .invoice-wrapper { background: white; padding: 0; border-radius: 0; overflow: visible;}
+            .dash-sidebar, .dash-header, .invoice-actions, .dash-filter-bar, .invoice-setup-bar { display: none !important; }
+            body, .modal-box { background: white; overflow: visible; }
+            .dash-body { padding: 0; }
+            /* Force exact background colors printing in webkit browsers */
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            .invoice-input { border: transparent !important; }
         }
-        .print-header { text-align: center; border-bottom: 2px solid #2e7d32; padding-bottom: 15px; margin-bottom: 20px; }
-        .print-brand { font-family: 'Yeseva One', serif; font-size: 32px; color: #1b5e20; margin: 0; }
-        .print-tagline { font-size: 14px; color: #555; text-transform: uppercase; margin: 5px 0 15px 0; }
-        .print-meta { display: flex; justify-content: space-between; background: #f1f8e9; padding: 10px 15px; border-radius: 8px; border: 1px solid #c5e1a5; font-weight: bold; }
-        .print-section { margin-bottom: 25px; }
-        .print-title { color: #1b5e20; font-size: 18px; border-bottom: 1px solid #ddd; padding-bottom: 5px; margin-bottom: 15px; text-transform: uppercase; }
-        .print-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        .print-table th, .print-table td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 14px; }
-        .print-table th { background: #f9f9f9; color: #333; }
-        .print-totals { width: 300px; float: right; }
-        .print-totals-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 15px; }
-        .print-totals-final { font-weight: bold; font-size: 18px; color: #1b5e20; border-top: 2px solid #2e7d32; border-bottom: none; margin-top: 5px; padding-top: 10px; }
-        .print-clear { clear: both; }
-        .print-quality { margin-top: 40px; text-align: center; background: #e8f5e9; padding: 20px; border-radius: 10px; border: 1px dashed #4caf50; }
-        .print-quality h4 { color: #2e7d32; margin: 0 0 10px 0; }
-        .print-footer { margin-top: 50px; text-align: center; color: #666; font-size: 13px; border-top: 1px solid #ddd; padding-top: 15px; }
     </style>
 </head>
 <body>
@@ -851,199 +857,229 @@
 
             <!-- Bill / Invoice Section -->
             <div id="invoice-section" class="dash-section" style="display:none; padding: 1.5rem;">
-                <div class="dash-filter-bar" style="margin-bottom:1rem; display:flex; gap:10px; align-items:center;">
-                    <button class="btn" style="background:#5d4037; color:white; border:none; padding:0.6rem 1.2rem; border-radius:8px; cursor:pointer;" onclick="openSection('invoice-history')">📜 View Invoice History</button>
-                    <button class="btn" style="background:#757575; color:white; border:none; padding:0.6rem 1.2rem; border-radius:8px; cursor:pointer;" onclick="clearInvoiceForm()">🔄 Clear Form</button>
+                <div class="dash-filter-bar invoice-setup-bar" style="margin-bottom:1rem; display:flex; flex-wrap:wrap; gap:15px; align-items:center; background: #fff; padding: 15px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                    <div style="flex: 1; min-width: 250px;">
+                        <label style="font-size: 0.85rem; font-weight: 700; color: var(--primary-color);">Search Customer by CID / Phone</label>
+                        <select id="invCustomerSelect" onchange="loadCustomerToInvoice()" style="width:100%; padding: 8px; border: 1.5px solid #ccc; border-radius: 8px; margin-top: 5px; font-family: inherit;">
+                            <option value="">-- Select Customer --</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; gap: 10px; align-items: flex-end;">
+                        <button class="btn" style="background:#5d4037; color:white; border:none; padding:0.6rem 1.2rem; border-radius:8px; cursor:pointer;" onclick="openSection('invoice-history')">📜 View History</button>
+                        <button class="btn" style="background:#757575; color:white; border:none; padding:0.6rem 1.2rem; border-radius:8px; cursor:pointer;" onclick="clearInvoiceForm()">🔄 Clear</button>
+                    </div>
                 </div>
                 
-                <div class="invoice-container printable-invoice invoice-card" id="printableInvoice">
-                    <div class="invoice-header-box print-header">
-                        <h1 class="invoice-brand print-brand">AYYAPPA DAIRY FARM</h1>
-                        <p class="invoice-tagline print-tagline">Pure Milk • Healthy Life<br>TAKE PURE MILK • STAY HEALTHY</p>
-                        <h2 style="margin: 0; color: #ffca28;" class="print-title">MILK SUBSCRIPTION BILL / INVOICE</h2>
-                    </div>
+                <div class="invoice-wrapper">
+                    <div class="printable-invoice" id="printableInvoice">
+                        <div class="print-header">
+                            <h1 class="print-brand">AYYAPPA DAIRY FARM</h1>
+                            <p class="print-tagline">Pure Milk • Healthy Life</p>
+                            <p class="print-tagline" style="font-style: italic; margin-bottom: 10px;">Take Pure Milk • Stay Healthy</p>
+                            <h2 class="print-title">MILK SUBSCRIPTION BILL / INVOICE</h2>
+                        </div>
 
-                    <div class="invoice-meta print-meta" style="margin-bottom: 2rem;">
-                        <div>
-                            <span>INVOICE NO: </span>
-                            <span id="invNoDisplay" style="color:#ffb300;">Draft</span>
-                        </div>
-                        <div>
-                            <span>DATE: </span>
-                            <span id="invDateDisplay"></span>
-                        </div>
-                        <div>
-                            <span class="invoice-meta-badge" id="invStatusBadge">PENDING</span>
-                        </div>
-                    </div>
+                        <!-- Top Meta Table -->
+                        <table class="invoice-table">
+                            <tr>
+                                <td class="label-col-half">Invoice No.</td>
+                                <td class="val-col-half"><input type="text" id="invNoDisplay" value="ADF-DRAFT" class="invoice-input invoice-input-bold"></td>
+                                <td class="label-col-half">Invoice Date</td>
+                                <td class="val-col-half"><input type="text" id="invDateDisplay" class="invoice-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col-half">Payment Status</td>
+                                <td colspan="3"><select id="invStatusBadge" class="invoice-input invoice-input-bold"><option value="PENDING">PENDING</option><option value="PAID">PAID</option><option value="PARTIALLY PAID">PARTIALLY PAID</option></select></td>
+                            </tr>
+                        </table>
 
-                    <div class="invoice-amount-box print-section">
-                        <h3 class="invoice-section-title print-title">1. PERSONAL DETAILS</h3>
-                        <div class="invoice-grid print-hide-input">
-                            <div class="invoice-input-group">
-                                <label>Search Customer by CID / Phone</label>
-                                <select id="invCustomerSelect" onchange="loadCustomerToInvoice()">
-                                    <option value="">-- Select Customer --</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="invoice-grid">
-                            <div class="invoice-input-group">
-                                <label>Customer Name *</label>
-                                <input type="text" id="invName" required>
-                            </div>
-                            <div class="invoice-input-group">
-                                <label>Phone Number *</label>
-                                <input type="tel" id="invPhone" required>
-                            </div>
-                            <div class="invoice-input-group">
-                                <label>WhatsApp Number</label>
-                                <input type="tel" id="invWhatsApp">
-                            </div>
-                        </div>
-                        <div class="invoice-grid">
-                            <div class="invoice-input-group">
-                                <label>Location</label>
-                                <input type="text" id="invLocation">
-                            </div>
-                            <div class="invoice-input-group">
-                                <label>Area</label>
-                                <input type="text" id="invArea">
-                            </div>
-                            <div class="invoice-input-group">
-                                <label>Complete Address</label>
-                                <input type="text" id="invAddress">
-                            </div>
-                        </div>
-                    </div>
+                        <!-- 1. PERSONAL DETAILS -->
+                        <table class="invoice-table">
+                            <tr>
+                                <th colspan="2">1. PERSONAL DETAILS</th>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Customer Name</td>
+                                <td class="val-col"><input type="text" id="invName" class="invoice-input" required></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Phone Number</td>
+                                <td class="val-col"><input type="tel" id="invPhone" class="invoice-input" required></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">WhatsApp Number</td>
+                                <td class="val-col"><input type="tel" id="invWhatsApp" class="invoice-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Location</td>
+                                <td class="val-col"><input type="text" id="invLocation" class="invoice-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Area</td>
+                                <td class="val-col"><input type="text" id="invArea" class="invoice-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Address</td>
+                                <td class="val-col"><input type="text" id="invAddress" class="invoice-input"></td>
+                            </tr>
+                        </table>
 
-                    <div class="invoice-amount-box print-section">
-                        <h3 class="invoice-section-title print-title">2. SUBSCRIPTION / CID DETAILS</h3>
-                        <div class="invoice-grid">
-                            <div class="invoice-input-group">
-                                <label>Customer ID (CID)</label>
-                                <input type="text" id="invCid" readonly style="background: rgba(255,255,255,0.15); font-weight: bold;">
-                            </div>
-                            <div class="invoice-input-group">
-                                <label>Product *</label>
-                                <select id="invProduct" required>
-                                    <option value="">-- Select Product --</option>
-                                    <option value="Fresh Buffalo Milk">Fresh Buffalo Milk</option>
-                                    <option value="Fresh Cow Milk">Fresh Cow Milk</option>
-                                    <option value="Curd">Curd</option>
-                                    <option value="Organic Ghee">Organic Ghee</option>
-                                    <option value="Paneer">Paneer</option>
-                                </select>
-                            </div>
-                            <div class="invoice-input-group">
-                                <label>Quantity *</label>
-                                <select id="invQuantity" required>
-                                    <option value="0.5L">0.5L</option>
-                                    <option value="1L" selected>1L</option>
-                                    <option value="1.5L">1.5L</option>
-                                    <option value="2L">2L</option>
-                                    <option value="3L">3L</option>
-                                    <option value="4L">4L</option>
-                                    <option value="5L">5L</option>
-                                    <option value="1 Kg">1 Kg</option>
-                                </select>
-                            </div>
-                            <div class="invoice-input-group">
-                                <label>Subscription Type *</label>
-                                <select id="invSubType" onchange="calculateInvoiceDates()" required>
-                                    <option value="">-- Select Type --</option>
-                                    <option value="15 Days">15 Days</option>
-                                    <option value="Monthly">Monthly</option>
-                                </select>
-                            </div>
-                            <div class="invoice-input-group">
-                                <label>Start Date *</label>
-                                <input type="text" id="invStartDate" placeholder="Select Date" class="flatpickr-input" onchange="calculateInvoiceDates()" required>
-                            </div>
-                            <div class="invoice-input-group">
-                                <label>End Date</label>
-                                <input type="text" id="invEndDate" readonly style="background: rgba(255,255,255,0.15);">
-                            </div>
-                        </div>
-                    </div>
+                        <!-- 2. SUBSCRIPTION / CID DETAILS -->
+                        <table class="invoice-table">
+                            <tr>
+                                <th colspan="2">2. SUBSCRIPTION / CID DETAILS</th>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Customer ID (CID)</td>
+                                <td class="val-col"><input type="text" id="invCid" class="invoice-input invoice-input-bold"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Name</td>
+                                <td class="val-col"><input type="text" id="invNameCID" class="invoice-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Product</td>
+                                <td class="val-col">
+                                    <select id="invProduct" class="invoice-input" required>
+                                        <option value="">-- Select Product --</option>
+                                        <option value="Fresh Buffalo Milk">Fresh Buffalo Milk</option>
+                                        <option value="Fresh Cow Milk">Fresh Cow Milk</option>
+                                        <option value="Curd">Curd</option>
+                                        <option value="Organic Ghee">Organic Ghee</option>
+                                        <option value="Paneer">Paneer</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Subscription Type</td>
+                                <td class="val-col">
+                                    <select id="invSubType" class="invoice-input" onchange="calculateInvoiceDates()" required>
+                                        <option value="">-- Select Type --</option>
+                                        <option value="15 Days">15 Days</option>
+                                        <option value="Monthly">Monthly</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Start Date</td>
+                                <td class="val-col"><input type="text" id="invStartDate" placeholder="Select Date" class="invoice-input flatpickr-input" onchange="calculateInvoiceDates()" required></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">End Date</td>
+                                <td class="val-col"><input type="text" id="invEndDate" class="invoice-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Duration</td>
+                                <td class="val-col"><input type="text" id="invDuration" class="invoice-input" value="30 Days"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Quantity</td>
+                                <td class="val-col">
+                                    <select id="invQuantity" class="invoice-input" required>
+                                        <option value="0.5L">0.5L</option>
+                                        <option value="1L" selected>1L</option>
+                                        <option value="1.5L">1.5L</option>
+                                        <option value="2L">2L</option>
+                                        <option value="3L">3L</option>
+                                        <option value="4L">4L</option>
+                                        <option value="5L">5L</option>
+                                        <option value="1 Kg">1 Kg</option>
+                                        <option value="2 Litres/Day">2 Litres/Day</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        </table>
 
-                    <div style="display:flex; flex-wrap:wrap; gap: 1.5rem;">
-                        <div class="invoice-amount-box print-section" style="flex: 1; min-width:300px;">
-                            <h3 class="invoice-section-title print-title">3. AMOUNT DETAILS</h3>
-                            <div class="invoice-input-group" style="margin-bottom:10px;">
-                                <label>Total Amount (₹) *</label>
-                                <input type="number" id="invTotalAmt" oninput="calculateInvoiceAmounts()" required>
-                            </div>
-                            <div class="invoice-input-group" style="margin-bottom:10px;">
-                                <label>Discount (₹)</label>
-                                <input type="number" id="invDiscountAmt" value="0" oninput="calculateInvoiceAmounts()">
-                            </div>
-                            <div class="invoice-calc-row">
-                                <span>Total Amount:</span>
-                                <span>₹<span id="txtInvTotal">0</span></span>
-                            </div>
-                            <div class="invoice-calc-row">
-                                <span>Discount:</span>
-                                <span style="color:#f44336;">- ₹<span id="txtInvDiscount">0</span></span>
-                            </div>
-                            <div class="invoice-calc-row invoice-calc-total">
-                                <span>FINAL AMOUNT:</span>
-                                <span>₹<span id="txtInvFinal">0</span></span>
-                            </div>
-                        </div>
+                        <!-- 3. AMOUNT DETAILS -->
+                        <table class="invoice-table">
+                            <tr>
+                                <th style="width: 70%;">3. AMOUNT DETAILS</th>
+                                <th style="width: 30%; text-align: right;">Amount</th>
+                            </tr>
+                            <tr>
+                                <td class="bg-light">Total Amount</td>
+                                <td style="text-align: right;"><input type="number" id="invTotalAmt" class="invoice-input invoice-input-bold" oninput="calculateInvoiceAmounts()" style="text-align: right;" required></td>
+                            </tr>
+                            <tr>
+                                <td class="bg-light">Discount</td>
+                                <td style="text-align: right;"><input type="number" id="invDiscountAmt" class="invoice-input" value="0" oninput="calculateInvoiceAmounts()" style="text-align: right;"></td>
+                            </tr>
+                            <tr class="final-amt-row highlight-accent">
+                                <td>FINAL AMOUNT</td>
+                                <td style="text-align: right;">₹<span id="txtInvFinal">0</span></td>
+                            </tr>
+                        </table>
                         
-                        <div class="invoice-amount-box print-section" style="flex: 1; min-width:300px;">
-                            <h3 class="invoice-section-title print-title">4. PAYMENT DETAILS</h3>
-                            <div class="invoice-input-group" style="margin-bottom:10px;">
-                                <label>Payment Method</label>
-                                <select id="invPaymentMethod">
-                                    <option value="Online">Online / UPI</option>
-                                    <option value="Cash">Cash</option>
-                                </select>
-                            </div>
-                            <div class="invoice-input-group" style="margin-bottom:10px;">
-                                <label>Payment Received (₹)</label>
-                                <input type="number" id="invPaymentReceived" value="0" oninput="calculateInvoiceAmounts()">
-                            </div>
-                            <div class="invoice-calc-row" style="margin-top: 15px;">
-                                <span style="color:#b0bec5;">Payment Received:</span>
-                                <span style="color:#4caf50;">₹<span id="txtInvReceived">0</span></span>
-                            </div>
-                            <div class="invoice-calc-row">
-                                <span style="color:#b0bec5;">Balance Due:</span>
-                                <span style="color:#f44336; font-weight:bold;">₹<span id="txtInvBalance">0</span></span>
+                        <!-- Spans for javascript legacy compatibility -->
+                        <span id="txtInvTotal" style="display:none;">0</span>
+                        <span id="txtInvDiscount" style="display:none;">0</span>
+
+                        <!-- 4. PAYMENT DETAILS -->
+                        <table class="invoice-table">
+                            <tr>
+                                <th colspan="2">4. PAYMENT DETAILS</th>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Payment Method</td>
+                                <td class="val-col">
+                                    <select id="invPaymentMethod" class="invoice-input">
+                                        <option value="Online">Online / UPI</option>
+                                        <option value="Cash">Cash</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Payment Received</td>
+                                <td class="val-col"><input type="number" id="invPaymentReceived" class="invoice-input invoice-input-bold" value="0" oninput="calculateInvoiceAmounts()"></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light" style="color: black !important;">Balance Due</td>
+                                <td class="val-col invoice-input-bold" style="color:#f44336;">₹<span id="txtInvBalance">0</span></td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Payment Status</td>
+                                <td class="val-col invoice-input-bold"><span id="txtPaymentStatusStr">PENDING</span></td>
+                            </tr>
+                        </table>
+                        <span id="txtInvReceived" style="display:none;">0</span>
+
+                        <!-- DELIVERY -->
+                        <table class="invoice-table">
+                            <tr>
+                                <th colspan="2">DELIVERY</th>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Home Delivery</td>
+                                <td class="val-col">FREE</td>
+                            </tr>
+                            <tr>
+                                <td class="label-col bg-light">Delivery Type</td>
+                                <td class="val-col">Direct Farm-to-Home</td>
+                            </tr>
+                        </table>
+
+                        <!-- OUR QUALITY PROMISE -->
+                        <div class="quality-promise">
+                            <div class="quality-promise-header">OUR QUALITY PROMISE</div>
+                            <div class="quality-grid">
+                                <div class="quality-item bg-light">Healthy Murrah Buffaloes</div>
+                                <div class="quality-item bg-light">Clean & Hygienic Shed</div>
+                                <div class="quality-item">Hygienic Milking</div>
+                                <div class="quality-item">Clean Milk Collection</div>
+                                <div class="quality-item bg-light">Quality Checked</div>
+                                <div class="quality-item bg-light">Fresh & Natural</div>
+                                <div class="quality-item invoice-input-bold">No Chemicals / Water Added</div>
+                                <div class="quality-item invoice-input-bold"></div>
                             </div>
                         </div>
-                    </div>
 
-                    <div style="display:flex; flex-wrap:wrap; gap: 1.5rem;">
-                        <div class="invoice-amount-box print-section" style="flex: 1;">
-                            <h3 class="invoice-section-title print-title">5. DELIVERY DETAILS</h3>
-                            <p style="margin:5px 0;"><strong>Home Delivery:</strong> FREE</p>
-                            <p style="margin:5px 0;"><strong>Delivery Type:</strong> Direct Farm-to-Home Delivery</p>
+                        <!-- THANK YOU Footer -->
+                        <div class="invoice-footer">
+                            <h4 style="color: #1b5e20; margin: 0 0 10px 0; font-size: 14px;">■ THANK YOU!</h4>
+                            <p style="font-weight: bold; color: #1b5e20;">"After 30 Days Renew Your Subscription"</p>
+                            <p><strong>AYYAPPA DAIRY FARM</strong> • Fresh Milk • Trusted Quality • Farm-to-Home Delivery</p>
+                            <p>■ Velamavaripalem, Palnadu District, Andhra Pradesh</p>
                         </div>
-                    </div>
-
-                    <div class="invoice-quality print-quality">
-                        <h4 style="text-align: center; color: #ffeb3b; font-size: 1.2rem; margin-top:0;">OUR QUALITY PROMISE</h4>
-                        <ul>
-                            <li>Healthy Murrah Buffaloes</li>
-                            <li>Clean & Hygienic Shed</li>
-                            <li>Hygienic Milking</li>
-                            <li>Clean Milk Collection</li>
-                            <li>Quality Checked</li>
-                            <li>Fresh & Natural</li>
-                            <li>Direct Farm-to-Home Delivery</li>
-                            <li style="color:#f44336; font-size:1.1rem; list-style-type: none; font-weight: bold; padding-top: 5px;">🚫 NO CHEMICALS / WATER ADDED</li>
-                        </ul>
-                    </div>
-
-                    <div class="invoice-footer print-footer">
-                        <p style="font-weight:bold; font-size:1.1rem; color:#ffb300; margin-bottom:5px;">THANK YOU!</p>
-                        <p style="font-style:italic; margin-bottom:15px;">“After 30 Days Renew Your Subscription”</p>
-                        <p style="margin:2px;">AYYAPPA DAIRY FARM</p>
-                        <p style="margin:2px; font-size:0.85rem;">Fresh Milk • Trusted Quality • Farm-to-Home Delivery</p>
-                        <p style="margin:2px; font-size:0.8rem; color:#90a4ae;">Location: Velamavaripalem, Palnadu District, Andhra Pradesh</p>
                     </div>
                 </div>
 
@@ -6937,19 +6973,19 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             document.getElementById('txtInvBalance').textContent = balance.toFixed(2);
             
             const badge = document.getElementById('invStatusBadge');
+            const statusStr = document.getElementById('txtPaymentStatusStr');
+            let status = 'PENDING';
             if (finalAmt === 0 && total === 0) {
-                badge.textContent = 'PENDING';
-                badge.style.background = '#ff9800';
+                status = 'PENDING';
             } else if (balance <= 0) {
-                badge.textContent = 'PAID';
-                badge.style.background = '#4caf50';
+                status = 'PAID';
             } else if (received > 0 && balance > 0) {
-                badge.textContent = 'PARTIALLY PAID';
-                badge.style.background = '#2196f3';
+                status = 'PARTIALLY PAID';
             } else {
-                badge.textContent = 'PENDING';
-                badge.style.background = '#f44336';
+                status = 'PENDING';
             }
+            if (badge) badge.value = status;
+            if (statusStr) statusStr.textContent = status;
         }
 
         function clearInvoiceForm() {
@@ -7031,7 +7067,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                     paymentMethod: document.getElementById('invPaymentMethod').value,
                     paymentReceived: received,
                     balanceDue: finalAmt - received,
-                    paymentStatus: document.getElementById('invStatusBadge').textContent,
+                    paymentStatus: document.getElementById('invStatusBadge').value,
                     
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 };
@@ -7089,7 +7125,8 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                     const dummy = document.createElement('span');
                     dummy.className = 'temp-print-val';
                     dummy.textContent = opt ? opt.text : '';
-                    dummy.style.color = '#fff';
+                    dummy.style.color = '#000';
+                    dummy.style.fontWeight = 'bold';
                     el.style.display = 'none';
                     el.parentNode.appendChild(dummy);
                 } else if (el.tagName === 'INPUT') {
@@ -7097,20 +7134,23 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                     const dummy = document.createElement('span');
                     dummy.className = 'temp-print-val';
                     dummy.textContent = el.value;
-                    dummy.style.color = '#fff';
+                    dummy.style.color = '#000';
+                    if (el.classList.contains('invoice-input-bold')) {
+                        dummy.style.fontWeight = 'bold';
+                    }
                     el.style.display = 'none';
                     el.parentNode.appendChild(dummy);
                 }
             });
 
-            html2canvas(element, { scale: 2, backgroundColor: '#10252e' }).then(canvas => {
+            html2canvas(element, { scale: 2, backgroundColor: '#ffffff' }).then(canvas => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jspdf.jsPDF('p', 'mm', 'a4');
                 const pdfWidth = pdf.internal.pageSize.getWidth();
                 const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
                 
                 pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                const invNo = document.getElementById('invNoDisplay').textContent;
+                const invNo = document.getElementById('invNoDisplay').value || 'Draft';
                 pdf.save(`Ayyappa_Invoice_${invNo}.pdf`);
                 
                 // Restore elements
