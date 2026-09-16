@@ -937,6 +937,21 @@
                             <form id="portalCartOrderForm" onsubmit="handleDynamicCartSubmit(event)">
                                 <div style="background: white; border-radius: 20px; padding: 1.5rem; border: 1px solid #e0eee0; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
                                     
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="font-size: 1.05rem; font-weight: 800; color: #1b5e20; margin-bottom: 0.8rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.5rem;">Customer Details</h5>
+                                        <div class="modal-input-group" style="margin-bottom:0.8rem;">
+                                            <input type="text" id="guestName" placeholder="Full Name" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required>
+                                        </div>
+                                        <div class="modal-input-group" style="margin-bottom:0.8rem;">
+                                            <input type="tel" id="guestPhone" placeholder="Mobile Number" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required pattern="[0-9]{10}">
+                                        </div>
+                                        <div class="modal-input-group" style="margin-bottom:0.8rem;">
+                                            <textarea id="guestAddress" placeholder="Full Delivery Address & Locality/Area" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem; resize:vertical; min-height:80px;" required></textarea>
+                                        </div>
+                                    </div>
+
+                                    <h5 style="font-size: 1.05rem; font-weight: 800; color: #1b5e20; margin-bottom: 0.8rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.5rem;">Delivery Settings</h5>
+                                    
                                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
                                         <div class="modal-input-group" style="margin-bottom:0;">
                                             <label style="font-weight: 700; color: #333; font-size: 0.88rem;">Delivery Slot</label>
@@ -2294,7 +2309,7 @@
             container.innerHTML = `
                 <div style="text-align:center; padding: 2rem; color: #666;">
                     <p>Please sign in to view your live orders and status.</p>
-                    <button onclick="openCustomerSigninModal()" class="btn" style="background:var(--primary-color); color:white; padding:0.6rem 1.2rem; border-radius:50px; font-weight:700; border:none; cursor:pointer;">🔑 Sign In Now</button>
+                    <!-- Sign in system removed -->
                 </div>
             `;
             return;

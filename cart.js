@@ -237,16 +237,7 @@ function proceedToCheckout() {
         return;
     }
     
-    // Ensure customer is signed in before allowing them to access the checkout and payment screen
-    const customer = typeof getSignedInCustomer === 'function' ? getSignedInCustomer() : null;
-    if (!customer) {
-        if (typeof openCustomerSigninModal === 'function') {
-            openCustomerSigninModal();
-        } else {
-            alert('Please sign in to proceed to checkout.');
-        }
-        return;
-    }
+
     
     // Switch view
     document.getElementById('cart-main-view').style.display = 'none';
@@ -285,9 +276,13 @@ function proceedToCheckout() {
 async function handleDynamicCartSubmit(e) {
     if (e) e.preventDefault();
 
-    const customer = typeof getSignedInCustomer === 'function' ? getSignedInCustomer() : null;
-    if (!customer) {
-        if (typeof openCustomerSigninModal === 'function') openCustomerSigninModal();
+    // Guest Validation
+    const guestName = document.getElementById('guestName').value.trim();
+    const guestPhone = document.getElementById('guestPhone').value.trim();
+    const guestAddress = document.getElementById('guestAddress').value.trim();
+    
+    if (!guestName || !guestPhone || !guestAddress) {
+        alert("Please fill in all your customer details completely.");
         return;
     }
 
@@ -351,14 +346,11 @@ async function handleDynamicCartSubmit(e) {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const orderID = `AYY-ORD-${yyyy}${mm}${dd}-${randomNum}`;
 
-    const address = customer.address || '';
-    const area = customer.area || '';
-
     const orderDoc = {
         orderID: orderID,
-        name: customer.name || 'Customer',
-        phone: customer.phone || 'N/A',
-        membershipId: customer.membershipId || customer.id || 'AYY-M-1001',
+        name: guestName,
+        phone: guestPhone,
+        membershipId: 'GUEST-USER',
         qty: qtyStr,
         items: itemsSnapshot,
         amount: amountStr,
@@ -366,9 +358,9 @@ async function handleDynamicCartSubmit(e) {
         deliveryDate: deliveryDateStr,
         paymentType: paymentType,
         orderStatus: 'Pending',
-        paymentStatus: paymentType === 'Cash On Delivery' ? 'Pending' : 'Completed',
-        address: address,
-        area: area,
+        paymentStatus: paymentType.includes('COD') ? 'Pending' : 'Completed',
+        address: guestAddress,
+        area: 'NA',
         totalSubtotal: amountStr,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         placedAt: now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
@@ -384,9 +376,9 @@ async function handleDynamicCartSubmit(e) {
 
         const msg = `🥛 *AYYAPPA DAIRY FARM - DIRECT CART ORDER*\n\n` +
                     `✅ *Order ID:* ${orderID}\n` +
-                    `👤 *Customer Name:* ${customer.name}\n` +
-                    `🆔 *Membership ID:* ${customer.membershipId || customer.id || 'N/A'}\n` +
-                    `📞 *Phone:* ${customer.phone}\n` +
+                    `👤 *Customer Name:* ${guestName}\n` +
+                    `📞 *Phone:* ${guestPhone}\n` +
+                    `📌 *Delivery Address:* ${guestAddress}\n` +
                     `🛒 *Products:*\n${itemsSnapshot.map(i => `  - ${i.product}: ${i.qty} x ₹${i.price} = ₹${i.total}`).join('\n')}\n\n` +
                     `🕒 *Slot:* ${slot}\n` +
                     `📅 *Delivery Date:* ${deliveryDateStr}\n` +
