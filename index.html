@@ -6411,6 +6411,24 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             }
 
             // Check approval & progress status
+            let is15DayOr30Day = (matchedDoc.subType || matchedDoc.subscriptionType || '').toLowerCase().includes('days plan');
+
+            // Auto-heal old rejection status if they have a valid plan CID
+            if (is15DayOr30Day && matchedDoc.cid) {
+                if (matchedDoc.status === 'Rejected' || matchedDoc.progressStatus === 'Rejected' || matchedDoc.status === 'Pending') {
+                    // Instantly patch the database in the background to Active
+                    try {
+                        const targetId = snapshot.docs[0].id;
+                        db.collection('customers').doc(targetId).update({
+                            status: 'Active',
+                            progressStatus: 'Active'
+                        });
+                        matchedDoc.status = 'Active';
+                        matchedDoc.progressStatus = 'Active';
+                    } catch(e) { console.error('Auto-heal failed', e); }
+                }
+            }
+
             if (matchedDoc.status === 'Pending' || matchedDoc.progressStatus === 'Pending') {
                 alert('⏳ Your account registration progress is Pending Admin Approval.\n\nOnce updated to Active by Admin, your Sign-In will be enabled!');
                 if (btn) {
