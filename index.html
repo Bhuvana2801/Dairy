@@ -6702,6 +6702,10 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                  showPage('customer-dashboard');
             } else {
                  alert(`Your Current Plan is: ${custSession.subType}.\n\nThe full Customer Dashboard requires an active 15-Day Discount Plan or 30-Day Premium Subscription.`);
+                 // Purge invalid session so they aren't permanently locked out of invoking the login modal
+                 localStorage.removeItem('ayyappa_signed_in');
+                 localStorage.removeItem('ayyappa_signed_in_customer');
+                 checkAuthStateOnLoad(); // Instantly update header to say 'Sign In' instead of 'Dash'
                  showPage('home');
             }
         } catch (e) {
