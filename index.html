@@ -1617,8 +1617,11 @@
                                 <h4 style="color: #1b5e20; font-weight: 800; font-size: 1.3rem; margin-bottom: 0.8rem;">Complete your UPI Payment</h4>
                                 <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">If your UPI app didn't open automatically, please go back and scan the QR code to pay.<br><br><strong>Once you have successfully transferred the amount, click the button below to finalize your order.</strong></p>
                                 
-                                <button type="button" onclick="confirmUpiPayment()" style="width:100%; padding:1rem; margin-bottom: 1rem; font-size:1.05rem; font-weight:800; border-radius:50px; cursor:pointer; background: #166534; color:white; border:none; box-shadow:0 4px 15px rgba(22,101,52,0.35);">
+                                <button type="button" onclick="confirmUpiPayment()" style="width:100%; padding:1rem; margin-bottom: 0.8rem; font-size:1.05rem; font-weight:800; border-radius:50px; cursor:pointer; background: #166534; color:white; border:none; box-shadow:0 4px 15px rgba(22,101,52,0.35);">
                                     ✅ Yes, Payment Complete - Confirm Order
+                                </button>
+                                <button type="button" onclick="pendingUpiPayment()" style="width:100%; padding:1rem; margin-bottom: 1rem; font-size:1.05rem; font-weight:800; border-radius:50px; cursor:pointer; background: #ea580c; color:white; border:none; box-shadow:0 4px 15px rgba(234,88,12,0.35);">
+                                    ❌ Payment Not Completed - Confirm Order
                                 </button>
                                 <button type="button" onclick="cancelUpiPayment()" style="width:100%; padding:1rem; font-size:1rem; font-weight:700; border-radius:50px; cursor:pointer; background: #f1f5f9; color:#475569; border:none;">
                                     ← Go Back

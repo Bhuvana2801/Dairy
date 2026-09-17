@@ -193,7 +193,13 @@ function renderCart() {
 let isPaymentConfirmed = false;
 
 function confirmUpiPayment() {
-    isPaymentConfirmed = true;
+    isPaymentConfirmed = 'Completed';
+    const btn = document.getElementById('cartSubmitBtn');
+    if (btn) btn.click();
+}
+
+function pendingUpiPayment() {
+    isPaymentConfirmed = 'Pending';
     const btn = document.getElementById('cartSubmitBtn');
     if (btn) btn.click();
 }
@@ -346,6 +352,8 @@ async function handleDynamicCartSubmit(e) {
     const randomNum = Math.floor(1000 + Math.random() * 9000);
     const orderID = `AYY-ORD-${yyyy}${mm}${dd}-${randomNum}`;
 
+    const actualPaymentStatus = paymentType.includes('COD') ? 'Pending' : (isPaymentConfirmed === 'Completed' ? 'Completed' : 'Pending');
+
     const orderDoc = {
         orderID: orderID,
         name: guestName,
@@ -358,7 +366,7 @@ async function handleDynamicCartSubmit(e) {
         deliveryDate: deliveryDateStr,
         paymentType: paymentType,
         orderStatus: 'Pending',
-        paymentStatus: paymentType.includes('COD') ? 'Pending' : 'Completed',
+        paymentStatus: actualPaymentStatus,
         address: guestAddress,
         area: 'NA',
         totalSubtotal: amountStr,
@@ -382,7 +390,7 @@ async function handleDynamicCartSubmit(e) {
                     `🛒 *Products:*\n${itemsSnapshot.map(i => `  - ${i.product}: ${i.qty} x ₹${i.price} = ₹${i.total}`).join('\n')}\n\n` +
                     `🕒 *Slot:* ${slot}\n` +
                     `📅 *Delivery Date:* ${deliveryDateStr}\n` +
-                    `💳 *Payment:* ${paymentType}\n` +
+                    `💳 *Payment:* ${paymentType} (${actualPaymentStatus})\n` +
                     `💰 *Grand Total:* ₹${subtotal.toLocaleString('en-IN')}\n\n` +
                     `Thank you for ordering with Ayyappa Dairy Farm!`;
 
