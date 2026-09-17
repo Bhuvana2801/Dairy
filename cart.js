@@ -326,11 +326,20 @@ async function handleDynamicCartSubmit(e) {
         
         // 1. Launch Intent
         const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(upiName)}&am=${amount}&cu=INR`;
-        window.location.href = upiUrl;
         
-        // 2. Show Confirmation Dialog
-        document.getElementById('cart-checkout-view-inner').style.display = 'none';
-        document.getElementById('cart-upi-confirm-view').style.display = 'block';
+        // Use a hidden anchor element for more reliable deep linking on mobile browsers
+        const intentLink = document.createElement('a');
+        intentLink.href = upiUrl;
+        document.body.appendChild(intentLink);
+        intentLink.click();
+        document.body.removeChild(intentLink);
+        
+        // 2. Show Confirmation Dialog with a slight delay 
+        // This ensures the browser doesn't interrupt the deep link navigation with a DOM repaint
+        setTimeout(() => {
+            document.getElementById('cart-checkout-view-inner').style.display = 'none';
+            document.getElementById('cart-upi-confirm-view').style.display = 'block';
+        }, 600);
         return;
     }
 
