@@ -252,23 +252,14 @@
             </ul>
         </nav>
         <div class="nav-actions" style="display: flex; gap: 0.8rem; align-items: center;">
-            <div id="loggedInNavBtns" style="display: none; gap: 0.6rem; align-items: center;">
-                <button class="btn btn-orders" onclick="handleDashboardAccess()" style="background: rgba(255,255,255,0.18); color: white; border: 1.5px solid rgba(255,255,255,0.35); padding: 0.45rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(8px); display: flex; align-items: center; gap: 0.4rem;">
-                    <span style="color: #ba68c8; font-size: 1.1rem;">👤</span>
-                    <span style="line-height: 1.1; text-align: left;">My<br>Dashboard</span>
-                </button>
-                <button class="btn btn-logout" onclick="handleCustomerLogout()" style="background: #e53e3e; color: white; border: none; padding: 0.45rem 0.9rem; border-radius: 50px; font-weight: 800; font-size: 0.78rem; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; min-width: 60px;">
-                    <span style="font-size: 0.95rem; margin-bottom: 2px;">🚪</span>
-                    <span>Sign<br>Out</span>
-                </button>
-            <div style="display: flex; gap: 0.5rem; align-items: center;" id="loggedOutDesktopBtns">
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
                 <button class="btn" style="background: #eab308; color: #451a03; border-radius: 50px; padding: 0.45rem 1.1rem; font-weight: 800; font-size: 0.85rem; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 10px rgba(234,179,8,0.3);" onclick="handleDashboardAccess()">
                     <span style="font-size: 1.1rem;">👤</span> My Dashboard
                 </button>
                 <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
             </div>
         </div>
-        <div style="display: flex; gap: 0.5rem; align-items: center;" id="loggedOutMobileBtns">
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
             <button class="admin-mobile-btn" onclick="handleDashboardAccess()" style="background: #eab308; color: #451a03; box-shadow: 0 4px 10px rgba(234,179,8,0.3);">👤 Dash</button>
             <button class="admin-mobile-btn" onclick="openAdminModal()">Admin</button>
         </div>
@@ -6123,11 +6114,8 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             // Show My Dashboard in navbar
             if (navDashboardLi) navDashboardLi.style.display = 'inline-block';
 
-            // Toggle header buttons
+            // Toggle header banner
             if (publicNavBtns) publicNavBtns.style.display = 'none';
-            if (loggedOutDesktopBtns) loggedOutDesktopBtns.style.display = 'none';
-            // KEEP mobile buttons visible! (They handle both states natively via their functions)
-            if (loggedInNavBtns) loggedInNavBtns.style.display = 'flex';
 
             // Mobile nav
             if (mobOrder) mobOrder.style.display = 'flex';
@@ -6169,11 +6157,8 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             // Hide My Dashboard from navbar
             if (navDashboardLi) navDashboardLi.style.display = 'none';
 
-            // Toggle header buttons
+            // Toggle header banner
             if (publicNavBtns) publicNavBtns.style.display = 'flex';
-            if (loggedOutDesktopBtns) loggedOutDesktopBtns.style.display = 'flex';
-            if (loggedOutMobileBtns) loggedOutMobileBtns.style.display = 'flex';
-            if (loggedInNavBtns) loggedInNavBtns.style.display = 'none';
 
             // Mobile nav
             if (mobOrder) mobOrder.style.display = 'none';
