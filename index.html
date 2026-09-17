@@ -3973,17 +3973,20 @@
         const cidStr = cidInput.value.trim().toUpperCase();
         const pwdStr = pwdInput.value.trim();
 
-        if (!cidStr.startsWith('AADFQ')) {
-            alert("The 15-Day Plan Customer ID must strictly begin with the prefix 'AADFQ'.");
-            return;
-        }
-        
-        if (!confirm('Assign CID "' + cidStr + '" and Password to this customer and register them?')) return;
-        
         try {
             const docSnap = await db.collection('offer_claims').doc(docId).get();
             if(!docSnap.exists) return;
             const data = docSnap.data();
+
+            const isMonthly = data.plan && data.plan.includes('Premium');
+            const requiredPrefix = isMonthly ? 'ADFM' : 'AADFQ';
+
+            if (!cidStr.startsWith(requiredPrefix)) {
+                alert(`Invalid Prefix! For ${data.plan || '15 Days Plan'}, the Customer ID must strictly begin with '${requiredPrefix}'.`);
+                return;
+            }
+            
+            if (!confirm('Assign CID "' + cidStr + '" and Password to this customer and register them?')) return;
 
             // Update local claim
             await db.collection('offer_claims').doc(docId).update({
@@ -4003,8 +4006,8 @@
                     address: data.deliveryAddress || '',
                     cid: cidStr,
                     password: pwdStr,
-                    source: '15 Days Plan',
-                    subType: '15 Days Plan', // assign them the plan explicitly!
+                    source: data.plan || '15 Days Plan',
+                    subType: data.plan || '15 Days Plan',
                     status: 'Active',
                     progressStatus: 'Active',
                     registeredAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -4030,15 +4033,18 @@
             return;
         }
         
-        if (!cleanedCid.startsWith('AADFQ')) {
-            alert("The 15-Day Plan Customer ID must strictly begin with the prefix 'AADFQ'.");
-            return;
-        }
-
         try {
             const docSnap = await db.collection('offer_claims').doc(docId).get();
             if(!docSnap.exists) return;
             const data = docSnap.data();
+
+            const isMonthly = data.plan && data.plan.includes('Premium');
+            const requiredPrefix = isMonthly ? 'ADFM' : 'AADFQ';
+
+            if (!cleanedCid.startsWith(requiredPrefix)) {
+                alert(`Invalid Prefix! For ${data.plan || '15 Days Plan'}, the Customer ID must strictly begin with '${requiredPrefix}'.`);
+                return;
+            }
 
             await db.collection('offer_claims').doc(docId).update({
                 cid: cleanedCid,
@@ -4050,7 +4056,7 @@
                     cid: cleanedCid,
                     status: 'Active',
                     progressStatus: 'Active',
-                    subType: '15 Days Plan',
+                    subType: data.plan || '15 Days Plan',
                     password: newPwd.trim()
                 });
             }
@@ -6436,7 +6442,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             }
 
             // Check approval & progress status
-            let is15DayOr30Day = (matchedDoc.subType || matchedDoc.subscriptionType || '').toLowerCase().includes('days plan');
+            let is15DayOr30Day = (matchedDoc.subType || matchedDoc.subscriptionType || '').toLowerCase().includes('day');
 
             // Auto-heal old rejection status if they have a valid plan CID
             if (is15DayOr30Day && matchedDoc.cid) {
