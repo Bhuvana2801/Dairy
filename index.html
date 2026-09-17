@@ -1142,6 +1142,9 @@
                                 <th style="padding:10px;">Locality & Address</th>
                                 <th style="padding:10px;">Plan Details</th>
                                 <th style="padding:10px; text-align:center;">Action</th>
+                                <th style="padding:10px;">Access Controls</th>
+                                <th style="padding:10px;">Plan Dates</th>
+                                <th style="padding:10px; text-align:center;">Save Controls</th>
                             </tr>
                         </thead>
                         <tbody id="offerClaimsTbody">
@@ -3878,12 +3881,45 @@
                                 <button onclick="approveOfferClaim('${docId}')" style="background:#4caf50; color:white; border:none; padding:4px 8px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:0.8rem; box-shadow:0 2px 4px rgba(0,0,0,0.1);">Assign Access</button>
                             </div>
                             ` : `
-                            <div style="background:#e8f5e9; color:#2e7d32; padding:4px 8px; border-radius:5px; font-size:0.85rem; font-weight:bold; border:1px solid #c8e6c9; margin-bottom:8px; display:inline-block; text-align:center;">
+                            <div style="background:#e8f5e9; color:#2e7d32; padding:4px 8px; border-radius:5px; font-size:0.85rem; font-weight:bold; border:1px solid #c8e6c9; margin-bottom:4px; display:inline-block; text-align:center;">
                                 CID: ${data.cid}<br>
                                 PWD: ${data.password || 'N/A'}
                             </div><br>
+                            <button onclick="editOfferClaimCredentials('${docId}', '${data.cid}', '${data.password || ''}')" style="background:#2196f3; color:white; border:none; padding:4px 10px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:0.75rem; margin-bottom:8px;">Edit</button><br>
                             `}
                             <button onclick="deleteOfferClaim('${docId}')" style="background:#c62828; color:white; border:none; padding:6px 12px; border-radius:15px; cursor:pointer; font-weight:bold; box-shadow:0 3px 6px rgba(0,0,0,0.1);">Delete</button>
+                        </td>
+                        <td style="padding:10px;">
+                            <div style="margin-bottom:5px;">
+                                <label style="font-size:0.75rem; font-weight:bold;">Access:</label><br>
+                                <select id="acc_${docId}" style="font-size:0.8rem; padding:2px; border-radius:4px;">
+                                    <option value="Pending" ${data.accessStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Approved" ${data.accessStatus === 'Approved' ? 'selected' : ''}>Approved</option>
+                                </select>
+                            </div>
+                            <div style="margin-bottom:5px;">
+                                <label style="font-size:0.75rem; font-weight:bold;">Details:</label><br>
+                                <select id="det_${docId}" style="font-size:0.8rem; padding:2px; border-radius:4px;">
+                                    <option value="Pending" ${data.detailsStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Approved" ${data.detailsStatus === 'Approved' ? 'selected' : ''}>Approved</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label style="font-size:0.75rem; font-weight:bold;">Renewal:</label><br>
+                                <select id="ren_${docId}" style="font-size:0.8rem; padding:2px; border-radius:4px;">
+                                    <option value="Pending" ${data.renewalStatus === 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Approved" ${data.renewalStatus === 'Approved' ? 'selected' : ''}>Approved</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td style="padding:10px;">
+                            <label style="font-size:0.75rem; font-weight:bold;">Start:</label><br>
+                            <input type="date" id="sd_${docId}" value="${data.planStartDate || ''}" style="margin-bottom:8px; font-size:0.8rem; padding:2px; border-radius:4px; width: 110px;"><br>
+                            <label style="font-size:0.75rem; font-weight:bold;">End:</label><br>
+                            <input type="date" id="ed_${docId}" value="${data.planEndDate || ''}" style="font-size:0.8rem; padding:2px; border-radius:4px; width: 110px;">
+                        </td>
+                        <td style="padding:10px; text-align:center;">
+                            <button onclick="updateOfferClaimControls('${docId}', '${phone}')" style="background:#ff9800; color:white; border:none; padding:6px 12px; border-radius:15px; cursor:pointer; font-weight:bold; box-shadow:0 3px 6px rgba(0,0,0,0.1);">Update DB</button>
                         </td>
                     </tr>
                 `;
@@ -3960,6 +3996,74 @@
         } catch(err) {
             console.error("Error assigning credentials:", err);
             alert("Failed to assign credentials.");
+        }
+    }
+
+    async function editOfferClaimCredentials(docId, oldCid, oldPwd) {
+        const newCid = prompt("Edit Customer CID:", oldCid);
+        if (newCid === null) return; 
+        const newPwd = prompt("Edit Password:", oldPwd);
+        if (newPwd === null) return;
+        
+        if (newCid.trim() === '' || newPwd.trim() === '') {
+            alert("Credentials cannot be empty.");
+            return;
+        }
+
+        try {
+            const docSnap = await db.collection('offer_claims').doc(docId).get();
+            if(!docSnap.exists) return;
+            const data = docSnap.data();
+
+            await db.collection('offer_claims').doc(docId).update({
+                cid: newCid.trim(),
+                password: newPwd.trim()
+            });
+
+            if (data.phone) {
+                await db.collection('customers').doc(data.phone).update({
+                    cid: newCid.trim(),
+                    password: newPwd.trim()
+                });
+            }
+            alert("Credentials updated successfully!");
+        } catch (e) {
+            console.error(e);
+            alert("Failed to update credentials.");
+        }
+    }
+
+    async function updateOfferClaimControls(docId, phone) {
+        const acc = document.getElementById('acc_' + docId).value;
+        const det = document.getElementById('det_' + docId).value;
+        const ren = document.getElementById('ren_' + docId).value;
+        const sd = document.getElementById('sd_' + docId).value;
+        const ed = document.getElementById('ed_' + docId).value;
+
+        if (!confirm('Update advanced controls and dates for this customer?')) return;
+
+        try {
+            await db.collection('offer_claims').doc(docId).update({
+                accessStatus: acc,
+                detailsStatus: det,
+                renewalStatus: ren,
+                planStartDate: sd,
+                planEndDate: ed
+            });
+
+            if (phone && phone !== 'undefined') {
+                await db.collection('customers').doc(phone).set({
+                    accessStatus: acc,
+                    detailsStatus: det,
+                    renewalStatus: ren,
+                    planStartDate: sd,
+                    planEndDate: ed
+                }, { merge: true });
+            }
+            alert("Advanced controls successfully updated!");
+        } catch(e) {
+            console.error(e);
+            alert("Error updating advanced controls.");
         }
     }
 
@@ -6327,7 +6431,12 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 location: matchedDoc.location || 'Narasaraopet',
                 area: matchedDoc.area || '',
                 address: matchedDoc.address || '',
-                deliverySlot: matchedDoc.deliverySlot || matchedDoc.slot || 'Morning'
+                deliverySlot: matchedDoc.deliverySlot || matchedDoc.slot || 'Morning',
+                accessStatus: matchedDoc.accessStatus || 'Approved', // defaults to approved for legacy
+                detailsStatus: matchedDoc.detailsStatus || 'Approved',
+                renewalStatus: matchedDoc.renewalStatus || 'Approved',
+                planStartDate: matchedDoc.planStartDate || '',
+                planEndDate: matchedDoc.planEndDate || ''
             };
 
             localStorage.setItem('ayyappa_signed_in', 'true');
@@ -6514,6 +6623,14 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             const custSession = JSON.parse(custJSON);
             const st = (custSession.subType || '').toLowerCase();
             
+            if (st.includes('15') || st.includes('30')) {
+                if (custSession.accessStatus === 'Pending') {
+                    alert("Your Dashboard access is currently Pending admin approval.\n\nPlease check back later or contact support.");
+                    showPage('home');
+                    return;
+                }
+            }
+
             // Re-populate just in case it was missed on reload
             const dashNameDisplay = document.getElementById('dashCustNameDisplay');
             if (dashNameDisplay) {
@@ -6522,8 +6639,18 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 document.getElementById('dashCustPhoneDisplay').textContent = custSession.phone;
                 document.getElementById('dashCustWhatsappDisplay').textContent = custSession.whatsapp || custSession.phone;
                 document.getElementById('dashCustAddressDisplay').textContent = custSession.address + (custSession.area ? ', ' + custSession.area : '');
-                document.getElementById('dashCustSubDisplay').textContent = custSession.subType;
-                document.getElementById('dashCustSlotDisplay').textContent = custSession.deliverySlot;
+                
+                if (custSession.detailsStatus === 'Pending') {
+                    document.getElementById('dashCustSubDisplay').textContent = "Pending Admin Assignment";
+                    document.getElementById('dashCustSlotDisplay').textContent = "Pending Assignment";
+                } else {
+                    let dateStr = "";
+                    if (custSession.planStartDate && custSession.planEndDate) {
+                        dateStr = ` (${custSession.planStartDate} to ${custSession.planEndDate})`;
+                    }
+                    document.getElementById('dashCustSubDisplay').textContent = custSession.subType + dateStr;
+                    document.getElementById('dashCustSlotDisplay').textContent = custSession.deliverySlot;
+                }
             }
 
             if (st.includes('15') || st.includes('30')) {
