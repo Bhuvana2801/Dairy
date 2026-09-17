@@ -363,29 +363,7 @@ async function handleDynamicCartSubmit(e) {
 
     const actualPaymentStatus = paymentType.includes('COD') ? 'Pending' : (isPaymentConfirmed === 'Completed' ? 'Completed' : 'Pending');
 
-    const orderDoc = {
-        orderID: orderID,
-        name: guestName,
-        phone: guestPhone,
-        membershipId: 'GUEST-USER',
-        qty: qtyStr,
-        items: itemsSnapshot,
-        amount: amountStr,
-        deliverySlot: slot,
-        deliveryDate: deliveryDateStr,
-        paymentType: paymentType,
-        orderStatus: 'Pending',
-        paymentStatus: actualPaymentStatus,
-        address: guestAddress,
-        area: 'NA',
-        totalSubtotal: amountStr,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        placedAt: now.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })
-    };
-
     try {
-        await db.collection('orders').add(orderDoc);
-
         if (btn) {
             btn.disabled = false;
             btn.innerHTML = '🛒 Confirm Order';
