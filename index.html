@@ -491,6 +491,15 @@
                     </div>
                 </div>
 
+                <div class="modal-input-group" style="margin-bottom:1rem;">
+                    <label style="font-size:0.85rem; font-weight:700; color:#444;">Subscription Type <span style="color:red">*</span></label>
+                    <select id="offerPlanType" required style="width:100%; border-radius:10px; border:1px solid #ccc; padding:0.6rem; font-size:0.85rem; margin-top:5px;">
+                        <option value="">Select Plan Type</option>
+                        <option value="15 Days Plan">15 Days Plan</option>
+                        <option value="30-Day Premium Plan">30-Day Premium Plan</option>
+                    </select>
+                </div>
+
                 <div style="display:flex; gap:10px; margin-bottom:1rem;">
                     <div class="modal-input-group" style="flex:1;">
                         <label style="font-size:0.85rem; font-weight:700; color:#444;">Quantity <span style="color:red">*</span></label>
@@ -1795,7 +1804,7 @@
                 <div style="background:linear-gradient(90deg, #ffb300, #ffeb3b); text-align:center; padding:10px; font-weight:900; font-size:1.6rem; color:#b71c1c; border-radius:12px; margin-top:15px; box-shadow:0 6px 12px rgba(255,179,0,0.3);">
                     <div style="font-size:0.85rem; color:#5d4037; text-transform:uppercase; margin-bottom:2px;">Customer Saves</div>₹100
                 </div>
-                <button onclick="openOfferClaimModal()" style="display:block; width:100%; margin-top:15px; padding:12px; background:linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color:#fff; border:none; border-radius:30px; font-weight:900; font-size:1.1rem; cursor:pointer; box-shadow: 0 4px 10px rgba(27,94,32,0.4); text-transform:uppercase; transition: 0.2s transform;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                <button onclick="openOfferClaimModal('15 Days Plan')" style="display:block; width:100%; margin-top:15px; padding:12px; background:linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color:#fff; border:none; border-radius:30px; font-weight:900; font-size:1.1rem; cursor:pointer; box-shadow: 0 4px 10px rgba(27,94,32,0.4); text-transform:uppercase; transition: 0.2s transform;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
                     ⚡ Claim Offer
                 </button>
             </div>
@@ -1832,7 +1841,7 @@
                         1 Extra Day<br><span style="font-size:1.2rem; display:block; margin-top:2px;">FREE</span>
                     </div>
                 </div>
-                <button onclick="openOfferClaimModal()" style="display:block; width:100%; margin-top:15px; padding:12px; background:linear-gradient(135deg, #0d47a1 0%, #1565c0 100%); color:#fff; border:none; border-radius:30px; font-weight:900; font-size:1.1rem; cursor:pointer; box-shadow: 0 4px 10px rgba(13,71,161,0.4); text-transform:uppercase; transition: 0.2s transform;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                <button onclick="openOfferClaimModal('30-Day Premium Plan')" style="display:block; width:100%; margin-top:15px; padding:12px; background:linear-gradient(135deg, #0d47a1 0%, #1565c0 100%); color:#fff; border:none; border-radius:30px; font-weight:900; font-size:1.1rem; cursor:pointer; box-shadow: 0 4px 10px rgba(13,71,161,0.4); text-transform:uppercase; transition: 0.2s transform;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
                     ⚡ Claim Offer
                 </button>
             </div>
@@ -6592,8 +6601,12 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
     }
 
     // Offer Claim Modal Logic
-    function openOfferClaimModal() {
+    function openOfferClaimModal(planName = '') {
         const m = document.getElementById('offerClaimModal');
+        const planInput = document.getElementById('offerPlanType');
+        if (planInput && planName) {
+            planInput.value = planName;
+        }
         if (m) m.style.display = 'flex';
     }
 
@@ -6631,8 +6644,10 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 return;
             }
 
+            const plan = document.getElementById('offerPlanType').value || "15-Day Subscription";
+
             const offerData = {
-                plan: "15-Day Subscription",
+                plan: plan,
                 name: name,
                 phone: phone,
                 whatsapp: wa,
