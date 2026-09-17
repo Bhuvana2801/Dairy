@@ -3873,8 +3873,9 @@
                         <td style="padding:10px; text-align:center;">
                             ${!data.cid ? `
                             <div style="display:flex; flex-direction:column; gap:5px; align-items:center; margin-bottom:8px;">
-                                <input type="text" id="cid_${docId}" placeholder="Enter CID" style="width:90px; padding:5px; font-size:0.8rem; border:1px solid #ccc; border-radius:5px; text-align:center; font-weight:bold;">
-                                <button onclick="approveOfferClaim('${docId}')" style="background:#4caf50; color:white; border:none; padding:4px 8px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:0.8rem; box-shadow:0 2px 4px rgba(0,0,0,0.1);">Assign CID</button>
+                                <input type="text" id="cid_${docId}" placeholder="Enter CID" style="width:110px; padding:5px; font-size:0.8rem; border:1px solid #ccc; border-radius:5px; text-align:center; font-weight:bold;">
+                                <input type="text" id="pwd_${docId}" placeholder="Password" style="width:110px; padding:5px; font-size:0.8rem; border:1px solid #ccc; border-radius:5px; text-align:center; font-weight:bold;">
+                                <button onclick="approveOfferClaim('${docId}')" style="background:#4caf50; color:white; border:none; padding:4px 8px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:0.8rem; box-shadow:0 2px 4px rgba(0,0,0,0.1);">Assign Access</button>
                             </div>
                             ` : `
                             <div style="background:#e8f5e9; color:#2e7d32; padding:4px 8px; border-radius:5px; font-size:0.85rem; font-weight:bold; border:1px solid #c8e6c9; margin-bottom:8px; display:inline-block;">
@@ -3909,12 +3910,21 @@
 
     async function approveOfferClaim(docId) {
         const cidInput = document.getElementById('cid_' + docId);
+        const pwdInput = document.getElementById('pwd_' + docId);
+        
         if (!cidInput || !cidInput.value.trim()) {
             alert("Please enter a valid Customer ID (CID) to assign.");
             return;
         }
+        if (!pwdInput || !pwdInput.value.trim()) {
+            alert("Please enter a valid Password to assign.");
+            return;
+        }
+        
         const cidStr = cidInput.value.trim();
-        if (!confirm('Assign CID "' + cidStr + '" to this customer and register them?')) return;
+        const pwdStr = pwdInput.value.trim();
+        
+        if (!confirm('Assign CID "' + cidStr + '" and Password to this customer and register them?')) return;
         
         try {
             const docSnap = await db.collection('offer_claims').doc(docId).get();
@@ -3924,6 +3934,7 @@
             // Update local claim
             await db.collection('offer_claims').doc(docId).update({
                 cid: cidStr,
+                password: pwdStr,
                 status: 'Approved' // Changes badge logic conditionally
             });
 
@@ -3937,15 +3948,17 @@
                     area: data.area || '',
                     address: data.deliveryAddress || '',
                     cid: cidStr,
+                    password: pwdStr,
                     source: '15 Days Plan',
+                    subType: '15 Days Plan', // assign them the plan explicitly!
                     registeredAt: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
             }
             
-            alert("Customer registered & CID Assigned Successfully!");
+            alert("Customer registered & Credentials Assigned Successfully!");
         } catch(err) {
-            console.error("Error assigning CID:", err);
-            alert("Failed to assign CID.");
+            console.error("Error assigning credentials:", err);
+            alert("Failed to assign credentials.");
         }
     }
 
