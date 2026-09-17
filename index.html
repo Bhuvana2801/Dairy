@@ -461,7 +461,7 @@
             <button class="modal-close" onclick="closeOfferClaimModal()" style="font-size:1.8rem; color:#666; top: 15px; right: 20px;">&times;</button>
             
             <div style="text-align:center; padding-bottom:1rem; border-bottom:2px dashed #ddd; margin-bottom:1rem;">
-                <h2 style="color:var(--primary-color); font-size:1.6rem; font-weight:900; margin:0;">15-Day Subscription</h2>
+                <h2 id="offerModalRootTitle" style="color:var(--primary-color); font-size:1.6rem; font-weight:900; margin:0;">15-Day Subscription</h2>
                 <div style="background:#ffeb3b; padding:2px 10px; border-radius:10px; display:inline-block; font-size:0.85rem; font-weight:800; color:#5d4037; margin-top:5px;">Claim Your Offer</div>
             </div>
 
@@ -6604,8 +6604,14 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
     function openOfferClaimModal(planName = '') {
         const m = document.getElementById('offerClaimModal');
         const planInput = document.getElementById('offerPlanType');
+        const titleEl = document.getElementById('offerModalRootTitle');
+        
         if (planInput && planName) {
             planInput.value = planName;
+        }
+        
+        if (titleEl) {
+            titleEl.textContent = (planName === '30-Day Premium Plan') ? '30-Day Premium Plan' : '15-Day Subscription';
         }
         if (m) m.style.display = 'flex';
     }
