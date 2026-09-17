@@ -248,12 +248,12 @@
                 <li><a href="#" onclick="showPage('offers')" id="nav-offers" style="font-weight: 700;">Grab Offers</a></li>
                 <li><a href="#" onclick="showPage('contact')" id="nav-contact" style="font-weight: 700;">Contact</a></li>
                 <li><a href="#" onclick="showPage('install')" id="nav-install" style="font-weight: 700;">Install</a></li>
-                <li id="nav-dashboard-li" style="display: none;"><a href="#" onclick="openCustomerOrdersModal()" id="nav-dashboard" style="font-weight: 700; line-height: 1.1; display: inline-block; text-align: center;">My<br>Dashboard</a></li>
+                <li id="nav-dashboard-li" style="display: none;"><a href="#" onclick="handleDashboardAccess()" id="nav-dashboard" style="font-weight: 700; line-height: 1.1; display: inline-block; text-align: center;">My<br>Dashboard</a></li>
             </ul>
         </nav>
         <div class="nav-actions" style="display: flex; gap: 0.8rem; align-items: center;">
             <div id="loggedInNavBtns" style="display: none; gap: 0.6rem; align-items: center;">
-                <button class="btn btn-orders" onclick="openCustomerOrdersModal()" style="background: rgba(255,255,255,0.18); color: white; border: 1.5px solid rgba(255,255,255,0.35); padding: 0.45rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(8px); display: flex; align-items: center; gap: 0.4rem;">
+                <button class="btn btn-orders" onclick="handleDashboardAccess()" style="background: rgba(255,255,255,0.18); color: white; border: 1.5px solid rgba(255,255,255,0.35); padding: 0.45rem 1.1rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.3s; backdrop-filter: blur(8px); display: flex; align-items: center; gap: 0.4rem;">
                     <span style="color: #ba68c8; font-size: 1.1rem;">👤</span>
                     <span style="line-height: 1.1; text-align: left;">My<br>Dashboard</span>
                 </button>
@@ -261,10 +261,15 @@
                     <span style="font-size: 0.95rem; margin-bottom: 2px;">🚪</span>
                     <span>Sign<br>Out</span>
                 </button>
+            <div style="display: flex; gap: 0.5rem; align-items: center;" id="loggedOutDesktopBtns">
+                <button class="btn" style="background: #eab308; color: #451a03; border-radius: 50px; padding: 0.45rem 1.1rem; font-weight: 800; font-size: 0.85rem; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 0.4rem; box-shadow: 0 4px 10px rgba(234,179,8,0.3);" onclick="handleDashboardAccess()">
+                    <span style="font-size: 1.1rem;">👤</span> My Dashboard
+                </button>
+                <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
             </div>
-            <button class="btn btn-admin" id="adminBtn" onclick="openAdminModal()">Admin</button>
         </div>
-        <div style="display: flex; gap: 0.5rem; align-items: center;">
+        <div style="display: flex; gap: 0.5rem; align-items: center;" id="loggedOutMobileBtns">
+            <button class="admin-mobile-btn" onclick="handleDashboardAccess()" style="background: #eab308; color: #451a03; box-shadow: 0 4px 10px rgba(234,179,8,0.3);">👤 Dash</button>
             <button class="admin-mobile-btn" onclick="openAdminModal()">Admin</button>
         </div>
     </header>
@@ -2148,7 +2153,106 @@
                     </div>
                 </div>
                 
+        <!-- CUSTOMER DASHBOARD PAGE -->
+        <div id="page-customer-dashboard" class="page-view" style="display: none; padding-top: 80px; padding-bottom: 80px; background: #f8fafc; min-height: 100vh;">
+            <div class="container" style="max-width: 900px; margin: 0 auto; padding: 0 1rem;">
+                <div style="background: white; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); overflow: hidden; margin-top: 2rem;">
+                    
+                    <!-- Dashboard Header -->
+                    <div style="background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); text-align: center; color: white; padding: 3rem 1.5rem; position: relative;">
+                        <!-- Back button in dashboard header -->
+                        <button class="back-btn" onclick="showPage('home')" title="Back to Home" style="position: absolute; top: 1.5rem; left: 1.5rem; background: rgba(255,255,255,0.2); border: none; width: 40px; height: 40px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        </button>
+                        
+                        <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.15); border: 3px solid rgba(255, 255, 255, 0.4); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem auto; box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);">
+                            <span style="font-size: 2.2rem;">👨‍🌾</span>
+                        </div>
+                        <h2 id="dashCustNameDisplay" style="font-size: 2rem; font-weight: 800; margin-bottom: 0.2rem;">Premium Member</h2>
+                        <span id="dashCustIdDisplay" style="background: #eab308; color: #451a03; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 800; font-size: 0.85rem; letter-spacing: 0.5px;">-</span>
+                    </div>
+
+                    <!-- Dashboard Content Tabs/Grid -->
+                    <div style="padding: 2rem;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                            
+                            <!-- Personal Info -->
+                            <div style="background: #f1f5f9; padding: 1.5rem; border-radius: 16px; border: 1px solid #e2e8f0;">
+                                <h4 style="color: #0f172a; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><span style="font-size:1.3rem;">📋</span> Personal Info</h4>
+                                <div style="margin-bottom: 0.8rem; font-size: 0.95rem;">
+                                    <span style="color: #64748b; font-weight: 600; display: block; font-size: 0.8rem; text-transform: uppercase;">Phone Number</span>
+                                    <strong id="dashCustPhoneDisplay" style="color: #334155;">-</strong>
+                                </div>
+                                <div style="margin-bottom: 0.8rem; font-size: 0.95rem;">
+                                    <span style="color: #64748b; font-weight: 600; display: block; font-size: 0.8rem; text-transform: uppercase;">WhatsApp</span>
+                                    <strong id="dashCustWhatsappDisplay" style="color: #334155;">-</strong>
+                                </div>
+                                <div style="font-size: 0.95rem;">
+                                    <span style="color: #64748b; font-weight: 600; display: block; font-size: 0.8rem; text-transform: uppercase;">Delivery Location</span>
+                                    <strong id="dashCustAddressDisplay" style="color: #334155;">-</strong>
+                                </div>
+                            </div>
+
+                            <!-- Subscription Details -->
+                            <div style="background: #f0fdf4; padding: 1.5rem; border-radius: 16px; border: 1px solid #dcfce7; position: relative;">
+                                <div style="position: absolute; top: 1rem; right: 1rem; font-size: 2rem; opacity: 0.2;">⭐</div>
+                                <h4 style="color: #166534; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><span style="font-size:1.3rem;">📦</span> Current Plan</h4>
+                                <div style="margin-bottom: 0.8rem; font-size: 0.95rem;">
+                                    <span style="color: #166534; font-weight: 600; display: block; font-size: 0.8rem; text-transform: uppercase;">Active Subscription</span>
+                                    <strong id="dashCustSubDisplay" style="color: #15803d; font-size: 1.1rem; border-bottom: 2px dashed #bbf7d0; display: inline-block;">-</strong>
+                                </div>
+                                <div style="margin-bottom: 0.8rem; font-size: 0.95rem;">
+                                    <span style="color: #166534; font-weight: 600; display: block; font-size: 0.8rem; text-transform: uppercase;">Delivery Slot</span>
+                                    <strong id="dashCustSlotDisplay" style="color: #15803d;">-</strong>
+                                </div>
+                            </div>
+
+                            <!-- Rewards -->
+                            <div style="background: #fffbeb; padding: 1.5rem; border-radius: 16px; border: 1px solid #fef3c7; grid-column: 1 / -1; position: relative;">
+                                <div style="position: absolute; top: 1.2rem; right: 1.2rem; background: #fef08a; color: #854d0e; font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 10px;">BETA</div>
+                                <h4 style="color: #b45309; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem;"><span style="font-size:1.3rem;">🎁</span> Rewards & Perks</h4>
+                                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                                    <div style="flex: 1; min-width: 200px; background: white; padding: 1.3rem; border-radius: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #fef08a;">
+                                        <p style="color: #854d0e; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.2rem;">Available Dairy Coins</p>
+                                        <div style="font-size: 1.8rem; font-weight: 900; color: #d97706; display: flex; align-items: center; gap: 0.5rem;">🪙 0</div>
+                                    </div>
+                                    <div style="flex: 1; min-width: 200px; background: white; padding: 1.3rem; border-radius: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.02); border: 1px solid #fef08a;">
+                                        <p style="color: #854d0e; font-size: 0.85rem; font-weight: 700; margin-bottom: 0.2rem;">Next Milestone</p>
+                                        <div style="color: #a16207; font-size: 0.95rem; font-weight: 600; margin-top: 5px;">Unlock Free Dessert at 500 Coins!</div>
+                                        <div style="width: 100%; background: #fef08a; height: 8px; border-radius: 10px; margin-top: 10px; overflow: hidden;">
+                                            <div style="width: 0%; background: #d97706; height: 100%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Orders List -->
+                            <div style="grid-column: 1 / -1; margin-top: 1rem;">
+                                <h4 style="color: #0f172a; margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: space-between; font-size: 1.1rem;">
+                                    <span><span style="font-size:1.3rem;">🧾</span> Recent Orders</span>
+                                    <button style="background: transparent; border: 1px solid #cbd5e1; padding: 0.35rem 0.9rem; border-radius: 50px; cursor: pointer; font-size: 0.82rem; font-weight: 700; color: #475569; transition: 0.2s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='transparent'" onclick="alert('Full order checkout history is synced locally.')">View All</button>
+                                </h4>
+                                <div style="background: white; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden;">
+                                    <div style="padding: 3rem 1.5rem; text-align: center; color: #94a3b8;">
+                                        <div style="font-size: 2.8rem; margin-bottom: 0.5rem; opacity: 0.4;">🛒</div>
+                                        <p style="font-size: 0.95rem; line-height: 1.5; color: #64748b; font-weight: 500;">You are on an active subscription plan.<br>Your daily milk tracking and order logs will appear here.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
                 
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-logout" onclick="handleCustomerLogout()" style="background: #e53e3e; color: white; border: none; padding: 0.8rem 2rem; border-radius: 50px; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 8px 20px rgba(229, 62, 62, 0.25);">
+                        <span style="font-size: 1.1rem;">🚪</span> Sign Out
+                    </button>
+                    <p style="margin-top: 0.8rem; font-size: 0.75rem; color: #a1a1aa; font-weight: 600;">Secure Portal by Ayyappa Dairy Farm</p>
+                </div>
+            </div>
+        </div>
+        
 
         <!-- CONTACT DETAILS PAGE -->
         <div id="page-contact" class="page-view">
@@ -6001,6 +6105,8 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         // Nav action buttons
         const publicNavBtns = document.getElementById('publicNavBtns');
         const loggedInNavBtns = document.getElementById('loggedInNavBtns');
+        const loggedOutDesktopBtns = document.getElementById('loggedOutDesktopBtns');
+        const loggedOutMobileBtns = document.getElementById('loggedOutMobileBtns');
 
         // Home hero boxes
         const publicBox = document.getElementById('heroPublicBox');
@@ -6019,6 +6125,8 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
 
             // Toggle header buttons
             if (publicNavBtns) publicNavBtns.style.display = 'none';
+            if (loggedOutDesktopBtns) loggedOutDesktopBtns.style.display = 'none';
+            if (loggedOutMobileBtns) loggedOutMobileBtns.style.display = 'none';
             if (loggedInNavBtns) loggedInNavBtns.style.display = 'flex';
 
             // Mobile nav
@@ -6063,6 +6171,8 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
 
             // Toggle header buttons
             if (publicNavBtns) publicNavBtns.style.display = 'flex';
+            if (loggedOutDesktopBtns) loggedOutDesktopBtns.style.display = 'flex';
+            if (loggedOutMobileBtns) loggedOutMobileBtns.style.display = 'flex';
             if (loggedInNavBtns) loggedInNavBtns.style.display = 'none';
 
             // Mobile nav
@@ -6233,8 +6343,26 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             checkAuthStateOnLoad();
 
             alert(`🎉 Welcome back, ${custSession.name}!\n\nYou have successfully signed in (ID: ${custSession.id}).`);
-            openCustomerOrdersModal('home');
+            
+            // Populate dashboard data
+            const dashNameDisplay = document.getElementById('dashCustNameDisplay');
+            if (dashNameDisplay) {
+                dashNameDisplay.textContent = custSession.name;
+                document.getElementById('dashCustIdDisplay').textContent = custSession.id;
+                document.getElementById('dashCustPhoneDisplay').textContent = custSession.phone;
+                document.getElementById('dashCustWhatsappDisplay').textContent = custSession.whatsapp || custSession.phone;
+                document.getElementById('dashCustAddressDisplay').textContent = custSession.address + (custSession.area ? ', ' + custSession.area : '');
+                document.getElementById('dashCustSubDisplay').textContent = custSession.subType;
+                document.getElementById('dashCustSlotDisplay').textContent = custSession.deliverySlot;
+            }
 
+            const st = (custSession.subType || '').toLowerCase();
+            if (st.includes('15') || st.includes('30')) {
+                showPage('customer-dashboard');
+            } else {
+                alert(`Your Current Plan is: ${custSession.subType}.\n\nThe full Customer Dashboard requires an active 15-Day Discount Plan or 30-Day Premium Subscription.`);
+                showPage('home');
+            }
         } catch (err) {
             console.error("Sign in error:", err);
             alert("Error signing in: " + err.message);
@@ -6374,6 +6502,40 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         } finally {
             btn.textContent = 'SUBMIT CLAIM';
             btn.disabled = false;
+        }
+    }
+
+    function handleDashboardAccess() {
+        const custJSON = localStorage.getItem('ayyappa_signed_in_customer');
+        if (!custJSON) {
+             openCustomerSigninModal();
+             return;
+        }
+        try {
+            const custSession = JSON.parse(custJSON);
+            const st = (custSession.subType || '').toLowerCase();
+            
+            // Re-populate just in case it was missed on reload
+            const dashNameDisplay = document.getElementById('dashCustNameDisplay');
+            if (dashNameDisplay) {
+                dashNameDisplay.textContent = custSession.name;
+                document.getElementById('dashCustIdDisplay').textContent = custSession.id;
+                document.getElementById('dashCustPhoneDisplay').textContent = custSession.phone;
+                document.getElementById('dashCustWhatsappDisplay').textContent = custSession.whatsapp || custSession.phone;
+                document.getElementById('dashCustAddressDisplay').textContent = custSession.address + (custSession.area ? ', ' + custSession.area : '');
+                document.getElementById('dashCustSubDisplay').textContent = custSession.subType;
+                document.getElementById('dashCustSlotDisplay').textContent = custSession.deliverySlot;
+            }
+
+            if (st.includes('15') || st.includes('30')) {
+                 showPage('customer-dashboard');
+            } else {
+                 alert(`Your Current Plan is: ${custSession.subType}.\n\nThe full Customer Dashboard requires an active 15-Day Discount Plan or 30-Day Premium Subscription.`);
+                 showPage('home');
+            }
+        } catch (e) {
+            console.error(e);
+            openCustomerSigninModal();
         }
     }
 
