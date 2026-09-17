@@ -6369,6 +6369,9 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 snapshot = await db.collection('customers').where('customerId', '==', inputId).get();
             }
             if (snapshot.empty) {
+                snapshot = await db.collection('customers').where('cid', '==', inputId).get();
+            }
+            if (snapshot.empty) {
                 snapshot = await db.collection('customers').where('membershipId', '==', inputId).get();
             }
 
@@ -6425,7 +6428,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
                 name: matchedDoc.name || 'Customer',
                 phone: matchedDoc.phone || inputId,
                 whatsapp: matchedDoc.whatsapp || matchedDoc.phone || '',
-                id: matchedDoc.customerId || matchedDoc.membershipId || 'AYY-C-1001',
+                id: matchedDoc.cid || matchedDoc.customerId || matchedDoc.membershipId || 'AYY-C-1001',
                 membershipId: matchedDoc.membershipId || 'AYY-M-1001',
                 subType: matchedDoc.subscriptionType || matchedDoc.subType || 'Daily Subscription',
                 location: matchedDoc.location || 'Narasaraopet',
