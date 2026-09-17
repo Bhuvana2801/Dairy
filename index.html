@@ -4062,6 +4062,7 @@
                     renewalStatus: ren,
                     planStartDate: sd,
                     planEndDate: ed,
+                    subType: '15 Days Plan',
                     status: 'Active',
                     progressStatus: 'Active'
                 }, { merge: true });
@@ -6448,13 +6449,18 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
             }
 
             // Successfully authenticated!
+            let inferredType = matchedDoc.subscriptionType || matchedDoc.subType || 'Daily Subscription';
+            if (matchedDoc.cid && inferredType === 'Daily Subscription') {
+                inferredType = '15 Days Plan';
+            }
+            
             const custSession = {
                 name: matchedDoc.name || 'Customer',
                 phone: matchedDoc.phone || inputId,
                 whatsapp: matchedDoc.whatsapp || matchedDoc.phone || '',
                 id: matchedDoc.cid || matchedDoc.customerId || matchedDoc.membershipId || 'AYY-C-1001',
                 membershipId: matchedDoc.membershipId || 'AYY-M-1001',
-                subType: matchedDoc.subscriptionType || matchedDoc.subType || 'Daily Subscription',
+                subType: inferredType,
                 location: matchedDoc.location || 'Narasaraopet',
                 area: matchedDoc.area || '',
                 address: matchedDoc.address || '',
