@@ -1407,230 +1407,6 @@
                     </div>
                 </div>
 
-                <!-- TAB 3: ORDER NOW -->
-                <div id="cdash-panel-ordernow" class="cdash-tab-panel" style="display: none;">
-                    
-                    <div id="cart-main-view">
-                        <div class="cart-header">
-                            <button class="back-btn" onclick="switchCustomerDashTab('home')" title="Back">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                            </button>
-                            <h4>Shop</h4>
-                            <div class="cart-count" id="cart-header-count">Cart (0)</div>
-                        </div>
-
-                        <div class="shop-tabs">
-                            <div class="shop-tab active">All</div>
-                            <div class="shop-tab">Milk</div>
-                            <div class="shop-tab">Curd & Yogurt</div>
-                            <div class="shop-tab">Ghee & Butter</div>
-                        </div>
-
-                        <!-- Product Selection Array -->
-                        <div class="cart-product-grid">
-                            <!-- Product 1 -->
-                            <div class="cart-product-card">
-                                <img src="images/buffalo_milk.jpg" alt="Pure Buffalo Milk" class="cart-product-img">
-                                <div class="cart-product-info">
-                                    <p class="vol">Select Qty</p>
-                                    <h5>Pure Buffalo Milk</h5>
-                                    <select id="cartQty-milk" class="cart-product-select">
-                                        <option value="0" selected disabled>Quantity</option>
-                                        <option value="0.5">500 ml — ₹50</option>
-                                        <option value="1">1 Litre — ₹100</option>
-                                        <option value="2">2 Litres — ₹200</option>
-                                        <option value="3">3 Litres — ₹300</option>
-                                        <option value="4">4 Litres — ₹400</option>
-                                        <option value="5">5 Litres — ₹500</option>
-                                        <option value="6">6 Litres — ₹600</option>
-                                        <option value="7">7 Litres — ₹700</option>
-                                        <option value="8">8 Litres — ₹800</option>
-                                        <option value="9">9 Litres — ₹900</option>
-                                        <option value="10">10 Litres — ₹1,000</option>
-                                    </select>
-                                    <div class="cart-product-bottom">
-                                        <div class="cart-product-price">₹100 <span style="font-size:0.6rem;color:#64748b;font-weight:600;">/L</span></div>
-                                        <button class="cart-add-btn" onclick="addToCart('milk')">+ Add</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Product 2 -->
-                            <div class="cart-product-card">
-                                <img src="images/fresh_curd.jpg" alt="Fresh Curd" class="cart-product-img">
-                                <div class="cart-product-info">
-                                    <p class="vol">Select Qty</p>
-                                    <h5>Fresh Curd</h5>
-                                    <select id="cartQty-curd" class="cart-product-select">
-                                        <option value="0" selected disabled>Quantity</option>
-                                        <option value="0.5">500 g — ₹30</option>
-                                        <option value="1">1 Kg — ₹60</option>
-                                        <option value="2">2 Kg — ₹120</option>
-                                        <option value="3">3 Kg — ₹180</option>
-                                        <option value="4">4 Kg — ₹240</option>
-                                        <option value="5">5 Kg — ₹300</option>
-                                        <option value="6">6 Kg — ₹360</option>
-                                        <option value="7">7 Kg — ₹420</option>
-                                        <option value="8">8 Kg — ₹480</option>
-                                        <option value="9">9 Kg — ₹540</option>
-                                        <option value="10">10 Kg — ₹600</option>
-                                    </select>
-                                    <div class="cart-product-bottom">
-                                        <div class="cart-product-price">₹60 <span style="font-size:0.6rem;color:#64748b;font-weight:600;">/Kg</span></div>
-                                        <button class="cart-add-btn" onclick="addToCart('curd')">+ Add</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Product 3 -->
-                            <div class="cart-product-card">
-                                <img src="images/pure_ghee.jpg" alt="Original Ghee" class="cart-product-img">
-                                <div class="cart-product-info">
-                                    <p class="vol">Select Qty</p>
-                                    <h5>Original Ghee</h5>
-                                    <select id="cartQty-ghee" class="cart-product-select">
-                                        <option value="0" selected disabled>Quantity</option>
-                                        <option value="0.5">500 ml — ₹300</option>
-                                        <option value="1">1 Litre — ₹600</option>
-                                        <option value="2">2 Litres — ₹1,200</option>
-                                        <option value="3">3 Litres — ₹1,800</option>
-                                        <option value="4">4 Litres — ₹2,400</option>
-                                        <option value="5">5 Litres — ₹3,000</option>
-                                        <option value="6">6 Litres — ₹3,600</option>
-                                        <option value="7">7 Litres — ₹4,200</option>
-                                        <option value="8">8 Litres — ₹4,800</option>
-                                        <option value="9">9 Litres — ₹540</option>
-                                        <option value="10">10 Litres — ₹6,000</option>
-                                    </select>
-                                    <div class="cart-product-bottom">
-                                        <div class="cart-product-price">₹600 <span style="font-size:0.6rem;color:#64748b;font-weight:600;">/L</span></div>
-                                        <button class="cart-add-btn" onclick="addToCart('ghee')">+ Add</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Cart Array Mapping -->
-                        <div id="cart-empty-state" class="cart-empty-state">
-                            <span class="icon">🛒</span>
-                            <h3>Your Cart is Empty</h3>
-                            <p>Add fresh dairy products to your cart and place your order.</p>
-                        </div>
-                        
-                        <div id="cart-active-layout" class="cart-layout" style="display: none;">
-                            <!-- Left: Cart Items -->
-                            <div>
-                                <div class="products-section-header">Selected Cart Items</div>
-                                <div class="cart-items-list" id="cart-items-list">
-                                    <!-- Rendered dynamically -->
-                                </div>
-                            </div>
-
-                            <!-- Right: Order Summary -->
-                            <div>
-                                <div class="cart-summary-card">
-                                    <h4>Order Summary</h4>
-                                    <div class="cart-summary-row">
-                                        <span>Subtotal</span>
-                                        <span id="cart-summary-subtotal" style="font-weight: 700;">₹0</span>
-                                    </div>
-                                    <div class="cart-summary-row" style="color: #16a34a;">
-                                        <span>Delivery Charge</span>
-                                        <span style="font-weight: 700;">FREE</span>
-                                    </div>
-                                    <p style="font-size: 0.75rem; color: #1b5e20; margin: 0.3rem 0; font-weight: 600;">🚚 Free delivery available in Narasaraopet</p>
-                                    
-                                    <div class="cart-summary-total">
-                                        <span>Total Amount</span>
-                                        <span id="cart-summary-final-amt">₹0</span>
-                                    </div>
-                                    <button type="button" class="cart-checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout →</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Checkout Section -->
-                    <div id="cart-checkout-view">
-                        <div class="cart-header" style="cursor: pointer;" onclick="showCartProducts()">
-                            <div>
-                                <h4>🛒 Return to Cart</h4>
-                            </div>
-                            <div class="cart-count">← Back</div>
-                        </div>
-                        
-                        <div id="cart-checkout-view-inner">
-                            <form id="portalCartOrderForm" onsubmit="handleDynamicCartSubmit(event)">
-                                <div style="background: white; border-radius: 20px; padding: 1.5rem; border: 1px solid #e0eee0; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
-                                    
-                                    <div style="margin-bottom: 1rem;">
-                                        <h5 style="font-size: 1.05rem; font-weight: 800; color: #1b5e20; margin-bottom: 0.8rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.5rem;">Customer Details</h5>
-                                        <div class="modal-input-group" style="margin-bottom:0.8rem;">
-                                            <input type="text" id="guestName" placeholder="Full Name" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required>
-                                        </div>
-                                        <div class="modal-input-group" style="margin-bottom:0.8rem;">
-                                            <input type="tel" id="guestPhone" placeholder="Mobile Number" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required pattern="[0-9]{10}">
-                                        </div>
-                                        <div class="modal-input-group" style="margin-bottom:0.8rem;">
-                                            <textarea id="guestAddress" placeholder="Full Delivery Address & Locality/Area" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem; resize:vertical; min-height:80px;" required></textarea>
-                                        </div>
-                                    </div>
-
-                                    <h5 style="font-size: 1.05rem; font-weight: 800; color: #1b5e20; margin-bottom: 0.8rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.5rem;">Delivery Settings</h5>
-                                    
-                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
-                                        <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label style="font-weight: 700; color: #333; font-size: 0.88rem;">Delivery Slot</label>
-                                            <select id="cartDeliverySlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required>
-                                                <option value="" selected disabled>Select Delivery Slot</option>
-                                                <option value="Morning (7:00 AM – 9:00 AM)">🌅 Morning (7:00 AM – 9:00 AM)</option>
-                                                <option value="Evening (7:00 PM – 9:00 PM)">🌆 Evening (7:00 PM – 9:00 PM)</option>
-                                                <option value="Morning & Evening">🌅 Morning & 🌆 Evening</option>
-                                            </select>
-                                        </div>
-                                        <div class="modal-input-group" style="margin-bottom:0;">
-                                            <label style="font-weight: 700; color: #333; font-size: 0.88rem;">Delivery Date <span style="color:red;">*</span></label>
-                                            <input type="text" id="cartDeliveryDateDisplay" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.9rem; font-weight:700; background: #f8fafc; color: #475569; pointer-events: none;" readonly>
-                                            <input type="hidden" id="cartDeliveryDate">
-                                        </div>
-                                    </div>
-                                    <div class="modal-input-group" style="margin-bottom: 1.2rem;">
-                                        <label style="font-weight: 700; color: #333; font-size: 0.88rem;">Payment System <span style="color:red;">*</span></label>
-                                        <select id="cartPaymentMethod" onchange="togglePaymentQR()" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.92rem; font-weight:700;" required>
-                                            <option value="Cash On Delivery" selected>💵 Cash on Delivery (COD)</option>
-                                            <option value="Online Upfront Payment (UPI/Card)">💳 Online Payment (UPI / GPay / PhonePe / Card)</option>
-                                        </select>
-                                        <div id="paymentQRCodeBox" style="display: none; margin-top: 1.2rem; text-align: center; background: #fefce8; padding: 1.5rem; border: 2px dashed #eab308; border-radius: 12px;">
-                                            <p style="font-weight: 800; color: #854d0e; font-size: 1rem; margin: 0 0 1rem 0;">Scan and Pay to Place Order</p>
-                                            <img src="images/PP.jpeg" alt="Payment QR Code" style="max-width: 220px; width: 100%; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.08);">
-                                            <p style="font-size: 0.82rem; color: #713f12; margin: 1rem 0 0 0; font-weight: 600;">Secure UPI via PhonePe/GPay 🔒</p>
-                                        </div>
-                                    </div>
-                                    <button type="submit" id="cartSubmitBtn" style="width:100%; padding:1rem; font-size:1.1rem; font-weight:800; border-radius:50px; cursor:pointer; background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color:white; border:none; box-shadow:0 4px 15px rgba(26,92,42,0.35);">
-                                        🛒 Confirm Order
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                        
-                        <div id="cart-upi-confirm-view" style="display: none;">
-                            <div style="background: white; border-radius: 20px; padding: 2.5rem 1.5rem; border: 1px solid #e0eee0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
-                                <div style="font-size: 3.5rem; margin-bottom: 1rem;">📲</div>
-                                <h4 style="color: #1b5e20; font-weight: 800; font-size: 1.3rem; margin-bottom: 0.8rem;">Complete your UPI Payment</h4>
-                                <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">If your UPI app didn't open automatically, please go back and scan the QR code to pay.<br><br><strong>Once you have successfully transferred the amount, click the button below to finalize your order.</strong></p>
-                                
-                                <button type="button" onclick="confirmUpiPayment()" style="width:100%; padding:1rem; margin-bottom: 0.8rem; font-size:1.05rem; font-weight:800; border-radius:50px; cursor:pointer; background: #166534; color:white; border:none; box-shadow:0 4px 15px rgba(22,101,52,0.35);">
-                                    ✅ Yes, Payment Complete - Confirm Order
-                                </button>
-                                <button type="button" onclick="pendingUpiPayment()" style="width:100%; padding:1rem; margin-bottom: 1rem; font-size:1.05rem; font-weight:800; border-radius:50px; cursor:pointer; background: #ea580c; color:white; border:none; box-shadow:0 4px 15px rgba(234,88,12,0.35);">
-                                    ❌ Payment Not Completed - Confirm Order
-                                </button>
-                                <button type="button" onclick="cancelUpiPayment()" style="width:100%; padding:1rem; font-size:1rem; font-weight:700; border-radius:50px; cursor:pointer; background: #f1f5f9; color:#475569; border:none;">
-                                    ← Go Back
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
                 <!-- TAB 4: CONTACT -->
                 <div id="cdash-panel-contact" class="cdash-tab-panel" style="display: none;">
                     <h3 style="color: var(--primary-color); font-size: 1.5rem; font-weight: 800; margin-bottom: 0.4rem;">📞 Contact & Customer Support</h3>
@@ -2148,6 +1924,232 @@
 
 
 
+        <!-- TAB 3: ORDER NOW -->
+                <div id="page-cart" class="page-view" style="padding-top: 80px;" style="display: none;">
+                    
+                    <div id="cart-main-view">
+                        <div class="cart-header">
+                            <button class="back-btn" onclick="showPage('home')" title="Back">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <h4>Shop</h4>
+                            <div class="cart-count" id="cart-header-count">Cart (0)</div>
+                        </div>
+
+                        <div class="shop-tabs">
+                            <div class="shop-tab active">All</div>
+                            <div class="shop-tab">Milk</div>
+                            <div class="shop-tab">Curd & Yogurt</div>
+                            <div class="shop-tab">Ghee & Butter</div>
+                        </div>
+
+                        <!-- Product Selection Array -->
+                        <div class="cart-product-grid">
+                            <!-- Product 1 -->
+                            <div class="cart-product-card">
+                                <img src="images/buffalo_milk.jpg" alt="Pure Buffalo Milk" class="cart-product-img">
+                                <div class="cart-product-info">
+                                    <p class="vol">Select Qty</p>
+                                    <h5>Pure Buffalo Milk</h5>
+                                    <select id="cartQty-milk" class="cart-product-select">
+                                        <option value="0" selected disabled>Quantity</option>
+                                        <option value="0.5">500 ml — ₹50</option>
+                                        <option value="1">1 Litre — ₹100</option>
+                                        <option value="2">2 Litres — ₹200</option>
+                                        <option value="3">3 Litres — ₹300</option>
+                                        <option value="4">4 Litres — ₹400</option>
+                                        <option value="5">5 Litres — ₹500</option>
+                                        <option value="6">6 Litres — ₹600</option>
+                                        <option value="7">7 Litres — ₹700</option>
+                                        <option value="8">8 Litres — ₹800</option>
+                                        <option value="9">9 Litres — ₹900</option>
+                                        <option value="10">10 Litres — ₹1,000</option>
+                                    </select>
+                                    <div class="cart-product-bottom">
+                                        <div class="cart-product-price">₹100 <span style="font-size:0.6rem;color:#64748b;font-weight:600;">/L</span></div>
+                                        <button class="cart-add-btn" onclick="addToCart('milk')">+ Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product 2 -->
+                            <div class="cart-product-card">
+                                <img src="images/fresh_curd.jpg" alt="Fresh Curd" class="cart-product-img">
+                                <div class="cart-product-info">
+                                    <p class="vol">Select Qty</p>
+                                    <h5>Fresh Curd</h5>
+                                    <select id="cartQty-curd" class="cart-product-select">
+                                        <option value="0" selected disabled>Quantity</option>
+                                        <option value="0.5">500 g — ₹30</option>
+                                        <option value="1">1 Kg — ₹60</option>
+                                        <option value="2">2 Kg — ₹120</option>
+                                        <option value="3">3 Kg — ₹180</option>
+                                        <option value="4">4 Kg — ₹240</option>
+                                        <option value="5">5 Kg — ₹300</option>
+                                        <option value="6">6 Kg — ₹360</option>
+                                        <option value="7">7 Kg — ₹420</option>
+                                        <option value="8">8 Kg — ₹480</option>
+                                        <option value="9">9 Kg — ₹540</option>
+                                        <option value="10">10 Kg — ₹600</option>
+                                    </select>
+                                    <div class="cart-product-bottom">
+                                        <div class="cart-product-price">₹60 <span style="font-size:0.6rem;color:#64748b;font-weight:600;">/Kg</span></div>
+                                        <button class="cart-add-btn" onclick="addToCart('curd')">+ Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Product 3 -->
+                            <div class="cart-product-card">
+                                <img src="images/pure_ghee.jpg" alt="Original Ghee" class="cart-product-img">
+                                <div class="cart-product-info">
+                                    <p class="vol">Select Qty</p>
+                                    <h5>Original Ghee</h5>
+                                    <select id="cartQty-ghee" class="cart-product-select">
+                                        <option value="0" selected disabled>Quantity</option>
+                                        <option value="0.5">500 ml — ₹300</option>
+                                        <option value="1">1 Litre — ₹600</option>
+                                        <option value="2">2 Litres — ₹1,200</option>
+                                        <option value="3">3 Litres — ₹1,800</option>
+                                        <option value="4">4 Litres — ₹2,400</option>
+                                        <option value="5">5 Litres — ₹3,000</option>
+                                        <option value="6">6 Litres — ₹3,600</option>
+                                        <option value="7">7 Litres — ₹4,200</option>
+                                        <option value="8">8 Litres — ₹4,800</option>
+                                        <option value="9">9 Litres — ₹540</option>
+                                        <option value="10">10 Litres — ₹6,000</option>
+                                    </select>
+                                    <div class="cart-product-bottom">
+                                        <div class="cart-product-price">₹600 <span style="font-size:0.6rem;color:#64748b;font-weight:600;">/L</span></div>
+                                        <button class="cart-add-btn" onclick="addToCart('ghee')">+ Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cart Array Mapping -->
+                        <div id="cart-empty-state" class="cart-empty-state">
+                            <span class="icon">🛒</span>
+                            <h3>Your Cart is Empty</h3>
+                            <p>Add fresh dairy products to your cart and place your order.</p>
+                        </div>
+                        
+                        <div id="cart-active-layout" class="cart-layout" style="display: none;">
+                            <!-- Left: Cart Items -->
+                            <div>
+                                <div class="products-section-header">Selected Cart Items</div>
+                                <div class="cart-items-list" id="cart-items-list">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                            </div>
+
+                            <!-- Right: Order Summary -->
+                            <div>
+                                <div class="cart-summary-card">
+                                    <h4>Order Summary</h4>
+                                    <div class="cart-summary-row">
+                                        <span>Subtotal</span>
+                                        <span id="cart-summary-subtotal" style="font-weight: 700;">₹0</span>
+                                    </div>
+                                    <div class="cart-summary-row" style="color: #16a34a;">
+                                        <span>Delivery Charge</span>
+                                        <span style="font-weight: 700;">FREE</span>
+                                    </div>
+                                    <p style="font-size: 0.75rem; color: #1b5e20; margin: 0.3rem 0; font-weight: 600;">🚚 Free delivery available in Narasaraopet</p>
+                                    
+                                    <div class="cart-summary-total">
+                                        <span>Total Amount</span>
+                                        <span id="cart-summary-final-amt">₹0</span>
+                                    </div>
+                                    <button type="button" class="cart-checkout-btn" onclick="proceedToCheckout()">Proceed to Checkout →</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Checkout Section -->
+                    <div id="cart-checkout-view">
+                        <div class="cart-header" style="cursor: pointer;" onclick="showCartProducts()">
+                            <div>
+                                <h4>🛒 Return to Cart</h4>
+                            </div>
+                            <div class="cart-count">← Back</div>
+                        </div>
+                        
+                        <div id="cart-checkout-view-inner">
+                            <form id="portalCartOrderForm" onsubmit="handleDynamicCartSubmit(event)">
+                                <div style="background: white; border-radius: 20px; padding: 1.5rem; border: 1px solid #e0eee0; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+                                    
+                                    <div style="margin-bottom: 1rem;">
+                                        <h5 style="font-size: 1.05rem; font-weight: 800; color: #1b5e20; margin-bottom: 0.8rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.5rem;">Customer Details</h5>
+                                        <div class="modal-input-group" style="margin-bottom:0.8rem;">
+                                            <input type="text" id="guestName" placeholder="Full Name" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required>
+                                        </div>
+                                        <div class="modal-input-group" style="margin-bottom:0.8rem;">
+                                            <input type="tel" id="guestPhone" placeholder="Mobile Number" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required pattern="[0-9]{10}">
+                                        </div>
+                                        <div class="modal-input-group" style="margin-bottom:0.8rem;">
+                                            <textarea id="guestAddress" placeholder="Full Delivery Address & Locality/Area" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem; resize:vertical; min-height:80px;" required></textarea>
+                                        </div>
+                                    </div>
+
+                                    <h5 style="font-size: 1.05rem; font-weight: 800; color: #1b5e20; margin-bottom: 0.8rem; border-bottom: 1px solid #e0eee0; padding-bottom: 0.5rem;">Delivery Settings</h5>
+                                    
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-bottom: 1rem;">
+                                        <div class="modal-input-group" style="margin-bottom:0;">
+                                            <label style="font-weight: 700; color: #333; font-size: 0.88rem;">Delivery Slot</label>
+                                            <select id="cartDeliverySlot" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.88rem;" required>
+                                                <option value="" selected disabled>Select Delivery Slot</option>
+                                                <option value="Morning (7:00 AM – 9:00 AM)">🌅 Morning (7:00 AM – 9:00 AM)</option>
+                                                <option value="Evening (7:00 PM – 9:00 PM)">🌆 Evening (7:00 PM – 9:00 PM)</option>
+                                                <option value="Morning & Evening">🌅 Morning & 🌆 Evening</option>
+                                            </select>
+                                        </div>
+                                        <div class="modal-input-group" style="margin-bottom:0;">
+                                            <label style="font-weight: 700; color: #333; font-size: 0.88rem;">Delivery Date <span style="color:red;">*</span></label>
+                                            <input type="text" id="cartDeliveryDateDisplay" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.9rem; font-weight:700; background: #f8fafc; color: #475569; pointer-events: none;" readonly>
+                                            <input type="hidden" id="cartDeliveryDate">
+                                        </div>
+                                    </div>
+                                    <div class="modal-input-group" style="margin-bottom: 1.2rem;">
+                                        <label style="font-weight: 700; color: #333; font-size: 0.88rem;">Payment System <span style="color:red;">*</span></label>
+                                        <select id="cartPaymentMethod" onchange="togglePaymentQR()" style="width:100%; padding:0.85rem; border:1.5px solid #ccc; border-radius:10px; font-size:0.92rem; font-weight:700;" required>
+                                            <option value="Cash On Delivery" selected>💵 Cash on Delivery (COD)</option>
+                                            <option value="Online Upfront Payment (UPI/Card)">💳 Online Payment (UPI / GPay / PhonePe / Card)</option>
+                                        </select>
+                                        <div id="paymentQRCodeBox" style="display: none; margin-top: 1.2rem; text-align: center; background: #fefce8; padding: 1.5rem; border: 2px dashed #eab308; border-radius: 12px;">
+                                            <p style="font-weight: 800; color: #854d0e; font-size: 1rem; margin: 0 0 1rem 0;">Scan and Pay to Place Order</p>
+                                            <img src="images/PP.jpeg" alt="Payment QR Code" style="max-width: 220px; width: 100%; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.08);">
+                                            <p style="font-size: 0.82rem; color: #713f12; margin: 1rem 0 0 0; font-weight: 600;">Secure UPI via PhonePe/GPay 🔒</p>
+                                        </div>
+                                    </div>
+                                    <button type="submit" id="cartSubmitBtn" style="width:100%; padding:1rem; font-size:1.1rem; font-weight:800; border-radius:50px; cursor:pointer; background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%); color:white; border:none; box-shadow:0 4px 15px rgba(26,92,42,0.35);">
+                                        🛒 Confirm Order
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        
+                        <div id="cart-upi-confirm-view" style="display: none;">
+                            <div style="background: white; border-radius: 20px; padding: 2.5rem 1.5rem; border: 1px solid #e0eee0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;">
+                                <div style="font-size: 3.5rem; margin-bottom: 1rem;">📲</div>
+                                <h4 style="color: #1b5e20; font-weight: 800; font-size: 1.3rem; margin-bottom: 0.8rem;">Complete your UPI Payment</h4>
+                                <p style="color: #64748b; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem;">If your UPI app didn't open automatically, please go back and scan the QR code to pay.<br><br><strong>Once you have successfully transferred the amount, click the button below to finalize your order.</strong></p>
+                                
+                                <button type="button" onclick="confirmUpiPayment()" style="width:100%; padding:1rem; margin-bottom: 0.8rem; font-size:1.05rem; font-weight:800; border-radius:50px; cursor:pointer; background: #166534; color:white; border:none; box-shadow:0 4px 15px rgba(22,101,52,0.35);">
+                                    ✅ Yes, Payment Complete - Confirm Order
+                                </button>
+                                <button type="button" onclick="pendingUpiPayment()" style="width:100%; padding:1rem; margin-bottom: 1rem; font-size:1.05rem; font-weight:800; border-radius:50px; cursor:pointer; background: #ea580c; color:white; border:none; box-shadow:0 4px 15px rgba(234,88,12,0.35);">
+                                    ❌ Payment Not Completed - Confirm Order
+                                </button>
+                                <button type="button" onclick="cancelUpiPayment()" style="width:100%; padding:1rem; font-size:1rem; font-weight:700; border-radius:50px; cursor:pointer; background: #f1f5f9; color:#475569; border:none;">
+                                    ← Go Back
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+
         <!-- CONTACT DETAILS PAGE -->
         <div id="page-contact" class="page-view">
             <section class="section-padding" style="background: var(--bg-light); min-height: 80vh;">
@@ -2313,7 +2315,7 @@
             <span class="m-icon">🥛</span>
             <span class="m-label">Products</span>
         </a>
-        <a href="#" onclick="openCustomerOrdersModal('ordernow')" class="mobile-nav-item" id="m-nav-cart">
+        <a href="#" onclick="showPage('cart')" class="mobile-nav-item" id="m-nav-cart">
             <span class="m-icon">🛒</span>
             <span class="m-label">Cart</span>
         </a>
@@ -2329,14 +2331,7 @@
             <span class="m-icon">📞</span>
             <span class="m-label">Contact</span>
         </a>
-        <a href="#" onclick="openCustomerOrdersModal()" class="mobile-nav-item" id="m-nav-profile" style="display: none;">
-            <span class="m-icon">👤</span>
-            <span class="m-label">My Profile</span>
-        </a>
-        <a href="#" onclick="showPage('contact')" class="mobile-nav-item" id="m-nav-contact">
-            <span class="m-icon">📞</span>
-            <span class="m-label">Contact</span>
-        </a>
+
         <a href="#" onclick="showPage('install')" class="mobile-nav-item" id="m-nav-install">
             <span class="m-icon">📲</span>
             <span class="m-label">Install</span>
