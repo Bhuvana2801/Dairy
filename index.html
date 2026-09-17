@@ -3958,8 +3958,13 @@
             return;
         }
         
-        const cidStr = cidInput.value.trim();
+        const cidStr = cidInput.value.trim().toUpperCase();
         const pwdStr = pwdInput.value.trim();
+
+        if (!cidStr.startsWith('AADFQ')) {
+            alert("The 15-Day Plan Customer ID must strictly begin with the prefix 'AADFQ'.");
+            return;
+        }
         
         if (!confirm('Assign CID "' + cidStr + '" and Password to this customer and register them?')) return;
         
@@ -4007,8 +4012,14 @@
         const newPwd = prompt("Edit Password:", oldPwd);
         if (newPwd === null) return;
         
-        if (newCid.trim() === '' || newPwd.trim() === '') {
+        const cleanedCid = newCid.trim().toUpperCase();
+        if (cleanedCid === '' || newPwd.trim() === '') {
             alert("Credentials cannot be empty.");
+            return;
+        }
+        
+        if (!cleanedCid.startsWith('AADFQ')) {
+            alert("The 15-Day Plan Customer ID must strictly begin with the prefix 'AADFQ'.");
             return;
         }
 
@@ -4018,13 +4029,13 @@
             const data = docSnap.data();
 
             await db.collection('offer_claims').doc(docId).update({
-                cid: newCid.trim(),
+                cid: cleanedCid,
                 password: newPwd.trim()
             });
 
             if (data.phone) {
                 await db.collection('customers').doc(data.phone).update({
-                    cid: newCid.trim(),
+                    cid: cleanedCid,
                     status: 'Active',
                     progressStatus: 'Active',
                     password: newPwd.trim()
