@@ -404,9 +404,8 @@ async function handleDynamicCartSubmit(e) {
                     `Thank you for ordering with Ayyappa Dairy Farm!`;
 
         const waUrl = `https://wa.me/919493207380?text=${encodeURIComponent(msg)}`;
-        window.open(waUrl, '_blank');
 
-        alert(`🎉 Thank You! Your Order has been placed successfully.\n\nOrder ID: ${orderID}\n\nRedirecting to Customer Dashboard Home page...`);
+        alert(`🎉 Thank You! Your Order has been placed successfully.\n\nOrder ID: ${orderID}\n\nPress OK to send your order details directly to our WhatsApp!`);
 
         // Close form, reset cart
         cartItems = [];
@@ -415,6 +414,9 @@ async function handleDynamicCartSubmit(e) {
         renderCart();
         
         if (typeof switchCustomerDashTab === 'function') switchCustomerDashTab('home');
+
+        // Redirect in the same tab (avoids popup blockers stopping window.open on async network calls)
+        window.location.href = waUrl;
 
     } catch (err) {
         console.error("Cart order error:", err);
