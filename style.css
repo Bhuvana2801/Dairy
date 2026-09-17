@@ -2092,12 +2092,29 @@ footer ul a:hover { color: var(--secondary-color); padding-left: 5px; }
     position: relative;
 }
 
+@media (max-width: 768px) {
+    .cdash-content-body {
+        padding: 1.2rem 1rem;
+    }
+}
+
 /* Responsive sidebar for mobile screens */
 @media (max-width: 768px) {
+    .premium-modal-overlay {
+        padding: 0 !important;
+        background: #f8faf8 !important;
+        align-items: stretch !important;
+    }
     .cdash-portal-box {
         flex-direction: column;
-        height: 92vh;
-        max-height: none;
+        height: 100vh !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        margin: 0 !important;
     }
     .cdash-sidebar {
         width: 100%;
