@@ -3878,8 +3878,9 @@
                                 <button onclick="approveOfferClaim('${docId}')" style="background:#4caf50; color:white; border:none; padding:4px 8px; border-radius:10px; cursor:pointer; font-weight:bold; font-size:0.8rem; box-shadow:0 2px 4px rgba(0,0,0,0.1);">Assign Access</button>
                             </div>
                             ` : `
-                            <div style="background:#e8f5e9; color:#2e7d32; padding:4px 8px; border-radius:5px; font-size:0.85rem; font-weight:bold; border:1px solid #c8e6c9; margin-bottom:8px; display:inline-block;">
-                                CID: ${data.cid}
+                            <div style="background:#e8f5e9; color:#2e7d32; padding:4px 8px; border-radius:5px; font-size:0.85rem; font-weight:bold; border:1px solid #c8e6c9; margin-bottom:8px; display:inline-block; text-align:center;">
+                                CID: ${data.cid}<br>
+                                PWD: ${data.password || 'N/A'}
                             </div><br>
                             `}
                             <button onclick="deleteOfferClaim('${docId}')" style="background:#c62828; color:white; border:none; padding:6px 12px; border-radius:15px; cursor:pointer; font-weight:bold; box-shadow:0 3px 6px rgba(0,0,0,0.1);">Delete</button>
