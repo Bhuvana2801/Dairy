@@ -1412,27 +1412,30 @@
                     
                     <div id="cart-main-view">
                         <div class="cart-header">
-                            <div>
-                                <h4>🛒 Your Shopping Cart</h4>
-                                <p style="margin: 0; font-size: 0.85rem; color: rgba(255,255,255,0.9); margin-top: 2px;">Fresh dairy products, delivered to your doorstep.</p>
-                            </div>
+                            <button class="back-btn" onclick="switchCustomerDashTab('home')" title="Back">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </button>
+                            <h4>Shop</h4>
                             <div class="cart-count" id="cart-header-count">Cart (0)</div>
                         </div>
 
+                        <div class="shop-tabs">
+                            <div class="shop-tab active">All</div>
+                            <div class="shop-tab">Milk</div>
+                            <div class="shop-tab">Curd & Yogurt</div>
+                            <div class="shop-tab">Ghee & Butter</div>
+                        </div>
+
                         <!-- Product Selection Array -->
-                        <div class="products-section-header">Select Products</div>
                         <div class="cart-product-grid">
                             <!-- Product 1 -->
                             <div class="cart-product-card">
-                                <div style="height: 140px; border-radius: 8px; overflow: hidden; margin-bottom: 0.8rem;">
-                                    <img src="images/buffalo_milk.jpg" alt="Pure Buffalo Milk" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
+                                <img src="images/buffalo_milk.jpg" alt="Pure Buffalo Milk" class="cart-product-img">
                                 <div class="cart-product-info">
+                                    <p class="vol">Select Qty</p>
                                     <h5>Pure Buffalo Milk</h5>
-                                    <p>Fresh • Pure • Hygienically Handled</p>
-                                    <div class="cart-product-price">₹100 / Litre</div>
                                     <select id="cartQty-milk" class="cart-product-select">
-                                        <option value="0" selected disabled>Select Quantity</option>
+                                        <option value="0" selected disabled>Quantity</option>
                                         <option value="0.5">500 ml — ₹50</option>
                                         <option value="1">1 Litre — ₹100</option>
                                         <option value="2">2 Litres — ₹200</option>
@@ -1445,20 +1448,20 @@
                                         <option value="9">9 Litres — ₹900</option>
                                         <option value="10">10 Litres — ₹1,000</option>
                                     </select>
-                                    <button class="cart-add-btn" onclick="addToCart('milk')">🛒 Add to Cart</button>
+                                    <div class="cart-product-bottom">
+                                        <div class="cart-product-price">₹100 <span style="font-size:0.6rem;color:#64748b;font-weight:600;">/L</span></div>
+                                        <button class="cart-add-btn" onclick="addToCart('milk')">+ Add</button>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Product 2 -->
                             <div class="cart-product-card">
-                                <div style="height: 140px; border-radius: 8px; overflow: hidden; margin-bottom: 0.8rem;">
-                                    <img src="images/fresh_curd.jpg" alt="Fresh Curd" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
+                                <img src="images/fresh_curd.jpg" alt="Fresh Curd" class="cart-product-img">
                                 <div class="cart-product-info">
+                                    <p class="vol">Select Qty</p>
                                     <h5>Fresh Curd</h5>
-                                    <p>Fresh • Creamy • Naturally Prepared</p>
-                                    <div class="cart-product-price">₹60 / Kg</div>
                                     <select id="cartQty-curd" class="cart-product-select">
-                                        <option value="0" selected disabled>Select Quantity</option>
+                                        <option value="0" selected disabled>Quantity</option>
                                         <option value="0.5">500 g — ₹30</option>
                                         <option value="1">1 Kg — ₹60</option>
                                         <option value="2">2 Kg — ₹120</option>
@@ -1471,20 +1474,20 @@
                                         <option value="9">9 Kg — ₹540</option>
                                         <option value="10">10 Kg — ₹600</option>
                                     </select>
-                                    <button class="cart-add-btn" onclick="addToCart('curd')">🛒 Add to Cart</button>
+                                    <div class="cart-product-bottom">
+                                        <div class="cart-product-price">₹60 <span style="font-size:0.6rem;color:#64748b;font-weight:600;">/Kg</span></div>
+                                        <button class="cart-add-btn" onclick="addToCart('curd')">+ Add</button>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Product 3 -->
                             <div class="cart-product-card">
-                                <div style="height: 140px; border-radius: 8px; overflow: hidden; margin-bottom: 0.8rem;">
-                                    <img src="images/pure_ghee.jpg" alt="Original Ghee" style="width: 100%; height: 100%; object-fit: cover;">
-                                </div>
+                                <img src="images/pure_ghee.jpg" alt="Original Ghee" class="cart-product-img">
                                 <div class="cart-product-info">
+                                    <p class="vol">Select Qty</p>
                                     <h5>Original Ghee</h5>
-                                    <p>Pure • Rich • Traditional Taste</p>
-                                    <div class="cart-product-price">₹600 / Litre</div>
                                     <select id="cartQty-ghee" class="cart-product-select">
-                                        <option value="0" selected disabled>Select Quantity</option>
+                                        <option value="0" selected disabled>Quantity</option>
                                         <option value="0.5">500 ml — ₹300</option>
                                         <option value="1">1 Litre — ₹600</option>
                                         <option value="2">2 Litres — ₹1,200</option>
@@ -1497,7 +1500,10 @@
                                         <option value="9">9 Litres — ₹540</option>
                                         <option value="10">10 Litres — ₹6,000</option>
                                     </select>
-                                    <button class="cart-add-btn" onclick="addToCart('ghee')">🛒 Add to Cart</button>
+                                    <div class="cart-product-bottom">
+                                        <div class="cart-product-price">₹600 <span style="font-size:0.6rem;color:#64748b;font-weight:600;">/L</span></div>
+                                        <button class="cart-add-btn" onclick="addToCart('ghee')">+ Add</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
