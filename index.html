@@ -3988,6 +3988,8 @@
                     password: pwdStr,
                     source: '15 Days Plan',
                     subType: '15 Days Plan', // assign them the plan explicitly!
+                    status: 'Active',
+                    progressStatus: 'Active',
                     registeredAt: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
             }
@@ -4023,6 +4025,8 @@
             if (data.phone) {
                 await db.collection('customers').doc(data.phone).update({
                     cid: newCid.trim(),
+                    status: 'Active',
+                    progressStatus: 'Active',
                     password: newPwd.trim()
                 });
             }
@@ -4057,7 +4061,9 @@
                     detailsStatus: det,
                     renewalStatus: ren,
                     planStartDate: sd,
-                    planEndDate: ed
+                    planEndDate: ed,
+                    status: 'Active',
+                    progressStatus: 'Active'
                 }, { merge: true });
             }
             alert("Advanced controls successfully updated!");
