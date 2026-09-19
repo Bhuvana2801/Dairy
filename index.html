@@ -1925,7 +1925,13 @@
 
                             <div style="background: white; padding: 2rem; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.08);">
                                 <h3 style="color: #333; font-weight: 800; font-size: 1.3rem; margin-bottom: 0.3rem;">Apply Referral Coupon</h3>
-                                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">Enter your friend's code below to claim your discount.</p>
+                                <p style="color: #666; font-size: 0.9rem; margin-bottom: 1rem;">Enter your friend's code below to claim your discount.</p>
+                                <div style="background: #e8f5e9; border: 1.5px dashed #4caf50; border-radius: 12px; padding: 0.8rem; margin: 0 auto 1.5rem auto; max-width: 500px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+                                    <span style="color: #2e7d32; font-weight: 700; font-size: 0.95rem;">To get a Coupon Code, please contact Admin.</span>
+                                    <a href="https://wa.me/919493207380?text=Hi%20Admin,%20I%20would%20like%20to%20get%20a%20Referral%20Coupon%20Code" target="_blank" style="background: #25D366; color: white; text-decoration: none; padding: 0.5rem 1.2rem; border-radius: 50px; font-weight: 800; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 4px 10px rgba(37,211,102,0.3); transition: 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                        <span style="font-size: 1.1rem;">💬</span> WhatsApp Admin
+                                    </a>
+                                </div>
                                 <div style="display: flex; gap: 10px; justify-content: center; max-width: 400px; margin: 0 auto; flex-wrap: wrap;">
                                     <input type="text" id="referralCouponInput" placeholder="Enter Code Here" style="flex: 1; min-width: 200px; padding: 1rem; border: 2px solid #ccc; border-radius: 10px; font-size: 1rem; font-weight: 700; text-transform: uppercase;">
                                     <button onclick="if(document.getElementById('referralCouponInput').value){alert('Coupon applied successfully! Redirecting to plans...'); document.getElementById('btn-tab-regular').click();} else {alert('Please enter a valid coupon code.');}" style="background: var(--primary-color); color: white; border: none; padding: 0 1.5rem; min-height: 50px; border-radius: 10px; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.3s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">Apply Code</button>
