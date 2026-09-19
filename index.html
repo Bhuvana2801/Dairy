@@ -496,7 +496,7 @@
                     <select id="offerPlanType" required style="width:100%; border-radius:10px; border:1px solid #ccc; padding:0.6rem; font-size:0.85rem; margin-top:5px;">
                         <option value="">Select Plan Type</option>
                         <option value="15 Days Plan">15 Days Plan</option>
-                        <option value="30-Day Premium Plan">30-Day Premium Plan</option>
+                        <option value="100% Benefit Plan">100% Benefit Plan</option>
                     </select>
                 </div>
 
@@ -1815,7 +1815,7 @@
         <div class="nob-card nob-theme-3" style="border: 2px solid #1976d2;">
             <div class="nob-card-head">
                 <div style="font-size:0.95rem; opacity:0.9; letter-spacing: 2px;">PLAN 3</div>
-                30-DAY PREMIUM PLAN
+                100% BENEFIT PLAN
                 <div style="font-size:0.8rem; background:rgba(0,0,0,0.25); margin:8px -1rem -1rem -1rem; padding:8px;">Minimum 2 Litres/Day</div>
             </div>
             <div class="nob-card-body">
@@ -1842,7 +1842,7 @@
                         1 Extra Day<br><span style="font-size:1.2rem; display:block; margin-top:2px;">FREE</span>
                     </div>
                 </div>
-                <button onclick="openOfferClaimModal('30-Day Premium Plan')" style="display:block; width:100%; margin-top:15px; padding:12px; background:linear-gradient(135deg, #0d47a1 0%, #1565c0 100%); color:#fff; border:none; border-radius:30px; font-weight:900; font-size:1.1rem; cursor:pointer; box-shadow: 0 4px 10px rgba(13,71,161,0.4); text-transform:uppercase; transition: 0.2s transform;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
+                <button onclick="openOfferClaimModal('100% Benefit Plan')" style="display:block; width:100%; margin-top:15px; padding:12px; background:linear-gradient(135deg, #0d47a1 0%, #1565c0 100%); color:#fff; border:none; border-radius:30px; font-weight:900; font-size:1.1rem; cursor:pointer; box-shadow: 0 4px 10px rgba(13,71,161,0.4); text-transform:uppercase; transition: 0.2s transform;" onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
                     ⚡ Claim Offer
                 </button>
             </div>
@@ -6619,7 +6619,7 @@ Thank you for choosing Ayyappa Dairy Farm! 🥛✨`;
         }
         
         if (titleEl) {
-            titleEl.textContent = (planName === '30-Day Premium Plan') ? '30-Day Premium Plan' : '15-Day Subscription';
+            titleEl.textContent = (planName === '100% Benefit Plan') ? '100% Benefit Plan' : '15-Day Subscription';
         }
         if (m) m.style.display = 'flex';
     }
